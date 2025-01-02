@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: "https://year-in-data.onrender.com/",
   timeout: 5000, // Set a timeout of 5 seconds
   headers: {
     "Content-Type": "application/json",

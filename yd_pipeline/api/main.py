@@ -8,7 +8,7 @@ app = FastAPI()
 # Handle cors stuff
 origins = [
     "http://localhost:5173",
-    "https://yearly-review.onrender.com/"
+    "https://yearly-review.onrender.com"
 ]
 
 app.add_middleware(

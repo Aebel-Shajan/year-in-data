@@ -115,7 +115,7 @@ def get_distinct_kindle_books(year: Optional[int] = Query(None)):
     query = f"SELECT * FROM {table}"
 
     if year:
-        query += " WHERE strftime('%Y', latest_date) = ?"
+        query += " WHERE strftime('%Y', latest_date) >= ?"
         query += " ORDER BY latest_date DESC"
         rows = cursor.execute(query, (str(year),)).fetchall()
     else:

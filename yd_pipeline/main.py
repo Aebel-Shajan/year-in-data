@@ -20,7 +20,7 @@ root_dir = Path(__file__).resolve().parent
 data_file_path = root_dir / "data" / "input"
 
 # ETL strong data
-strong_data_filepath = data_file_path / "strong266140424475682467.csv"
+strong_data_filepath = data_file_path / "strong1918192963746116310.csv"
 with open(strong_data_filepath) as strong_csv:
     process_strong_data(strong_csv)
     get_distinct_workouts()

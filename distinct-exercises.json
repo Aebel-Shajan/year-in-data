@@ -1,35 +1,5 @@
 [
     {
-        "index": 0,
-        "exercise_name": "Reverse Fly (Machine)",
-        "latest_date": "2025-01-01 00:00:00"
-    },
-    {
-        "index": 1,
-        "exercise_name": "Pull Up (Assisted)",
-        "latest_date": "2025-01-01 00:00:00"
-    },
-    {
-        "index": 2,
-        "exercise_name": "Hammer Curl (Dumbbell)",
-        "latest_date": "2025-01-01 00:00:00"
-    },
-    {
-        "index": 3,
-        "exercise_name": "Elliptical Machine",
-        "latest_date": "2025-01-01 00:00:00"
-    },
-    {
-        "index": 4,
-        "exercise_name": "Deadhang",
-        "latest_date": "2025-01-01 00:00:00"
-    },
-    {
-        "index": 5,
-        "exercise_name": "Bent Over Row (Barbell)",
-        "latest_date": "2025-01-01 00:00:00"
-    },
-    {
         "index": 6,
         "exercise_name": "Triceps Dip (Assisted)",
         "latest_date": "2024-12-23 00:00:00"
@@ -228,35 +198,5 @@
         "index": 45,
         "exercise_name": "Bent Over Row (Dumbbell)",
         "latest_date": "2024-01-17 00:00:00"
-    },
-    {
-        "index": 46,
-        "exercise_name": "Flat Leg Raise",
-        "latest_date": "2023-12-15 00:00:00"
-    },
-    {
-        "index": 47,
-        "exercise_name": "Bicep Curl (Dumbbell)",
-        "latest_date": "2023-11-08 00:00:00"
-    },
-    {
-        "index": 48,
-        "exercise_name": "Chest Fly",
-        "latest_date": "2023-10-28 00:00:00"
-    },
-    {
-        "index": 49,
-        "exercise_name": "Back Extension (Machine)",
-        "latest_date": "2023-08-30 00:00:00"
-    },
-    {
-        "index": 50,
-        "exercise_name": "Shoulder Press (Machine)",
-        "latest_date": "2023-08-14 00:00:00"
-    },
-    {
-        "index": 51,
-        "exercise_name": "Running (Treadmill)",
-        "latest_date": "2023-08-14 00:00:00"
     }
 ]

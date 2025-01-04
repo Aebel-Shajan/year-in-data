@@ -112,7 +112,7 @@ const NavigationLeft = ({ element, scroll }: { element: HTMLDivElement, scroll: 
 const NavigationRight = ({ element, scroll }: { element: HTMLDivElement, scroll: number }) => {
   const [initialRender, setInitialRender] = useState(true)
   useEffect(()=> {setTimeout(() => setInitialRender(false), 500)}, [])
-  if (scroll > (element.scrollWidth - 1.1* element.clientWidth) && !initialRender) return
+  if (scroll > (element.scrollWidth - 1.05* element.clientWidth) && !initialRender) return
   return (
     <button
       id={styles.navRight}

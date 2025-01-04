@@ -18,23 +18,23 @@ const TimeSeriesHeatmap = (
     filterMap,
     dataUrl,
     units,
-    valueCol="value",
-    dateCol="date",
-    title=name,
-    description="",
-    colorScheme="Greens"
-  } :
-  {
-    name: string,
-    filterMap: { [key: number]: string },
-    dataUrl: string,
-    units: string,
-    valueCol?: string,
-    dateCol?: string,
-    title?: string,
-    description?: string,
-    colorScheme?: string
-  }
+    valueCol = "value",
+    dateCol = "date",
+    title = name,
+    description = "",
+    colorScheme = "Greens"
+  }:
+    {
+      name: string,
+      filterMap: { [key: number]: string },
+      dataUrl: string,
+      units: string,
+      valueCol?: string,
+      dateCol?: string,
+      title?: string,
+      description?: string,
+      colorScheme?: string
+    }
 ) => {
   const filters: number[] = Object.keys(filterMap).map(value => Number(value))
   const [selectedIndex, setSelectedIndex] = useState<number>(-1)
@@ -65,7 +65,7 @@ const TimeSeriesHeatmap = (
 
     async function getData() {
       const data = await fetchData<FetchedData[]>(dataUrl)
-      const modifiedData: TimeSeriesData[] = data.map(element=> {
+      const modifiedData: TimeSeriesData[] = data.map(element => {
         return {
           date: String(element[dateCol]),
           value: Number(element[valueCol])
@@ -88,7 +88,7 @@ const TimeSeriesHeatmap = (
         else if (selectedIndex === 0) {
           output = data["value"] < filters[selectedIndex + 1]
         }
-        else if (selectedIndex === filters.length -1) {
+        else if (selectedIndex === filters.length - 1) {
           output = data["value"] >= filters[selectedIndex]
         } else {
           output = data["value"] >= filters[selectedIndex] && data["value"] < filters[selectedIndex + 1]
@@ -104,7 +104,10 @@ const TimeSeriesHeatmap = (
       className={styles.dataSection}
     >
       <h2>{title}</h2>
-      <div id={`${name}-heatmap`}></div>
+      <div
+        id={`${name}-heatmap`}
+        className={styles.heatmap}
+      ></div>
       <div id={`${name}-legend`}></div>
 
       <FilterCarousel

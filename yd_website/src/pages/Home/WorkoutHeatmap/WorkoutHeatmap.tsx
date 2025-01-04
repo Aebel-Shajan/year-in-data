@@ -60,7 +60,10 @@ const WorkoutHeatmap = () => {
       className={styles.dataSection}
     >
       <h2>Workout Activity (From Strong workout app)</h2>
-      <div id="workout-heatmap"></div>
+      <div
+        id="workout-heatmap"
+        className={styles.heatmap}
+      ></div>
       <div id="workout-legend"></div>
       <FilterCarousel
         items={distinctWorkouts.map((data) => {
@@ -84,10 +87,10 @@ const WorkoutHeatmap = () => {
 
       <p>
         January, February March I was in the gym almost everyday. End of April I started
-        working and the frequency has been slowly declining ever since. I think I was 
-        over doing it at the start going in 5 to 6 times per week. Although, it did help me 
+        working and the frequency has been slowly declining ever since. I think I was
+        over doing it at the start going in 5 to 6 times per week. Although, it did help me
         establish the habit of going and this helped me endure the habit till the end of the year.
-        I'll probably stick to just 3 to 4 days a week because I'm still 
+        I'll probably stick to just 3 to 4 days a week because I'm still
         making roughly the same amount of progress.
       </p>
     </div>

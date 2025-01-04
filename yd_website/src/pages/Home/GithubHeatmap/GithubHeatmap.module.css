@@ -9,3 +9,8 @@
     padding: 0 1rem;
   }
 }
+
+.heatmap {
+  overflow: scroll;
+  height: 9rem;
+}

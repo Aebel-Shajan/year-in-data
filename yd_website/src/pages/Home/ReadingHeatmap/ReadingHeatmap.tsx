@@ -41,7 +41,10 @@ const ReadingHeatmap = () => {
       className={styles.dataSection}
     >
       <h2>Reading Activity (From Amazon Kindle)</h2>
-      <div id="reading-heatmap" style={{ height: "7rem" }}></div>
+      <div 
+        id="reading-heatmap" 
+        className={styles.heatmap}
+      ></div>
       <div id="reading-legend"></div>
 
       <FilterCarousel

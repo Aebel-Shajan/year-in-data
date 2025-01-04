@@ -41,7 +41,10 @@ const GithubHeatmap = () => {
       className={styles.dataSection}
     >
       <h2>Github Activity (From Gitlab)</h2>
-      <div id="github-heatmap" style={{ height: "7rem" }}></div>
+      <div
+        id="github-heatmap"
+        className={styles.heatmap}
+      ></div>
       <div id="github-legend"></div>
       <FilterCarousel
         items={distinctRepos.map((repo) => {
@@ -54,20 +57,20 @@ const GithubHeatmap = () => {
         setSelectedIndex={setSelectedIndex}
       />
       <p>
-        At the start of 2024, I was stressed out because I graduated in 2023 and had 
+        At the start of 2024, I was stressed out because I graduated in 2023 and had
         not been able to land a job despite applying to hundreds of companies. So this
         year I decided to lock in and learn how to code properly.
       </p>
       <p>
-        January I made a couple chrome extensions to learn how to use javascript. 
-        February, March, April I  enrolled in a bootcamp where I learned react, java 
+        January I made a couple chrome extensions to learn how to use javascript.
+        February, March, April I  enrolled in a bootcamp where I learned react, java
         spring boot and working with rest apis. End of april I got my first job as a
-        data engineer 🎉. This was when I started learning about data pipelines and doing 
+        data engineer 🎉. This was when I started learning about data pipelines and doing
         more python related stuff.
       </p>
       <p>
-        Ever since then I've just been messing around with projects/tech which I think 
-        are fun. 
+        Ever since then I've just been messing around with projects/tech which I think
+        are fun.
       </p>
     </div>
   );

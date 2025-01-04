@@ -2,6 +2,20 @@ import sqlite3
 import json
 import os
 
+endpoints = {
+    "workout_data_daily": "/workout-data",
+    "workout_distinct_workouts": "/distinct-workouts",
+    "workout_distinct_exercises": "/distinct-exercises",
+    "kindle_data_daily": "/kindle-data",
+    "kindle_distinct_books": "/distinct-kindle-books",
+    "github_data_daily": "/github-data",
+    "github_distinct_repos": "/distinct-github-repos",
+    "fitbit_sleep_data_processed": "/sleep-data",
+    "fitbit_calorie_data_processed": "/calorie-data",
+    "fitbit_steps_data_processed": "/steps-data",
+    "fitbit_running_data_processed": "/running-data"
+}
+
 def fetch_data_from_db(db_path, output_dir):
     # Connect to the SQLite database
     conn = sqlite3.connect(db_path)
@@ -11,8 +25,7 @@ def fetch_data_from_db(db_path, output_dir):
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = cursor.fetchall()
 
-    for table_name in tables:
-        table_name = table_name[0]
+    for table_name in endpoints.keys():
         # Query to fetch all data from the table
         query = f"SELECT * FROM {table_name}"
         cursor.execute(query)
@@ -27,8 +40,8 @@ def fetch_data_from_db(db_path, output_dir):
         data = [dict(zip(column_names, row)) for row in rows]
 
         # Write to a JSON file
-        output_file = os.path.join(output_dir, f"{table_name}.json")
-        with open(output_file, "w") as json_file:
+        output_file = os.path.join(output_dir, f"{endpoints[table_name].replace("/","")}.json")
+        with open(output_file, "x") as json_file:
             json.dump(data, json_file, indent=4)
 
     conn.close()

@@ -30,7 +30,7 @@ export interface GithubData {
 
 export interface DistinctRepos {
   "index": number,
-  "date": string,
+  "latest_date": string,
   "repository_name": string,
   "repository_url": string,
   "repository_image": string,

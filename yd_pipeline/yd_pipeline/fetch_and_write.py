@@ -21,10 +21,6 @@ def fetch_data_from_db(db_path, output_dir):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Fetch all table names
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tables = cursor.fetchall()
-
     for table_name in endpoints.keys():
         # Query to fetch all data from the table
         query = f"SELECT * FROM {table_name}"
@@ -38,10 +34,14 @@ def fetch_data_from_db(db_path, output_dir):
 
         # Convert to JSON
         data = [dict(zip(column_names, row)) for row in rows]
+        
+        # Only get values for distinct categories.
+        if ("latest_date" in column_names):  
+            data = [row for row in data if row["latest_date"].startswith("2024")]
 
         # Write to a JSON file
         output_file = os.path.join(output_dir, f"{endpoints[table_name].replace("/","")}.json")
-        with open(output_file, "x") as json_file:
+        with open(output_file, "w") as json_file:
             json.dump(data, json_file, indent=4)
 
     conn.close()

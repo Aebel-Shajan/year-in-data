@@ -4,6 +4,9 @@ Made this to visualise what I did in 2024 through annual activity heatmaps.
 
 https://year-in-data.vercel.app/
 
+Preview| 
+-|-
+|![demo](docs/page_1.jpg) | ![demo2](docs/page_2.jpg)
 ## Frontend
 
 * I used [cal-heatmap](https://cal-heatmap.com/) to visualise the data as heatmaps.

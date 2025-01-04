@@ -1,0 +1,262 @@
+[
+    {
+        "index": 0,
+        "exercise_name": "Reverse Fly (Machine)",
+        "latest_date": "2025-01-01 00:00:00"
+    },
+    {
+        "index": 1,
+        "exercise_name": "Pull Up (Assisted)",
+        "latest_date": "2025-01-01 00:00:00"
+    },
+    {
+        "index": 2,
+        "exercise_name": "Hammer Curl (Dumbbell)",
+        "latest_date": "2025-01-01 00:00:00"
+    },
+    {
+        "index": 3,
+        "exercise_name": "Elliptical Machine",
+        "latest_date": "2025-01-01 00:00:00"
+    },
+    {
+        "index": 4,
+        "exercise_name": "Deadhang",
+        "latest_date": "2025-01-01 00:00:00"
+    },
+    {
+        "index": 5,
+        "exercise_name": "Bent Over Row (Barbell)",
+        "latest_date": "2025-01-01 00:00:00"
+    },
+    {
+        "index": 6,
+        "exercise_name": "Triceps Dip (Assisted)",
+        "latest_date": "2024-12-23 00:00:00"
+    },
+    {
+        "index": 7,
+        "exercise_name": "Overhead Press (Barbell)",
+        "latest_date": "2024-12-23 00:00:00"
+    },
+    {
+        "index": 8,
+        "exercise_name": "Incline Bench Press (Dumbbell)",
+        "latest_date": "2024-12-23 00:00:00"
+    },
+    {
+        "index": 9,
+        "exercise_name": "Dumbbel external rotation",
+        "latest_date": "2024-12-23 00:00:00"
+    },
+    {
+        "index": 10,
+        "exercise_name": "Bench Press (Barbell)",
+        "latest_date": "2024-12-23 00:00:00"
+    },
+    {
+        "index": 11,
+        "exercise_name": "Stretching",
+        "latest_date": "2024-12-21 00:00:00"
+    },
+    {
+        "index": 12,
+        "exercise_name": "Seated Calf Raise (Machine)",
+        "latest_date": "2024-12-21 00:00:00"
+    },
+    {
+        "index": 13,
+        "exercise_name": "Romanian Deadlift (Barbell)",
+        "latest_date": "2024-12-21 00:00:00"
+    },
+    {
+        "index": 14,
+        "exercise_name": "Leg Press",
+        "latest_date": "2024-12-21 00:00:00"
+    },
+    {
+        "index": 15,
+        "exercise_name": "Hanging Leg Raise",
+        "latest_date": "2024-12-21 00:00:00"
+    },
+    {
+        "index": 16,
+        "exercise_name": "Seated Row (Cable)",
+        "latest_date": "2024-12-19 00:00:00"
+    },
+    {
+        "index": 17,
+        "exercise_name": "Lat Pulldown (Cable)",
+        "latest_date": "2024-12-19 00:00:00"
+    },
+    {
+        "index": 18,
+        "exercise_name": "Concentration Curl (Dumbbell)",
+        "latest_date": "2024-12-19 00:00:00"
+    },
+    {
+        "index": 19,
+        "exercise_name": "Triceps Pushdown (Cable - Straight Bar)",
+        "latest_date": "2024-12-17 00:00:00"
+    },
+    {
+        "index": 20,
+        "exercise_name": "Seated Palms Up Wrist Curl (Dumbbell)",
+        "latest_date": "2024-12-17 00:00:00"
+    },
+    {
+        "index": 21,
+        "exercise_name": "Lateral Raise (Machine)",
+        "latest_date": "2024-12-17 00:00:00"
+    },
+    {
+        "index": 22,
+        "exercise_name": "Bench Press (Dumbbell)",
+        "latest_date": "2024-12-17 00:00:00"
+    },
+    {
+        "index": 23,
+        "exercise_name": "Squat (Barbell)",
+        "latest_date": "2024-12-15 00:00:00"
+    },
+    {
+        "index": 24,
+        "exercise_name": "Side Plank",
+        "latest_date": "2024-12-15 00:00:00"
+    },
+    {
+        "index": 25,
+        "exercise_name": "Seated Leg Curl (Machine)",
+        "latest_date": "2024-12-15 00:00:00"
+    },
+    {
+        "index": 26,
+        "exercise_name": "Crunch (Machine)",
+        "latest_date": "2024-12-15 00:00:00"
+    },
+    {
+        "index": 27,
+        "exercise_name": "Plank",
+        "latest_date": "2024-11-29 00:00:00"
+    },
+    {
+        "index": 28,
+        "exercise_name": "Lying Leg Curl (Machine)",
+        "latest_date": "2024-11-29 00:00:00"
+    },
+    {
+        "index": 29,
+        "exercise_name": "Deadlift (Barbell)",
+        "latest_date": "2024-11-23 00:00:00"
+    },
+    {
+        "index": 30,
+        "exercise_name": "Triceps Extension (Machine)",
+        "latest_date": "2024-09-24 00:00:00"
+    },
+    {
+        "index": 31,
+        "exercise_name": "Bench Press - Close Grip (Barbell)",
+        "latest_date": "2024-09-06 00:00:00"
+    },
+    {
+        "index": 32,
+        "exercise_name": "Wrist Rotations",
+        "latest_date": "2024-08-28 00:00:00"
+    },
+    {
+        "index": 33,
+        "exercise_name": "Hip Adductor (Machine)",
+        "latest_date": "2024-08-27 00:00:00"
+    },
+    {
+        "index": 34,
+        "exercise_name": "Hip Abductor (Machine)",
+        "latest_date": "2024-08-27 00:00:00"
+    },
+    {
+        "index": 35,
+        "exercise_name": "Running",
+        "latest_date": "2024-08-06 00:00:00"
+    },
+    {
+        "index": 36,
+        "exercise_name": "Trap Bar Deadlift",
+        "latest_date": "2024-08-01 00:00:00"
+    },
+    {
+        "index": 37,
+        "exercise_name": "Bicep Curl (Machine)",
+        "latest_date": "2024-05-18 00:00:00"
+    },
+    {
+        "index": 38,
+        "exercise_name": "Seated Row (Machine)",
+        "latest_date": "2024-05-13 00:00:00"
+    },
+    {
+        "index": 39,
+        "exercise_name": "Leg Extension (Machine)",
+        "latest_date": "2024-04-22 00:00:00"
+    },
+    {
+        "index": 40,
+        "exercise_name": "Incline Bench Press (Barbell)",
+        "latest_date": "2024-03-30 00:00:00"
+    },
+    {
+        "index": 41,
+        "exercise_name": "Lunge (Dumbbell)",
+        "latest_date": "2024-03-29 00:00:00"
+    },
+    {
+        "index": 42,
+        "exercise_name": "Triceps Extension (Cable)",
+        "latest_date": "2024-03-08 00:00:00"
+    },
+    {
+        "index": 43,
+        "exercise_name": "Shrug (Dumbbell)",
+        "latest_date": "2024-02-24 00:00:00"
+    },
+    {
+        "index": 44,
+        "exercise_name": "Bicycle Crunch",
+        "latest_date": "2024-01-25 00:00:00"
+    },
+    {
+        "index": 45,
+        "exercise_name": "Bent Over Row (Dumbbell)",
+        "latest_date": "2024-01-17 00:00:00"
+    },
+    {
+        "index": 46,
+        "exercise_name": "Flat Leg Raise",
+        "latest_date": "2023-12-15 00:00:00"
+    },
+    {
+        "index": 47,
+        "exercise_name": "Bicep Curl (Dumbbell)",
+        "latest_date": "2023-11-08 00:00:00"
+    },
+    {
+        "index": 48,
+        "exercise_name": "Chest Fly",
+        "latest_date": "2023-10-28 00:00:00"
+    },
+    {
+        "index": 49,
+        "exercise_name": "Back Extension (Machine)",
+        "latest_date": "2023-08-30 00:00:00"
+    },
+    {
+        "index": 50,
+        "exercise_name": "Shoulder Press (Machine)",
+        "latest_date": "2023-08-14 00:00:00"
+    },
+    {
+        "index": 51,
+        "exercise_name": "Running (Treadmill)",
+        "latest_date": "2023-08-14 00:00:00"
+    }
+]

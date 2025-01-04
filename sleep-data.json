@@ -1,0 +1,3164 @@
+[
+    {
+        "date": "2022-12-04",
+        "start_time": "00:53:30.000000",
+        "end_time": "09:08:30.000000",
+        "total_duration_hours": 8.25
+    },
+    {
+        "date": "2022-12-05",
+        "start_time": "02:00:00.000000",
+        "end_time": "08:50:30.000000",
+        "total_duration_hours": 6.83
+    },
+    {
+        "date": "2022-12-06",
+        "start_time": "23:16:30.000000",
+        "end_time": "08:14:30.000000",
+        "total_duration_hours": 8.97
+    },
+    {
+        "date": "2022-12-07",
+        "start_time": "23:27:00.000000",
+        "end_time": "07:47:30.000000",
+        "total_duration_hours": 8.33
+    },
+    {
+        "date": "2022-12-08",
+        "start_time": "23:04:30.000000",
+        "end_time": "08:08:30.000000",
+        "total_duration_hours": 9.07
+    },
+    {
+        "date": "2022-12-09",
+        "start_time": "22:28:00.000000",
+        "end_time": "07:11:30.000000",
+        "total_duration_hours": 8.72
+    },
+    {
+        "date": "2022-12-10",
+        "start_time": "22:55:00.000000",
+        "end_time": "07:40:00.000000",
+        "total_duration_hours": 8.75
+    },
+    {
+        "date": "2022-12-11",
+        "start_time": "00:13:00.000000",
+        "end_time": "08:05:30.000000",
+        "total_duration_hours": 7.87
+    },
+    {
+        "date": "2022-12-12",
+        "start_time": "00:18:00.000000",
+        "end_time": "08:40:30.000000",
+        "total_duration_hours": 8.37
+    },
+    {
+        "date": "2022-12-13",
+        "start_time": "23:25:00.000000",
+        "end_time": "08:43:30.000000",
+        "total_duration_hours": 9.3
+    },
+    {
+        "date": "2022-12-14",
+        "start_time": "23:26:30.000000",
+        "end_time": "08:20:30.000000",
+        "total_duration_hours": 8.9
+    },
+    {
+        "date": "2022-12-15",
+        "start_time": "21:24:30.000000",
+        "end_time": "08:36:30.000000",
+        "total_duration_hours": 11.2
+    },
+    {
+        "date": "2022-12-16",
+        "start_time": "22:55:30.000000",
+        "end_time": "08:56:30.000000",
+        "total_duration_hours": 10.02
+    },
+    {
+        "date": "2022-12-17",
+        "start_time": "00:31:30.000000",
+        "end_time": "09:42:30.000000",
+        "total_duration_hours": 9.18
+    },
+    {
+        "date": "2022-12-18",
+        "start_time": "08:35:30.000000",
+        "end_time": "12:20:30.000000",
+        "total_duration_hours": 9.25
+    },
+    {
+        "date": "2022-12-19",
+        "start_time": "00:11:00.000000",
+        "end_time": "09:05:30.000000",
+        "total_duration_hours": 8.9
+    },
+    {
+        "date": "2022-12-20",
+        "start_time": "23:16:00.000000",
+        "end_time": "08:54:00.000000",
+        "total_duration_hours": 9.63
+    },
+    {
+        "date": "2022-12-21",
+        "start_time": "22:17:00.000000",
+        "end_time": "07:48:00.000000",
+        "total_duration_hours": 9.52
+    },
+    {
+        "date": "2022-12-22",
+        "start_time": "22:18:00.000000",
+        "end_time": "09:34:30.000000",
+        "total_duration_hours": 11.27
+    },
+    {
+        "date": "2022-12-23",
+        "start_time": "02:41:30.000000",
+        "end_time": "08:18:00.000000",
+        "total_duration_hours": 5.6
+    },
+    {
+        "date": "2022-12-24",
+        "start_time": "00:06:30.000000",
+        "end_time": "08:45:00.000000",
+        "total_duration_hours": 8.63
+    },
+    {
+        "date": "2022-12-25",
+        "start_time": "00:08:30.000000",
+        "end_time": "10:14:30.000000",
+        "total_duration_hours": 10.1
+    },
+    {
+        "date": "2022-12-26",
+        "start_time": "02:44:30.000000",
+        "end_time": "10:21:00.000000",
+        "total_duration_hours": 7.6
+    },
+    {
+        "date": "2022-12-29",
+        "start_time": "22:29:30.000000",
+        "end_time": "08:35:00.000000",
+        "total_duration_hours": 10.08
+    },
+    {
+        "date": "2022-12-30",
+        "start_time": "03:12:00.000000",
+        "end_time": "11:20:00.000000",
+        "total_duration_hours": 8.13
+    },
+    {
+        "date": "2023-01-01",
+        "start_time": "09:51:30.000000",
+        "end_time": "13:12:00.000000",
+        "total_duration_hours": 16.66
+    },
+    {
+        "date": "2023-01-02",
+        "start_time": "01:17:00.000000",
+        "end_time": "09:33:00.000000",
+        "total_duration_hours": 8.27
+    },
+    {
+        "date": "2023-01-03",
+        "start_time": "00:21:30.000000",
+        "end_time": "09:28:30.000000",
+        "total_duration_hours": 7.66
+    },
+    {
+        "date": "2023-01-04",
+        "start_time": "23:55:30.000000",
+        "end_time": "09:22:30.000000",
+        "total_duration_hours": 9.45
+    },
+    {
+        "date": "2023-01-05",
+        "start_time": "23:39:30.000000",
+        "end_time": "08:28:30.000000",
+        "total_duration_hours": 8.82
+    },
+    {
+        "date": "2023-01-06",
+        "start_time": "23:11:00.000000",
+        "end_time": "08:39:00.000000",
+        "total_duration_hours": 9.47
+    },
+    {
+        "date": "2023-01-07",
+        "start_time": "00:09:00.000000",
+        "end_time": "06:30:00.000000",
+        "total_duration_hours": 6.35
+    },
+    {
+        "date": "2023-01-08",
+        "start_time": "00:05:30.000000",
+        "end_time": "08:40:30.000000",
+        "total_duration_hours": 8.58
+    },
+    {
+        "date": "2023-01-10",
+        "start_time": "00:55:30.000000",
+        "end_time": "10:18:30.000000",
+        "total_duration_hours": 9.38
+    },
+    {
+        "date": "2023-01-11",
+        "start_time": "01:09:00.000000",
+        "end_time": "10:05:00.000000",
+        "total_duration_hours": 8.93
+    },
+    {
+        "date": "2023-01-12",
+        "start_time": "23:28:00.000000",
+        "end_time": "07:01:30.000000",
+        "total_duration_hours": 7.55
+    },
+    {
+        "date": "2023-01-13",
+        "start_time": "23:07:00.000000",
+        "end_time": "08:07:00.000000",
+        "total_duration_hours": 9.0
+    },
+    {
+        "date": "2023-01-14",
+        "start_time": "23:00:30.000000",
+        "end_time": "07:29:30.000000",
+        "total_duration_hours": 8.48
+    },
+    {
+        "date": "2023-01-15",
+        "start_time": "22:05:00.000000",
+        "end_time": "08:01:30.000000",
+        "total_duration_hours": 9.93
+    },
+    {
+        "date": "2023-01-16",
+        "start_time": "22:15:00.000000",
+        "end_time": "05:36:30.000000",
+        "total_duration_hours": 7.35
+    },
+    {
+        "date": "2023-01-20",
+        "start_time": "21:06:00.000000",
+        "end_time": "05:44:30.000000",
+        "total_duration_hours": 8.63
+    },
+    {
+        "date": "2023-01-23",
+        "start_time": "22:36:30.000000",
+        "end_time": "09:02:30.000000",
+        "total_duration_hours": 10.43
+    },
+    {
+        "date": "2023-01-24",
+        "start_time": "21:52:30.000000",
+        "end_time": "06:54:00.000000",
+        "total_duration_hours": 9.02
+    },
+    {
+        "date": "2023-01-26",
+        "start_time": "20:36:00.000000",
+        "end_time": "06:53:30.000000",
+        "total_duration_hours": 10.28
+    },
+    {
+        "date": "2023-01-27",
+        "start_time": "21:06:30.000000",
+        "end_time": "04:50:00.000000",
+        "total_duration_hours": 7.72
+    },
+    {
+        "date": "2023-01-29",
+        "start_time": "04:43:00.000000",
+        "end_time": "09:44:30.000000",
+        "total_duration_hours": 8.57
+    },
+    {
+        "date": "2023-01-30",
+        "start_time": "01:05:30.000000",
+        "end_time": "07:45:00.000000",
+        "total_duration_hours": 6.65
+    },
+    {
+        "date": "2023-01-31",
+        "start_time": "20:11:00.000000",
+        "end_time": "06:35:30.000000",
+        "total_duration_hours": 20.8
+    },
+    {
+        "date": "2023-02-04",
+        "start_time": "00:06:30.000000",
+        "end_time": "07:50:00.000000",
+        "total_duration_hours": 7.72
+    },
+    {
+        "date": "2023-02-05",
+        "start_time": "00:35:00.000000",
+        "end_time": "06:46:00.000000",
+        "total_duration_hours": 6.18
+    },
+    {
+        "date": "2023-02-07",
+        "start_time": "00:10:00.000000",
+        "end_time": "08:05:30.000000",
+        "total_duration_hours": 7.92
+    },
+    {
+        "date": "2023-02-08",
+        "start_time": "22:51:30.000000",
+        "end_time": "08:39:30.000000",
+        "total_duration_hours": 9.8
+    },
+    {
+        "date": "2023-02-12",
+        "start_time": "00:32:00.000000",
+        "end_time": "09:36:30.000000",
+        "total_duration_hours": 9.07
+    },
+    {
+        "date": "2023-02-13",
+        "start_time": "02:09:00.000000",
+        "end_time": "08:12:30.000000",
+        "total_duration_hours": 6.05
+    },
+    {
+        "date": "2023-02-15",
+        "start_time": "23:58:00.000000",
+        "end_time": "07:29:00.000000",
+        "total_duration_hours": 7.52
+    },
+    {
+        "date": "2023-02-16",
+        "start_time": "13:26:30.000000",
+        "end_time": "14:48:30.000000",
+        "total_duration_hours": 1.37
+    },
+    {
+        "date": "2023-02-17",
+        "start_time": "21:54:30.000000",
+        "end_time": "08:12:00.000000",
+        "total_duration_hours": 10.28
+    },
+    {
+        "date": "2023-02-20",
+        "start_time": "00:14:30.000000",
+        "end_time": "08:04:00.000000",
+        "total_duration_hours": 7.82
+    },
+    {
+        "date": "2023-02-21",
+        "start_time": "23:00:00.000000",
+        "end_time": "07:41:30.000000",
+        "total_duration_hours": 8.68
+    },
+    {
+        "date": "2023-02-22",
+        "start_time": "23:50:00.000000",
+        "end_time": "08:34:30.000000",
+        "total_duration_hours": 8.73
+    },
+    {
+        "date": "2023-02-23",
+        "start_time": "22:30:00.000000",
+        "end_time": "07:08:30.000000",
+        "total_duration_hours": 8.63
+    },
+    {
+        "date": "2023-02-24",
+        "start_time": "22:55:30.000000",
+        "end_time": "07:23:00.000000",
+        "total_duration_hours": 8.45
+    },
+    {
+        "date": "2023-02-25",
+        "start_time": "21:53:30.000000",
+        "end_time": "07:18:00.000000",
+        "total_duration_hours": 9.4
+    },
+    {
+        "date": "2023-03-09",
+        "start_time": "04:25:30.000000",
+        "end_time": "07:00:00.000000",
+        "total_duration_hours": 6.4
+    },
+    {
+        "date": "2023-03-12",
+        "start_time": "21:05:00.000000",
+        "end_time": "09:11:30.000000",
+        "total_duration_hours": 12.1
+    },
+    {
+        "date": "2023-03-13",
+        "start_time": "23:40:30.000000",
+        "end_time": "07:29:30.000000",
+        "total_duration_hours": 7.82
+    },
+    {
+        "date": "2023-03-20",
+        "start_time": "22:57:00.000000",
+        "end_time": "07:04:30.000000",
+        "total_duration_hours": 8.12
+    },
+    {
+        "date": "2023-03-21",
+        "start_time": "23:04:00.000000",
+        "end_time": "06:56:30.000000",
+        "total_duration_hours": 7.87
+    },
+    {
+        "date": "2023-06-14",
+        "start_time": "23:55:00.000000",
+        "end_time": "08:01:30.000000",
+        "total_duration_hours": 8.1
+    },
+    {
+        "date": "2023-06-15",
+        "start_time": "20:55:00.000000",
+        "end_time": "22:06:30.000000",
+        "total_duration_hours": 1.18
+    },
+    {
+        "date": "2023-06-20",
+        "start_time": "22:05:00.000000",
+        "end_time": "07:25:30.000000",
+        "total_duration_hours": 9.33
+    },
+    {
+        "date": "2023-06-21",
+        "start_time": "01:31:30.000000",
+        "end_time": "09:53:30.000000",
+        "total_duration_hours": 8.37
+    },
+    {
+        "date": "2023-06-22",
+        "start_time": "23:16:00.000000",
+        "end_time": "10:14:00.000000",
+        "total_duration_hours": 10.97
+    },
+    {
+        "date": "2023-06-23",
+        "start_time": "02:27:00.000000",
+        "end_time": "08:59:30.000000",
+        "total_duration_hours": 6.53
+    },
+    {
+        "date": "2023-06-24",
+        "start_time": "23:01:30.000000",
+        "end_time": "09:26:00.000000",
+        "total_duration_hours": 10.4
+    },
+    {
+        "date": "2023-06-25",
+        "start_time": "00:32:30.000000",
+        "end_time": "23:24:00.000000",
+        "total_duration_hours": 15.379999999999999
+    },
+    {
+        "date": "2023-06-29",
+        "start_time": "20:28:30.000000",
+        "end_time": "05:06:30.000000",
+        "total_duration_hours": 8.63
+    },
+    {
+        "date": "2023-06-30",
+        "start_time": "00:12:00.000000",
+        "end_time": "12:40:30.000000",
+        "total_duration_hours": 18.380000000000003
+    },
+    {
+        "date": "2023-07-01",
+        "start_time": "03:40:30.000000",
+        "end_time": "10:02:30.000000",
+        "total_duration_hours": 6.37
+    },
+    {
+        "date": "2023-07-02",
+        "start_time": "23:55:00.000000",
+        "end_time": "06:37:30.000000",
+        "total_duration_hours": 6.7
+    },
+    {
+        "date": "2023-07-03",
+        "start_time": "00:45:00.000000",
+        "end_time": "08:59:00.000000",
+        "total_duration_hours": 8.23
+    },
+    {
+        "date": "2023-07-04",
+        "start_time": "09:54:30.000000",
+        "end_time": "11:27:00.000000",
+        "total_duration_hours": 10.85
+    },
+    {
+        "date": "2023-07-05",
+        "start_time": "17:25:00.000000",
+        "end_time": "19:32:00.000000",
+        "total_duration_hours": 2.12
+    },
+    {
+        "date": "2023-07-06",
+        "start_time": "19:40:30.000000",
+        "end_time": "20:46:30.000000",
+        "total_duration_hours": 9.719999999999999
+    },
+    {
+        "date": "2023-07-07",
+        "start_time": "02:39:00.000000",
+        "end_time": "09:36:00.000000",
+        "total_duration_hours": 6.95
+    },
+    {
+        "date": "2023-07-08",
+        "start_time": "02:58:00.000000",
+        "end_time": "07:51:00.000000",
+        "total_duration_hours": 4.88
+    },
+    {
+        "date": "2023-07-09",
+        "start_time": "23:56:00.000000",
+        "end_time": "07:48:30.000000",
+        "total_duration_hours": 7.87
+    },
+    {
+        "date": "2023-07-10",
+        "start_time": "01:01:30.000000",
+        "end_time": "07:55:30.000000",
+        "total_duration_hours": 6.9
+    },
+    {
+        "date": "2023-07-11",
+        "start_time": "00:05:00.000000",
+        "end_time": "06:24:30.000000",
+        "total_duration_hours": 6.32
+    },
+    {
+        "date": "2023-07-12",
+        "start_time": "23:20:00.000000",
+        "end_time": "04:21:30.000000",
+        "total_duration_hours": 5.02
+    },
+    {
+        "date": "2023-07-13",
+        "start_time": "23:18:30.000000",
+        "end_time": "07:02:00.000000",
+        "total_duration_hours": 7.72
+    },
+    {
+        "date": "2023-07-15",
+        "start_time": "21:56:00.000000",
+        "end_time": "05:21:30.000000",
+        "total_duration_hours": 7.42
+    },
+    {
+        "date": "2023-07-16",
+        "start_time": "01:19:30.000000",
+        "end_time": "09:47:30.000000",
+        "total_duration_hours": 8.47
+    },
+    {
+        "date": "2023-07-18",
+        "start_time": "20:00:00.000000",
+        "end_time": "03:31:00.000000",
+        "total_duration_hours": 7.52
+    },
+    {
+        "date": "2023-07-20",
+        "start_time": "09:01:30.000000",
+        "end_time": "11:38:30.000000",
+        "total_duration_hours": 10.2
+    },
+    {
+        "date": "2023-07-21",
+        "start_time": "00:21:30.000000",
+        "end_time": "07:37:30.000000",
+        "total_duration_hours": 7.27
+    },
+    {
+        "date": "2023-07-22",
+        "start_time": "07:19:00.000000",
+        "end_time": "10:33:30.000000",
+        "total_duration_hours": 10.21
+    },
+    {
+        "date": "2023-07-25",
+        "start_time": "16:20:30.000000",
+        "end_time": "17:50:30.000000",
+        "total_duration_hours": 10.87
+    },
+    {
+        "date": "2023-07-26",
+        "start_time": "02:43:00.000000",
+        "end_time": "22:55:00.000000",
+        "total_duration_hours": 8.5
+    },
+    {
+        "date": "2023-07-27",
+        "start_time": "05:19:30.000000",
+        "end_time": "10:52:00.000000",
+        "total_duration_hours": 5.53
+    },
+    {
+        "date": "2023-07-28",
+        "start_time": "15:34:00.000000",
+        "end_time": "16:38:30.000000",
+        "total_duration_hours": 7.94
+    },
+    {
+        "date": "2023-07-29",
+        "start_time": "15:50:30.000000",
+        "end_time": "17:15:30.000000",
+        "total_duration_hours": 8.3
+    },
+    {
+        "date": "2023-07-30",
+        "start_time": "01:49:00.000000",
+        "end_time": "07:39:00.000000",
+        "total_duration_hours": 11.66
+    },
+    {
+        "date": "2023-07-31",
+        "start_time": "22:00:30.000000",
+        "end_time": "06:56:00.000000",
+        "total_duration_hours": 8.92
+    },
+    {
+        "date": "2023-08-01",
+        "start_time": "00:33:00.000000",
+        "end_time": "11:58:30.000000",
+        "total_duration_hours": 7.8500000000000005
+    },
+    {
+        "date": "2023-08-02",
+        "start_time": "02:46:00.000000",
+        "end_time": "08:35:30.000000",
+        "total_duration_hours": 5.82
+    },
+    {
+        "date": "2023-08-03",
+        "start_time": "23:58:30.000000",
+        "end_time": "08:32:30.000000",
+        "total_duration_hours": 8.57
+    },
+    {
+        "date": "2023-08-04",
+        "start_time": "00:25:30.000000",
+        "end_time": "08:57:30.000000",
+        "total_duration_hours": 8.53
+    },
+    {
+        "date": "2023-08-05",
+        "start_time": "23:50:30.000000",
+        "end_time": "08:08:00.000000",
+        "total_duration_hours": 8.28
+    },
+    {
+        "date": "2023-08-06",
+        "start_time": "22:33:30.000000",
+        "end_time": "05:25:30.000000",
+        "total_duration_hours": 6.87
+    },
+    {
+        "date": "2023-08-14",
+        "start_time": "02:03:00.000000",
+        "end_time": "17:02:00.000000",
+        "total_duration_hours": 9.48
+    },
+    {
+        "date": "2023-08-15",
+        "start_time": "23:48:00.000000",
+        "end_time": "09:26:00.000000",
+        "total_duration_hours": 9.63
+    },
+    {
+        "date": "2023-08-16",
+        "start_time": "04:05:00.000000",
+        "end_time": "18:48:00.000000",
+        "total_duration_hours": 7.069999999999999
+    },
+    {
+        "date": "2023-08-17",
+        "start_time": "00:26:30.000000",
+        "end_time": "08:36:30.000000",
+        "total_duration_hours": 8.17
+    },
+    {
+        "date": "2023-08-18",
+        "start_time": "22:27:00.000000",
+        "end_time": "07:43:00.000000",
+        "total_duration_hours": 9.27
+    },
+    {
+        "date": "2023-08-19",
+        "start_time": "22:19:30.000000",
+        "end_time": "03:24:30.000000",
+        "total_duration_hours": 5.08
+    },
+    {
+        "date": "2023-08-20",
+        "start_time": "23:32:30.000000",
+        "end_time": "08:28:00.000000",
+        "total_duration_hours": 8.92
+    },
+    {
+        "date": "2023-08-21",
+        "start_time": "03:10:30.000000",
+        "end_time": "06:49:00.000000",
+        "total_duration_hours": 3.63
+    },
+    {
+        "date": "2023-08-22",
+        "start_time": "21:02:00.000000",
+        "end_time": "01:30:30.000000",
+        "total_duration_hours": 4.47
+    },
+    {
+        "date": "2023-08-26",
+        "start_time": "21:52:30.000000",
+        "end_time": "06:45:00.000000",
+        "total_duration_hours": 8.87
+    },
+    {
+        "date": "2023-08-27",
+        "start_time": "23:45:30.000000",
+        "end_time": "09:12:30.000000",
+        "total_duration_hours": 9.45
+    },
+    {
+        "date": "2023-08-28",
+        "start_time": "23:22:00.000000",
+        "end_time": "06:47:30.000000",
+        "total_duration_hours": 7.42
+    },
+    {
+        "date": "2023-08-29",
+        "start_time": "21:45:30.000000",
+        "end_time": "07:40:30.000000",
+        "total_duration_hours": 19.84
+    },
+    {
+        "date": "2023-08-30",
+        "start_time": "22:03:30.000000",
+        "end_time": "08:28:00.000000",
+        "total_duration_hours": 10.4
+    },
+    {
+        "date": "2023-08-31",
+        "start_time": "22:09:30.000000",
+        "end_time": "07:14:30.000000",
+        "total_duration_hours": 9.08
+    },
+    {
+        "date": "2023-09-02",
+        "start_time": "15:36:30.000000",
+        "end_time": "17:00:00.000000",
+        "total_duration_hours": 7.7
+    },
+    {
+        "date": "2023-09-03",
+        "start_time": "23:08:30.000000",
+        "end_time": "08:12:00.000000",
+        "total_duration_hours": 9.05
+    },
+    {
+        "date": "2023-09-04",
+        "start_time": "21:55:00.000000",
+        "end_time": "05:20:30.000000",
+        "total_duration_hours": 7.42
+    },
+    {
+        "date": "2023-09-05",
+        "start_time": "13:47:00.000000",
+        "end_time": "14:47:00.000000",
+        "total_duration_hours": 9.15
+    },
+    {
+        "date": "2023-09-06",
+        "start_time": "00:53:00.000000",
+        "end_time": "17:58:00.000000",
+        "total_duration_hours": 7.0
+    },
+    {
+        "date": "2023-09-07",
+        "start_time": "00:30:30.000000",
+        "end_time": "07:24:30.000000",
+        "total_duration_hours": 6.9
+    },
+    {
+        "date": "2023-09-08",
+        "start_time": "23:23:00.000000",
+        "end_time": "07:13:00.000000",
+        "total_duration_hours": 7.83
+    },
+    {
+        "date": "2023-09-09",
+        "start_time": "08:02:00.000000",
+        "end_time": "09:51:00.000000",
+        "total_duration_hours": 8.79
+    },
+    {
+        "date": "2023-09-10",
+        "start_time": "23:12:00.000000",
+        "end_time": "06:54:00.000000",
+        "total_duration_hours": 7.7
+    },
+    {
+        "date": "2023-09-11",
+        "start_time": "21:43:30.000000",
+        "end_time": "05:50:30.000000",
+        "total_duration_hours": 8.12
+    },
+    {
+        "date": "2023-09-12",
+        "start_time": "21:35:00.000000",
+        "end_time": "23:30:00.000000",
+        "total_duration_hours": 5.02
+    },
+    {
+        "date": "2023-09-13",
+        "start_time": "01:12:00.000000",
+        "end_time": "06:30:30.000000",
+        "total_duration_hours": 5.3
+    },
+    {
+        "date": "2023-09-14",
+        "start_time": "22:00:30.000000",
+        "end_time": "07:07:30.000000",
+        "total_duration_hours": 9.12
+    },
+    {
+        "date": "2023-09-15",
+        "start_time": "22:23:00.000000",
+        "end_time": "06:20:30.000000",
+        "total_duration_hours": 7.95
+    },
+    {
+        "date": "2023-09-16",
+        "start_time": "01:01:30.000000",
+        "end_time": "07:14:30.000000",
+        "total_duration_hours": 6.22
+    },
+    {
+        "date": "2023-09-17",
+        "start_time": "17:12:00.000000",
+        "end_time": "18:28:00.000000",
+        "total_duration_hours": 7.039999999999999
+    },
+    {
+        "date": "2023-09-19",
+        "start_time": "22:45:00.000000",
+        "end_time": "08:38:00.000000",
+        "total_duration_hours": 9.88
+    },
+    {
+        "date": "2023-09-20",
+        "start_time": "23:58:30.000000",
+        "end_time": "06:22:30.000000",
+        "total_duration_hours": 6.4
+    },
+    {
+        "date": "2023-09-21",
+        "start_time": "08:46:30.000000",
+        "end_time": "13:27:30.000000",
+        "total_duration_hours": 7.91
+    },
+    {
+        "date": "2023-09-22",
+        "start_time": "22:16:00.000000",
+        "end_time": "06:26:30.000000",
+        "total_duration_hours": 8.17
+    },
+    {
+        "date": "2023-09-23",
+        "start_time": "23:14:00.000000",
+        "end_time": "07:10:30.000000",
+        "total_duration_hours": 7.93
+    },
+    {
+        "date": "2023-09-25",
+        "start_time": "23:28:30.000000",
+        "end_time": "07:18:30.000000",
+        "total_duration_hours": 7.83
+    },
+    {
+        "date": "2023-09-26",
+        "start_time": "22:25:00.000000",
+        "end_time": "06:42:30.000000",
+        "total_duration_hours": 8.28
+    },
+    {
+        "date": "2023-09-27",
+        "start_time": "22:43:00.000000",
+        "end_time": "07:06:30.000000",
+        "total_duration_hours": 8.38
+    },
+    {
+        "date": "2023-09-30",
+        "start_time": "22:47:30.000000",
+        "end_time": "07:39:30.000000",
+        "total_duration_hours": 8.87
+    },
+    {
+        "date": "2023-10-01",
+        "start_time": "00:59:00.000000",
+        "end_time": "06:51:30.000000",
+        "total_duration_hours": 5.87
+    },
+    {
+        "date": "2023-10-02",
+        "start_time": "14:45:00.000000",
+        "end_time": "15:48:30.000000",
+        "total_duration_hours": 10.23
+    },
+    {
+        "date": "2023-10-03",
+        "start_time": "02:16:00.000000",
+        "end_time": "06:50:30.000000",
+        "total_duration_hours": 4.57
+    },
+    {
+        "date": "2023-10-04",
+        "start_time": "21:05:30.000000",
+        "end_time": "07:19:30.000000",
+        "total_duration_hours": 10.23
+    },
+    {
+        "date": "2023-10-05",
+        "start_time": "00:02:00.000000",
+        "end_time": "06:43:30.000000",
+        "total_duration_hours": 6.68
+    },
+    {
+        "date": "2023-10-06",
+        "start_time": "23:18:00.000000",
+        "end_time": "07:42:30.000000",
+        "total_duration_hours": 8.4
+    },
+    {
+        "date": "2023-10-07",
+        "start_time": "09:33:00.000000",
+        "end_time": "11:31:30.000000",
+        "total_duration_hours": 10.350000000000001
+    },
+    {
+        "date": "2023-10-08",
+        "start_time": "23:12:00.000000",
+        "end_time": "07:53:30.000000",
+        "total_duration_hours": 8.68
+    },
+    {
+        "date": "2023-10-09",
+        "start_time": "23:01:00.000000",
+        "end_time": "07:37:30.000000",
+        "total_duration_hours": 8.6
+    },
+    {
+        "date": "2023-10-10",
+        "start_time": "23:49:30.000000",
+        "end_time": "08:29:30.000000",
+        "total_duration_hours": 8.67
+    },
+    {
+        "date": "2023-10-11",
+        "start_time": "22:01:00.000000",
+        "end_time": "07:46:30.000000",
+        "total_duration_hours": 9.75
+    },
+    {
+        "date": "2023-10-12",
+        "start_time": "23:02:00.000000",
+        "end_time": "08:31:30.000000",
+        "total_duration_hours": 9.48
+    },
+    {
+        "date": "2023-10-13",
+        "start_time": "22:19:30.000000",
+        "end_time": "03:27:30.000000",
+        "total_duration_hours": 5.13
+    },
+    {
+        "date": "2023-10-14",
+        "start_time": "00:31:30.000000",
+        "end_time": "06:17:30.000000",
+        "total_duration_hours": 5.77
+    },
+    {
+        "date": "2023-10-18",
+        "start_time": "11:04:30.000000",
+        "end_time": "12:40:30.000000",
+        "total_duration_hours": 8.4
+    },
+    {
+        "date": "2023-10-19",
+        "start_time": "22:41:00.000000",
+        "end_time": "08:29:30.000000",
+        "total_duration_hours": 9.8
+    },
+    {
+        "date": "2023-10-20",
+        "start_time": "22:22:30.000000",
+        "end_time": "07:04:30.000000",
+        "total_duration_hours": 8.7
+    },
+    {
+        "date": "2023-10-21",
+        "start_time": "00:42:00.000000",
+        "end_time": "16:52:00.000000",
+        "total_duration_hours": 5.57
+    },
+    {
+        "date": "2023-10-22",
+        "start_time": "05:37:30.000000",
+        "end_time": "07:29:30.000000",
+        "total_duration_hours": 7.5200000000000005
+    },
+    {
+        "date": "2023-10-23",
+        "start_time": "04:13:00.000000",
+        "end_time": "10:30:30.000000",
+        "total_duration_hours": 6.28
+    },
+    {
+        "date": "2023-10-24",
+        "start_time": "22:43:30.000000",
+        "end_time": "08:21:30.000000",
+        "total_duration_hours": 9.63
+    },
+    {
+        "date": "2023-10-25",
+        "start_time": "23:03:00.000000",
+        "end_time": "08:05:30.000000",
+        "total_duration_hours": 9.03
+    },
+    {
+        "date": "2023-10-26",
+        "start_time": "22:00:00.000000",
+        "end_time": "07:15:30.000000",
+        "total_duration_hours": 9.25
+    },
+    {
+        "date": "2023-10-28",
+        "start_time": "22:18:00.000000",
+        "end_time": "07:38:00.000000",
+        "total_duration_hours": 18.66
+    },
+    {
+        "date": "2023-10-29",
+        "start_time": "22:29:00.000000",
+        "end_time": "07:48:00.000000",
+        "total_duration_hours": 9.32
+    },
+    {
+        "date": "2023-10-31",
+        "start_time": "22:35:30.000000",
+        "end_time": "06:54:30.000000",
+        "total_duration_hours": 8.32
+    },
+    {
+        "date": "2023-11-01",
+        "start_time": "21:26:30.000000",
+        "end_time": "06:54:30.000000",
+        "total_duration_hours": 9.47
+    },
+    {
+        "date": "2023-11-02",
+        "start_time": "22:05:30.000000",
+        "end_time": "07:05:30.000000",
+        "total_duration_hours": 9.0
+    },
+    {
+        "date": "2023-11-03",
+        "start_time": "22:11:00.000000",
+        "end_time": "07:28:30.000000",
+        "total_duration_hours": 9.28
+    },
+    {
+        "date": "2023-11-04",
+        "start_time": "22:58:00.000000",
+        "end_time": "08:38:30.000000",
+        "total_duration_hours": 9.67
+    },
+    {
+        "date": "2023-11-05",
+        "start_time": "22:17:00.000000",
+        "end_time": "09:35:30.000000",
+        "total_duration_hours": 11.3
+    },
+    {
+        "date": "2023-11-06",
+        "start_time": "01:40:30.000000",
+        "end_time": "07:33:30.000000",
+        "total_duration_hours": 5.88
+    },
+    {
+        "date": "2023-11-07",
+        "start_time": "21:38:00.000000",
+        "end_time": "06:42:30.000000",
+        "total_duration_hours": 9.07
+    },
+    {
+        "date": "2023-11-08",
+        "start_time": "21:59:30.000000",
+        "end_time": "06:58:30.000000",
+        "total_duration_hours": 8.98
+    },
+    {
+        "date": "2023-11-09",
+        "start_time": "21:53:30.000000",
+        "end_time": "07:06:00.000000",
+        "total_duration_hours": 9.2
+    },
+    {
+        "date": "2023-11-10",
+        "start_time": "21:50:00.000000",
+        "end_time": "07:03:30.000000",
+        "total_duration_hours": 9.22
+    },
+    {
+        "date": "2023-11-11",
+        "start_time": "00:27:00.000000",
+        "end_time": "17:21:00.000000",
+        "total_duration_hours": 9.690000000000001
+    },
+    {
+        "date": "2023-11-12",
+        "start_time": "23:00:30.000000",
+        "end_time": "07:02:30.000000",
+        "total_duration_hours": 8.03
+    },
+    {
+        "date": "2023-11-13",
+        "start_time": "22:55:30.000000",
+        "end_time": "04:52:30.000000",
+        "total_duration_hours": 5.95
+    },
+    {
+        "date": "2023-11-15",
+        "start_time": "21:03:00.000000",
+        "end_time": "06:27:30.000000",
+        "total_duration_hours": 9.4
+    },
+    {
+        "date": "2023-11-16",
+        "start_time": "22:23:30.000000",
+        "end_time": "08:28:30.000000",
+        "total_duration_hours": 10.08
+    },
+    {
+        "date": "2023-11-17",
+        "start_time": "00:07:00.000000",
+        "end_time": "06:25:30.000000",
+        "total_duration_hours": 6.3
+    },
+    {
+        "date": "2023-11-18",
+        "start_time": "15:42:00.000000",
+        "end_time": "17:36:00.000000",
+        "total_duration_hours": 8.53
+    },
+    {
+        "date": "2023-11-19",
+        "start_time": "00:42:00.000000",
+        "end_time": "15:33:30.000000",
+        "total_duration_hours": 11.15
+    },
+    {
+        "date": "2023-11-20",
+        "start_time": "22:11:00.000000",
+        "end_time": "07:36:00.000000",
+        "total_duration_hours": 9.42
+    },
+    {
+        "date": "2023-11-21",
+        "start_time": "01:03:30.000000",
+        "end_time": "08:39:30.000000",
+        "total_duration_hours": 7.6
+    },
+    {
+        "date": "2023-11-22",
+        "start_time": "21:40:30.000000",
+        "end_time": "07:09:30.000000",
+        "total_duration_hours": 9.48
+    },
+    {
+        "date": "2023-11-23",
+        "start_time": "22:00:30.000000",
+        "end_time": "06:55:30.000000",
+        "total_duration_hours": 8.92
+    },
+    {
+        "date": "2023-11-24",
+        "start_time": "22:30:30.000000",
+        "end_time": "07:53:30.000000",
+        "total_duration_hours": 9.38
+    },
+    {
+        "date": "2023-11-25",
+        "start_time": "23:32:30.000000",
+        "end_time": "07:42:30.000000",
+        "total_duration_hours": 8.17
+    },
+    {
+        "date": "2023-11-26",
+        "start_time": "23:02:30.000000",
+        "end_time": "08:20:00.000000",
+        "total_duration_hours": 9.28
+    },
+    {
+        "date": "2023-11-27",
+        "start_time": "22:33:30.000000",
+        "end_time": "06:41:30.000000",
+        "total_duration_hours": 16.26
+    },
+    {
+        "date": "2023-11-28",
+        "start_time": "23:38:00.000000",
+        "end_time": "08:02:00.000000",
+        "total_duration_hours": 8.4
+    },
+    {
+        "date": "2023-11-29",
+        "start_time": "22:07:30.000000",
+        "end_time": "05:58:00.000000",
+        "total_duration_hours": 7.83
+    },
+    {
+        "date": "2023-11-30",
+        "start_time": "00:02:00.000000",
+        "end_time": "09:28:30.000000",
+        "total_duration_hours": 9.43
+    },
+    {
+        "date": "2023-12-01",
+        "start_time": "22:45:30.000000",
+        "end_time": "07:28:30.000000",
+        "total_duration_hours": 8.72
+    },
+    {
+        "date": "2023-12-03",
+        "start_time": "00:30:00.000000",
+        "end_time": "08:29:30.000000",
+        "total_duration_hours": 7.98
+    },
+    {
+        "date": "2023-12-04",
+        "start_time": "06:36:00.000000",
+        "end_time": "11:44:30.000000",
+        "total_duration_hours": 5.13
+    },
+    {
+        "date": "2023-12-05",
+        "start_time": "00:05:30.000000",
+        "end_time": "10:12:30.000000",
+        "total_duration_hours": 10.12
+    },
+    {
+        "date": "2023-12-06",
+        "start_time": "01:32:30.000000",
+        "end_time": "10:54:30.000000",
+        "total_duration_hours": 9.37
+    },
+    {
+        "date": "2023-12-07",
+        "start_time": "11:51:30.000000",
+        "end_time": "15:37:30.000000",
+        "total_duration_hours": 7.54
+    },
+    {
+        "date": "2023-12-08",
+        "start_time": "21:21:30.000000",
+        "end_time": "08:29:30.000000",
+        "total_duration_hours": 11.13
+    },
+    {
+        "date": "2023-12-09",
+        "start_time": "23:19:00.000000",
+        "end_time": "08:29:30.000000",
+        "total_duration_hours": 9.17
+    },
+    {
+        "date": "2023-12-10",
+        "start_time": "17:22:30.000000",
+        "end_time": "19:07:30.000000",
+        "total_duration_hours": 9.78
+    },
+    {
+        "date": "2023-12-11",
+        "start_time": "01:12:00.000000",
+        "end_time": "07:23:30.000000",
+        "total_duration_hours": 6.18
+    },
+    {
+        "date": "2023-12-12",
+        "start_time": "22:19:00.000000",
+        "end_time": "07:59:30.000000",
+        "total_duration_hours": 9.67
+    },
+    {
+        "date": "2023-12-14",
+        "start_time": "21:41:30.000000",
+        "end_time": "06:53:30.000000",
+        "total_duration_hours": 9.2
+    },
+    {
+        "date": "2023-12-15",
+        "start_time": "22:39:30.000000",
+        "end_time": "08:21:30.000000",
+        "total_duration_hours": 9.7
+    },
+    {
+        "date": "2023-12-16",
+        "start_time": "22:47:00.000000",
+        "end_time": "05:24:00.000000",
+        "total_duration_hours": 6.62
+    },
+    {
+        "date": "2023-12-17",
+        "start_time": "23:18:30.000000",
+        "end_time": "07:22:00.000000",
+        "total_duration_hours": 8.05
+    },
+    {
+        "date": "2023-12-22",
+        "start_time": "00:02:00.000000",
+        "end_time": "09:05:30.000000",
+        "total_duration_hours": 9.05
+    },
+    {
+        "date": "2023-12-23",
+        "start_time": "23:20:00.000000",
+        "end_time": "07:10:00.000000",
+        "total_duration_hours": 7.83
+    },
+    {
+        "date": "2023-12-24",
+        "start_time": "23:15:00.000000",
+        "end_time": "07:35:30.000000",
+        "total_duration_hours": 8.33
+    },
+    {
+        "date": "2023-12-25",
+        "start_time": "23:51:00.000000",
+        "end_time": "09:01:30.000000",
+        "total_duration_hours": 9.17
+    },
+    {
+        "date": "2023-12-26",
+        "start_time": "20:03:30.000000",
+        "end_time": "02:26:30.000000",
+        "total_duration_hours": 6.38
+    },
+    {
+        "date": "2023-12-27",
+        "start_time": "23:30:30.000000",
+        "end_time": "07:33:30.000000",
+        "total_duration_hours": 16.1
+    },
+    {
+        "date": "2023-12-28",
+        "start_time": "23:01:00.000000",
+        "end_time": "08:05:00.000000",
+        "total_duration_hours": 9.07
+    },
+    {
+        "date": "2023-12-29",
+        "start_time": "01:00:30.000000",
+        "end_time": "11:18:30.000000",
+        "total_duration_hours": 9.08
+    },
+    {
+        "date": "2023-12-30",
+        "start_time": "22:48:00.000000",
+        "end_time": "06:58:30.000000",
+        "total_duration_hours": 8.17
+    },
+    {
+        "date": "2023-12-31",
+        "start_time": "01:57:30.000000",
+        "end_time": "08:29:30.000000",
+        "total_duration_hours": 6.53
+    },
+    {
+        "date": "2024-01-01",
+        "start_time": "23:38:30.000000",
+        "end_time": "09:38:30.000000",
+        "total_duration_hours": 10.0
+    },
+    {
+        "date": "2024-01-02",
+        "start_time": "02:25:00.000000",
+        "end_time": "08:36:30.000000",
+        "total_duration_hours": 6.18
+    },
+    {
+        "date": "2024-01-03",
+        "start_time": "23:53:00.000000",
+        "end_time": "10:26:30.000000",
+        "total_duration_hours": 10.55
+    },
+    {
+        "date": "2024-01-04",
+        "start_time": "01:58:30.000000",
+        "end_time": "11:40:30.000000",
+        "total_duration_hours": 9.7
+    },
+    {
+        "date": "2024-01-05",
+        "start_time": "03:04:00.000000",
+        "end_time": "08:34:30.000000",
+        "total_duration_hours": 5.5
+    },
+    {
+        "date": "2024-01-06",
+        "start_time": "02:32:00.000000",
+        "end_time": "12:16:30.000000",
+        "total_duration_hours": 9.73
+    },
+    {
+        "date": "2024-01-07",
+        "start_time": "01:22:00.000000",
+        "end_time": "11:32:00.000000",
+        "total_duration_hours": 10.17
+    },
+    {
+        "date": "2024-01-08",
+        "start_time": "05:53:30.000000",
+        "end_time": "13:52:00.000000",
+        "total_duration_hours": 7.97
+    },
+    {
+        "date": "2024-01-09",
+        "start_time": "23:30:00.000000",
+        "end_time": "05:40:30.000000",
+        "total_duration_hours": 6.17
+    },
+    {
+        "date": "2024-01-10",
+        "start_time": "01:55:30.000000",
+        "end_time": "09:52:00.000000",
+        "total_duration_hours": 7.93
+    },
+    {
+        "date": "2024-01-11",
+        "start_time": "23:41:00.000000",
+        "end_time": "03:31:00.000000",
+        "total_duration_hours": 3.83
+    },
+    {
+        "date": "2024-01-12",
+        "start_time": "00:29:30.000000",
+        "end_time": "09:02:30.000000",
+        "total_duration_hours": 8.55
+    },
+    {
+        "date": "2024-01-13",
+        "start_time": "00:43:30.000000",
+        "end_time": "06:35:00.000000",
+        "total_duration_hours": 5.85
+    },
+    {
+        "date": "2024-01-14",
+        "start_time": "23:03:30.000000",
+        "end_time": "10:40:00.000000",
+        "total_duration_hours": 11.6
+    },
+    {
+        "date": "2024-01-15",
+        "start_time": "00:51:30.000000",
+        "end_time": "10:23:00.000000",
+        "total_duration_hours": 9.52
+    },
+    {
+        "date": "2024-01-16",
+        "start_time": "23:34:00.000000",
+        "end_time": "08:39:30.000000",
+        "total_duration_hours": 9.08
+    },
+    {
+        "date": "2024-01-17",
+        "start_time": "22:30:00.000000",
+        "end_time": "07:57:30.000000",
+        "total_duration_hours": 9.45
+    },
+    {
+        "date": "2024-01-18",
+        "start_time": "23:00:30.000000",
+        "end_time": "07:57:00.000000",
+        "total_duration_hours": 8.93
+    },
+    {
+        "date": "2024-01-19",
+        "start_time": "22:15:30.000000",
+        "end_time": "07:46:30.000000",
+        "total_duration_hours": 9.52
+    },
+    {
+        "date": "2024-01-21",
+        "start_time": "21:52:00.000000",
+        "end_time": "07:08:30.000000",
+        "total_duration_hours": 9.27
+    },
+    {
+        "date": "2024-02-25",
+        "start_time": "02:04:00.000000",
+        "end_time": "09:27:30.000000",
+        "total_duration_hours": 14.76
+    },
+    {
+        "date": "2024-02-26",
+        "start_time": "18:05:30.000000",
+        "end_time": "21:40:30.000000",
+        "total_duration_hours": 3.58
+    },
+    {
+        "date": "2024-02-27",
+        "start_time": "03:15:30.000000",
+        "end_time": "08:29:30.000000",
+        "total_duration_hours": 5.23
+    },
+    {
+        "date": "2024-02-28",
+        "start_time": "00:10:30.000000",
+        "end_time": "07:10:00.000000",
+        "total_duration_hours": 6.98
+    },
+    {
+        "date": "2024-02-29",
+        "start_time": "23:26:30.000000",
+        "end_time": "08:41:00.000000",
+        "total_duration_hours": 9.23
+    },
+    {
+        "date": "2024-03-01",
+        "start_time": "22:39:00.000000",
+        "end_time": "06:33:30.000000",
+        "total_duration_hours": 7.9
+    },
+    {
+        "date": "2024-03-02",
+        "start_time": "23:01:30.000000",
+        "end_time": "07:09:00.000000",
+        "total_duration_hours": 8.12
+    },
+    {
+        "date": "2024-03-03",
+        "start_time": "23:04:00.000000",
+        "end_time": "09:47:00.000000",
+        "total_duration_hours": 10.72
+    },
+    {
+        "date": "2024-03-05",
+        "start_time": "21:17:30.000000",
+        "end_time": "06:38:30.000000",
+        "total_duration_hours": 9.35
+    },
+    {
+        "date": "2024-03-07",
+        "start_time": "22:30:30.000000",
+        "end_time": "06:55:30.000000",
+        "total_duration_hours": 8.42
+    },
+    {
+        "date": "2024-03-08",
+        "start_time": "23:38:00.000000",
+        "end_time": "08:16:00.000000",
+        "total_duration_hours": 8.63
+    },
+    {
+        "date": "2024-03-09",
+        "start_time": "23:11:00.000000",
+        "end_time": "08:58:00.000000",
+        "total_duration_hours": 9.78
+    },
+    {
+        "date": "2024-03-10",
+        "start_time": "23:13:30.000000",
+        "end_time": "08:59:00.000000",
+        "total_duration_hours": 9.75
+    },
+    {
+        "date": "2024-03-11",
+        "start_time": "23:45:00.000000",
+        "end_time": "07:57:00.000000",
+        "total_duration_hours": 8.2
+    },
+    {
+        "date": "2024-03-12",
+        "start_time": "22:34:30.000000",
+        "end_time": "08:06:00.000000",
+        "total_duration_hours": 9.52
+    },
+    {
+        "date": "2024-03-15",
+        "start_time": "23:00:00.000000",
+        "end_time": "07:18:30.000000",
+        "total_duration_hours": 8.3
+    },
+    {
+        "date": "2024-03-16",
+        "start_time": "23:04:00.000000",
+        "end_time": "09:17:30.000000",
+        "total_duration_hours": 10.22
+    },
+    {
+        "date": "2024-03-17",
+        "start_time": "00:20:00.000000",
+        "end_time": "08:16:30.000000",
+        "total_duration_hours": 7.93
+    },
+    {
+        "date": "2024-03-18",
+        "start_time": "22:56:30.000000",
+        "end_time": "07:52:30.000000",
+        "total_duration_hours": 8.93
+    },
+    {
+        "date": "2024-03-19",
+        "start_time": "05:46:00.000000",
+        "end_time": "08:22:00.000000",
+        "total_duration_hours": 6.15
+    },
+    {
+        "date": "2024-03-20",
+        "start_time": "22:15:30.000000",
+        "end_time": "02:12:30.000000",
+        "total_duration_hours": 3.95
+    },
+    {
+        "date": "2024-03-21",
+        "start_time": "22:56:00.000000",
+        "end_time": "08:22:30.000000",
+        "total_duration_hours": 9.43
+    },
+    {
+        "date": "2024-03-22",
+        "start_time": "23:11:30.000000",
+        "end_time": "02:39:30.000000",
+        "total_duration_hours": 3.47
+    },
+    {
+        "date": "2024-03-25",
+        "start_time": "20:21:00.000000",
+        "end_time": "22:56:30.000000",
+        "total_duration_hours": 11.8
+    },
+    {
+        "date": "2024-03-26",
+        "start_time": "01:31:30.000000",
+        "end_time": "08:32:00.000000",
+        "total_duration_hours": 14.0
+    },
+    {
+        "date": "2024-03-27",
+        "start_time": "01:42:30.000000",
+        "end_time": "07:14:00.000000",
+        "total_duration_hours": 5.52
+    },
+    {
+        "date": "2024-03-28",
+        "start_time": "00:04:00.000000",
+        "end_time": "08:37:30.000000",
+        "total_duration_hours": 8.55
+    },
+    {
+        "date": "2024-03-29",
+        "start_time": "22:47:30.000000",
+        "end_time": "08:57:30.000000",
+        "total_duration_hours": 10.17
+    },
+    {
+        "date": "2024-03-30",
+        "start_time": "02:00:30.000000",
+        "end_time": "10:18:30.000000",
+        "total_duration_hours": 8.3
+    },
+    {
+        "date": "2024-03-31",
+        "start_time": "00:12:30.000000",
+        "end_time": "09:33:30.000000",
+        "total_duration_hours": 9.35
+    },
+    {
+        "date": "2024-04-01",
+        "start_time": "00:21:30.000000",
+        "end_time": "03:21:30.000000",
+        "total_duration_hours": 3.0
+    },
+    {
+        "date": "2024-04-02",
+        "start_time": "01:26:00.000000",
+        "end_time": "09:00:30.000000",
+        "total_duration_hours": 7.57
+    },
+    {
+        "date": "2024-04-04",
+        "start_time": "19:50:30.000000",
+        "end_time": "21:00:30.000000",
+        "total_duration_hours": 1.17
+    },
+    {
+        "date": "2024-04-05",
+        "start_time": "00:49:00.000000",
+        "end_time": "09:07:00.000000",
+        "total_duration_hours": 8.3
+    },
+    {
+        "date": "2024-04-06",
+        "start_time": "00:14:00.000000",
+        "end_time": "17:46:00.000000",
+        "total_duration_hours": 10.35
+    },
+    {
+        "date": "2024-04-07",
+        "start_time": "00:46:00.000000",
+        "end_time": "11:12:30.000000",
+        "total_duration_hours": 10.43
+    },
+    {
+        "date": "2024-04-08",
+        "start_time": "01:02:30.000000",
+        "end_time": "08:51:30.000000",
+        "total_duration_hours": 7.82
+    },
+    {
+        "date": "2024-04-09",
+        "start_time": "00:01:30.000000",
+        "end_time": "08:51:00.000000",
+        "total_duration_hours": 8.82
+    },
+    {
+        "date": "2024-04-10",
+        "start_time": "00:48:30.000000",
+        "end_time": "07:15:00.000000",
+        "total_duration_hours": 6.43
+    },
+    {
+        "date": "2024-04-11",
+        "start_time": "22:36:30.000000",
+        "end_time": "01:26:00.000000",
+        "total_duration_hours": 2.82
+    },
+    {
+        "date": "2024-04-12",
+        "start_time": "19:13:30.000000",
+        "end_time": "07:28:30.000000",
+        "total_duration_hours": 12.25
+    },
+    {
+        "date": "2024-04-13",
+        "start_time": "23:10:00.000000",
+        "end_time": "08:09:30.000000",
+        "total_duration_hours": 8.98
+    },
+    {
+        "date": "2024-04-14",
+        "start_time": "23:29:30.000000",
+        "end_time": "08:02:00.000000",
+        "total_duration_hours": 8.53
+    },
+    {
+        "date": "2024-04-15",
+        "start_time": "23:12:00.000000",
+        "end_time": "06:46:30.000000",
+        "total_duration_hours": 7.57
+    },
+    {
+        "date": "2024-04-16",
+        "start_time": "02:05:00.000000",
+        "end_time": "05:43:30.000000",
+        "total_duration_hours": 6.65
+    },
+    {
+        "date": "2024-04-17",
+        "start_time": "23:15:00.000000",
+        "end_time": "06:08:00.000000",
+        "total_duration_hours": 6.88
+    },
+    {
+        "date": "2024-04-18",
+        "start_time": "23:03:00.000000",
+        "end_time": "06:07:00.000000",
+        "total_duration_hours": 7.07
+    },
+    {
+        "date": "2024-04-19",
+        "start_time": "22:50:00.000000",
+        "end_time": "07:01:30.000000",
+        "total_duration_hours": 8.18
+    },
+    {
+        "date": "2024-04-20",
+        "start_time": "14:10:00.000000",
+        "end_time": "15:22:00.000000",
+        "total_duration_hours": 1.2
+    },
+    {
+        "date": "2024-04-21",
+        "start_time": "23:21:00.000000",
+        "end_time": "09:14:30.000000",
+        "total_duration_hours": 9.88
+    },
+    {
+        "date": "2024-04-22",
+        "start_time": "22:50:30.000000",
+        "end_time": "08:39:00.000000",
+        "total_duration_hours": 9.8
+    },
+    {
+        "date": "2024-04-23",
+        "start_time": "22:23:00.000000",
+        "end_time": "06:59:30.000000",
+        "total_duration_hours": 8.6
+    },
+    {
+        "date": "2024-04-24",
+        "start_time": "01:41:00.000000",
+        "end_time": "08:22:00.000000",
+        "total_duration_hours": 6.68
+    },
+    {
+        "date": "2024-04-25",
+        "start_time": "21:43:00.000000",
+        "end_time": "07:28:30.000000",
+        "total_duration_hours": 19.5
+    },
+    {
+        "date": "2024-04-26",
+        "start_time": "22:55:30.000000",
+        "end_time": "07:28:30.000000",
+        "total_duration_hours": 8.55
+    },
+    {
+        "date": "2024-04-27",
+        "start_time": "06:15:00.000000",
+        "end_time": "10:05:30.000000",
+        "total_duration_hours": 9.15
+    },
+    {
+        "date": "2024-04-28",
+        "start_time": "00:18:30.000000",
+        "end_time": "07:34:30.000000",
+        "total_duration_hours": 7.27
+    },
+    {
+        "date": "2024-04-29",
+        "start_time": "22:33:00.000000",
+        "end_time": "07:38:30.000000",
+        "total_duration_hours": 9.08
+    },
+    {
+        "date": "2024-04-30",
+        "start_time": "23:17:00.000000",
+        "end_time": "07:11:30.000000",
+        "total_duration_hours": 7.9
+    },
+    {
+        "date": "2024-05-01",
+        "start_time": "23:15:00.000000",
+        "end_time": "07:55:00.000000",
+        "total_duration_hours": 8.67
+    },
+    {
+        "date": "2024-05-02",
+        "start_time": "22:32:00.000000",
+        "end_time": "08:05:30.000000",
+        "total_duration_hours": 9.55
+    },
+    {
+        "date": "2024-05-04",
+        "start_time": "23:16:30.000000",
+        "end_time": "07:22:30.000000",
+        "total_duration_hours": 8.1
+    },
+    {
+        "date": "2024-05-05",
+        "start_time": "17:21:00.000000",
+        "end_time": "18:28:00.000000",
+        "total_duration_hours": 11.190000000000001
+    },
+    {
+        "date": "2024-05-06",
+        "start_time": "00:06:30.000000",
+        "end_time": "07:33:00.000000",
+        "total_duration_hours": 7.43
+    },
+    {
+        "date": "2024-05-07",
+        "start_time": "22:41:30.000000",
+        "end_time": "07:09:30.000000",
+        "total_duration_hours": 8.47
+    },
+    {
+        "date": "2024-05-08",
+        "start_time": "23:03:30.000000",
+        "end_time": "07:48:00.000000",
+        "total_duration_hours": 8.73
+    },
+    {
+        "date": "2024-05-09",
+        "start_time": "22:14:30.000000",
+        "end_time": "07:41:00.000000",
+        "total_duration_hours": 9.43
+    },
+    {
+        "date": "2024-05-10",
+        "start_time": "00:57:30.000000",
+        "end_time": "06:58:00.000000",
+        "total_duration_hours": 6.0
+    },
+    {
+        "date": "2024-05-12",
+        "start_time": "01:34:00.000000",
+        "end_time": "09:12:30.000000",
+        "total_duration_hours": 7.63
+    },
+    {
+        "date": "2024-05-13",
+        "start_time": "23:18:00.000000",
+        "end_time": "07:11:00.000000",
+        "total_duration_hours": 7.88
+    },
+    {
+        "date": "2024-05-14",
+        "start_time": "00:17:00.000000",
+        "end_time": "08:38:30.000000",
+        "total_duration_hours": 6.130000000000001
+    },
+    {
+        "date": "2024-05-15",
+        "start_time": "16:12:30.000000",
+        "end_time": "17:25:00.000000",
+        "total_duration_hours": 8.9
+    },
+    {
+        "date": "2024-05-16",
+        "start_time": "23:27:30.000000",
+        "end_time": "07:43:00.000000",
+        "total_duration_hours": 8.25
+    },
+    {
+        "date": "2024-05-17",
+        "start_time": "22:33:30.000000",
+        "end_time": "08:04:00.000000",
+        "total_duration_hours": 9.5
+    },
+    {
+        "date": "2024-05-18",
+        "start_time": "22:15:30.000000",
+        "end_time": "08:08:30.000000",
+        "total_duration_hours": 9.88
+    },
+    {
+        "date": "2024-05-19",
+        "start_time": "22:57:30.000000",
+        "end_time": "08:10:30.000000",
+        "total_duration_hours": 9.22
+    },
+    {
+        "date": "2024-05-20",
+        "start_time": "23:39:00.000000",
+        "end_time": "08:23:00.000000",
+        "total_duration_hours": 8.73
+    },
+    {
+        "date": "2024-05-21",
+        "start_time": "00:05:00.000000",
+        "end_time": "07:37:30.000000",
+        "total_duration_hours": 7.53
+    },
+    {
+        "date": "2024-05-22",
+        "start_time": "01:14:00.000000",
+        "end_time": "08:14:00.000000",
+        "total_duration_hours": 7.0
+    },
+    {
+        "date": "2024-05-23",
+        "start_time": "23:16:30.000000",
+        "end_time": "09:41:30.000000",
+        "total_duration_hours": 10.42
+    },
+    {
+        "date": "2024-05-24",
+        "start_time": "23:40:00.000000",
+        "end_time": "07:44:30.000000",
+        "total_duration_hours": 8.07
+    },
+    {
+        "date": "2024-05-25",
+        "start_time": "23:38:00.000000",
+        "end_time": "07:34:30.000000",
+        "total_duration_hours": 15.86
+    },
+    {
+        "date": "2024-05-27",
+        "start_time": "23:43:00.000000",
+        "end_time": "07:47:00.000000",
+        "total_duration_hours": 8.07
+    },
+    {
+        "date": "2024-05-28",
+        "start_time": "23:00:00.000000",
+        "end_time": "06:53:30.000000",
+        "total_duration_hours": 7.88
+    },
+    {
+        "date": "2024-05-29",
+        "start_time": "21:41:00.000000",
+        "end_time": "08:03:30.000000",
+        "total_duration_hours": 10.37
+    },
+    {
+        "date": "2024-05-30",
+        "start_time": "00:46:30.000000",
+        "end_time": "07:21:00.000000",
+        "total_duration_hours": 6.57
+    },
+    {
+        "date": "2024-05-31",
+        "start_time": "21:24:30.000000",
+        "end_time": "06:25:00.000000",
+        "total_duration_hours": 9.0
+    },
+    {
+        "date": "2024-06-01",
+        "start_time": "22:58:00.000000",
+        "end_time": "06:39:00.000000",
+        "total_duration_hours": 7.68
+    },
+    {
+        "date": "2024-06-02",
+        "start_time": "04:22:00.000000",
+        "end_time": "10:04:30.000000",
+        "total_duration_hours": 5.7
+    },
+    {
+        "date": "2024-06-03",
+        "start_time": "22:59:00.000000",
+        "end_time": "08:22:30.000000",
+        "total_duration_hours": 9.38
+    },
+    {
+        "date": "2024-06-05",
+        "start_time": "01:47:00.000000",
+        "end_time": "10:24:30.000000",
+        "total_duration_hours": 8.62
+    },
+    {
+        "date": "2024-06-06",
+        "start_time": "23:29:30.000000",
+        "end_time": "07:39:00.000000",
+        "total_duration_hours": 8.15
+    },
+    {
+        "date": "2024-06-07",
+        "start_time": "01:41:00.000000",
+        "end_time": "08:36:30.000000",
+        "total_duration_hours": 6.92
+    },
+    {
+        "date": "2024-06-08",
+        "start_time": "03:25:30.000000",
+        "end_time": "10:08:30.000000",
+        "total_duration_hours": 6.72
+    },
+    {
+        "date": "2024-06-09",
+        "start_time": "23:30:00.000000",
+        "end_time": "09:11:00.000000",
+        "total_duration_hours": 9.68
+    },
+    {
+        "date": "2024-06-12",
+        "start_time": "01:52:30.000000",
+        "end_time": "17:16:00.000000",
+        "total_duration_hours": 7.83
+    },
+    {
+        "date": "2024-06-13",
+        "start_time": "23:19:00.000000",
+        "end_time": "08:19:30.000000",
+        "total_duration_hours": 9.0
+    },
+    {
+        "date": "2024-06-14",
+        "start_time": "00:53:30.000000",
+        "end_time": "08:39:30.000000",
+        "total_duration_hours": 7.77
+    },
+    {
+        "date": "2024-06-15",
+        "start_time": "23:31:00.000000",
+        "end_time": "07:32:00.000000",
+        "total_duration_hours": 8.02
+    },
+    {
+        "date": "2024-06-16",
+        "start_time": "23:32:00.000000",
+        "end_time": "09:15:00.000000",
+        "total_duration_hours": 9.72
+    },
+    {
+        "date": "2024-06-17",
+        "start_time": "23:21:00.000000",
+        "end_time": "07:25:00.000000",
+        "total_duration_hours": 8.07
+    },
+    {
+        "date": "2024-06-18",
+        "start_time": "23:02:30.000000",
+        "end_time": "07:30:30.000000",
+        "total_duration_hours": 8.47
+    },
+    {
+        "date": "2024-06-20",
+        "start_time": "23:29:30.000000",
+        "end_time": "08:08:00.000000",
+        "total_duration_hours": 8.63
+    },
+    {
+        "date": "2024-06-21",
+        "start_time": "03:49:00.000000",
+        "end_time": "08:36:30.000000",
+        "total_duration_hours": 4.78
+    },
+    {
+        "date": "2024-06-22",
+        "start_time": "23:32:00.000000",
+        "end_time": "06:17:00.000000",
+        "total_duration_hours": 6.75
+    },
+    {
+        "date": "2024-06-23",
+        "start_time": "23:40:00.000000",
+        "end_time": "06:40:30.000000",
+        "total_duration_hours": 7.0
+    },
+    {
+        "date": "2024-06-24",
+        "start_time": "00:18:30.000000",
+        "end_time": "19:25:00.000000",
+        "total_duration_hours": 17.04
+    },
+    {
+        "date": "2024-06-25",
+        "start_time": "00:59:00.000000",
+        "end_time": "07:41:00.000000",
+        "total_duration_hours": 6.7
+    },
+    {
+        "date": "2024-06-26",
+        "start_time": "00:32:30.000000",
+        "end_time": "23:53:30.000000",
+        "total_duration_hours": 8.39
+    },
+    {
+        "date": "2024-06-29",
+        "start_time": "00:27:00.000000",
+        "end_time": "06:31:30.000000",
+        "total_duration_hours": 6.07
+    },
+    {
+        "date": "2024-06-30",
+        "start_time": "01:13:00.000000",
+        "end_time": "07:42:30.000000",
+        "total_duration_hours": 6.48
+    },
+    {
+        "date": "2024-07-01",
+        "start_time": "00:05:00.000000",
+        "end_time": "07:29:00.000000",
+        "total_duration_hours": 7.4
+    },
+    {
+        "date": "2024-07-02",
+        "start_time": "05:26:30.000000",
+        "end_time": "07:30:00.000000",
+        "total_duration_hours": 6.319999999999999
+    },
+    {
+        "date": "2024-07-03",
+        "start_time": "23:58:00.000000",
+        "end_time": "07:32:30.000000",
+        "total_duration_hours": 7.57
+    },
+    {
+        "date": "2024-07-04",
+        "start_time": "23:13:00.000000",
+        "end_time": "07:30:30.000000",
+        "total_duration_hours": 8.28
+    },
+    {
+        "date": "2024-07-05",
+        "start_time": "18:51:00.000000",
+        "end_time": "22:18:30.000000",
+        "total_duration_hours": 9.100000000000001
+    },
+    {
+        "date": "2024-07-06",
+        "start_time": "23:39:00.000000",
+        "end_time": "07:03:30.000000",
+        "total_duration_hours": 7.4
+    },
+    {
+        "date": "2024-07-07",
+        "start_time": "23:37:00.000000",
+        "end_time": "08:28:30.000000",
+        "total_duration_hours": 8.85
+    },
+    {
+        "date": "2024-07-08",
+        "start_time": "04:11:00.000000",
+        "end_time": "08:03:00.000000",
+        "total_duration_hours": 7.24
+    },
+    {
+        "date": "2024-07-09",
+        "start_time": "22:56:00.000000",
+        "end_time": "07:35:30.000000",
+        "total_duration_hours": 8.65
+    },
+    {
+        "date": "2024-07-10",
+        "start_time": "23:08:30.000000",
+        "end_time": "06:20:30.000000",
+        "total_duration_hours": 7.2
+    },
+    {
+        "date": "2024-07-11",
+        "start_time": "23:23:30.000000",
+        "end_time": "07:19:00.000000",
+        "total_duration_hours": 7.92
+    },
+    {
+        "date": "2024-07-16",
+        "start_time": "00:17:30.000000",
+        "end_time": "09:08:30.000000",
+        "total_duration_hours": 8.85
+    },
+    {
+        "date": "2024-07-17",
+        "start_time": "02:40:30.000000",
+        "end_time": "09:20:00.000000",
+        "total_duration_hours": 6.65
+    },
+    {
+        "date": "2024-07-18",
+        "start_time": "00:19:00.000000",
+        "end_time": "09:05:30.000000",
+        "total_duration_hours": 8.77
+    },
+    {
+        "date": "2024-07-19",
+        "start_time": "22:57:00.000000",
+        "end_time": "07:22:00.000000",
+        "total_duration_hours": 8.42
+    },
+    {
+        "date": "2024-07-20",
+        "start_time": "23:48:30.000000",
+        "end_time": "10:27:00.000000",
+        "total_duration_hours": 10.63
+    },
+    {
+        "date": "2024-07-21",
+        "start_time": "01:52:00.000000",
+        "end_time": "08:26:00.000000",
+        "total_duration_hours": 6.57
+    },
+    {
+        "date": "2024-07-22",
+        "start_time": "03:20:30.000000",
+        "end_time": "09:25:00.000000",
+        "total_duration_hours": 6.07
+    },
+    {
+        "date": "2024-07-23",
+        "start_time": "02:01:00.000000",
+        "end_time": "09:08:30.000000",
+        "total_duration_hours": 7.12
+    },
+    {
+        "date": "2024-07-24",
+        "start_time": "23:38:30.000000",
+        "end_time": "08:21:00.000000",
+        "total_duration_hours": 17.4
+    },
+    {
+        "date": "2024-07-25",
+        "start_time": "00:32:00.000000",
+        "end_time": "09:28:00.000000",
+        "total_duration_hours": 8.93
+    },
+    {
+        "date": "2024-07-26",
+        "start_time": "23:32:30.000000",
+        "end_time": "07:41:30.000000",
+        "total_duration_hours": 8.15
+    },
+    {
+        "date": "2024-07-27",
+        "start_time": "00:04:00.000000",
+        "end_time": "08:01:30.000000",
+        "total_duration_hours": 7.95
+    },
+    {
+        "date": "2024-07-28",
+        "start_time": "01:09:30.000000",
+        "end_time": "10:37:00.000000",
+        "total_duration_hours": 9.45
+    },
+    {
+        "date": "2024-07-29",
+        "start_time": "23:12:00.000000",
+        "end_time": "08:32:30.000000",
+        "total_duration_hours": 9.33
+    },
+    {
+        "date": "2024-07-30",
+        "start_time": "23:42:30.000000",
+        "end_time": "09:25:00.000000",
+        "total_duration_hours": 9.7
+    },
+    {
+        "date": "2024-07-31",
+        "start_time": "23:44:30.000000",
+        "end_time": "09:20:30.000000",
+        "total_duration_hours": 9.6
+    },
+    {
+        "date": "2024-08-01",
+        "start_time": "22:47:30.000000",
+        "end_time": "08:12:00.000000",
+        "total_duration_hours": 9.4
+    },
+    {
+        "date": "2024-08-02",
+        "start_time": "23:12:30.000000",
+        "end_time": "08:39:30.000000",
+        "total_duration_hours": 9.45
+    },
+    {
+        "date": "2024-08-03",
+        "start_time": "22:31:30.000000",
+        "end_time": "07:21:00.000000",
+        "total_duration_hours": 8.82
+    },
+    {
+        "date": "2024-08-04",
+        "start_time": "14:26:00.000000",
+        "end_time": "15:45:00.000000",
+        "total_duration_hours": 9.35
+    },
+    {
+        "date": "2024-08-05",
+        "start_time": "00:53:00.000000",
+        "end_time": "08:06:00.000000",
+        "total_duration_hours": 7.22
+    },
+    {
+        "date": "2024-08-06",
+        "start_time": "00:58:00.000000",
+        "end_time": "08:36:30.000000",
+        "total_duration_hours": 7.63
+    },
+    {
+        "date": "2024-08-07",
+        "start_time": "01:30:00.000000",
+        "end_time": "10:50:30.000000",
+        "total_duration_hours": 9.33
+    },
+    {
+        "date": "2024-08-08",
+        "start_time": "22:27:30.000000",
+        "end_time": "08:41:30.000000",
+        "total_duration_hours": 10.23
+    },
+    {
+        "date": "2024-08-09",
+        "start_time": "23:40:00.000000",
+        "end_time": "08:33:00.000000",
+        "total_duration_hours": 8.88
+    },
+    {
+        "date": "2024-08-11",
+        "start_time": "22:37:00.000000",
+        "end_time": "08:25:30.000000",
+        "total_duration_hours": 9.8
+    },
+    {
+        "date": "2024-08-12",
+        "start_time": "23:57:00.000000",
+        "end_time": "07:38:00.000000",
+        "total_duration_hours": 7.68
+    },
+    {
+        "date": "2024-08-13",
+        "start_time": "01:18:00.000000",
+        "end_time": "08:09:00.000000",
+        "total_duration_hours": 6.85
+    },
+    {
+        "date": "2024-08-14",
+        "start_time": "23:10:30.000000",
+        "end_time": "06:44:30.000000",
+        "total_duration_hours": 7.57
+    },
+    {
+        "date": "2024-08-15",
+        "start_time": "00:47:00.000000",
+        "end_time": "08:42:30.000000",
+        "total_duration_hours": 7.92
+    },
+    {
+        "date": "2024-08-16",
+        "start_time": "00:26:00.000000",
+        "end_time": "23:36:30.000000",
+        "total_duration_hours": 10.469999999999999
+    },
+    {
+        "date": "2024-08-17",
+        "start_time": "00:59:00.000000",
+        "end_time": "07:22:30.000000",
+        "total_duration_hours": 6.38
+    },
+    {
+        "date": "2024-08-19",
+        "start_time": "23:22:30.000000",
+        "end_time": "08:35:00.000000",
+        "total_duration_hours": 9.2
+    },
+    {
+        "date": "2024-08-20",
+        "start_time": "01:11:30.000000",
+        "end_time": "09:31:30.000000",
+        "total_duration_hours": 8.33
+    },
+    {
+        "date": "2024-08-21",
+        "start_time": "22:25:00.000000",
+        "end_time": "09:06:00.000000",
+        "total_duration_hours": 10.68
+    },
+    {
+        "date": "2024-08-22",
+        "start_time": "06:07:00.000000",
+        "end_time": "21:51:30.000000",
+        "total_duration_hours": 8.899999999999999
+    },
+    {
+        "date": "2024-08-23",
+        "start_time": "01:01:00.000000",
+        "end_time": "06:42:30.000000",
+        "total_duration_hours": 11.36
+    },
+    {
+        "date": "2024-08-24",
+        "start_time": "23:42:00.000000",
+        "end_time": "05:33:00.000000",
+        "total_duration_hours": 5.85
+    },
+    {
+        "date": "2024-08-25",
+        "start_time": "02:41:30.000000",
+        "end_time": "09:53:30.000000",
+        "total_duration_hours": 7.2
+    },
+    {
+        "date": "2024-08-26",
+        "start_time": "23:49:00.000000",
+        "end_time": "06:43:00.000000",
+        "total_duration_hours": 6.9
+    },
+    {
+        "date": "2024-08-27",
+        "start_time": "22:52:30.000000",
+        "end_time": "07:39:30.000000",
+        "total_duration_hours": 8.78
+    },
+    {
+        "date": "2024-08-28",
+        "start_time": "22:46:30.000000",
+        "end_time": "07:45:00.000000",
+        "total_duration_hours": 8.97
+    },
+    {
+        "date": "2024-08-29",
+        "start_time": "00:07:00.000000",
+        "end_time": "07:47:30.000000",
+        "total_duration_hours": 7.67
+    },
+    {
+        "date": "2024-08-30",
+        "start_time": "23:42:00.000000",
+        "end_time": "09:28:30.000000",
+        "total_duration_hours": 9.77
+    },
+    {
+        "date": "2024-08-31",
+        "start_time": "01:20:00.000000",
+        "end_time": "08:10:30.000000",
+        "total_duration_hours": 6.83
+    },
+    {
+        "date": "2024-09-01",
+        "start_time": "22:47:30.000000",
+        "end_time": "07:17:30.000000",
+        "total_duration_hours": 8.5
+    },
+    {
+        "date": "2024-09-02",
+        "start_time": "01:21:00.000000",
+        "end_time": "09:12:30.000000",
+        "total_duration_hours": 7.85
+    },
+    {
+        "date": "2024-09-04",
+        "start_time": "00:15:00.000000",
+        "end_time": "07:44:30.000000",
+        "total_duration_hours": 7.48
+    },
+    {
+        "date": "2024-09-05",
+        "start_time": "23:22:00.000000",
+        "end_time": "07:34:00.000000",
+        "total_duration_hours": 8.2
+    },
+    {
+        "date": "2024-09-06",
+        "start_time": "23:34:00.000000",
+        "end_time": "07:46:00.000000",
+        "total_duration_hours": 8.2
+    },
+    {
+        "date": "2024-09-07",
+        "start_time": "22:28:30.000000",
+        "end_time": "07:28:00.000000",
+        "total_duration_hours": 8.98
+    },
+    {
+        "date": "2024-09-08",
+        "start_time": "01:00:00.000000",
+        "end_time": "08:43:00.000000",
+        "total_duration_hours": 7.72
+    },
+    {
+        "date": "2024-09-09",
+        "start_time": "23:24:00.000000",
+        "end_time": "08:49:00.000000",
+        "total_duration_hours": 9.42
+    },
+    {
+        "date": "2024-09-10",
+        "start_time": "19:39:30.000000",
+        "end_time": "21:42:00.000000",
+        "total_duration_hours": 2.03
+    },
+    {
+        "date": "2024-09-11",
+        "start_time": "01:36:30.000000",
+        "end_time": "06:45:30.000000",
+        "total_duration_hours": 5.15
+    },
+    {
+        "date": "2024-09-12",
+        "start_time": "23:19:00.000000",
+        "end_time": "09:23:30.000000",
+        "total_duration_hours": 10.07
+    },
+    {
+        "date": "2024-09-13",
+        "start_time": "00:37:30.000000",
+        "end_time": "10:14:00.000000",
+        "total_duration_hours": 9.6
+    },
+    {
+        "date": "2024-09-14",
+        "start_time": "22:42:30.000000",
+        "end_time": "07:09:30.000000",
+        "total_duration_hours": 8.45
+    },
+    {
+        "date": "2024-09-15",
+        "start_time": "01:02:00.000000",
+        "end_time": "08:01:00.000000",
+        "total_duration_hours": 6.98
+    },
+    {
+        "date": "2024-09-16",
+        "start_time": "23:59:30.000000",
+        "end_time": "08:58:00.000000",
+        "total_duration_hours": 8.97
+    },
+    {
+        "date": "2024-09-17",
+        "start_time": "23:07:00.000000",
+        "end_time": "08:00:30.000000",
+        "total_duration_hours": 8.88
+    },
+    {
+        "date": "2024-09-18",
+        "start_time": "00:15:30.000000",
+        "end_time": "03:53:30.000000",
+        "total_duration_hours": 3.63
+    },
+    {
+        "date": "2024-09-19",
+        "start_time": "23:35:30.000000",
+        "end_time": "09:06:00.000000",
+        "total_duration_hours": 9.5
+    },
+    {
+        "date": "2024-09-20",
+        "start_time": "00:56:00.000000",
+        "end_time": "09:00:30.000000",
+        "total_duration_hours": 8.07
+    },
+    {
+        "date": "2024-09-21",
+        "start_time": "23:55:30.000000",
+        "end_time": "08:33:30.000000",
+        "total_duration_hours": 8.63
+    },
+    {
+        "date": "2024-09-22",
+        "start_time": "23:40:30.000000",
+        "end_time": "07:51:30.000000",
+        "total_duration_hours": 16.36
+    },
+    {
+        "date": "2024-09-23",
+        "start_time": "00:04:00.000000",
+        "end_time": "07:21:30.000000",
+        "total_duration_hours": 7.28
+    },
+    {
+        "date": "2024-09-24",
+        "start_time": "23:53:30.000000",
+        "end_time": "08:04:30.000000",
+        "total_duration_hours": 8.18
+    },
+    {
+        "date": "2024-09-25",
+        "start_time": "00:09:00.000000",
+        "end_time": "08:04:00.000000",
+        "total_duration_hours": 7.92
+    },
+    {
+        "date": "2024-09-26",
+        "start_time": "23:03:00.000000",
+        "end_time": "07:55:00.000000",
+        "total_duration_hours": 8.87
+    },
+    {
+        "date": "2024-09-27",
+        "start_time": "00:25:30.000000",
+        "end_time": "07:43:00.000000",
+        "total_duration_hours": 7.28
+    },
+    {
+        "date": "2024-09-28",
+        "start_time": "23:01:00.000000",
+        "end_time": "07:17:00.000000",
+        "total_duration_hours": 8.27
+    },
+    {
+        "date": "2024-09-29",
+        "start_time": "17:59:00.000000",
+        "end_time": "20:45:00.000000",
+        "total_duration_hours": 11.04
+    },
+    {
+        "date": "2024-09-30",
+        "start_time": "01:06:30.000000",
+        "end_time": "07:33:30.000000",
+        "total_duration_hours": 6.45
+    },
+    {
+        "date": "2024-10-01",
+        "start_time": "23:48:30.000000",
+        "end_time": "08:28:30.000000",
+        "total_duration_hours": 8.67
+    },
+    {
+        "date": "2024-10-02",
+        "start_time": "02:11:00.000000",
+        "end_time": "08:31:30.000000",
+        "total_duration_hours": 6.33
+    },
+    {
+        "date": "2024-10-04",
+        "start_time": "00:11:30.000000",
+        "end_time": "09:00:30.000000",
+        "total_duration_hours": 8.82
+    },
+    {
+        "date": "2024-10-05",
+        "start_time": "00:22:30.000000",
+        "end_time": "08:05:00.000000",
+        "total_duration_hours": 7.7
+    },
+    {
+        "date": "2024-10-06",
+        "start_time": "00:28:30.000000",
+        "end_time": "07:53:00.000000",
+        "total_duration_hours": 7.4
+    },
+    {
+        "date": "2024-10-07",
+        "start_time": "23:44:00.000000",
+        "end_time": "08:01:30.000000",
+        "total_duration_hours": 8.28
+    },
+    {
+        "date": "2024-10-08",
+        "start_time": "23:07:30.000000",
+        "end_time": "08:08:00.000000",
+        "total_duration_hours": 9.0
+    },
+    {
+        "date": "2024-10-09",
+        "start_time": "23:39:30.000000",
+        "end_time": "09:18:00.000000",
+        "total_duration_hours": 9.63
+    },
+    {
+        "date": "2024-10-10",
+        "start_time": "22:53:30.000000",
+        "end_time": "09:06:00.000000",
+        "total_duration_hours": 10.2
+    },
+    {
+        "date": "2024-10-11",
+        "start_time": "23:23:30.000000",
+        "end_time": "08:19:30.000000",
+        "total_duration_hours": 8.93
+    },
+    {
+        "date": "2024-10-12",
+        "start_time": "17:28:30.000000",
+        "end_time": "19:04:30.000000",
+        "total_duration_hours": 8.73
+    },
+    {
+        "date": "2024-10-13",
+        "start_time": "23:35:00.000000",
+        "end_time": "08:19:30.000000",
+        "total_duration_hours": 8.73
+    },
+    {
+        "date": "2024-10-14",
+        "start_time": "20:28:30.000000",
+        "end_time": "07:52:30.000000",
+        "total_duration_hours": 11.4
+    },
+    {
+        "date": "2024-10-15",
+        "start_time": "23:47:00.000000",
+        "end_time": "09:08:00.000000",
+        "total_duration_hours": 9.35
+    },
+    {
+        "date": "2024-10-16",
+        "start_time": "23:28:00.000000",
+        "end_time": "05:21:00.000000",
+        "total_duration_hours": 5.88
+    },
+    {
+        "date": "2024-10-17",
+        "start_time": "00:09:00.000000",
+        "end_time": "09:16:30.000000",
+        "total_duration_hours": 9.12
+    },
+    {
+        "date": "2024-10-20",
+        "start_time": "00:43:00.000000",
+        "end_time": "07:47:30.000000",
+        "total_duration_hours": 7.07
+    },
+    {
+        "date": "2024-10-21",
+        "start_time": "23:32:00.000000",
+        "end_time": "08:01:00.000000",
+        "total_duration_hours": 8.48
+    },
+    {
+        "date": "2024-10-22",
+        "start_time": "00:09:00.000000",
+        "end_time": "08:20:30.000000",
+        "total_duration_hours": 16.36
+    },
+    {
+        "date": "2024-10-23",
+        "start_time": "23:53:00.000000",
+        "end_time": "03:32:30.000000",
+        "total_duration_hours": 3.65
+    },
+    {
+        "date": "2024-10-24",
+        "start_time": "22:42:30.000000",
+        "end_time": "10:18:30.000000",
+        "total_duration_hours": 11.6
+    },
+    {
+        "date": "2024-10-25",
+        "start_time": "00:42:00.000000",
+        "end_time": "07:54:30.000000",
+        "total_duration_hours": 7.2
+    },
+    {
+        "date": "2024-10-26",
+        "start_time": "23:18:30.000000",
+        "end_time": "09:06:30.000000",
+        "total_duration_hours": 9.8
+    },
+    {
+        "date": "2024-10-27",
+        "start_time": "01:31:00.000000",
+        "end_time": "06:35:00.000000",
+        "total_duration_hours": 5.07
+    },
+    {
+        "date": "2024-10-28",
+        "start_time": "00:57:30.000000",
+        "end_time": "08:24:30.000000",
+        "total_duration_hours": 7.45
+    },
+    {
+        "date": "2024-10-31",
+        "start_time": "00:04:30.000000",
+        "end_time": "08:30:00.000000",
+        "total_duration_hours": 8.42
+    },
+    {
+        "date": "2024-11-01",
+        "start_time": "00:41:30.000000",
+        "end_time": "08:33:30.000000",
+        "total_duration_hours": 7.87
+    },
+    {
+        "date": "2024-11-02",
+        "start_time": "23:11:00.000000",
+        "end_time": "07:37:00.000000",
+        "total_duration_hours": 8.43
+    },
+    {
+        "date": "2024-11-03",
+        "start_time": "23:21:30.000000",
+        "end_time": "08:16:00.000000",
+        "total_duration_hours": 8.9
+    },
+    {
+        "date": "2024-11-04",
+        "start_time": "00:04:00.000000",
+        "end_time": "09:18:30.000000",
+        "total_duration_hours": 9.23
+    },
+    {
+        "date": "2024-11-05",
+        "start_time": "22:54:30.000000",
+        "end_time": "07:34:30.000000",
+        "total_duration_hours": 8.67
+    },
+    {
+        "date": "2024-11-06",
+        "start_time": "22:39:30.000000",
+        "end_time": "07:16:30.000000",
+        "total_duration_hours": 8.62
+    },
+    {
+        "date": "2024-11-07",
+        "start_time": "22:59:30.000000",
+        "end_time": "08:16:30.000000",
+        "total_duration_hours": 9.28
+    },
+    {
+        "date": "2024-11-08",
+        "start_time": "01:01:30.000000",
+        "end_time": "07:31:30.000000",
+        "total_duration_hours": 6.5
+    },
+    {
+        "date": "2024-11-09",
+        "start_time": "00:11:30.000000",
+        "end_time": "07:18:00.000000",
+        "total_duration_hours": 7.1
+    },
+    {
+        "date": "2024-11-10",
+        "start_time": "00:14:00.000000",
+        "end_time": "09:27:30.000000",
+        "total_duration_hours": 9.22
+    },
+    {
+        "date": "2024-11-11",
+        "start_time": "21:41:30.000000",
+        "end_time": "07:40:30.000000",
+        "total_duration_hours": 9.98
+    },
+    {
+        "date": "2024-11-13",
+        "start_time": "18:26:00.000000",
+        "end_time": "19:54:30.000000",
+        "total_duration_hours": 9.4
+    },
+    {
+        "date": "2024-11-14",
+        "start_time": "01:03:30.000000",
+        "end_time": "08:38:30.000000",
+        "total_duration_hours": 7.58
+    },
+    {
+        "date": "2024-11-15",
+        "start_time": "23:53:30.000000",
+        "end_time": "08:27:30.000000",
+        "total_duration_hours": 8.57
+    },
+    {
+        "date": "2024-11-16",
+        "start_time": "00:54:00.000000",
+        "end_time": "09:55:00.000000",
+        "total_duration_hours": 9.02
+    },
+    {
+        "date": "2024-11-17",
+        "start_time": "00:33:30.000000",
+        "end_time": "08:38:30.000000",
+        "total_duration_hours": 8.08
+    },
+    {
+        "date": "2024-11-18",
+        "start_time": "23:40:30.000000",
+        "end_time": "07:45:00.000000",
+        "total_duration_hours": 8.07
+    },
+    {
+        "date": "2024-11-19",
+        "start_time": "23:13:30.000000",
+        "end_time": "08:16:30.000000",
+        "total_duration_hours": 9.05
+    },
+    {
+        "date": "2024-11-20",
+        "start_time": "23:43:00.000000",
+        "end_time": "07:54:00.000000",
+        "total_duration_hours": 8.18
+    },
+    {
+        "date": "2024-11-23",
+        "start_time": "00:45:30.000000",
+        "end_time": "07:27:30.000000",
+        "total_duration_hours": 6.7
+    },
+    {
+        "date": "2024-11-24",
+        "start_time": "23:01:30.000000",
+        "end_time": "08:00:30.000000",
+        "total_duration_hours": 8.98
+    },
+    {
+        "date": "2024-11-25",
+        "start_time": "01:20:30.000000",
+        "end_time": "07:44:30.000000",
+        "total_duration_hours": 7.98
+    },
+    {
+        "date": "2024-11-26",
+        "start_time": "23:19:00.000000",
+        "end_time": "08:14:30.000000",
+        "total_duration_hours": 8.92
+    },
+    {
+        "date": "2024-11-27",
+        "start_time": "00:32:00.000000",
+        "end_time": "07:47:30.000000",
+        "total_duration_hours": 7.25
+    },
+    {
+        "date": "2024-11-28",
+        "start_time": "00:32:00.000000",
+        "end_time": "08:27:30.000000",
+        "total_duration_hours": 7.92
+    },
+    {
+        "date": "2024-11-29",
+        "start_time": "23:43:30.000000",
+        "end_time": "09:42:30.000000",
+        "total_duration_hours": 9.98
+    },
+    {
+        "date": "2024-11-30",
+        "start_time": "00:56:00.000000",
+        "end_time": "07:59:00.000000",
+        "total_duration_hours": 7.05
+    },
+    {
+        "date": "2024-12-01",
+        "start_time": "23:53:30.000000",
+        "end_time": "09:05:30.000000",
+        "total_duration_hours": 9.2
+    },
+    {
+        "date": "2024-12-02",
+        "start_time": "00:40:00.000000",
+        "end_time": "08:24:00.000000",
+        "total_duration_hours": 7.73
+    },
+    {
+        "date": "2024-12-03",
+        "start_time": "02:19:00.000000",
+        "end_time": "03:58:30.000000",
+        "total_duration_hours": 1.65
+    },
+    {
+        "date": "2024-12-05",
+        "start_time": "02:21:00.000000",
+        "end_time": "09:18:30.000000",
+        "total_duration_hours": 6.95
+    },
+    {
+        "date": "2024-12-07",
+        "start_time": "01:04:00.000000",
+        "end_time": "08:37:30.000000",
+        "total_duration_hours": 7.55
+    },
+    {
+        "date": "2024-12-08",
+        "start_time": "00:59:30.000000",
+        "end_time": "10:20:30.000000",
+        "total_duration_hours": 9.35
+    },
+    {
+        "date": "2024-12-09",
+        "start_time": "03:44:00.000000",
+        "end_time": "09:33:00.000000",
+        "total_duration_hours": 5.82
+    },
+    {
+        "date": "2024-12-10",
+        "start_time": "00:50:00.000000",
+        "end_time": "09:16:00.000000",
+        "total_duration_hours": 8.43
+    },
+    {
+        "date": "2024-12-11",
+        "start_time": "22:38:30.000000",
+        "end_time": "09:28:00.000000",
+        "total_duration_hours": 10.82
+    },
+    {
+        "date": "2024-12-12",
+        "start_time": "23:35:00.000000",
+        "end_time": "09:22:30.000000",
+        "total_duration_hours": 9.78
+    },
+    {
+        "date": "2024-12-13",
+        "start_time": "23:23:30.000000",
+        "end_time": "08:28:30.000000",
+        "total_duration_hours": 9.08
+    },
+    {
+        "date": "2024-12-14",
+        "start_time": "22:42:30.000000",
+        "end_time": "07:54:00.000000",
+        "total_duration_hours": 9.18
+    },
+    {
+        "date": "2024-12-15",
+        "start_time": "00:42:00.000000",
+        "end_time": "08:54:00.000000",
+        "total_duration_hours": 8.2
+    },
+    {
+        "date": "2024-12-16",
+        "start_time": "23:47:00.000000",
+        "end_time": "07:59:00.000000",
+        "total_duration_hours": 8.2
+    },
+    {
+        "date": "2024-12-17",
+        "start_time": "01:05:30.000000",
+        "end_time": "08:04:30.000000",
+        "total_duration_hours": 6.98
+    },
+    {
+        "date": "2024-12-18",
+        "start_time": "23:20:00.000000",
+        "end_time": "08:32:30.000000",
+        "total_duration_hours": 9.2
+    },
+    {
+        "date": "2024-12-19",
+        "start_time": "23:52:00.000000",
+        "end_time": "09:18:00.000000",
+        "total_duration_hours": 9.43
+    },
+    {
+        "date": "2024-12-20",
+        "start_time": "01:32:30.000000",
+        "end_time": "09:30:00.000000",
+        "total_duration_hours": 7.95
+    },
+    {
+        "date": "2024-12-22",
+        "start_time": "05:07:00.000000",
+        "end_time": "10:19:30.000000",
+        "total_duration_hours": 5.2
+    },
+    {
+        "date": "2024-12-23",
+        "start_time": "01:22:30.000000",
+        "end_time": "09:27:30.000000",
+        "total_duration_hours": 8.08
+    },
+    {
+        "date": "2024-12-24",
+        "start_time": "00:04:00.000000",
+        "end_time": "10:59:00.000000",
+        "total_duration_hours": 10.92
+    },
+    {
+        "date": "2024-12-25",
+        "start_time": "00:11:00.000000",
+        "end_time": "09:30:00.000000",
+        "total_duration_hours": 9.32
+    },
+    {
+        "date": "2024-12-26",
+        "start_time": "23:32:00.000000",
+        "end_time": "09:22:30.000000",
+        "total_duration_hours": 9.83
+    },
+    {
+        "date": "2024-12-27",
+        "start_time": "00:27:00.000000",
+        "end_time": "22:12:30.000000",
+        "total_duration_hours": 12.1
+    },
+    {
+        "date": "2024-12-28",
+        "start_time": "04:08:00.000000",
+        "end_time": "09:44:00.000000",
+        "total_duration_hours": 5.6
+    },
+    {
+        "date": "2024-12-29",
+        "start_time": "16:13:00.000000",
+        "end_time": "19:02:00.000000",
+        "total_duration_hours": 7.449999999999999
+    },
+    {
+        "date": "2024-12-30",
+        "start_time": "08:10:30.000000",
+        "end_time": "13:40:30.000000",
+        "total_duration_hours": 5.5
+    },
+    {
+        "date": "2024-12-31",
+        "start_time": "23:31:30.000000",
+        "end_time": "10:10:30.000000",
+        "total_duration_hours": 10.65
+    }
+]

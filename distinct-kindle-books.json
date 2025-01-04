@@ -1,0 +1,352 @@
+[
+    {
+        "index": 0,
+        "ASIN": "905de1c3-d748-4f28-9c56-27951ab96589",
+        "total_reading_minutes": 852,
+        "latest_date": "2021-01-19",
+        "book_image": null
+    },
+    {
+        "index": 1,
+        "ASIN": "b6f919aa-81e1-4c8e-af29-d65b564915e0",
+        "total_reading_minutes": 475,
+        "latest_date": "2021-01-24",
+        "book_image": null
+    },
+    {
+        "index": 2,
+        "ASIN": "B0064CPN7I",
+        "total_reading_minutes": 438,
+        "latest_date": "2021-03-01",
+        "book_image": "https://images.amazon.com/images/P/B0064CPN7I.jpg"
+    },
+    {
+        "index": 3,
+        "ASIN": "b6c8dbab-2323-4fa5-bd40-7a5db6142d92",
+        "total_reading_minutes": 431,
+        "latest_date": "2021-04-12",
+        "book_image": null
+    },
+    {
+        "index": 4,
+        "ASIN": "B005FVNIW6",
+        "total_reading_minutes": 764,
+        "latest_date": "2021-05-02",
+        "book_image": "https://images.amazon.com/images/P/B005FVNIW6.jpg"
+    },
+    {
+        "index": 5,
+        "ASIN": "INVALID-ASIN",
+        "total_reading_minutes": 5562,
+        "latest_date": "2021-05-05",
+        "book_image": null
+    },
+    {
+        "index": 6,
+        "ASIN": "B005IYNQAY",
+        "total_reading_minutes": 832,
+        "latest_date": "2021-05-14",
+        "book_image": "https://images.amazon.com/images/P/B005IYNQAY.jpg"
+    },
+    {
+        "index": 7,
+        "ASIN": "B003GK2180",
+        "total_reading_minutes": 442,
+        "latest_date": "2021-05-27",
+        "book_image": "https://images.amazon.com/images/P/B003GK2180.jpg"
+    },
+    {
+        "index": 8,
+        "ASIN": "B07CS9MZMG",
+        "total_reading_minutes": 68,
+        "latest_date": "2021-07-12",
+        "book_image": "https://images.amazon.com/images/P/B07CS9MZMG.jpg"
+    },
+    {
+        "index": 9,
+        "ASIN": "B07B5ZQN2C",
+        "total_reading_minutes": 659,
+        "latest_date": "2021-12-28",
+        "book_image": "https://images.amazon.com/images/P/B07B5ZQN2C.jpg"
+    },
+    {
+        "index": 10,
+        "ASIN": "B012UTQ6CY",
+        "total_reading_minutes": 78,
+        "latest_date": "2022-01-03",
+        "book_image": "https://images.amazon.com/images/P/B012UTQ6CY.jpg"
+    },
+    {
+        "index": 11,
+        "ASIN": "B06XCS5CY8",
+        "total_reading_minutes": 59,
+        "latest_date": "2022-01-17",
+        "book_image": "https://images.amazon.com/images/P/B06XCS5CY8.jpg"
+    },
+    {
+        "index": 12,
+        "ASIN": "B002U3CBZM",
+        "total_reading_minutes": 1454,
+        "latest_date": "2022-01-20",
+        "book_image": "https://images.amazon.com/images/P/B002U3CBZM.jpg"
+    },
+    {
+        "index": 13,
+        "ASIN": "B07B3LLRSH",
+        "total_reading_minutes": 41,
+        "latest_date": "2022-01-29",
+        "book_image": "https://images.amazon.com/images/P/B07B3LLRSH.jpg"
+    },
+    {
+        "index": 14,
+        "ASIN": "B004Z0TU0W",
+        "total_reading_minutes": 95,
+        "latest_date": "2022-03-01",
+        "book_image": "https://images.amazon.com/images/P/B004Z0TU0W.jpg"
+    },
+    {
+        "index": 15,
+        "ASIN": "B00K7ED54M",
+        "total_reading_minutes": 937,
+        "latest_date": "2022-03-01",
+        "book_image": "https://images.amazon.com/images/P/B00K7ED54M.jpg"
+    },
+    {
+        "index": 16,
+        "ASIN": "B00590YMHI",
+        "total_reading_minutes": 132,
+        "latest_date": "2022-04-06",
+        "book_image": "https://images.amazon.com/images/P/B00590YMHI.jpg"
+    },
+    {
+        "index": 17,
+        "ASIN": "B00Y16BEM2",
+        "total_reading_minutes": 683,
+        "latest_date": "2022-04-16",
+        "book_image": "https://images.amazon.com/images/P/B00Y16BEM2.jpg"
+    },
+    {
+        "index": 18,
+        "ASIN": "B077G8FXDP",
+        "total_reading_minutes": 22,
+        "latest_date": "2023-03-22",
+        "book_image": "https://images.amazon.com/images/P/B077G8FXDP.jpg"
+    },
+    {
+        "index": 19,
+        "ASIN": "B00N2AH8NW",
+        "total_reading_minutes": 40,
+        "latest_date": "2023-05-03",
+        "book_image": "https://images.amazon.com/images/P/B00N2AH8NW.jpg"
+    },
+    {
+        "index": 20,
+        "ASIN": "B08CZX8334",
+        "total_reading_minutes": 198,
+        "latest_date": "2023-05-07",
+        "book_image": "https://images.amazon.com/images/P/B08CZX8334.jpg"
+    },
+    {
+        "index": 21,
+        "ASIN": "B0752ZLG34",
+        "total_reading_minutes": 15,
+        "latest_date": "2023-05-13",
+        "book_image": "https://images.amazon.com/images/P/B0752ZLG34.jpg"
+    },
+    {
+        "index": 22,
+        "ASIN": "B017MZ8EBM",
+        "total_reading_minutes": 34,
+        "latest_date": "2023-07-09",
+        "book_image": "https://images.amazon.com/images/P/B017MZ8EBM.jpg"
+    },
+    {
+        "index": 23,
+        "ASIN": "B07W9LYXD9",
+        "total_reading_minutes": 193,
+        "latest_date": "2023-09-10",
+        "book_image": "https://images.amazon.com/images/P/B07W9LYXD9.jpg"
+    },
+    {
+        "index": 24,
+        "ASIN": "B008TVFXMM",
+        "total_reading_minutes": 249,
+        "latest_date": "2023-09-17",
+        "book_image": "https://images.amazon.com/images/P/B008TVFXMM.jpg"
+    },
+    {
+        "index": 25,
+        "ASIN": "B000FC1JAI",
+        "total_reading_minutes": 45,
+        "latest_date": "2023-09-22",
+        "book_image": "https://images.amazon.com/images/P/B000FC1JAI.jpg"
+    },
+    {
+        "index": 26,
+        "ASIN": "B01BKS2X0K",
+        "total_reading_minutes": 43,
+        "latest_date": "2023-10-01",
+        "book_image": "https://images.amazon.com/images/P/B01BKS2X0K.jpg"
+    },
+    {
+        "index": 27,
+        "ASIN": "B0863CKDFQ",
+        "total_reading_minutes": 377,
+        "latest_date": "2023-10-07",
+        "book_image": "https://images.amazon.com/images/P/B0863CKDFQ.jpg"
+    },
+    {
+        "index": 28,
+        "ASIN": "B0BWTXDDQV",
+        "total_reading_minutes": 39,
+        "latest_date": "2023-10-08",
+        "book_image": "https://images.amazon.com/images/P/B0BWTXDDQV.jpg"
+    },
+    {
+        "index": 29,
+        "ASIN": "B0041G68Z0",
+        "total_reading_minutes": 75,
+        "latest_date": "2023-10-22",
+        "book_image": "https://images.amazon.com/images/P/B0041G68Z0.jpg"
+    },
+    {
+        "index": 30,
+        "ASIN": "B005LCYR7Y",
+        "total_reading_minutes": 1983,
+        "latest_date": "2023-12-03",
+        "book_image": "https://images.amazon.com/images/P/B005LCYR7Y.jpg"
+    },
+    {
+        "index": 31,
+        "ASIN": "B08JV3W3VC",
+        "total_reading_minutes": 224,
+        "latest_date": "2023-12-03",
+        "book_image": "https://images.amazon.com/images/P/B08JV3W3VC.jpg"
+    },
+    {
+        "index": 32,
+        "ASIN": "B00GIUG3ES",
+        "total_reading_minutes": 1222,
+        "latest_date": "2024-01-05",
+        "book_image": "https://images.amazon.com/images/P/B00GIUG3ES.jpg"
+    },
+    {
+        "index": 33,
+        "ASIN": "B00N9AVETO",
+        "total_reading_minutes": 1027,
+        "latest_date": "2024-01-15",
+        "book_image": "https://images.amazon.com/images/P/B00N9AVETO.jpg"
+    },
+    {
+        "index": 34,
+        "ASIN": "B00X61MXTG",
+        "total_reading_minutes": 1147,
+        "latest_date": "2024-02-11",
+        "book_image": "https://images.amazon.com/images/P/B00X61MXTG.jpg"
+    },
+    {
+        "index": 35,
+        "ASIN": "B07ZH244RZ",
+        "total_reading_minutes": 38,
+        "latest_date": "2024-02-16",
+        "book_image": "https://images.amazon.com/images/P/B07ZH244RZ.jpg"
+    },
+    {
+        "index": 36,
+        "ASIN": "B019CGXTP0",
+        "total_reading_minutes": 960,
+        "latest_date": "2024-05-08",
+        "book_image": "https://images.amazon.com/images/P/B019CGXTP0.jpg"
+    },
+    {
+        "index": 37,
+        "ASIN": "B0BPCM5BL1",
+        "total_reading_minutes": 840,
+        "latest_date": "2024-05-26",
+        "book_image": "https://images.amazon.com/images/P/B0BPCM5BL1.jpg"
+    },
+    {
+        "index": 38,
+        "ASIN": "B0BPCK4XW9",
+        "total_reading_minutes": 231,
+        "latest_date": "2024-08-23",
+        "book_image": "https://images.amazon.com/images/P/B0BPCK4XW9.jpg"
+    },
+    {
+        "index": 39,
+        "ASIN": "B002VBV1HC",
+        "total_reading_minutes": 2002,
+        "latest_date": "2024-10-23",
+        "book_image": "https://images.amazon.com/images/P/B002VBV1HC.jpg"
+    },
+    {
+        "index": 40,
+        "ASIN": "B08SGJ9WHG",
+        "total_reading_minutes": 17,
+        "latest_date": "2024-10-24",
+        "book_image": "https://images.amazon.com/images/P/B08SGJ9WHG.jpg"
+    },
+    {
+        "index": 41,
+        "ASIN": "B0BS37DHM3",
+        "total_reading_minutes": 433,
+        "latest_date": "2024-11-02",
+        "book_image": "https://images.amazon.com/images/P/B0BS37DHM3.jpg"
+    },
+    {
+        "index": 42,
+        "ASIN": "B08FFJS3YW",
+        "total_reading_minutes": 781,
+        "latest_date": "2024-11-10",
+        "book_image": "https://images.amazon.com/images/P/B08FFJS3YW.jpg"
+    },
+    {
+        "index": 43,
+        "ASIN": "B007HLIUN4",
+        "total_reading_minutes": 946,
+        "latest_date": "2024-11-22",
+        "book_image": "https://images.amazon.com/images/P/B007HLIUN4.jpg"
+    },
+    {
+        "index": 44,
+        "ASIN": "B0043M6780",
+        "total_reading_minutes": 1227,
+        "latest_date": "2024-12-08",
+        "book_image": "https://images.amazon.com/images/P/B0043M6780.jpg"
+    },
+    {
+        "index": 45,
+        "ASIN": "B08NDJC2YK",
+        "total_reading_minutes": 15,
+        "latest_date": "2024-12-09",
+        "book_image": "https://images.amazon.com/images/P/B08NDJC2YK.jpg"
+    },
+    {
+        "index": 46,
+        "ASIN": "B01N5AX61W",
+        "total_reading_minutes": 265,
+        "latest_date": "2024-12-12",
+        "book_image": "https://images.amazon.com/images/P/B01N5AX61W.jpg"
+    },
+    {
+        "index": 47,
+        "ASIN": "B01GNJ5RWM",
+        "total_reading_minutes": 278,
+        "latest_date": "2024-12-16",
+        "book_image": "https://images.amazon.com/images/P/B01GNJ5RWM.jpg"
+    },
+    {
+        "index": 48,
+        "ASIN": "B07D1G6DTF",
+        "total_reading_minutes": 535,
+        "latest_date": "2024-12-21",
+        "book_image": "https://images.amazon.com/images/P/B07D1G6DTF.jpg"
+    },
+    {
+        "index": 49,
+        "ASIN": "B00486U2RS",
+        "total_reading_minutes": 381,
+        "latest_date": "2025-01-01",
+        "book_image": "https://images.amazon.com/images/P/B00486U2RS.jpg"
+    }
+]

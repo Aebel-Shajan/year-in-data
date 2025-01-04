@@ -12,6 +12,6 @@ const axiosInstance = axios.create({
 
 // Export a function to fetch data
 export const fetchData = async <T>(url: string): Promise<T> => {
-  const response = await axiosInstance.get<T>(url);
+  const response = await axiosInstance.get<T>(url + ".json");
   return response.data;
 };

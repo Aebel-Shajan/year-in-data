@@ -22,8 +22,8 @@ const WorkoutHeatmap = () => {
 
   useEffect(() => {
     async function getData() {
-      const data = await fetchData<WorkoutData[]>("/workout-data?year=2024")
-      const distinctWorkouts = await fetchData<DistinctWorkouts[]>("/distinct-workouts?year=2024")
+      const data = await fetchData<WorkoutData[]>("/workout-data")
+      const distinctWorkouts = await fetchData<DistinctWorkouts[]>("/distinct-workouts")
       setActivity(data)
       drawWorkoutHeatmap(workoutCal, data)
       setDistinctWorkouts(distinctWorkouts)

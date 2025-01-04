@@ -15,8 +15,8 @@ const GithubHeatmap = () => {
 
   useEffect(() => {
     async function getData() {
-      const data = await fetchData<GithubData[]>("/github-data?year=2024")
-      const distinctRepos = await fetchData<DistinctRepos[]>("/distinct-github-repos?year=2024")
+      const data = await fetchData<GithubData[]>("/github-data")
+      const distinctRepos = await fetchData<DistinctRepos[]>("/distinct-github-repos")
       setActivity(data)
       drawGithubHeatmap(cal, data)
       setDistinctRepos(distinctRepos)

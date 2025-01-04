@@ -15,8 +15,8 @@ const ReadingHeatmap = () => {
 
   useEffect(() => {
     async function getData() {
-      const readingData = await fetchData<ReadingData[]>("/kindle-data?year=2024")
-      const distinctBooks = await fetchData<DistinctBooks[]>("distinct-kindle-books?year=2024")
+      const readingData = await fetchData<ReadingData[]>("/kindle-data")
+      const distinctBooks = await fetchData<DistinctBooks[]>("/distinct-kindle-books")
       setReadingActivity(readingData)
       drawKindleHeatmap(readingCal, readingData)
       setBooks(distinctBooks)

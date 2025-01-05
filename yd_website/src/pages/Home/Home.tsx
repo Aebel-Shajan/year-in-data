@@ -3,6 +3,8 @@ import ReadingHeatmap from "./ReadingHeatmap/ReadingHeatmap";
 import GithubHeatmap from "./GithubHeatmap/GithubHeatmap";
 import WorkoutHeatmap from "./WorkoutHeatmap/WorkoutHeatmap";
 import TimeSeriesHeatmap from "../../components/TimeSeriesHeatmap/TimeSeriesHeatmap";
+import FeedbackForm from "../../components/FeedbackForm/FeedbackForm";
+import Footer from "../../components/Footer/Footer";
 
 const Home = () => {
 
@@ -10,15 +12,16 @@ const Home = () => {
     <div
       className={styles.home}
     >
-      <h1>Year in Data</h1>
-      <p>
-        2024 is over, 2025 is here. Here is what I was doing this year represented through
-        yearly heatmaps.
-      </p>
+
 
       <div
         className={styles.mainContent}
       >
+        <h1>Year in Data</h1>
+        <p>
+          2024 is over, 2025 is here. Here is what I was doing this year represented through
+          yearly heatmaps.
+        </p>
         <ReadingHeatmap />
 
         <GithubHeatmap />
@@ -96,7 +99,11 @@ const Home = () => {
           so I have no idea how accurate this is."
           colorScheme="YlOrRd"
         />
-
+      </div>
+      <div
+        className={styles.footer}
+      >
+        <Footer />
       </div>
     </div>
   );

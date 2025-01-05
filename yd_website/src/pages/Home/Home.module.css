@@ -3,7 +3,7 @@
   min-height: 100vh;
   height: fit-content;
   padding-top: 2rem;
-  padding: 1rem;
+
 
   display: flex;
   flex-direction: column;
@@ -19,6 +19,7 @@
   align-items: center;
   gap: 3rem;
   padding-bottom: 3rem;
+    padding: 1rem;
 }
 
 .dataSection {
@@ -31,4 +32,9 @@
   &>p {
     padding: 0 1rem;
   }
+}
+
+.footer {
+  background-color: black;
+  width: 100%;
 }

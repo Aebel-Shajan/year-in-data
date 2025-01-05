@@ -1,0 +1,29 @@
+.footer {
+  height: fit-content;
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  background-color: var(--color-2);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  button, a {
+    text-decoration: none;
+    color: white;
+    border-radius: 1rem;
+    background-color: black;
+    cursor: pointer;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+  }
+
+  button:hover, a:hover {
+    color: black;
+    background-color: white;
+  }
+}

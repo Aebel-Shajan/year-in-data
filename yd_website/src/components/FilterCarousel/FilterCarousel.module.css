@@ -23,6 +23,10 @@
   position: relative;
 }
 
+.itemCarousel::-webkit-scrollbar {
+  display: none;
+}
+
 .itemContainer {
   height: 100%;
   min-width: 2rem;

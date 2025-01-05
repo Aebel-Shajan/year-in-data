@@ -14,3 +14,7 @@
   overflow: scroll;
   height: 9rem;
 }
+
+.heatmap::-webkit-scrollbar {
+  display: none;
+}

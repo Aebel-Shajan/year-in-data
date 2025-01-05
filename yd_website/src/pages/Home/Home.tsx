@@ -3,7 +3,6 @@ import ReadingHeatmap from "./ReadingHeatmap/ReadingHeatmap";
 import GithubHeatmap from "./GithubHeatmap/GithubHeatmap";
 import WorkoutHeatmap from "./WorkoutHeatmap/WorkoutHeatmap";
 import TimeSeriesHeatmap from "../../components/TimeSeriesHeatmap/TimeSeriesHeatmap";
-import FeedbackForm from "../../components/FeedbackForm/FeedbackForm";
 import Footer from "../../components/Footer/Footer";
 
 const Home = () => {

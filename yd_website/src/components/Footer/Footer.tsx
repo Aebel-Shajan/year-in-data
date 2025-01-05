@@ -1,9 +1,8 @@
 import { RiBlueskyLine, RiGithubLine, RiMailLine } from "react-icons/ri";
 import styles from "./Footer.module.css"
-import { SiChromewebstore } from "react-icons/si";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import { useState } from "react";
-import { MdEmail, MdFeedback } from "react-icons/md";
+import { MdFeedback } from "react-icons/md";
 
 const Footer = () => {
   const [showFeedback, setShowFeedback] = useState(false);

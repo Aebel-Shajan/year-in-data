@@ -149,32 +149,21 @@ export function drawKindleHeatmap(cal: CalHeatmap, data: ReadingData[]) {
 }
 
 export function drawGithubHeatmap(cal: CalHeatmap, data: GithubData[]) {
-  const plugins = [...basePlugins]
-  plugins.push([
-    Legend,
+  drawHeatmap(
     {
-      label: 'Number of commits',
-      itemSelector: '#github-legend',
-    },
-  ])
-  plugins.push(createTooltip("commits"))
-  const options = {
-    ...baseOptions,
-    data: {
-      source: data,
-      x: "date",
-      y: "total_commits",
-      groupY: "min"
-    },
-    itemSelector: '#github-heatmap',
-    scale: {
+      cal: cal,
+      data: data,
+      dateCol: "date",
+      valueCol: "total_commits",
+      name: "github",
+      legendLabel: "Number of commits",
       color: {
-        scheme: "Greens",
-        domain: [-10, 20],
-      }
+        range: ["#9AE9A8", "#41C363", "#31A14E", "#206D38"],
+        domain: [ 5, 10, 15, 20]
+      },
+      units: "commits"
     }
-  }
-  cal.paint(options, plugins);
+  )
 }
 
 export function drawSleepHeatmap(cal: CalHeatmap, data: SleepData[]) {

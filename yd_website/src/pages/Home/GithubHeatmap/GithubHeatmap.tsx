@@ -41,7 +41,7 @@ const GithubHeatmap = () => {
     <div
       className={styles.dataSection}
     >
-      <h2>Github Activity (From Gitlab)</h2>
+      <h2>Github Activity (From Github)</h2>
       <div
         id="github-heatmap"
         className={styles.heatmap}

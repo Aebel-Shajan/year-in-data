@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import styles from "./WorkoutHeatmap.module.css"
 import { drawWorkoutHeatmap } from "../heatmapUtils"
 import { fetchData } from "../../../api/axiosClient"
@@ -6,6 +6,7 @@ import { WorkoutData } from "../../../types/dataTypes"
 // @ts-expect-error cal-heatmap library don't have declration files :(
 import CalHeatmap from 'cal-heatmap';
 import FilterCarousel from "../../../components/FilterCarousel/FilterCarousel"
+import { HeatmapContext } from "../HeatmapContext/HeatmapContext"
 
 interface DistinctWorkouts {
   workout_name: string,
@@ -19,6 +20,7 @@ const WorkoutHeatmap = () => {
   const [distinctExercises, setDistinctExercises] = useState<string[]>([])
   const [activity, setActivity] = useState<WorkoutData[]>([])
   const [workoutCal,] = useState(new CalHeatmap())
+  const {showDetails} = useContext(HeatmapContext)
 
   useEffect(() => {
     async function getData() {
@@ -65,34 +67,38 @@ const WorkoutHeatmap = () => {
         className={styles.heatmap}
       ></div>
       <div id="workout-legend"></div>
-      <FilterCarousel
-        items={distinctWorkouts.map((data) => {
-          return {
-            "name": data["workout_name"]
-          }
-        })}
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
-      />
-      <FilterCarousel
-        items={distinctExercises.map((exercise) => {
-          return {
-            "name": exercise
-          }
-        })}
-        selectedIndex={selectedSubIndex}
-        setSelectedIndex={setSelectedSubIndex}
-      />
+      {showDetails &&
+        <>
+          <FilterCarousel
+            items={distinctWorkouts.map((data) => {
+              return {
+                "name": data["workout_name"]
+              }
+            })}
+            selectedIndex={selectedIndex}
+            setSelectedIndex={setSelectedIndex}
+          />
+          <FilterCarousel
+            items={distinctExercises.map((exercise) => {
+              return {
+                "name": exercise
+              }
+            })}
+            selectedIndex={selectedSubIndex}
+            setSelectedIndex={setSelectedSubIndex}
+          />
 
 
-      <p>
-        January, February March I was in the gym almost everyday. End of April I started
-        working and the frequency has been slowly declining ever since. I think I was
-        over doing it at the start going in 5 to 6 times per week. Although, it did help me
-        establish the habit of going and this helped me endure the habit till the end of the year.
-        I'll probably stick to just 3 to 4 days a week because I'm still
-        making roughly the same amount of progress.
-      </p>
+          <p>
+            January, February March I was in the gym almost everyday. End of April I started
+            working and the frequency has been slowly declining ever since. I think I was
+            over doing it at the start going in 5 to 6 times per week. Although, it did help me
+            establish the habit of going and this helped me endure the habit till the end of the year.
+            I'll probably stick to just 3 to 4 days a week because I'm still
+            making roughly the same amount of progress.
+          </p>
+        </>
+      }
     </div>
   );
 }

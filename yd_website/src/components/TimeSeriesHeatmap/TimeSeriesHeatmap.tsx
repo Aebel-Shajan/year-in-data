@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import styles from "./TimeSeriesHeatmap.module.css"
 import { fetchData } from "../../api/axiosClient"
 // @ts-expect-error cal-heatmap library don't have declration files :(
 import CalHeatmap from 'cal-heatmap';
 import FilterCarousel from "../FilterCarousel/FilterCarousel";
 import { drawHeatmap } from "./heatmapUtils";
+import { HeatmapContext } from "../../pages/Home/HeatmapContext/HeatmapContext";
 
 
 interface TimeSeriesData {
@@ -40,6 +41,7 @@ const TimeSeriesHeatmap = (
   const [selectedIndex, setSelectedIndex] = useState<number>(-1)
   const [activity, setActivity] = useState<TimeSeriesData[]>([])
   const [cal,] = useState(new CalHeatmap())
+  const { showDetails } = useContext(HeatmapContext)
   const drawTimeSeriesHeatmap = (data: TimeSeriesData[]) => {
     drawHeatmap(
       {
@@ -109,20 +111,23 @@ const TimeSeriesHeatmap = (
         className={styles.heatmap}
       ></div>
       <div id={`${name}-legend`}></div>
-
-      <FilterCarousel
-        items={filters.map((element: number) => {
-          return {
-            "name": filterMap[element]
-          }
-        })}
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
-        height={5}
-      />
-      <p>
-        {description}
-      </p>
+      {showDetails &&
+        <>
+          <FilterCarousel
+            items={filters.map((element: number) => {
+              return {
+                "name": filterMap[element]
+              }
+            })}
+            selectedIndex={selectedIndex}
+            setSelectedIndex={setSelectedIndex}
+            height={5}
+          />
+          <p>
+            {description}
+          </p>
+        </>
+      }
     </div>
   );
 }

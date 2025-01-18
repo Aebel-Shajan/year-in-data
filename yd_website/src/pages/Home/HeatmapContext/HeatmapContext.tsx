@@ -5,7 +5,7 @@ interface HeatmapContextType {
   setShowDetails: CallableFunction;
 }
 
-export const HeatmapContext = createContext<HeatmapContextType | null>(null);
+const HeatmapContext = createContext<HeatmapContextType | null>(null);
 
 export const HeatmapProvider = ({ children }: { children: React.ReactNode }) => {
   const [showDetails, setShowDetails] = useState(true);
@@ -17,12 +17,16 @@ export const HeatmapProvider = ({ children }: { children: React.ReactNode }) => 
   );
 };
 
-export const DetailsToggleButton = () => {
+export const useHeatmapContext = () => {
   const context = useContext(HeatmapContext);
   if (context === null) {
-    throw Error("Context not defined properly.")
+    throw Error("Context not defined properly.");
   }
-  const {showDetails, setShowDetails} = context
+  return context;
+};
+
+export const DetailsToggleButton = () => {
+  const { showDetails, setShowDetails } = useHeatmapContext();
 
   return (
     <div className={styles.container}>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./GithubHeatmap.module.css"
 import { drawGithubHeatmap, } from "../heatmapUtils"
 import { fetchData } from "../../../api/axiosClient"
@@ -6,14 +6,14 @@ import { DistinctRepos, GithubData } from "../../../types/dataTypes"
 // @ts-expect-error cal-heatmap library don't have declration files :(
 import CalHeatmap from 'cal-heatmap';
 import FilterCarousel from "../../../components/FilterCarousel/FilterCarousel"
-import { HeatmapContext } from "../HeatmapContext/HeatmapContext"
+import {  useHeatmapContext } from "../HeatmapContext/HeatmapContext"
 
 const GithubHeatmap = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1)
   const [distinctRepos, setDistinctRepos] = useState<DistinctRepos[]>([])
   const [activity, setActivity] = useState<GithubData[]>()
   const [cal,] = useState(new CalHeatmap())
-  const {showDetails} = useContext(HeatmapContext)
+  const {showDetails} = useHeatmapContext()
 
   useEffect(() => {
     async function getData() {

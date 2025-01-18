@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./ReadingHeatmap.module.css"
 import { drawKindleHeatmap } from "../heatmapUtils"
 import { fetchData } from "../../../api/axiosClient"
@@ -6,14 +6,14 @@ import { DistinctBooks, ReadingData } from "../../../types/dataTypes"
 // @ts-expect-error cal-heatmap library don't have declration files :(
 import CalHeatmap from 'cal-heatmap';
 import FilterCarousel from "../../../components/FilterCarousel/FilterCarousel"
-import { HeatmapContext } from "../HeatmapContext/HeatmapContext"
+import { useHeatmapContext } from "../HeatmapContext/HeatmapContext"
 
 const ReadingHeatmap = () => {
   const [selectedBook, setSelectedBook] = useState<number>(-1)
   const [books, setBooks] = useState<DistinctBooks[]>([])
   const [readingActivity, setReadingActivity] = useState<ReadingData[]>()
   const [readingCal,] = useState(new CalHeatmap())
-  const {showDetails} = useContext(HeatmapContext)
+  const {showDetails} = useHeatmapContext()
 
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./WorkoutHeatmap.module.css"
 import { drawWorkoutHeatmap } from "../heatmapUtils"
 import { fetchData } from "../../../api/axiosClient"
@@ -6,7 +6,7 @@ import { WorkoutData } from "../../../types/dataTypes"
 // @ts-expect-error cal-heatmap library don't have declration files :(
 import CalHeatmap from 'cal-heatmap';
 import FilterCarousel from "../../../components/FilterCarousel/FilterCarousel"
-import { HeatmapContext } from "../HeatmapContext/HeatmapContext"
+import { useHeatmapContext } from "../HeatmapContext/HeatmapContext"
 
 interface DistinctWorkouts {
   workout_name: string,
@@ -20,7 +20,7 @@ const WorkoutHeatmap = () => {
   const [distinctExercises, setDistinctExercises] = useState<string[]>([])
   const [activity, setActivity] = useState<WorkoutData[]>([])
   const [workoutCal,] = useState(new CalHeatmap())
-  const {showDetails} = useContext(HeatmapContext)
+  const {showDetails} = useHeatmapContext()
 
   useEffect(() => {
     async function getData() {

@@ -19,8 +19,9 @@
   gap: 1rem;
   overflow: scroll;
   scroll-behavior: smooth;
-  padding: 1rem 0;
+  padding: 1rem 3rem;
   position: relative;
+
 }
 
 .itemCarousel::-webkit-scrollbar {
@@ -71,12 +72,12 @@
 }
 
 .navigation {
-  padding: 1rem;
+  padding: 0.7rem;
   height: var(--height);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: antiquewhite;
+  background-color: white;
   color: black;
   position: absolute;
   height: 100%;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./FilterCarousel.module.css"
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
@@ -21,7 +21,7 @@ const FilterCarousel = (
   }
 ) => {
   const itemCarousel = useRef<HTMLDivElement>(null)
-  const [scroll, setScroll] = useState(0);
+  const [isHovered, setIsHovered] = useState(false)
 
   const itemImageElements = items.map((item, index) => {
     const classes = [styles.itemContainer]
@@ -68,24 +68,24 @@ const FilterCarousel = (
     <div
       className={styles.container}
       style={{ height: `${height}rem` }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {showAllElement}
       <div
         className={styles.itemCarouselContainer}
       >
-        {itemCarousel.current &&
+        {itemCarousel.current && isHovered &&
           (<>
-          <NavigationLeft element={itemCarousel.current} scroll={scroll} />
-          <NavigationRight element={itemCarousel.current} scroll={scroll} />
+          <NavigationLeft element={itemCarousel.current}/>
+          <NavigationRight element={itemCarousel.current}/>
           </>
           )
         }
-
         <div
           className={styles.itemCarousel}
           ref={itemCarousel}
-          onScroll={event => setScroll(event.currentTarget.scrollLeft)}
         >
+          {showAllElement}
           {itemImageElements}
         </div>
         
@@ -94,10 +94,7 @@ const FilterCarousel = (
   );
 }
 
-const NavigationLeft = ({ element, scroll }: { element: HTMLDivElement, scroll: number }) => {
-  const [initialRender, setInitialRender] = useState(true)
-  useEffect(()=> {setTimeout(() => setInitialRender(false), 500)}, []) // 😭
-  if (scroll < 5  && !initialRender) return
+const NavigationLeft = ({ element }: { element: HTMLDivElement}) => {
   return (
     <button
       id={styles.navLeft}
@@ -109,10 +106,7 @@ const NavigationLeft = ({ element, scroll }: { element: HTMLDivElement, scroll: 
   )
 }
 
-const NavigationRight = ({ element, scroll }: { element: HTMLDivElement, scroll: number }) => {
-  const [initialRender, setInitialRender] = useState(true)
-  useEffect(()=> {setTimeout(() => setInitialRender(false), 500)}, [])
-  if (scroll > (element.scrollWidth - 1.05* element.clientWidth) && !initialRender) return
+const NavigationRight = ({ element }: { element: HTMLDivElement}) => {
   return (
     <button
       id={styles.navRight}

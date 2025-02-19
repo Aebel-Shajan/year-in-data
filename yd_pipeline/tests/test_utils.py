@@ -1,7 +1,15 @@
-from yd_pipeline.utils import parse_duration, check_columns_exist, detect_delimiter
+from yd_pipeline.utils import (
+    parse_duration, 
+    check_columns_exist, 
+    detect_delimiter,
+    get_latest_file,
+    unzip_file
+)
 import pandas as pd
 import pytest
-
+import zipfile
+import os
+from pathlib import Path
 
 class TestParseDuration:
     """Test function parse_duration"""
@@ -77,3 +85,38 @@ class TestDetectDelimiter:
             f.write(content)
         with open(file_path, "r") as f:
             assert detect_delimiter(f) == expected_delimiter
+
+class TestGetLatestFile:
+    """Test function get_latest_file."""
+
+    def test_expected(self, tmpdir):
+        folder_path = Path(tmpdir)
+        file1 = folder_path / "file1.txt"
+        file2 = folder_path / "file2.txt"
+
+        with open(file1, "w") as f:
+            f.write("file1 content")
+        with open(file2, "w") as f:
+            f.write("file2 content")
+
+        latest_file = get_latest_file(folder_path, "*.txt")
+        assert latest_file == file2
+
+
+class TestUnzipFile:
+    """Test function unzip_file."""
+
+    def test_expected(self, tmpdir):
+        zip_file_path = tmpdir.join("test.zip")
+        output_path = tmpdir.mkdir("output")
+
+        # Create a test zip file
+        with zipfile.ZipFile(zip_file_path, "w") as zipf:
+            zipf.writestr("file1.txt", "file1 content")
+            zipf.writestr("file2.txt", "file2 content")
+
+        unzip_file(zip_file_path, output_path)
+
+        # Check if files are extracted
+        assert os.path.exists(output_path.join("file1.txt"))
+        assert os.path.exists(output_path.join("file2.txt"))

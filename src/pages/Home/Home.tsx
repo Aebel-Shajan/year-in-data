@@ -5,8 +5,14 @@ import WorkoutHeatmap from "./WorkoutHeatmap/WorkoutHeatmap";
 import TimeSeriesHeatmap from "../../components/TimeSeriesHeatmap/TimeSeriesHeatmap";
 import Footer from "../../components/Footer/Footer";
 import { DetailsToggleButton, HeatmapProvider } from "./HeatmapContext/HeatmapContext";
+import { axiosInstance, postData } from "../../api/axiosClient";
 
 const Home = () => {
+
+  async function updateGithubActivity() {
+    const result = await postData("/github/2024")
+    alert(result)
+  }
 
   return (
     <div
@@ -22,6 +28,10 @@ const Home = () => {
           2024 is over, 2025 is here. Here is what I was doing this year represented through
           yearly heatmaps.
         </p>
+
+        <a href={axiosInstance.getUri() + "github/auth"} target="_blank">dev login</a>
+        <button onClick={updateGithubActivity}>Update github activity</button>
+
         <HeatmapProvider>
           <DetailsToggleButton />
 

@@ -20,6 +20,11 @@
   box-sizing: border-box;
 }
 
+#root {
+  width: 100vw;
+  min-height: 100vh;
+}
+
 @media (max-width: 600px) {
   :root {
     font-size: 14px;

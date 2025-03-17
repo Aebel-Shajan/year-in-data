@@ -1,0 +1,57 @@
+.pageContainer {
+  width: 100%;
+  min-height: 100vh;
+
+  display:flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.container {
+  display: flex;
+  width: 40rem;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  border: solid 1px #5f5f5f;
+  background-color: #333;
+  border-radius: 1rem;
+  text-align: center;
+}
+
+
+.ghSignInButton {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+
+}
+
+.ghSignInButton:hover {
+  background-color: #5f5f5f;
+}
+
+.ghSignInButton .githubIcon {
+  width: 25px;
+  height: 25px;
+  margin-right: 8px;
+}
+
+.ghSignInButton span {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}

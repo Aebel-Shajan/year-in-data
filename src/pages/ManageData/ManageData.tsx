@@ -2,21 +2,45 @@ import { useEffect, useState } from "react";
 import { axiosInstance, fetchData } from "../../api/axiosClient";
 import styles from "./ManageData.module.css"
 import { FaGithub } from "react-icons/fa6";
+import TableView from "./TableView/TableView";
 
 
 interface auth_status {
   "is_authenticated": string
 }
 
+
+export interface GithubActivity { 
+  "id": number
+  "date": string
+  "repository_image": string
+  "repository_name": string
+  "repository_url": string
+  "total_commits": number
+}
+
+interface activity_response {
+  "data": GithubActivity[]
+}
+
+
 const ManageData = () => {
   const [authStatus, setAuthStatus] = useState(false)
+  const [githubActivity, setGithubActivity] = useState<GithubActivity[]>([])
 
   useEffect(() => {
     (async () => {
       const data = await fetchData<auth_status>("/github/auth_status")
       const isAuthenticated = Boolean(data['is_authenticated'])
       setAuthStatus(isAuthenticated)
+
+
+      const activity = await fetchData<activity_response>("/github/2024")
+      setGithubActivity(activity["data"])
+
     })();
+    
+
   }, [])
 
   function handleGithubLogin() {
@@ -49,9 +73,10 @@ const ManageData = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <h1>Manage Data</h1>
-      
-
+      <div className={styles}>
+        <h1>Manage Data</h1>
+        <TableView data={githubActivity} />
+      </div>
     </div>
   );
 }

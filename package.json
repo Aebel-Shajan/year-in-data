@@ -14,6 +14,7 @@
     "cal-heatmap": "^4.2.4",
     "d3-scale-chromatic": "^3.1.0",
     "dayjs": "^1.11.13",
+    "material-react-table": "^3.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0"

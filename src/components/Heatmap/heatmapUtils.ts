@@ -120,7 +120,6 @@ function sortAcscending(arr: number[]) {
 export function getQuantile(arr: number[], q: number) {
   q = q/100
   const sorted = sortAcscending(arr);
-  console.log(sorted)
   const pos = (sorted.length - 1) * q;
   const base = Math.floor(pos);
   const rest = pos - base;

@@ -4,6 +4,18 @@ import Navbar from "./components/Navbar";
 import ModalButton from "./components/ModalButton";
 import { axiosInstance } from "./api/axiosClient";
 
+const HeatmapContainer = (
+  {
+    children
+  }: {
+    children: React.ReactNode
+  }
+) => {
+  return <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-fit max-w-full">
+    {children}
+  </div>
+}
+
 const HomePage = () => {
   const [authStatus, setAuthStatus] = useState(false)
   const [file, setFile] = useState<File | null>(null);
@@ -77,9 +89,8 @@ const HomePage = () => {
       />
 
       <div className="p-8 min-h-screen w-full flex flex-col items-center gap-5">
+        <HeatmapContainer>
 
-
-        <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-fit max-w-full">
           <div className="flex justify-between">
 
             <h1 className="text-xl font-semibold">
@@ -110,9 +121,10 @@ const HomePage = () => {
               year={year}
             />
           </div>
-        </div>
+        </HeatmapContainer>
 
-        <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-fit max-w-full">
+        <HeatmapContainer>
+
           <div className="flex justify-between">
 
             <h1 className="text-xl font-semibold">
@@ -131,10 +143,11 @@ const HomePage = () => {
               year={year}
             />
           </div>
-        </div>
+        </HeatmapContainer>
 
 
-        <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-fit max-w-full">
+        <HeatmapContainer>
+
           <div className="flex justify-between" >
             <h1 className="text-xl font-semibold">
               Workout Activity
@@ -166,7 +179,44 @@ const HomePage = () => {
               colorRange={["powderblue", "slateblue"]}
             />
           </div>
-        </div>
+        </HeatmapContainer>
+
+
+        <HeatmapContainer>
+          <div className="flex justify-between">
+            <h1 className="text-xl font-semibold">
+              Step Activity
+            </h1>
+            <ModalButton buttonText="upload files">
+              <div className="flex flex-col gap-5">
+
+                <h1 className="font-semibold text-xl">Upload fitbit zip file</h1>
+                <input
+                  type="file"
+                  className="file-input"
+                  accept=".zip"
+                  onChange={handleFileChange}
+                />
+                {file && <p className="text-sm text-gray-600">Selected: {file.name}</p>}
+                <button onClick={() => handleUpload("/fitbit/upload_file")} disabled={uploading || !file} className="btn w-full">
+                  {uploading ? "Uploading..." : "Upload File"}
+                </button>
+              </div>
+            </ModalButton>
+          </div>
+
+          <div className="p-3 flex justify-center overflow-x-scroll">
+            <Heatmap
+              url={"/fitbit/steps/" + year}
+              name="steps"
+              year={year}
+            />
+          </div>
+
+        </HeatmapContainer>
+
+
+
 
 
       </div>

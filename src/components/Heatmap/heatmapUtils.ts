@@ -64,7 +64,7 @@ export function drawHeatmap({
   dateCol = 'date',
   units = 'times',
   colorDomain = [0, 30],
-  colorRange = ['#9AF9A8', '#206D38'],
+  colorScheme,
   groupY = "sum"
 }: {
   cal: CalHeatmap,
@@ -75,7 +75,7 @@ export function drawHeatmap({
   dateCol?: string,
   units?: string,
   colorDomain?: number[],
-  colorRange?: string[],
+  colorScheme?: string,
   groupY?: string
 }) {
 
@@ -104,7 +104,8 @@ export function drawHeatmap({
     scale: {
       color: {
         domain: colorDomain,
-        range: colorRange
+        scheme: colorScheme,
+        type: "threshold"
       }
     },
     itemSelector: itemSelector,
@@ -118,6 +119,21 @@ export function drawHeatmap({
 function sortAcscending(arr: number[]) {
   return arr.sort((a, b) => a - b);
 }
+
+function calculateSum(arr: number[]): number {
+  return arr.reduce((a, b) => a + b, 0);
+}
+
+export function calculateMean(arr: number[]): number {
+  return calculateSum(arr) / arr.length;
+}
+
+export function calculateStandardDeviation(arr: number[]): number {
+  const meanValue = calculateMean(arr);
+  const squaredDiffArr = arr.map(a => (a - meanValue) ** 2);
+  return Math.sqrt(calculateSum(squaredDiffArr) / (arr.length - 1));
+}
+
 
 export function getQuantile(arr: number[], q: number) {
   q = q/100

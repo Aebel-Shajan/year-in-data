@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { fetchData } from "../../api/axiosClient"
 // @ts-expect-error cal-heatmap library don't have declration files :(
 import CalHeatmap from 'cal-heatmap';
-import { drawHeatmap, getQuantile } from "./heatmapUtils";
+import { calculateStandardDeviation, drawHeatmap, getQuantile } from "./heatmapUtils";
 import "./Heatmap.css";
 import { FiRefreshCcw } from "react-icons/fi";
 
@@ -27,7 +27,8 @@ const Heatmap = (
     url,
     name,
     year,
-    colorRange = ['#9AF9A8', '#206D38']
+    colorDomain,
+    colorScheme="Blues"
   }:
     {
       url: string,
@@ -35,7 +36,7 @@ const Heatmap = (
       year: number,
       // https://www.w3.org/TR/css-color-3/#colorunits
       colorDomain?: number[],
-      colorRange?: string[],
+      colorScheme?: string,
     }
 ) => {
   const [cal,] = useState<CalHeatmap>(new CalHeatmap())
@@ -61,7 +62,7 @@ const Heatmap = (
     const valueColInfo = metadata["value_cols"][0]
     let values = data.map(elem => elem[valueColInfo["col"]])
     values = values.filter((value) => value != 0)
-    const colorDomain = [getQuantile(values, 10), getQuantile(values, 90)]
+    const calculatedDomain = [getQuantile(values, 20), getQuantile(values, 50), getQuantile(values, 80)].map(num => Math.round(num))
     drawHeatmap(
       {
         cal: cal,
@@ -71,8 +72,8 @@ const Heatmap = (
         dateCol: metadata["date_col"],
         valueCol: valueColInfo["col"],
         units: valueColInfo["units"],
-        colorDomain: colorDomain,
-        colorRange: colorRange
+        colorDomain: colorDomain ? colorDomain : calculatedDomain,
+        colorScheme: colorScheme
       }
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,12 +86,12 @@ const Heatmap = (
 
 
   return (
-    <div>
+    <div className="w-full overflow-x-scroll">
       <div
         id={`${name}-heatmap`}
-        className={"w-full heatmap"}
+        className={"heatmap"}
       />
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-between sticky left-0">
 
         <div
           id={`${name}-heatmap-legend`}

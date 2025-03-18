@@ -88,7 +88,7 @@ const HomePage = () => {
         setYear={setYear}
       />
 
-      <div className="p-8 min-h-screen w-full flex flex-col items-center gap-5">
+      <div className="p-8 min-h-screen w-full flex flex-col items-center gap-5 pt-20">
         <HeatmapContainer>
 
           <div className="flex justify-between">
@@ -119,6 +119,7 @@ const HomePage = () => {
               url={"/reading/" + year}
               name="reading"
               year={year}
+              colorDomain={[30, 60, 90, 120]}
             />
           </div>
         </HeatmapContainer>
@@ -141,6 +142,7 @@ const HomePage = () => {
               url={"/github/" + year}
               name="github"
               year={year}
+              colorDomain={[5, 10, 15]}
             />
           </div>
         </HeatmapContainer>
@@ -176,7 +178,7 @@ const HomePage = () => {
               url={"/workouts/" + year}
               name="workouts"
               year={year}
-              colorRange={["powderblue", "slateblue"]}
+              colorDomain={[1000, 2000, 3000, 4000]}
             />
           </div>
         </HeatmapContainer>
@@ -205,13 +207,12 @@ const HomePage = () => {
             </ModalButton>
           </div>
 
-          <div className="p-3 flex justify-center overflow-x-scroll">
             <Heatmap
               url={"/fitbit/steps/" + year}
               name="steps"
               year={year}
+              colorDomain={[1000, 4000, 7000]}
             />
-          </div>
 
         </HeatmapContainer>
 

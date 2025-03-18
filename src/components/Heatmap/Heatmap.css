@@ -2,4 +2,8 @@
   &>svg {
     background-color: transparent;
   }
+
+  & g > rect {
+    fill: var(--color-base-300);
+  }
 }

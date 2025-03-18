@@ -28,8 +28,7 @@ const baseOptions = {
   },
   date: {
     start: new Date("2024-01-01"),
-  },
-  theme: "dark"
+  }
 }
 
 const basePlugins = [
@@ -58,36 +57,40 @@ function createTooltip(unit: string) {
   ]
 }
 
+
 export function drawHeatmap({
   cal,
+  itemSelector,
   data,
-  dateCol,
   valueCol,
-  name,
-  legendLabel,
-  color,
-  units,
+  dateCol= 'date',
+  units = 'times',
+  colorDomain = [0, 30],
+  colorRange =['#9AF9A8', '#206D38'],
   groupY = "sum"
 }: {
   cal: CalHeatmap,
+  itemSelector: string,
   data: unknown[],
-  dateCol: string,
   valueCol: string,
-  name: string,
-  legendLabel: string,
-  color: { range?: string[] | unknown, scheme?: string, domain: number[] },
-  units: string,
+  dateCol?: string,
+  units?: string,
+  colorDomain?: number[],
+  colorRange?: string[],
   groupY?: string
 }) {
+
   const plugins = [...basePlugins]
+  plugins.push(createTooltip(units))
   plugins.push([
     Legend,
     {
-      label: legendLabel,
-      itemSelector: `#${name}-legend`,
+      label: `${units} per day`,
+      itemSelector: itemSelector + "-legend",
     },
   ])
-  plugins.push(createTooltip(units))
+
+
   const options = {
     ...baseOptions,
     data: {
@@ -96,13 +99,15 @@ export function drawHeatmap({
       y: valueCol,
       groupY: groupY
     },
-    itemSelector: `#${name}-heatmap`,
     scale: {
       color: {
-        ...color,
-        type: "threshold"
+        domain: colorDomain,
+        range: colorRange
       }
-    }
+    },
+    itemSelector: itemSelector,
   }
   cal.paint(options, plugins);
 }
+
+

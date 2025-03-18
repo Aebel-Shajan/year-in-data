@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { axiosInstance, fetchData } from "../../api/axiosClient";
+import { axiosInstance, fetchData } from "../dist/api/axiosClient";
 import styles from "./ManageData.module.css"
 import { FaGithub } from "react-icons/fa6";
 import TableView from "./TableView/TableView";

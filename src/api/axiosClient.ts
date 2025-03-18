@@ -2,10 +2,8 @@ import axios from "axios";
 
 export const axiosInstance = axios.create({
   baseURL: "https://aebelshajan.pythonanywhere.com/",
-  // baseURL: "https://raw.githubusercontent.com/Aebel-Shajan/year-in-data/refs/heads/json-data/",
-  // baseURL: "https://year-in-data.onrender.com/",
   // baseURL: "http://127.0.0.1:5000/",
-  timeout: 5000, // Set a timeout of 5 seconds
+  // timeout: 5000, // Set a timeout of 5 seconds
   headers: {
     "Content-Type": "application/json",
   },

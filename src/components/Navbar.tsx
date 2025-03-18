@@ -45,7 +45,7 @@ const Navbar = (
     setYear(year)
   }
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar bg-base-100 shadow-sm fixed top-0">
 
 
       <div className="navbar-start">

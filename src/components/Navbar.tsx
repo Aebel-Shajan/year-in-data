@@ -42,7 +42,7 @@ const Navbar = (
 
 
 
-      <div className="navbar-end flex-none">
+      <div className="navbar-end flex-none gap-5 p-">
             <ThemeController />
             {authStatus ? 
               <a className="btn">Log out</a>  

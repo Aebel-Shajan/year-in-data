@@ -1,0 +1,5 @@
+.heatmap {
+  &>svg {
+    background-color: transparent;
+  }
+}

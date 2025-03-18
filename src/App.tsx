@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Heatmap from "./components/Heatmap";
+import Heatmap from "./components/Heatmap/Heatmap";
 import Navbar from "./components/Navbar";
 import ModalButton from "./components/ModalButton";
 import { axiosInstance } from "./api/axiosClient";
@@ -104,7 +104,12 @@ const HomePage = () => {
           </div>
 
           <div className="p-3 flex justify-center overflow-x-scroll">
-            <Heatmap url="/workouts/2024" name="workouts" />
+            <Heatmap 
+              url="/workouts/2024" 
+              name="workouts"
+              colorDomain={[2000, 6000]}
+              colorRange={["powderblue", "slateblue"]}
+            />
           </div>
         </div>
 

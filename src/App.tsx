@@ -52,12 +52,26 @@ const HomePage = () => {
     }
   };
 
+  async function handleSyncGithub(url: string) {
+    try {
+      const response = await axiosInstance.post(url)
+      if (response.status == 201) {
+        alert(`Successfully synced github data for ${url}`);
+      } else {
+        alert("Failed to sync!");
+      }
+    } catch (error) {
+      console.error("Error syncing", error)
+      alert("Error syncing github data.")
+    }
+  }
+
 
   return (
     <div className="min-h-screen bg-base-200 max-w-screen overflow-x-hidden">
-      <Navbar 
-        authStatus={authStatus} 
-        setAuthStatus={setAuthStatus} 
+      <Navbar
+        authStatus={authStatus}
+        setAuthStatus={setAuthStatus}
         year={year}
         setYear={setYear}
       />
@@ -90,22 +104,30 @@ const HomePage = () => {
             </ModalButton>
           </div>
           <div className="p-3 flex justify-center overflow-x-scroll">
-            <Heatmap 
-              url={"/reading/" + year} 
-              name="reading" 
+            <Heatmap
+              url={"/reading/" + year}
+              name="reading"
               year={year}
             />
           </div>
         </div>
 
         <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-fit max-w-full">
-          <h1 className="text-xl font-semibold">
-            Github Activity
-          </h1>
+          <div className="flex justify-between">
+
+            <h1 className="text-xl font-semibold">
+              Github Activity
+            </h1>
+            <button className="btn" onClick={() => handleSyncGithub("/github/" + year)}>
+
+              {`Sync ${year} Github activity`}
+            </button>
+
+          </div>
           <div className="p-3 flex justify-center overflow-x-scroll">
-            <Heatmap 
-              url={"/github/" + year} 
-              name="github" 
+            <Heatmap
+              url={"/github/" + year}
+              name="github"
               year={year}
             />
           </div>

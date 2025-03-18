@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { fetchData } from "../../api/axiosClient"
 // @ts-expect-error cal-heatmap library don't have declration files :(
 import CalHeatmap from 'cal-heatmap';
-import { drawHeatmap } from "./heatmapUtils";
+import { drawHeatmap, getQuantile } from "./heatmapUtils";
 import "./Heatmap.css";
 import { FiRefreshCcw } from "react-icons/fi";
 
@@ -56,9 +56,9 @@ const Heatmap = (
     if (!metadata) return
     cal.destroy()
     const valueColInfo = metadata["value_cols"][0]
-    const values = data.map(elem => elem[valueColInfo["col"]])
-    const colorDomain = [Math.min(...values), Math.max(...values)]
-
+    let values = data.map(elem => elem[valueColInfo["col"]])
+    values = values.filter((value) => value != 0)
+    const colorDomain = [getQuantile(values, 10), getQuantile(values, 90)]
     drawHeatmap(
       {
         cal: cal,

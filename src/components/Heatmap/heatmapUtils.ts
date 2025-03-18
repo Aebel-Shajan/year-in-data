@@ -63,10 +63,10 @@ export function drawHeatmap({
   itemSelector,
   data,
   valueCol,
-  dateCol= 'date',
+  dateCol = 'date',
   units = 'times',
   colorDomain = [0, 30],
-  colorRange =['#9AF9A8', '#206D38'],
+  colorRange = ['#9AF9A8', '#206D38'],
   groupY = "sum"
 }: {
   cal: CalHeatmap,
@@ -111,3 +111,22 @@ export function drawHeatmap({
 }
 
 
+
+// sort array ascending
+function sortAcscending(arr: number[]) {
+  return arr.sort((a, b) => a - b);
+}
+
+export function getQuantile(arr: number[], q: number) {
+  q = q/100
+  const sorted = sortAcscending(arr);
+  console.log(sorted)
+  const pos = (sorted.length - 1) * q;
+  const base = Math.floor(pos);
+  const rest = pos - base;
+  if (sorted[base + 1] !== undefined) {
+    return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+  } else {
+    return sorted[base];
+  }
+};

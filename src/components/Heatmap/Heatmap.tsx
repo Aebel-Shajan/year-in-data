@@ -26,11 +26,13 @@ const Heatmap = (
   {
     url,
     name,
+    year,
     colorRange = ['#9AF9A8', '#206D38']
   }:
     {
       url: string,
       name: string,
+      year: number,
       // https://www.w3.org/TR/css-color-3/#colorunits
       colorDomain?: number[],
       colorRange?: string[],
@@ -46,6 +48,7 @@ const Heatmap = (
       const response = await fetchData<UnknownObject>(url)
       const newMetadata = response["metadata"] as ActivityMetaData
       const newData = response["data"] as { [x: string]: number; }[]
+
       setData(newData)
       setMetadata(newMetadata)
     }
@@ -64,6 +67,7 @@ const Heatmap = (
         cal: cal,
         itemSelector: `#${name}-heatmap`,
         data: data,
+        year: year,
         dateCol: metadata["date_col"],
         valueCol: valueColInfo["col"],
         units: valueColInfo["units"],

@@ -26,9 +26,6 @@ const baseOptions = {
       position: 'left'
     }
   },
-  date: {
-    start: new Date("2024-01-01"),
-  }
 }
 
 const basePlugins = [
@@ -63,6 +60,7 @@ export function drawHeatmap({
   itemSelector,
   data,
   valueCol,
+  year,
   dateCol = 'date',
   units = 'times',
   colorDomain = [0, 30],
@@ -73,6 +71,7 @@ export function drawHeatmap({
   itemSelector: string,
   data: unknown[],
   valueCol: string,
+  year: number,
   dateCol?: string,
   units?: string,
   colorDomain?: number[],
@@ -93,6 +92,9 @@ export function drawHeatmap({
 
   const options = {
     ...baseOptions,
+    date: {
+      start: new Date(`${year}-01-01`),
+    },
     data: {
       source: data,
       x: dateCol,

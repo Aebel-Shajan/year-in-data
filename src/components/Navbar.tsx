@@ -9,13 +9,17 @@ interface AuthStatus {
 
 const Navbar = (
   {
-    authStatus, 
-    setAuthStatus
-  }: 
-  {
-    authStatus: boolean,
-    setAuthStatus: CallableFunction
-  }
+    authStatus,
+    setAuthStatus,
+    year,
+    setYear
+  }:
+    {
+      authStatus: boolean,
+      setAuthStatus: CallableFunction,
+      year: number,
+      setYear: CallableFunction
+    }
 ) => {
 
   useEffect(() => {
@@ -24,7 +28,7 @@ const Navbar = (
       const isAuthenticated = Boolean(data['is_authenticated'])
       setAuthStatus(isAuthenticated)
     })();
-    
+
 
   }, [])
 
@@ -32,27 +36,54 @@ const Navbar = (
     const authUrl = axiosInstance.getUri() + "github/auth"
     window.open(authUrl, '_blank')?.focus()
   }
+
+  function handleSelectYear(year: number) {
+    const elem = document.activeElement as HTMLElement;
+    if (elem) {
+      elem?.blur();
+    }
+    setYear(year)
+  }
   return (
     <div className="navbar bg-base-100 shadow-sm">
 
 
       <div className="navbar-start">
-        <a className="btn btn-ghost text-xl">Year in data</a>
+
+        <div className="font-semibold text-xl px-8">
+          Year in data
+        </div>
+        <div className="dropdown">
+          <a tabIndex={0} role="button" className="btn m-1 font-semibold text-xl">{year}</a>
+          <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+            {range(2023, new Date().getFullYear()).map((year) => <li><a onClick={() => handleSelectYear(year)}>{year}</a></li>)}
+          </ul>
+        </div>
+
       </div>
 
 
 
-      <div className="navbar-end flex-none gap-5 p-">
-            <ThemeController />
-            {authStatus ? 
-              <a className="btn">Log out</a>  
-              : <a className="btn" onClick={handleGithubLogin}>Dev Login</a>
-            }
-            
+      <div className="navbar-end flex-none gap-5">
+        <ThemeController />
+        {authStatus ?
+          <a className="btn">Log out</a>
+          : <a className="btn" onClick={handleGithubLogin}>Dev Login</a>
+        }
+
       </div>
 
     </div>
   );
 };
+
+
+function range(start: number, end: number) {
+  const list = [];
+  for (let i = start; i <= end; i++) {
+    list.push(i);
+  }
+  return list
+}
 
 export default Navbar;

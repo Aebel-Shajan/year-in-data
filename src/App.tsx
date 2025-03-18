@@ -6,9 +6,9 @@ import { axiosInstance } from "./api/axiosClient";
 
 const HomePage = () => {
   const [authStatus, setAuthStatus] = useState(false)
-
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [year, setYear] = useState(2023)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -55,7 +55,12 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-base-200 max-w-screen overflow-x-hidden">
-      <Navbar authStatus={authStatus} setAuthStatus={setAuthStatus} />
+      <Navbar 
+        authStatus={authStatus} 
+        setAuthStatus={setAuthStatus} 
+        year={year}
+        setYear={setYear}
+      />
 
       <div className="p-8 min-h-screen w-full flex flex-col items-center gap-5">
 
@@ -85,7 +90,11 @@ const HomePage = () => {
             </ModalButton>
           </div>
           <div className="p-3 flex justify-center overflow-x-scroll">
-            <Heatmap url="/reading/2024" name="reading" />
+            <Heatmap 
+              url={"/reading/" + year} 
+              name="reading" 
+              year={year}
+            />
           </div>
         </div>
 
@@ -94,7 +103,11 @@ const HomePage = () => {
             Github Activity
           </h1>
           <div className="p-3 flex justify-center overflow-x-scroll">
-            <Heatmap url="/github/2024" name="github" />
+            <Heatmap 
+              url={"/github/" + year} 
+              name="github" 
+              year={year}
+            />
           </div>
         </div>
 
@@ -125,8 +138,9 @@ const HomePage = () => {
 
           <div className="p-3 flex justify-center overflow-x-scroll">
             <Heatmap
-              url="/workouts/2024"
+              url={"/workouts/" + year}
               name="workouts"
+              year={year}
               colorRange={["powderblue", "slateblue"]}
             />
           </div>

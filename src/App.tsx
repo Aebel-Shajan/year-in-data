@@ -16,7 +16,7 @@ const HomePage = () => {
     }
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (url: string) => {
     if (!file) {
       alert("Please select a file first.");
       return;
@@ -29,7 +29,7 @@ const HomePage = () => {
 
     try {
       const response = await axiosInstance.post(
-        "/workouts/upload_file",
+        url,
         formData,
         {
           headers: {
@@ -61,9 +61,29 @@ const HomePage = () => {
 
 
         <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-fit max-w-full">
-          <h1 className="text-xl font-semibold">
-            Reading Activity
-          </h1>
+          <div className="flex justify-between">
+
+            <h1 className="text-xl font-semibold">
+              Reading Activity
+            </h1>
+            <ModalButton buttonText="upload files" >
+              <div className="flex flex-col gap-5">
+
+                <h1 className="font-semibold text-xl">Upload kindle zip</h1>
+                <input
+                  type="file"
+                  className="file-input"
+                  accept=".zip"
+                  onChange={handleFileChange}
+                />
+                {file && <p className="text-sm text-gray-600">Selected: {file.name}</p>}
+                <button onClick={() => handleUpload("/reading/upload_file")} disabled={uploading || !file} className="btn w-full">
+                  {uploading ? "Uploading..." : "Upload File"}
+                </button>
+              </div>
+
+            </ModalButton>
+          </div>
           <div className="p-3 flex justify-center overflow-x-scroll">
             <Heatmap url="/reading/2024" name="reading" />
           </div>
@@ -95,7 +115,7 @@ const HomePage = () => {
                   onChange={handleFileChange}
                 />
                 {file && <p className="text-sm text-gray-600">Selected: {file.name}</p>}
-                <button onClick={handleUpload} disabled={uploading || !file} className="btn w-full">
+                <button onClick={() => handleUpload("/workouts/upload_file")} disabled={uploading || !file} className="btn w-full">
                   {uploading ? "Uploading..." : "Upload File"}
                 </button>
               </div>
@@ -104,8 +124,8 @@ const HomePage = () => {
           </div>
 
           <div className="p-3 flex justify-center overflow-x-scroll">
-            <Heatmap 
-              url="/workouts/2024" 
+            <Heatmap
+              url="/workouts/2024"
               name="workouts"
               colorRange={["powderblue", "slateblue"]}
             />

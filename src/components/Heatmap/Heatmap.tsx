@@ -3,8 +3,9 @@ import { useEffect, useState } from "react"
 import { fetchData } from "../../api/axiosClient"
 // @ts-expect-error cal-heatmap library don't have declration files :(
 import CalHeatmap from 'cal-heatmap';
-import { drawHeatmap } from "../heatmapUtils";
+import { drawHeatmap } from "./heatmapUtils";
 import "./Heatmap.css";
+import { FiRefreshCcw } from "react-icons/fi";
 
 
 interface UnknownObject {
@@ -89,7 +90,7 @@ const Heatmap = (
           className="pt-5"
         />
       <button className="btn" onClick={handleRefresh}>
-        Refresh
+        <FiRefreshCcw />
       </button>
       </div>
     </div>

@@ -26,7 +26,6 @@ const Heatmap = (
   {
     url,
     name,
-    colorDomain = [0, 30],
     colorRange = ['#9AF9A8', '#206D38']
   }:
     {
@@ -56,14 +55,18 @@ const Heatmap = (
   useEffect(() => {
     if (!metadata) return
     cal.destroy()
+    const valueColInfo = metadata["value_cols"][0]
+    const values = data.map(elem => elem[valueColInfo["col"]])
+    const colorDomain = [Math.min(...values), Math.max(...values)]
+
     drawHeatmap(
       {
         cal: cal,
         itemSelector: `#${name}-heatmap`,
         data: data,
         dateCol: metadata["date_col"],
-        valueCol: metadata["value_cols"][0]["col"],
-        units: metadata["value_cols"][0]["units"],
+        valueCol: valueColInfo["col"],
+        units: valueColInfo["units"],
         colorDomain: colorDomain,
         colorRange: colorRange
       }
@@ -75,7 +78,7 @@ const Heatmap = (
     setRefershState(old => !old)
   }
 
-  
+
 
   return (
     <div>
@@ -89,9 +92,10 @@ const Heatmap = (
           id={`${name}-heatmap-legend`}
           className="pt-5"
         />
-      <button className="btn" onClick={handleRefresh}>
-        <FiRefreshCcw />
-      </button>
+
+        <button className="btn" onClick={handleRefresh}>
+          <FiRefreshCcw />
+        </button>
       </div>
     </div>
 

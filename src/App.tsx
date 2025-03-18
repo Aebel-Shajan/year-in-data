@@ -107,7 +107,6 @@ const HomePage = () => {
             <Heatmap 
               url="/workouts/2024" 
               name="workouts"
-              colorDomain={[2000, 6000]}
               colorRange={["powderblue", "slateblue"]}
             />
           </div>

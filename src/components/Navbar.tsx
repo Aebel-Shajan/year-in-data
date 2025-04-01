@@ -33,7 +33,7 @@ const Navbar = (
         <div className="dropdown">
           <a tabIndex={0} role="button" className="btn m-1 font-semibold text-xl">{year}</a>
           <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-            {range(2023, new Date().getFullYear()).map((year) => <li><a onClick={() => handleSelectYear(year)}>{year}</a></li>)}
+            {range(2023, new Date().getFullYear()).map((year) => <li key={year}><a onClick={() => handleSelectYear(year)}>{year}</a></li>)}
           </ul>
         </div>
 

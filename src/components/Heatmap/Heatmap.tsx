@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { fetchData } from "../../api/axiosClient"
 // @ts-expect-error cal-heatmap library don't have declration files :(
 import CalHeatmap from 'cal-heatmap';
-import { calculateStandardDeviation, drawHeatmap, getQuantile } from "./heatmapUtils";
+import { drawHeatmap, getQuantile } from "./heatmapUtils";
 import "./Heatmap.css";
 import { FiRefreshCcw } from "react-icons/fi";
 
@@ -12,14 +12,6 @@ interface UnknownObject {
   [key: string]: object
 }
 
-interface ActivityMetaData {
-  date_col: string,
-  filter_cols: string[],
-  value_cols: {
-    col: string,
-    units: string
-  }[]
-}
 
 
 const Heatmap = (
@@ -41,15 +33,15 @@ const Heatmap = (
 ) => {
   const [cal,] = useState<CalHeatmap>(new CalHeatmap())
   const [data, setData] = useState<{ [x: string]: number; }[]>([])
-  const [metadata, setMetadata] = useState<ActivityMetaData | null>(null)
+  const [metadata, setMetadata] = useState<object | null>(null)
   const [refreshState, setRefershState] = useState(false)
 
   useEffect(() => {
     async function getData() {
       const response = await fetchData<UnknownObject>(url)
-      const newMetadata = response["metadata"] as ActivityMetaData
+      const newMetadata = response["metadata"] as UnknownObject
       const newData = response["data"] as { [x: string]: number; }[]
-
+      console.log(newData)
       setData(newData)
       setMetadata(newMetadata)
     }
@@ -59,19 +51,31 @@ const Heatmap = (
   useEffect(() => {
     if (!metadata) return
     cal.destroy()
-    const valueColInfo = metadata["value_cols"][0]
-    let values = data.map(elem => elem[valueColInfo["col"]])
+    let dateCol = "date"
+    let valueCol = "value"
+    for (const [column, pandasDType] of Object.entries(metadata)) {
+      if (pandasDType === "datetime64[ns]") {
+        dateCol = column
+      }
+      if (["int64", "int32", "float64", "float32"].includes(pandasDType)) {
+        valueCol = column
+      }
+    }
+    
+    let values = data.map(elem => elem[valueCol])
     values = values.filter((value) => value != 0)
     const calculatedDomain = [getQuantile(values, 20), getQuantile(values, 50), getQuantile(values, 80)].map(num => Math.round(num))
+
+    console.log(name, dateCol, valueCol, metadata)
     drawHeatmap(
       {
         cal: cal,
         itemSelector: `#${name}-heatmap`,
         data: data,
         year: year,
-        dateCol: metadata["date_col"],
-        valueCol: valueColInfo["col"],
-        units: valueColInfo["units"],
+        dateCol:dateCol,
+        valueCol: valueCol,
+        units: "units",
         colorDomain: colorDomain ? colorDomain : calculatedDomain,
         colorScheme: colorScheme
       }

@@ -12,7 +12,15 @@ interface UnknownObject {
   [key: string]: object
 }
 
+interface Metadata {
+  name: string,
+  type: string,
+  comment: string
+}
 
+interface Data {
+  [key: string]: string | number 
+}
 
 const Heatmap = (
   {
@@ -32,37 +40,61 @@ const Heatmap = (
     }
 ) => {
   const [cal,] = useState<CalHeatmap>(new CalHeatmap())
-  const [data, setData] = useState<{ [x: string]: number; }[]>([])
-  const [metadata, setMetadata] = useState<object | null>(null)
+  const [data, setData] = useState<Data[]>([])
+  const [metadata, setMetadata] = useState<Metadata[]>([])
   const [refreshState, setRefershState] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    async function getData() {
-      const response = await fetchData<UnknownObject>(url)
-      const newMetadata = response["metadata"] as UnknownObject
-      const newData = response["data"] as { [x: string]: number; }[]
-      console.log(newData)
-      setData(newData)
-      setMetadata(newMetadata)
-    }
-    getData()
-  }, [url, refreshState])
+    let isMounted = true; // to avoid setting state on unmounted component
+
+    const getData = async () => {
+      console.log(isLoading)
+      if (isLoading) return;
+      setIsLoading(true);
+      console.log(isLoading)
+      try {
+        console.log(`Fetching data from ${url}`)
+        const response = await fetchData<UnknownObject>(url)
+        const newMetadata = response["metadata"] as Metadata[]
+        const newData = response["data"] as Data[]
+        if (isMounted) {
+          setData(newData)
+          setMetadata(newMetadata)
+        }
+      } catch (error) {
+        console.error('Error fetching:', error);
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    getData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [url, refreshState]); // empty dependency array = run once on mount
+
 
   useEffect(() => {
     if (!metadata) return
     cal.destroy()
     let dateCol = "date"
     let valueCol = "value"
-    for (const [column, pandasDType] of Object.entries(metadata)) {
-      if (pandasDType === "datetime64[ns]") {
-        dateCol = column
-      }
-      if (["int64", "int32", "float64", "float32"].includes(pandasDType)) {
-        valueCol = column
-      }
+    for (const column_metadata of metadata) {
+        if (column_metadata["comment"].includes("date_column")){
+          dateCol = column_metadata["name"]
+        }
+        if (column_metadata["comment"].includes("value_column") && valueCol=="value") {
+          valueCol = column_metadata["name"]
+        }
     }
     
-    let values = data.map(elem => elem[valueCol])
+    let values = data.map(elem => elem[valueCol]) as number[]
     values = values.filter((value) => value != 0)
     const calculatedDomain = [getQuantile(values, 20), getQuantile(values, 50), getQuantile(values, 80)].map(num => Math.round(num))
 

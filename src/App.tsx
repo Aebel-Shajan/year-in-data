@@ -44,11 +44,19 @@ const HomePage = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/data-sources/list-data-sources")
+      .get("/retrieve-data/data-routes")
       .then(response => response.data)
-      .then(data => {
-        setDataEndpoints(data.routes)
-        console.log(data.routes)
+      .then((data) => {
+        console.log(data)
+        const endpoints: Routes[] = []
+        const dataRoutes: string[] = data.data
+        dataRoutes.forEach(route => {
+          endpoints.push({
+            "name": route,
+            "path": "/retrieve-data/" + route
+          })
+        })
+        setDataEndpoints(endpoints)
       })
       .catch(e => console.error(e))
 

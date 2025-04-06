@@ -85,12 +85,17 @@ const Heatmap = (
     cal.destroy()
     let dateCol = "date"
     let valueCol = "value"
+    let units = "units"
     for (const column_metadata of metadata) {
         if (column_metadata["comment"].includes("date_column")){
           dateCol = column_metadata["name"]
         }
         if (column_metadata["comment"].includes("value_column") && valueCol=="value") {
           valueCol = column_metadata["name"]
+          const extractedUnits = extractBracketContent(column_metadata["comment"])
+          if (extractedUnits) {
+            units = extractedUnits
+          }
         }
     }
     
@@ -107,7 +112,7 @@ const Heatmap = (
         year: year,
         dateCol:dateCol,
         valueCol: valueCol,
-        units: "units",
+        units: units,
         colorDomain: colorDomain ? colorDomain : calculatedDomain,
         colorScheme: colorScheme
       }
@@ -144,7 +149,13 @@ const Heatmap = (
 }
 
 
-
+function extractBracketContent(str: string) {
+  const match = str.match(/\[(.*?)\]/);
+  if (match && match[1]) {
+    return match[1];
+  }
+  return null;
+}
 
 
 

@@ -12,10 +12,12 @@ interface UnknownObject {
   [key: string]: object
 }
 
+
 interface Metadata {
   name: string,
   type: string,
-  comment: string
+  comment: string,
+  units: string
 }
 
 interface Data {
@@ -41,9 +43,12 @@ const Heatmap = (
 ) => {
   const [cal,] = useState<CalHeatmap>(new CalHeatmap())
   const [data, setData] = useState<Data[]>([])
-  const [metadata, setMetadata] = useState<Metadata[]>([])
   const [refreshState, setRefershState] = useState(false)
-
+  const [valueCols, setValueCols] = useState<Metadata[]>([])
+  // const [categoryCols, setCategoryCols] = useState<Metadata[]>([])
+  const [dateCol, setDateCol] = useState<string>("date")
+  const [selectedValueCol, setSelectedValueCol] = useState<number>(0)
+  // const [selectedCategoryCol, setSelectedCategoryCol] = useState<number>(-1)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -61,7 +66,16 @@ const Heatmap = (
         const newData = response["data"] as Data[]
         if (isMounted) {
           setData(newData)
-          setMetadata(newMetadata)
+          setValueCols(newMetadata.filter((column) => column.comment.includes("value_column")))
+          // setCategoryCols(newMetadata.filter((column) => column.comment.includes("category_column")))
+
+          for (const column of newMetadata) {
+            if (column.comment.includes("date_column") || column.type == "DATE") {
+              setDateCol(column.name)
+              break
+            }
+          }
+
         }
       } catch (error) {
         console.error('Error fetching:', error);
@@ -81,29 +95,26 @@ const Heatmap = (
 
 
   useEffect(() => {
-    if (!metadata) return
     cal.destroy()
-    let dateCol = "date"
+
     let valueCol = "value"
     let units = "units"
-    for (const column_metadata of metadata) {
-        if (column_metadata["comment"].includes("date_column")){
-          dateCol = column_metadata["name"]
-        }
-        if (column_metadata["comment"].includes("value_column") && valueCol=="value") {
-          valueCol = column_metadata["name"]
-          const extractedUnits = extractBracketContent(column_metadata["comment"])
-          if (extractedUnits) {
-            units = extractedUnits
-          }
-        }
+    let groupValues = "sum"
+    if (valueCols.length > selectedValueCol && selectedValueCol != -1) {
+      valueCol = valueCols[selectedValueCol].name
+      const extractedUnits = extractBracketContent(valueCols[selectedValueCol].comment)
+      if (extractedUnits) {
+        units = extractedUnits
+      }
+      if (valueCols[selectedValueCol].comment.includes("max")) {
+        groupValues = "max"
+      }
     }
     
     let values = data.map(elem => elem[valueCol]) as number[]
     values = values.filter((value) => value != 0)
     const calculatedDomain = [getQuantile(values, 20), getQuantile(values, 50), getQuantile(values, 80)].map(num => Math.round(num))
 
-    console.log(name, dateCol, valueCol, metadata)
     drawHeatmap(
       {
         cal: cal,
@@ -114,20 +125,26 @@ const Heatmap = (
         valueCol: valueCol,
         units: units,
         colorDomain: colorDomain ? colorDomain : calculatedDomain,
-        colorScheme: colorScheme
+        colorScheme: colorScheme,
+        groupY: groupValues
       }
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, metadata, refreshState])
+  }, [data, refreshState, selectedValueCol])
 
   function handleRefresh() {
     setRefershState(old => !old)
   }
 
+  const valueColOptions = valueCols.map((col, index) => {
+    return (
+      <option value={index} key={col.name}>{col.name.replace(/_/g, " ") } </option>
+    )
+  })
 
 
   return (
-    <div className="w-full overflow-x-scroll">
+    <div className="w-200 overflow-x-scroll">
       <div
         id={`${name}-heatmap`}
         className={"heatmap"}
@@ -139,9 +156,23 @@ const Heatmap = (
           className="pt-5"
         />
 
+        <div className="flex items-center gap-2">
+
+        <fieldset className="fieldset">
+          <select
+            value={selectedValueCol}
+            onChange={e => setSelectedValueCol(Number(e.target.value))}
+            className="select"
+          >
+            <option disabled={true} value={-1}>Pick a value column</option>
+            {valueColOptions}
+          </select>
+        </fieldset>
+
         <button className="btn" onClick={handleRefresh}>
           <FiRefreshCcw />
         </button>
+        </div>
       </div>
     </div>
 

@@ -7,7 +7,7 @@ import { drawHeatmap, getQuantile } from "./heatmapUtils";
 import "./Heatmap.css";
 import { FiRefreshCcw } from "react-icons/fi";
 import Barplot from "../Barplot/Barplot";
-import WeeklyBarPlot from "../Barplot/WeeklyBarPlot";
+import DateBarPlot from "../Barplot/DateBarPlot";
 
 
 interface UnknownObject {
@@ -186,7 +186,7 @@ const Heatmap = (
         })}
         />
       }
-      <WeeklyBarPlot width={500} height={250} data={data.map(row => {
+      <DateBarPlot width={500} height={250} data={data.map(row => {
         return {
           date: row.date as string,
           value: row[valueCols[selectedValueCol].name] as number

@@ -10,16 +10,28 @@ type BarplotProps = {
   width: number;
   height: number;
   data: { name: string; value: number }[];
+  sort?: boolean
 };
 
-export const Barplot = ({ width, height, data }: BarplotProps) => {
+export const Barplot = (
+  { 
+    width, 
+    height, 
+    data,
+    sort=true
+  }: BarplotProps
+) => {
   data = groupData(data)
   // bounds = area inside the graph axis = calculated by substracting the margins
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
+  if (sort) {
+    data = data.sort((a, b) => b.value - a.value)
+  }
+
   // Y axis is for groups since the barplot is horizontal
-  const groups = data.sort((a, b) => b.value - a.value).map((d) => d.name);
+  const groups = data.map((d) => d.name);
   const yScale = useMemo(() => {
     return d3
       .scaleBand()

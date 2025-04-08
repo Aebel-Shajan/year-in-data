@@ -6,6 +6,8 @@ import CalHeatmap from 'cal-heatmap';
 import { drawHeatmap, getQuantile } from "./heatmapUtils";
 import "./Heatmap.css";
 import { FiRefreshCcw } from "react-icons/fi";
+import Barplot from "../Barplot/Barplot";
+import WeeklyBarPlot from "../Barplot/WeeklyBarPlot";
 
 
 interface UnknownObject {
@@ -21,7 +23,7 @@ interface Metadata {
 }
 
 interface Data {
-  [key: string]: string | number 
+  [key: string]: string | number
 }
 
 const Heatmap = (
@@ -30,7 +32,7 @@ const Heatmap = (
     name,
     year,
     colorDomain,
-    colorScheme="Blues"
+    colorScheme = "Blues"
   }:
     {
       url: string,
@@ -45,7 +47,7 @@ const Heatmap = (
   const [data, setData] = useState<Data[]>([])
   const [refreshState, setRefershState] = useState(false)
   const [valueCols, setValueCols] = useState<Metadata[]>([])
-  // const [categoryCols, setCategoryCols] = useState<Metadata[]>([])
+  const [categoryCols, setCategoryCols] = useState<Metadata[]>([])
   const [dateCol, setDateCol] = useState<string>("date")
   const [selectedValueCol, setSelectedValueCol] = useState<number>(0)
   // const [selectedCategoryCol, setSelectedCategoryCol] = useState<number>(-1)
@@ -67,7 +69,7 @@ const Heatmap = (
         if (isMounted) {
           setData(newData)
           setValueCols(newMetadata.filter((column) => column.comment.includes("value_column")))
-          // setCategoryCols(newMetadata.filter((column) => column.comment.includes("category_column")))
+          setCategoryCols(newMetadata.filter((column) => column.comment.includes("category_column")))
 
           for (const column of newMetadata) {
             if (column.comment.includes("date_column") || column.type == "DATE") {
@@ -110,7 +112,7 @@ const Heatmap = (
         groupValues = "max"
       }
     }
-    
+
     let values = data.map(elem => elem[valueCol]) as number[]
     values = values.filter((value) => value != 0)
     const calculatedDomain = [getQuantile(values, 20), getQuantile(values, 50), getQuantile(values, 80)].map(num => Math.round(num))
@@ -121,7 +123,7 @@ const Heatmap = (
         itemSelector: `#${name}-heatmap`,
         data: data,
         year: year,
-        dateCol:dateCol,
+        dateCol: dateCol,
         valueCol: valueCol,
         units: units,
         colorDomain: colorDomain ? colorDomain : calculatedDomain,
@@ -138,13 +140,13 @@ const Heatmap = (
 
   const valueColOptions = valueCols.map((col, index) => {
     return (
-      <option value={index} key={col.name}>{col.name.replace(/_/g, " ") } </option>
+      <option value={index} key={col.name}>{col.name.replace(/_/g, " ")} </option>
     )
   })
 
 
   return (
-    <div className="w-200 overflow-x-scroll">
+    <div className="w-220 overflow-x-scroll flex flex-col items-center gap-2">
       <div
         id={`${name}-heatmap`}
         className={"heatmap"}
@@ -158,22 +160,39 @@ const Heatmap = (
 
         <div className="flex items-center gap-2">
 
-        <fieldset className="fieldset">
-          <select
-            value={selectedValueCol}
-            onChange={e => setSelectedValueCol(Number(e.target.value))}
-            className="select"
-          >
-            <option disabled={true} value={-1}>Pick a value column</option>
-            {valueColOptions}
-          </select>
-        </fieldset>
+          <fieldset className="fieldset">
+            <select
+              value={selectedValueCol}
+              onChange={e => setSelectedValueCol(Number(e.target.value))}
+              className="select"
+            >
+              <option disabled={true} value={-1}>Pick a value column</option>
+              {valueColOptions}
+            </select>
+          </fieldset>
 
-        <button className="btn" onClick={handleRefresh}>
-          <FiRefreshCcw />
-        </button>
+          <button className="btn" onClick={handleRefresh}>
+            <FiRefreshCcw />
+          </button>
         </div>
       </div>
+
+      {categoryCols.length > 0 &&
+        <Barplot width={500} height={250} data={data.map(row => {
+          return {
+            name: row[categoryCols[0].name] as string,
+            value: row[valueCols[selectedValueCol].name] as number
+          }
+        })}
+        />
+      }
+      <WeeklyBarPlot width={500} height={250} data={data.map(row => {
+        return {
+          date: row.date as string,
+          value: row[valueCols[selectedValueCol].name] as number
+        }
+      })}
+      />
     </div>
 
   );

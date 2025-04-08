@@ -24,7 +24,7 @@ const HeatmapInstance = (
   return <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-fit max-w-full">
     <div className="flex justify-between">
       <h1 className="text-xl font-semibold">
-        {name.replace("get_", "")}
+        {name.replace(/_/g, " ")}
       </h1>
     </div>
     <div className="p-3 flex justify-center overflow-x-scroll">

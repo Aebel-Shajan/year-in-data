@@ -7,14 +7,19 @@ const HeatmapInstance = (
   {
     name,
     url,
-    year
+    year,
+    index
   }:
   {
     name: string,
     url: string,
-    year: number
+    year: number,
+    index: number
   }
 ) => {
+
+  const d3Colors = ["Greens", "Blues", "Oranges", "Purples", "Reds"]
+  const d3ColorIndex = index % d3Colors.length
 
   return <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-fit max-w-full">
     <div className="flex justify-between">
@@ -27,6 +32,7 @@ const HeatmapInstance = (
         url={url + "/" + year}
         name={name}
         year={year}
+        colorScheme={d3Colors[d3ColorIndex]}
       />
     </div>
   </div>
@@ -68,6 +74,7 @@ const HomePage = () => {
       name={route.name}
       url={route.path}
       year={year}
+      index={index}
     />)
   })
 

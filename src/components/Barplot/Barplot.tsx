@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 import * as d3 from "d3";
 
-const MARGIN = { top: 30, right: 30, bottom: 30, left: 30 };
 const BAR_PADDING = 0.3;
 
 type BarplotProps = {
@@ -14,29 +13,28 @@ type BarplotProps = {
 };
 
 export const Barplot = (
-  { 
-    width, 
-    height, 
+  {
+    width,
+    height,
     data,
-    sort=true
+    sort = true
   }: BarplotProps
 ) => {
   data = groupData(data)
-  // bounds = area inside the graph axis = calculated by substracting the margins
-  const boundsWidth = width - MARGIN.right - MARGIN.left;
-  const boundsHeight = height - MARGIN.top - MARGIN.bottom;
-
   if (sort) {
     data = data.sort((a, b) => b.value - a.value)
   }
+  const groups = data.map((d) => d.name);
+
+  const barWidth = 20
+  const totalHeight = barWidth * groups.length
 
   // Y axis is for groups since the barplot is horizontal
-  const groups = data.map((d) => d.name);
   const yScale = useMemo(() => {
     return d3
       .scaleBand()
       .domain(groups)
-      .range([0, boundsHeight])
+      .range([0, totalHeight])
       .padding(BAR_PADDING);
   }, [data, height]);
 
@@ -46,7 +44,7 @@ export const Barplot = (
     return d3
       .scaleLinear()
       .domain([0, max || 10])
-      .range([0, boundsWidth]);
+      .range([0, width]);
   }, [data, width]);
 
   // Build the shapes
@@ -94,21 +92,21 @@ export const Barplot = (
   });
 
   const grid = xScale
-    .ticks(5)
-    .slice(1)
+    .ticks(6)
+    .slice(0)
     .map((value, i) => (
       <g key={i}>
         <line
           x1={xScale(value)}
           x2={xScale(value)}
           y1={0}
-          y2={boundsHeight}
+          y2={height}
           stroke="#808080"
           opacity={0.2}
         />
         <text
           x={xScale(value)}
-          y={boundsHeight + 10}
+          y={height - 10}
           textAnchor="middle"
           alignmentBaseline="central"
           fontSize={9}
@@ -121,17 +119,33 @@ export const Barplot = (
     ));
 
   return (
-    <div>
-      <svg width={width} height={height}>
-        <g
-          width={boundsWidth}
-          height={boundsHeight}
-          transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+    <div className="relative overflow-y-scroll">
+        <svg 
+          className="sticky top-0"
+          width={width} 
+          height={height}
         >
-          {grid}
-          {allShapes}
-        </g>
-      </svg>
+          <g
+            width={width}
+            height={height}
+          >
+            {grid}
+          </g>
+        </svg>
+
+        <svg
+          className="absolute top-0 "
+          width={width} 
+          height={totalHeight}
+        >
+          <g
+            width={width}
+            height={height}
+          >
+            {allShapes}
+          </g>
+
+        </svg>
     </div>
   );
 };

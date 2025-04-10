@@ -50,7 +50,7 @@ const Heatmap = (
   const [categoryCols, setCategoryCols] = useState<Metadata[]>([])
   const [dateCol, setDateCol] = useState<string>("date")
   const [selectedValueCol, setSelectedValueCol] = useState<number>(0)
-  // const [selectedCategoryCol, setSelectedCategoryCol] = useState<number>(-1)
+  const [selectedCategoryCol, setSelectedCategoryCol] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -143,7 +143,11 @@ const Heatmap = (
       <option value={index} key={col.name}>{col.name.replace(/_/g, " ")} </option>
     )
   })
-
+  const categoryOptions = categoryCols.map((col, index) => {
+    return (
+      <option value={index} key={col.name}>{col.name.replace(/_/g, " ")} </option>
+    )
+  })
 
   return (
     <div className="w-220 overflow-x-scroll flex flex-col items-center gap-2">
@@ -160,16 +164,30 @@ const Heatmap = (
 
         <div className="flex items-center gap-2">
 
+        {valueCols.length > 1 && 
           <fieldset className="fieldset">
             <select
               value={selectedValueCol}
               onChange={e => setSelectedValueCol(Number(e.target.value))}
               className="select"
-            >
+              >
               <option disabled={true} value={-1}>Pick a value column</option>
               {valueColOptions}
             </select>
           </fieldset>
+        }
+        {categoryCols.length > 1 && 
+          <fieldset className="fieldset">
+            <select
+              value={selectedCategoryCol}
+              onChange={e => setSelectedCategoryCol(Number(e.target.value))}
+              className="select"
+              >
+              <option disabled={true} value={-1}>Pick a category column</option>
+              {categoryOptions}
+            </select>
+          </fieldset>
+        }
 
           <button className="btn" onClick={handleRefresh}>
             <FiRefreshCcw />
@@ -180,7 +198,7 @@ const Heatmap = (
       {categoryCols.length > 0 &&
         <Barplot width={500} height={250} data={data.map(row => {
           return {
-            name: row[categoryCols[0].name] as string,
+            name: row[categoryCols[selectedCategoryCol].name] as string,
             value: row[valueCols[selectedValueCol].name] as number
           }
         })}

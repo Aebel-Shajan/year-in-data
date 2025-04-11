@@ -1,42 +1,9 @@
 import { useEffect, useState } from "react";
-import Heatmap from "./components/Heatmap/Heatmap";
 import Navbar from "./components/Navbar";
 import { axiosInstance } from "./api/axiosClient";
+import DataVis from "./components/DataVis/DataVis";
 
-const HeatmapInstance = (
-  {
-    name,
-    url,
-    year,
-    index
-  }:
-  {
-    name: string,
-    url: string,
-    year: number,
-    index: number
-  }
-) => {
 
-  const d3Colors = ["Greens", "Blues", "Oranges", "Purples", "Reds"]
-  const d3ColorIndex = index % d3Colors.length
-
-  return <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-fit max-w-full">
-    <div className="flex justify-between">
-      <h1 className="text-xl font-semibold">
-        {name.replace(/_/g, " ")}
-      </h1>
-    </div>
-    <div className="p-3 flex justify-center overflow-x-scroll">
-      <Heatmap
-        url={url + "/" + year}
-        name={name}
-        year={year}
-        colorScheme={d3Colors[d3ColorIndex]}
-      />
-    </div>
-  </div>
-}
 
 interface Routes {
   name: string,
@@ -69,7 +36,7 @@ const HomePage = () => {
   }, [])
 
   const heatmaps = dataEndpoints.map((route, index) => {
-    return (<HeatmapInstance
+    return (<DataVis
       key={index + "_heatmap"}
       name={route.name}
       url={route.path}

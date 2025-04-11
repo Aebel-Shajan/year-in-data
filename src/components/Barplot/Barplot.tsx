@@ -1,6 +1,4 @@
-// Cool website would reccomend
-// https://www.react-graph-gallery.com/
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import * as d3 from "d3";
 
 const BAR_PADDING = 0.3;
@@ -9,27 +7,26 @@ type BarplotProps = {
   width: number;
   height: number;
   data: { name: string; value: number }[];
-  sort?: boolean
+  sort?: boolean;
 };
 
-export const Barplot = (
-  {
-    width,
-    height,
-    data,
-    sort = true
-  }: BarplotProps
-) => {
-  data = groupData(data)
+export const Barplot = ({ width, height, data, sort = true }: BarplotProps) => {
+  const [tooltip, setTooltip] = useState<{
+    visible: boolean;
+    x: number;
+    y: number;
+    content: string;
+  }>({ visible: false, x: 0, y: 0, content: "" });
+
+  data = groupData(data);
   if (sort) {
-    data = data.sort((a, b) => b.value - a.value)
+    data = data.sort((a, b) => b.value - a.value);
   }
   const groups = data.map((d) => d.name);
 
-  const barWidth = 20
-  const totalHeight = barWidth * groups.length
+  const barWidth = 20;
+  const totalHeight = barWidth * groups.length;
 
-  // Y axis is for groups since the barplot is horizontal
   const yScale = useMemo(() => {
     return d3
       .scaleBand()
@@ -38,7 +35,6 @@ export const Barplot = (
       .padding(BAR_PADDING);
   }, [data, height]);
 
-  // X axis
   const xScale = useMemo(() => {
     const [, max] = d3.extent(data.map((d) => d.value));
     return d3
@@ -47,7 +43,6 @@ export const Barplot = (
       .range([0, width]);
   }, [data, width]);
 
-  // Build the shapes
   const allShapes = data.map((d, i) => {
     const y = yScale(d.name);
     if (y === undefined) {
@@ -55,7 +50,28 @@ export const Barplot = (
     }
 
     return (
-      <g key={i}>
+      <g
+        key={i}
+        onMouseEnter={(e) =>
+          setTooltip({
+            visible: true,
+            x: e.clientX,
+            y: e.clientY,
+            content: `${d.name}: ${d.value}`,
+          })
+        }
+        onMouseMove={(e) =>
+          setTooltip({
+            visible: true,
+            x: e.clientX,
+            y: e.clientY,
+            content: `${d.name}: ${d.value}`,
+          })
+        }
+        onMouseLeave={() =>
+          setTooltip({ visible: false, x: 0, y: 0, content: "" })
+        }
+      >
         <rect
           x={xScale(0)}
           y={yScale(d.name)}
@@ -74,7 +90,7 @@ export const Barplot = (
           textAnchor="end"
           alignmentBaseline="central"
           fontSize={12}
-          opacity={xScale(d.value) > 90 ? 0 : 0} // hide label if bar is not wide enough
+          opacity={xScale(d.value) > 90 ? 0 : 0}
         >
           {d.value}
         </text>
@@ -120,36 +136,30 @@ export const Barplot = (
 
   return (
     <div className="relative overflow-y-scroll">
-        <svg 
-          className="sticky top-0"
-          width={width} 
-          height={height}
-        >
-          <g
-            width={width}
-            height={height}
-          >
-            {grid}
-          </g>
-        </svg>
+      <svg className="sticky top-0" width={width} height={height}>
+        <g width={width} height={height}>
+          {grid}
+        </g>
+      </svg>
 
-        <svg
-          className="absolute top-0 "
-          width={width} 
-          height={totalHeight}
-        >
-          <g
-            width={width}
-            height={height}
-          >
-            {allShapes}
-          </g>
+      <svg className="absolute top-0" width={width} height={totalHeight}>
+        <g width={width} height={height}>{allShapes}</g>
+      </svg>
 
-        </svg>
+      {tooltip.visible && (
+        <div
+          className="fixed bg-white border-blue-100 border-solid rounded-xs p-1 pointer-events-none text-xs z-999"
+          style={{
+            left: tooltip.x + 20,
+            top: tooltip.y ,
+          }}
+        >
+          {tooltip.content}
+        </div>
+      )}
     </div>
   );
 };
-
 
 interface ungroupedData {
   name: string | number;
@@ -157,18 +167,15 @@ interface ungroupedData {
 }
 
 function groupData(data: ungroupedData[]) {
-  // Sums values together based on the same name
   const grouped = data.reduce<Record<string | number, number>>((acc, curr) => {
     acc[curr.name] = (acc[curr.name] || 0) + curr.value;
     return acc;
   }, {});
 
-  // Convert the grouped object back into an array
   return Object.entries(grouped).map(([name, value]) => ({
     name,
     value,
   }));
 }
-
 
 export default Barplot;

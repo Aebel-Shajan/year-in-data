@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
 import { fetchData } from "../../api/axiosClient"
 import Select from "../Select"
-import Heatmap from "../Heatmap/Heatmap"
+import Barplot from "../Barplot/Barplot"
+import { AnnualHeatmap } from "../AnnualHeatmap"
+import * as d3 from "d3";
 
 interface Metadata {
   name: string,
@@ -29,7 +31,7 @@ const DataVis = (
     }
 ) => {
 
-  const d3Colors = ["Greens", "Blues", "Oranges", "Purples", "Reds"]
+  const d3Colors = [d3.schemeGreens, d3.schemeBlues, d3.schemeOranges, d3.schemePurples, d3.schemeReds]
   const d3ColorIndex = index % d3Colors.length
   const [data, setData] = useState<Data[]>([])
   const [valueCols, setValueCols] = useState<Metadata[]>([])
@@ -59,7 +61,7 @@ const DataVis = (
             newDateCol = foundDateCols[0].name
           }
           let newCategoryCol = null
-          const foundCategoryCols = newMetadata.filter(column => column.classification == "date_column")
+          const foundCategoryCols = newMetadata.filter(column => column.classification == "category_column")
           if (foundCategoryCols.length > 0) {
             newCategoryCol = foundCategoryCols[0].name
           }
@@ -81,7 +83,7 @@ const DataVis = (
     return () => {
       isMounted = false;
     };
-  }, [ url, year]); // empty dependency array = run once on mount
+  }, [url, year]); // empty dependency array = run once on mount
 
   const [range, setRange] = useState<[number, number] | null>(null);
 
@@ -100,31 +102,43 @@ const DataVis = (
     fetchRange();
   }, [selectedValueCol, valueCols, url]);
 
-  if (valueCols.length == 0 ) return 
+  if (valueCols.length == 0) return
 
-return <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-250 max-w-full">
+  return <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-250 max-w-full">
     <div className="flex justify-between">
       <h1 className="text-xl font-semibold">
         {name.replace(/_/g, " ")}
       </h1>
     </div>
-    <div className="p-3 flex justify-center items-center overflow-x-scroll w-full">
+    <div className="overflow-x-scroll w-full">
 
-      <Heatmap
-        name={name}
+      <AnnualHeatmap
         data={structureData(data, dateCol, valueCols[selectedValueCol].name)}
         units={valueCols[selectedValueCol].units}
-        range={range?  range: [1, 10]}
-        colorScheme={d3Colors[d3ColorIndex]}
+        domain={range ? range : [1, 10]}
+        colorScheme={d3Colors[d3ColorIndex] }
         year={year}
       />
     </div>
-    <div className="flex w-full">
+    <div className=" w-full flex-col">
       <Select
         options={valueCols.map(col => col.name)}
         selectedOptionIndex={selectedValueCol}
         setSelectedOptionIndex={setSelectedValueCol}
       />
+      {categoryCol &&
+
+        <Barplot
+          width={250}
+          height={250}
+          data={data.map(row => {
+            return {
+              name: row[categoryCol] as string,
+              value: row[valueCols[selectedValueCol].name] as number
+            }
+          })}
+        />
+      }
     </div>
   </div>
 }
@@ -138,8 +152,8 @@ function structureData(
 ) {
   return data.map(row => {
     return {
-      date: row[dateCol],
-      value: row[valueCol]
+      date: row[dateCol] as string,
+      value: row[valueCol] as number
     }
   })
 }

@@ -149,7 +149,7 @@ export const Barplot = (
     ));
 
   return (
-    <div className={"relative" + className}>
+    <div className={"relative " + className}>
       <svg className="sticky top-0" width={width} height={height}>
         <g width={width} height={height}>
           {grid}

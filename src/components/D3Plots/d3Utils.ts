@@ -44,24 +44,32 @@ interface TimeSeriesData {
   value: number,
 }
 
-export function groupByWeekDay(data: TimeSeriesData[]) {
+export function groupByWeekDay(
+  data: TimeSeriesData[],
+  groupingFunction: CallableFunction = d3.mean
+) {
   const weekDayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   
+
   const groupedData = weekDayOrder.map(weekDay => {
     const matchingData = data.filter(row => {
       const date = new Date(row.date);
       return date.toLocaleString('en-US', { weekday: 'long' }) === weekDay;
     });
+    const matchingValues = matchingData.map(row => row.value)
     return {
       name: weekDay,
-      value: matchingData.reduce((sum, row) => sum + row.value, 0)
+      value: groupingFunction(matchingValues)
     };
   });
 
   return groupedData;
 }
 
-export function groupByMonth(data: TimeSeriesData[]) {
+export function groupByMonth(
+  data: TimeSeriesData[],
+  groupingFunction: CallableFunction = d3.mean
+) {
   const monthOrder = [
     "January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December"
@@ -71,10 +79,12 @@ export function groupByMonth(data: TimeSeriesData[]) {
     const matchingData = data.filter(row => {
       const date = new Date(row.date);
       return date.toLocaleString('en-US', { month: 'long' }) === month;
-    });
+    })
+    const matchingValues = matchingData.map(row => row.value)
+    
     return {
       name: month,
-      value: matchingData.reduce((sum, row) => sum + row.value, 0)
+      value: groupingFunction(matchingValues)
     };
   });
 

@@ -116,79 +116,83 @@ const DataVis = (
 
   if (valueCols.length == 0) return
 
-  return <div className="p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-250 max-w-full">
-    <div className="flex justify-between">
-      <h1 className="text-xl font-semibold">
-        {name.replace(/_/g, " ")}
-      </h1>
-    </div>
-    <div className="overflow-x-scroll w-full">
-
-      <AnnualHeatmap
-        data={structureData(data, dateCol, valueCols[selectedValueCol].name)}
-        units={valueCols[selectedValueCol].units}
-        colorScale={colorScale}
-        year={year}
-      />
-      <Legend
-        ticks={ticks}
-        colorScale={colorScale}
-      />
-    </div>
-    <div className=" w-full flex flex-col p-10 gap-10">
-      <Select
+  return (
+    <div className="
+      p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-250 
+      max-w-full flex flex-col gap-3"
+    >
+      <div className="flex justify-between">
+        <h1 className="text-xl font-semibold">
+          {name.replace(/_/g, " ")}
+        </h1>
+      </div>
+      <div className="overflow-x-scroll w-full flex flex-col gap-3">
+        <AnnualHeatmap
+          data={structureData(data, dateCol, valueCols[selectedValueCol].name)}
+          units={valueCols[selectedValueCol].units}
+          colorScale={colorScale}
+          year={year}
+        />
+        <Legend
+          ticks={ticks}
+          colorScale={colorScale}
+        />
+      </div>
+      { valueCols.length > 1 && <Select
         options={valueCols.map(col => col.name)}
         selectedOptionIndex={selectedValueCol}
         setSelectedOptionIndex={setSelectedValueCol}
       />
-    </div>
+}
 
-    <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
-      {categoryCol &&
+      <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
+        {categoryCol &&
+          <Barplot
+            className="p-3  rounded border-gray-300 border w-fit"
+            width={300}
+            height={200}
+            barColor={colorScale(ticks[1])}
+            data={data.map(row => {
+              return {
+                name: row[categoryCol] as string,
+                value: row[valueCols[selectedValueCol].name] as number
+              }
+            })}
+          />
+        }
         <Barplot
-        className="p-3  rounded border-gray-300 border w-fit"
+          className="p-3 rounded border-gray-300 border w-fit"
           width={300}
           height={200}
           barColor={colorScale(ticks[1])}
-          data={data.map(row => {
+          sort={false}
+          data={convertDateToWeekDay(data.map(row => {
             return {
-              name: row[categoryCol] as string,
+              date: row[dateCol] as string,
               value: row[valueCols[selectedValueCol].name] as number
             }
-          })}
+          }))}
         />
-      }
-      <Barplot
-        className="p-3 rounded border-gray-300 border w-fit"
-        width={300}
-        height={200}
-        barColor={colorScale(ticks[1])}
-        sort={false}
-        data={convertDateToWeekDay(data.map(row => {
-          return {
-            date: row[dateCol] as string,
-            value: row[valueCols[selectedValueCol].name] as number
-          }
-        }))}
-      />
-      <Barplot
-        className="p-3  rounded border-gray-300 border w-fit"
-        width={500}
-        height={340}
-        barColor={colorScale(ticks[1])}
-        sort={false}
-        data={convertDateToMonth(data.map(row => {
-          return {
-            date: row[dateCol] as string,
-            value: row[valueCols[selectedValueCol].name] as number
-          }
-        }))}
-      />
+        <Barplot
+          className="p-3  rounded border-gray-300 border w-fit"
+          width={500}
+          height={340}
+          barColor={colorScale(ticks[1])}
+          sort={false}
+          data={convertDateToMonth(data.map(row => {
+            return {
+              date: row[dateCol] as string,
+              value: row[valueCols[selectedValueCol].name] as number
+            }
+          }))}
+        />
 
 
+      </div>
     </div>
-  </div>
+  )
 }
+
 export default DataVis;
 
 

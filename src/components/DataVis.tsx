@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
-import { fetchData } from "../../api/axiosClient"
-import Select from "../Select"
-import Barplot from "../D3Plots/Barplot"
-import DateBarPlot from "../D3Plots/DateBarPlot"
-import { AnnualHeatmap } from "../D3Plots/AnnualHeatmap"
+import { fetchData } from "../api/axiosClient"
+import Select from "./Select"
+import Barplot from "./D3Plots/Barplot"
+import DateBarPlot from "./D3Plots/DateBarPlot"
+import { AnnualHeatmap } from "./D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
 
 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import { fetchData } from "../../api/axiosClient"
 import Select from "../Select"
-import Barplot from "../Barplot/Barplot"
-import { AnnualHeatmap } from "../AnnualHeatmap"
+import Barplot from "../D3Plots/Barplot"
+import DateBarPlot from "../D3Plots/DateBarPlot"
+import { AnnualHeatmap } from "../D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
-import DateBarPlot from "../Barplot/DateBarPlot"
+
 
 interface Metadata {
   name: string,

@@ -1,4 +1,4 @@
-import Barplot from "./Barplot";
+import Barplot from "../D3Plots/Barplot";
 
 
 interface TimeSeriesData {

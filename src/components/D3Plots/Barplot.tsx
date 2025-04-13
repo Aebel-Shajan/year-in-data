@@ -1,52 +1,28 @@
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState } from "react";
 import * as d3 from "d3";
 
 const BAR_PADDING = 0.3;
 
 type BarplotProps = {
   data: { name: string; value: number }[];
+  width: number,
+  height: number,
+  className?: string,
   barColor?:string;
   sort?: boolean;
-  className?: string
 };
 
 export const Barplot = (
   { 
-    data, 
-    className="", 
+    data,
+    width,
+    height,
+    className="",
     sort = true ,
     barColor="#9d174d",
   }: 
   BarplotProps
 ) => {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (wrapperRef.current) {
-        const computedStyle = getComputedStyle(wrapperRef.current);
-        const paddingX =
-          parseFloat(computedStyle.paddingLeft || "0") +
-          parseFloat(computedStyle.paddingRight || "0");
-        const paddingY =
-          parseFloat(computedStyle.paddingTop || "0") +
-          parseFloat(computedStyle.paddingBottom || "0");
-
-        setDimensions({
-          width: wrapperRef.current.offsetWidth - paddingX,
-          height: wrapperRef.current.offsetHeight - paddingY,
-        });
-      }
-    };
-
-    updateDimensions();
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
-
-  const { width, height } = dimensions;
-
   const [tooltip, setTooltip] = useState<{
     visible: boolean;
     x: number;
@@ -54,7 +30,11 @@ export const Barplot = (
     content: string;
   }>({ visible: false, x: 0, y: 0, content: "" });
 
-  data = groupData(data);
+  data = d3.rollups(
+    data,
+    (v) => d3.sum(v, (d) => d.value),
+    (d) => d.name
+  ).map(([name, value]) => ({ name, value }));
   if (sort) {
     data = data.sort((a, b) => b.value - a.value);
   }
@@ -143,7 +123,7 @@ export const Barplot = (
   });
 
   const grid = xScale
-    .ticks(6)
+    .ticks(Math.floor(width/50))
     .slice(0)
     .map((value, i) => (
       <g key={i}>
@@ -169,8 +149,7 @@ export const Barplot = (
     ));
 
   return (
-    <div className={className}>
-    <div ref={wrapperRef} className="relative overflow-hidden w-full h-full">
+    <div className={"relative" + className}>
       <svg className="sticky top-0" width={width} height={height}>
         <g width={width} height={height}>
           {grid}
@@ -197,26 +176,7 @@ export const Barplot = (
         </div>
       )}
     </div>
-    </div>
-
   );
 };
-
-interface ungroupedData {
-  name: string | number;
-  value: number;
-}
-
-function groupData(data: ungroupedData[]) {
-  const grouped = data.reduce<Record<string | number, number>>((acc, curr) => {
-    acc[curr.name] = (acc[curr.name] || 0) + curr.value;
-    return acc;
-  }, {});
-
-  return Object.entries(grouped).map(([name, value]) => ({
-    name,
-    value,
-  }));
-}
 
 export default Barplot;

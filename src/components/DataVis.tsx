@@ -2,10 +2,9 @@ import { useEffect, useState } from "react"
 import { fetchData } from "../api/axiosClient"
 import Select from "./Select"
 import Barplot from "./D3Plots/Barplot"
-import DateBarPlot from "./D3Plots/DateBarPlot"
 import { AnnualHeatmap } from "./D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
-import { createColorScale } from "./D3Plots/d3Utils"
+import { convertDateToWeekDay, createColorScale } from "./D3Plots/d3Utils"
 import Legend from "./D3Plots/Legend"
 
 
@@ -144,10 +143,11 @@ const DataVis = (
       />
     </div>
 
-    <div className="w-full flex flex-col items-center gap-1 pb-10 pt-0">
+    <div className="w-full flex items-center gap-1 pb-10 pt-0">
       {categoryCol &&
         <Barplot
-          className="w-full max-w-150 h-70 p-3 bg-gray-100 rounded-md border-gray-300 border-2"
+          width={300}
+          height={200}
           barColor={colorScale(ticks[1])}
           data={data.map(row => {
             return {
@@ -157,17 +157,19 @@ const DataVis = (
           })}
         />
       }
-        <DateBarPlot
-          className="w-full max-w-150 h-90 p-3 bg-gray-100 rounded-md border-gray-300 border-2"
-          barColor={colorScale(ticks[1])}
-          data={data.map(row => {
-            return {
-              date: row[dateCol] as string,
-              value: row[valueCols[selectedValueCol].name] as number
-            }
-          })}
-        />
-        
+      <Barplot
+        width={300}
+        height={200}
+        barColor={colorScale(ticks[1])}
+        sort={false}
+        data={convertDateToWeekDay(data.map(row => {
+          return {
+            date: row[dateCol] as string,
+            value: row[valueCols[selectedValueCol].name] as number
+          }
+        }))}
+      />
+
 
     </div>
   </div>

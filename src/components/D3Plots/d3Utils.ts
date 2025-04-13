@@ -1,4 +1,6 @@
 import * as d3 from "d3";
+import { useEffect, useRef, useState } from "react";
+
 
 export function createColorScale(
   ticks: number[], 
@@ -34,4 +36,75 @@ export function shadeColor(color: string, percent: number) {
   const BB = ((B.toString(16).length == 1) ? "0" + B.toString(16) : B.toString(16));
 
   return "#" + RR + GG + BB;
+}
+
+
+interface TimeSeriesData {
+  date: string, 
+  value: number,
+}
+
+export function convertDateToWeekDay(data: TimeSeriesData[]) {
+  const weekDayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  
+  const groupedData = weekDayOrder.map(weekDay => {
+    const matchingData = data.filter(row => {
+      const date = new Date(row.date);
+      return date.toLocaleString('en-US', { weekday: 'long' }) === weekDay;
+    });
+    return {
+      name: weekDay,
+      value: matchingData.reduce((sum, row) => sum + row.value, 0)
+    };
+  });
+
+  return groupedData;
+}
+
+export function convertDateToMonth(data: TimeSeriesData[]) {
+  const monthOrder = [
+    "January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const groupedData = monthOrder.map(month => {
+    const matchingData = data.filter(row => {
+      const date = new Date(row.date);
+      return date.toLocaleString('en-US', { month: 'long' }) === month;
+    });
+    return {
+      name: month,
+      value: matchingData.reduce((sum, row) => sum + row.value, 0)
+    };
+  });
+
+  return groupedData;
+}
+
+
+
+export function useResizeObserver<T extends Element>() {
+  const ref = useRef<T | null>(null);
+  const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (entry?.contentRect) {
+        setDimensions({
+          width: entry.contentRect.width,
+          height: entry.contentRect.height,
+        });
+      }
+    });
+
+    resizeObserver.observe(element);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  return [ref, dimensions] as const;
 }

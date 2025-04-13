@@ -8,20 +8,20 @@ type BarplotProps = {
   width: number,
   height: number,
   className?: string,
-  barColor?:string;
+  barColor?: string;
   sort?: boolean;
 };
 
 export const Barplot = (
-  { 
+  {
     data,
     width,
     height,
-    className="",
-    sort = true ,
-    barColor="#9d174d",
-  }: 
-  BarplotProps
+    className = "",
+    sort = true,
+    barColor = "#9d174d",
+  }:
+    BarplotProps
 ) => {
   const [tooltip, setTooltip] = useState<{
     visible: boolean;
@@ -56,7 +56,7 @@ export const Barplot = (
     return d3
       .scaleLinear()
       .domain([0, max || 10])
-      .range([0, 0.9*width]);
+      .range([0, 0.9 * width]);
   }, [data, width]);
 
   const allShapes = data.map((d, i) => {
@@ -123,7 +123,7 @@ export const Barplot = (
   });
 
   const grid = xScale
-    .ticks(Math.floor(width/50))
+    .ticks(Math.floor(width / 50))
     .slice(0)
     .map((value, i) => (
       <g key={i}>
@@ -149,32 +149,34 @@ export const Barplot = (
     ));
 
   return (
-    <div className={"relative " + className}>
-      <svg className="sticky top-0" width={width} height={height}>
-        <g width={width} height={height}>
-          {grid}
-        </g>
-      </svg>
+    <div className={className}>
+      <div className="relative overflow-hidden w-fit h-fit">
+        <svg className="sticky top-0" width={width} height={height}>
+          <g width={width} height={height}>
+            {grid}
+          </g>
+        </svg>
 
-      <div className="absolute top-0 w-full h-9/10 overflow-y-scroll">
+        <div className="absolute top-0 w-full h-9/10 overflow-y-scroll">
 
-      <svg className=" " width={width} height={totalHeight}>
-        <g width={width} height={height}>{allShapes}</g>
-      </svg>
-      </div>
-
-
-      {tooltip.visible && (
-        <div
-          className="fixed bg-white border-blue-100 border-solid rounded-xs p-1 pointer-events-none text-xs z-999"
-          style={{
-            left: tooltip.x + 20,
-            top: tooltip.y ,
-          }}
-        >
-          {tooltip.content}
+          <svg className=" " width={width} height={totalHeight}>
+            <g width={width} height={height}>{allShapes}</g>
+          </svg>
         </div>
-      )}
+
+
+        {tooltip.visible && (
+          <div
+            className="fixed bg-white border-blue-100 border-solid rounded-xs p-1 pointer-events-none text-xs z-999"
+            style={{
+              left: tooltip.x + 20,
+              top: tooltip.y,
+            }}
+          >
+            {tooltip.content}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

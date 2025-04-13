@@ -44,7 +44,7 @@ interface TimeSeriesData {
   value: number,
 }
 
-export function convertDateToWeekDay(data: TimeSeriesData[]) {
+export function groupByWeekDay(data: TimeSeriesData[]) {
   const weekDayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   
   const groupedData = weekDayOrder.map(weekDay => {
@@ -61,7 +61,7 @@ export function convertDateToWeekDay(data: TimeSeriesData[]) {
   return groupedData;
 }
 
-export function convertDateToMonth(data: TimeSeriesData[]) {
+export function groupByMonth(data: TimeSeriesData[]) {
   const monthOrder = [
     "January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December"

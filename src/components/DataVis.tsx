@@ -4,7 +4,7 @@ import Select from "./Select"
 import Barplot from "./D3Plots/Barplot"
 import { AnnualHeatmap } from "./D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
-import { convertDateToMonth, convertDateToWeekDay, createColorScale } from "./D3Plots/d3Utils"
+import { groupByMonth, groupByWeekDay, createColorScale } from "./D3Plots/d3Utils"
 import Legend from "./D3Plots/Legend"
 
 
@@ -166,7 +166,7 @@ const DataVis = (
           height={200}
           barColor={colorScale(ticks[1])}
           sort={false}
-          data={convertDateToWeekDay(data.map(row => {
+          data={groupByWeekDay(data.map(row => {
             return {
               date: row[dateCol] as string,
               value: row[valueCols[selectedValueCol].name] as number
@@ -179,7 +179,7 @@ const DataVis = (
           height={340}
           barColor={colorScale(ticks[1])}
           sort={false}
-          data={convertDateToMonth(data.map(row => {
+          data={groupByMonth(data.map(row => {
             return {
               date: row[dateCol] as string,
               value: row[valueCols[selectedValueCol].name] as number

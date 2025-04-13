@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { fetchData } from "../api/axiosClient"
 import Select from "./Select"
 import Barplot from "./D3Plots/Barplot"
@@ -6,6 +6,7 @@ import { AnnualHeatmap } from "./D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
 import { groupByMonth, groupByWeekDay, createColorScale } from "./D3Plots/d3Utils"
 import Legend from "./D3Plots/Legend"
+import FilterCarousel from "./FilterCarousel/FilterCarousel"
 
 
 interface Metadata {
@@ -37,12 +38,15 @@ const DataVis = (
   const d3Colors = [d3.schemeGreens, d3.schemeBlues, d3.schemeOranges, d3.schemePurples, d3.schemeReds]
   const d3ColorIndex = index % d3Colors.length
   const [data, setData] = useState<Data[]>([])
+  const [filteredData, setFilteredData] = useState<Data[]>([])
   const [valueCols, setValueCols] = useState<Metadata[]>([])
   const [dateCol, setDateCol] = useState<string>("date")
   const [categoryCol, setCategoryCol] = useState<string | null>(null)
   const [selectedValueCol, setSelectedValueCol] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(false);
   const [range, setRange] = useState<[number, number] | null>(null);
+  const [imageCol, setImageCol] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<number>(-1)
 
   let ticks: number[] = [0, 10]
   if (range) {
@@ -52,6 +56,32 @@ const DataVis = (
   }
   const colorScale = createColorScale(ticks, d3Colors[d3ColorIndex])
 
+
+
+  const imageGroups: {name: string, imageUrl: string}[] = useMemo(() => {
+    if (!categoryCol || !imageCol) return []
+    const uniqueImages = new Set()
+    const newImageGroups:{name: string, imageUrl: string}[] = []
+    data.forEach(row => {
+      if (!uniqueImages.has(row[categoryCol])) {
+       newImageGroups.push({
+        name: row[categoryCol] as string,
+        imageUrl: row[imageCol] as string
+       })
+      uniqueImages.add(row[categoryCol])
+      }
+    })
+    return newImageGroups
+  }, [categoryCol, data, imageCol])
+
+  useEffect(() => {
+    if (!categoryCol) return 
+    if (selectedCategory == -1) {
+      setFilteredData(data)
+      return 
+    }
+    setFilteredData(data.filter(row => row[categoryCol] == imageGroups[selectedCategory].name))
+  }, [selectedCategory, data, categoryCol, imageGroups])
 
   useEffect(() => {
     let isMounted = true; // to avoid setting state on unmounted component
@@ -67,6 +97,7 @@ const DataVis = (
         const newData = response["data"] as Data[]
         if (isMounted) {
           setData(newData)
+          setFilteredData(newData)
           setValueCols(newMetadata.filter((column) => column.classification == "value_column"))
           let newDateCol = "date"
           const foundDateCols = newMetadata.filter(column => column.classification == "date_column")
@@ -78,6 +109,12 @@ const DataVis = (
           if (foundCategoryCols.length > 0) {
             newCategoryCol = foundCategoryCols[0].name
           }
+          let newImageCol = null
+          const foundImageCols = newMetadata.filter(column => column.classification == "image_column")
+          if (foundImageCols.length > 0) {
+            newImageCol = foundImageCols[0].name
+          }
+          setImageCol(newImageCol)
           setDateCol(newDateCol)
           setCategoryCol(newCategoryCol)
         }
@@ -128,7 +165,7 @@ const DataVis = (
       </div>
       <div className="overflow-x-scroll w-full flex flex-col gap-3">
         <AnnualHeatmap
-          data={structureData(data, dateCol, valueCols[selectedValueCol].name)}
+          data={structureData(filteredData, dateCol, valueCols[selectedValueCol].name)}
           units={valueCols[selectedValueCol].units}
           colorScale={colorScale}
           year={year}
@@ -138,12 +175,20 @@ const DataVis = (
           colorScale={colorScale}
         />
       </div>
-      { valueCols.length > 1 && <Select
-        options={valueCols.map(col => col.name)}
-        selectedOptionIndex={selectedValueCol}
-        setSelectedOptionIndex={setSelectedValueCol}
-      />
-}
+      {valueCols.length > 1 && (
+        <Select
+          options={valueCols.map(col => col.name)}
+          selectedOptionIndex={selectedValueCol}
+          setSelectedOptionIndex={setSelectedValueCol}
+        />
+      )}
+      {imageGroups.length > 0 && (
+        <FilterCarousel
+          items={imageGroups}
+          selectedIndex={selectedCategory}
+          setSelectedIndex={setSelectedCategory}
+        />
+      )}
 
       <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
         {categoryCol &&
@@ -152,7 +197,7 @@ const DataVis = (
             width={300}
             height={200}
             barColor={colorScale(ticks[1])}
-            data={data.map(row => {
+            data={filteredData.map(row => {
               return {
                 name: row[categoryCol] as string,
                 value: row[valueCols[selectedValueCol].name] as number
@@ -166,7 +211,7 @@ const DataVis = (
           height={200}
           barColor={colorScale(ticks[1])}
           sort={false}
-          data={groupByWeekDay(data.map(row => {
+          data={groupByWeekDay(filteredData.map(row => {
             return {
               date: row[dateCol] as string,
               value: row[valueCols[selectedValueCol].name] as number
@@ -179,7 +224,7 @@ const DataVis = (
           height={340}
           barColor={colorScale(ticks[1])}
           sort={false}
-          data={groupByMonth(data.map(row => {
+          data={groupByMonth(filteredData.map(row => {
             return {
               date: row[dateCol] as string,
               value: row[valueCols[selectedValueCol].name] as number

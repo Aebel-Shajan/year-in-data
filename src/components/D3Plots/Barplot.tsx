@@ -123,7 +123,7 @@ export const Barplot = (
   });
 
   const grid = xScale
-    .ticks(Math.floor(width / 50))
+    .ticks(Math.floor(width / 80)) // number is min size of tick spacing in px
     .slice(0)
     .map((value, i) => (
       <g key={i}>

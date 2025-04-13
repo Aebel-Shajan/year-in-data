@@ -2,3 +2,7 @@
 @plugin "daisyui" {
   themes: cupcake --default, dim --prefersdark;
 }
+
+* {
+  box-sizing: border-box;
+}

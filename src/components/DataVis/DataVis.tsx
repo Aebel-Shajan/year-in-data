@@ -4,6 +4,7 @@ import Select from "../Select"
 import Barplot from "../Barplot/Barplot"
 import { AnnualHeatmap } from "../AnnualHeatmap"
 import * as d3 from "d3";
+import DateBarPlot from "../Barplot/DateBarPlot"
 
 interface Metadata {
   name: string,
@@ -120,17 +121,18 @@ const DataVis = (
         year={year}
       />
     </div>
-    <div className=" w-full flex-col">
+    <div className=" w-full flex flex-col p-10 gap-10">
       <Select
         options={valueCols.map(col => col.name)}
         selectedOptionIndex={selectedValueCol}
         setSelectedOptionIndex={setSelectedValueCol}
       />
-      {categoryCol &&
+    </div>
 
+    <div className="w-full flex flex-col items-center gap-1 pb-10 pt-0">
+      {categoryCol &&
         <Barplot
-          width={250}
-          height={250}
+          className="w-full max-w-150 h-70 p-3 bg-gray-100 rounded-md border-gray-300 border-2"
           data={data.map(row => {
             return {
               name: row[categoryCol] as string,
@@ -139,6 +141,17 @@ const DataVis = (
           })}
         />
       }
+        <DateBarPlot
+          className="w-full max-w-150 h-90 p-3 bg-gray-100 rounded-md border-gray-300 border-2"
+          data={data.map(row => {
+            return {
+              date: row[dateCol] as string,
+              value: row[valueCols[selectedValueCol].name] as number
+            }
+          })}
+        />
+        
+
     </div>
   </div>
 }

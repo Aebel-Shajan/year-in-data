@@ -1,16 +1,42 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import * as d3 from "d3";
-
 const BAR_PADDING = 0.3;
 
 type BarplotProps = {
-  width: number;
-  height: number;
   data: { name: string; value: number }[];
   sort?: boolean;
+  className?: string
 };
 
-export const Barplot = ({ width, height, data, sort = true }: BarplotProps) => {
+export const Barplot = ({ data, className="", sort = true }: BarplotProps) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (wrapperRef.current) {
+        const computedStyle = getComputedStyle(wrapperRef.current);
+        const paddingX =
+          parseFloat(computedStyle.paddingLeft || "0") +
+          parseFloat(computedStyle.paddingRight || "0");
+        const paddingY =
+          parseFloat(computedStyle.paddingTop || "0") +
+          parseFloat(computedStyle.paddingBottom || "0");
+
+        setDimensions({
+          width: wrapperRef.current.offsetWidth - paddingX,
+          height: wrapperRef.current.offsetHeight - paddingY,
+        });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
+  const { width, height } = dimensions;
+
   const [tooltip, setTooltip] = useState<{
     visible: boolean;
     x: number;
@@ -24,7 +50,7 @@ export const Barplot = ({ width, height, data, sort = true }: BarplotProps) => {
   }
   const groups = data.map((d) => d.name);
 
-  const barWidth = 20;
+  const barWidth = 25;
   const totalHeight = barWidth * groups.length;
 
   const yScale = useMemo(() => {
@@ -40,7 +66,7 @@ export const Barplot = ({ width, height, data, sort = true }: BarplotProps) => {
     return d3
       .scaleLinear()
       .domain([0, max || 10])
-      .range([0, width]);
+      .range([0, 0.9*width]);
   }, [data, width]);
 
   const allShapes = data.map((d, i) => {
@@ -123,7 +149,6 @@ export const Barplot = ({ width, height, data, sort = true }: BarplotProps) => {
         <text
           x={xScale(value)}
           y={height - 10}
-          textAnchor="middle"
           alignmentBaseline="central"
           fontSize={9}
           stroke="#808080"
@@ -135,16 +160,21 @@ export const Barplot = ({ width, height, data, sort = true }: BarplotProps) => {
     ));
 
   return (
-    <div className="relative overflow-y-scroll">
+    <div className={className}>
+    <div ref={wrapperRef} className="relative overflow-hidden w-full h-full">
       <svg className="sticky top-0" width={width} height={height}>
         <g width={width} height={height}>
           {grid}
         </g>
       </svg>
 
-      <svg className="absolute top-0" width={width} height={totalHeight}>
+      <div className="absolute top-0 w-full h-9/10 overflow-y-scroll">
+
+      <svg className=" " width={width} height={totalHeight}>
         <g width={width} height={height}>{allShapes}</g>
       </svg>
+      </div>
+
 
       {tooltip.visible && (
         <div
@@ -158,6 +188,8 @@ export const Barplot = ({ width, height, data, sort = true }: BarplotProps) => {
         </div>
       )}
     </div>
+    </div>
+
   );
 };
 

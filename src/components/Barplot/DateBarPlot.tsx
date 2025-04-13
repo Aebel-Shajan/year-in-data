@@ -9,21 +9,18 @@ interface TimeSeriesData {
 
 const DateBarPlot = (
   {
-    width,
-    height,
     data,
+    className="",
     group="month"
   }: {
-    width: number,
-    height: number,
     data: {date: string, value: number}[],
+    className?: string,
     group?: "month" | "weekday" 
   }
 ) => {
   return (
     <Barplot 
-      width={width}
-      height={height}
+      className={className}
       data={group=="weekday" ? convertDateToWeekDay(data) : convertDateToMonth(data)}
       sort={false}
     />

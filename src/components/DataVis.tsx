@@ -5,6 +5,8 @@ import Barplot from "./D3Plots/Barplot"
 import DateBarPlot from "./D3Plots/DateBarPlot"
 import { AnnualHeatmap } from "./D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
+import { createColorScale } from "./D3Plots/d3Utils"
+import Legend from "./D3Plots/Legend"
 
 
 interface Metadata {
@@ -41,6 +43,16 @@ const DataVis = (
   const [categoryCol, setCategoryCol] = useState<string | null>(null)
   const [selectedValueCol, setSelectedValueCol] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(false);
+  const [range, setRange] = useState<[number, number] | null>(null);
+
+  let ticks: number[] = [0, 10]
+  if (range) {
+    ticks = d3.ticks(range[0], range[1], 4).filter((value) => value !== 0)
+    ticks.unshift(0.001)
+    ticks.pop()
+  }
+  const colorScale = createColorScale(ticks, d3Colors[d3ColorIndex])
+
 
   useEffect(() => {
     let isMounted = true; // to avoid setting state on unmounted component
@@ -87,7 +99,6 @@ const DataVis = (
     };
   }, [url, year]); // empty dependency array = run once on mount
 
-  const [range, setRange] = useState<[number, number] | null>(null);
 
   useEffect(() => {
     const fetchRange = async () => {
@@ -117,9 +128,12 @@ const DataVis = (
       <AnnualHeatmap
         data={structureData(data, dateCol, valueCols[selectedValueCol].name)}
         units={valueCols[selectedValueCol].units}
-        domain={range ? range : [1, 10]}
-        colorScheme={d3Colors[d3ColorIndex] }
+        colorScale={colorScale}
         year={year}
+      />
+      <Legend
+        ticks={ticks}
+        colorScale={colorScale}
       />
     </div>
     <div className=" w-full flex flex-col p-10 gap-10">
@@ -134,6 +148,7 @@ const DataVis = (
       {categoryCol &&
         <Barplot
           className="w-full max-w-150 h-70 p-3 bg-gray-100 rounded-md border-gray-300 border-2"
+          barColor={colorScale(ticks[1])}
           data={data.map(row => {
             return {
               name: row[categoryCol] as string,
@@ -144,6 +159,7 @@ const DataVis = (
       }
         <DateBarPlot
           className="w-full max-w-150 h-90 p-3 bg-gray-100 rounded-md border-gray-300 border-2"
+          barColor={colorScale(ticks[1])}
           data={data.map(row => {
             return {
               date: row[dateCol] as string,

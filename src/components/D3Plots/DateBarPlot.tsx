@@ -11,11 +11,13 @@ const DateBarPlot = (
   {
     data,
     className="",
-    group="month"
+    group="month",
+    barColor=null
   }: {
     data: {date: string, value: number}[],
     className?: string,
-    group?: "month" | "weekday" 
+    group?: "month" | "weekday" ,
+    barColor: string | null
   }
 ) => {
   return (
@@ -23,6 +25,7 @@ const DateBarPlot = (
       className={className}
       data={group=="weekday" ? convertDateToWeekDay(data) : convertDateToMonth(data)}
       sort={false}
+      barColor={barColor ?? undefined}
     />
   );
 }

@@ -1,14 +1,24 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import * as d3 from "d3";
+
 const BAR_PADDING = 0.3;
 
 type BarplotProps = {
   data: { name: string; value: number }[];
+  barColor?:string;
   sort?: boolean;
   className?: string
 };
 
-export const Barplot = ({ data, className="", sort = true }: BarplotProps) => {
+export const Barplot = (
+  { 
+    data, 
+    className="", 
+    sort = true ,
+    barColor="#9d174d",
+  }: 
+  BarplotProps
+) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
@@ -103,9 +113,8 @@ export const Barplot = ({ data, className="", sort = true }: BarplotProps) => {
           y={yScale(d.name)}
           width={xScale(d.value)}
           height={yScale.bandwidth()}
-          opacity={0.7}
-          stroke="#9d174d"
-          fill="#9d174d"
+          stroke={barColor}
+          fill={barColor}
           fillOpacity={0.3}
           strokeWidth={1}
           rx={1}

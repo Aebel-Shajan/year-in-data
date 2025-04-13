@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import { axiosInstance } from "./api/axiosClient";
-import DataVis from "./components/DataVis/DataVis";
+import DataVis from "./components/DataVis";
 
 
 

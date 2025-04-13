@@ -4,7 +4,7 @@ import Select from "./Select"
 import Barplot from "./D3Plots/Barplot"
 import { AnnualHeatmap } from "./D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
-import { convertDateToWeekDay, createColorScale } from "./D3Plots/d3Utils"
+import { convertDateToMonth, convertDateToWeekDay, createColorScale } from "./D3Plots/d3Utils"
 import Legend from "./D3Plots/Legend"
 
 
@@ -143,9 +143,10 @@ const DataVis = (
       />
     </div>
 
-    <div className="w-full flex items-center gap-1 pb-10 pt-0">
+    <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
       {categoryCol &&
         <Barplot
+        className="p-3  rounded border-gray-300 border w-fit"
           width={300}
           height={200}
           barColor={colorScale(ticks[1])}
@@ -158,11 +159,25 @@ const DataVis = (
         />
       }
       <Barplot
+        className="p-3 rounded border-gray-300 border w-fit"
         width={300}
         height={200}
         barColor={colorScale(ticks[1])}
         sort={false}
         data={convertDateToWeekDay(data.map(row => {
+          return {
+            date: row[dateCol] as string,
+            value: row[valueCols[selectedValueCol].name] as number
+          }
+        }))}
+      />
+      <Barplot
+        className="p-3  rounded border-gray-300 border w-fit"
+        width={500}
+        height={340}
+        barColor={colorScale(ticks[1])}
+        sort={false}
+        data={convertDateToMonth(data.map(row => {
           return {
             date: row[dateCol] as string,
             value: row[valueCols[selectedValueCol].name] as number

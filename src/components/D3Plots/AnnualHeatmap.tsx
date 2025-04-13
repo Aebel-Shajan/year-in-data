@@ -26,7 +26,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
   year,
   colorScale,
   cellSize = 13,
-  cellPadding = 6,
+  cellPadding = 3,
   cellRadius = 2,
 }) => {
   const uniqueTooltipId = uuidv4();

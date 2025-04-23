@@ -29,7 +29,7 @@ const HomePage = () => {
             "path": "/retrieve-data/" + route
           })
         })
-        setDataEndpoints(endpoints)
+        setDataEndpoints(endpoints.reverse())
       })
       .catch(e => console.error(e))
 

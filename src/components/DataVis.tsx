@@ -190,7 +190,7 @@ const DataVis = (
         />
       )}
 
-      <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
+      {/* <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
         {categoryCol &&
           <Barplot
             className="p-3  rounded border-gray-300 border w-fit"
@@ -233,7 +233,7 @@ const DataVis = (
         />
 
 
-      </div>
+      </div> */}
     </div>
   )
 }

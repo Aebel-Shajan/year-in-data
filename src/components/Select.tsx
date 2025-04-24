@@ -3,10 +3,12 @@ const Select = (
     selectedOptionIndex,
     setSelectedOptionIndex,
     options,
+    defaultValue = ""
   }: {
     selectedOptionIndex: number,
     setSelectedOptionIndex: CallableFunction,
     options: string[]
+    defaultValue?: string
   }
 ) => {
 
@@ -29,7 +31,11 @@ const Select = (
         onChange={e => setSelectedOptionIndex(Number(e.target.value))}
         className="select"
       >
-        <option disabled={true} value={-1}>Pick an option</option>
+        {defaultValue == "" ?
+          <option disabled={true} value={-1}>Pick an option</option>
+          :
+          <option value={-1}>{defaultValue}</option>
+        }
         {optionElements}
       </select>
     </fieldset>

@@ -57,30 +57,46 @@ const DataVis = (
   const colorScale = createColorScale(ticks, d3Colors[d3ColorIndex])
 
 
+  const categoryGroups: string[] = useMemo(() => {
+    if (!categoryCol) return []
+    const uniqueCategories = new Set()
+    const newCategoryGroups: string[] = []
+    data.forEach(row => {
+      if (!uniqueCategories.has(row[categoryCol])) {
+        newCategoryGroups.push(row[categoryCol] as string)
+        uniqueCategories.add(row[categoryCol])
+      }
+    })
+    return newCategoryGroups
+  }, [categoryCol, data])
 
-  const imageGroups: {name: string, imageUrl: string}[] = useMemo(() => {
+  const imageGroups: { name: string, imageUrl: string }[] = useMemo(() => {
     if (!categoryCol || !imageCol) return []
     const uniqueImages = new Set()
-    const newImageGroups:{name: string, imageUrl: string}[] = []
+    const newImageGroups: { name: string, imageUrl: string }[] = []
     data.forEach(row => {
       if (!uniqueImages.has(row[categoryCol])) {
-       newImageGroups.push({
-        name: row[categoryCol] as string,
-        imageUrl: row[imageCol] as string
-       })
-      uniqueImages.add(row[categoryCol])
+        newImageGroups.push({
+          name: row[categoryCol] as string,
+          imageUrl: row[imageCol] as string
+        })
+        uniqueImages.add(row[categoryCol])
       }
     })
     return newImageGroups
   }, [categoryCol, data, imageCol])
 
   useEffect(() => {
-    if (!categoryCol) return 
-    if (selectedCategory == -1) {
+    if (!categoryCol) return
+    if (selectedCategory == -1 || selectedCategory >= categoryGroups.length) {
       setFilteredData(data)
-      return 
+      return
     }
-    setFilteredData(data.filter(row => row[categoryCol] == imageGroups[selectedCategory].name))
+    if (imageCol){
+      setFilteredData(data.filter(row => row[categoryCol] == imageGroups[selectedCategory].name))
+    } else {
+      setFilteredData(data.filter(row => row[categoryCol] == categoryGroups[selectedCategory]))
+    }
   }, [selectedCategory, data, categoryCol, imageGroups])
 
   useEffect(() => {
@@ -182,13 +198,24 @@ const DataVis = (
           setSelectedOptionIndex={setSelectedValueCol}
         />
       )}
-      {imageGroups.length > 0 && (
+      {
+      imageGroups.length > 0 ? (
         <FilterCarousel
           items={imageGroups}
           selectedIndex={selectedCategory}
           setSelectedIndex={setSelectedCategory}
         />
-      )}
+      ):
+      categoryGroups.length > 0 && (
+        <Select
+          options={categoryGroups}
+          selectedOptionIndex={selectedCategory}
+          setSelectedOptionIndex={setSelectedCategory}
+          defaultValue={"All"}
+        />
+      )
+
+    }
 
       {/* <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
         {categoryCol &&

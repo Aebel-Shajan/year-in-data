@@ -7,6 +7,7 @@ import { shadeColor } from "./d3Utils";
 type HeatmapData = {
   date: string; // ISO string: "2025-04-11"
   value: number;
+  category: string;
 };
 
 type Props = {
@@ -35,6 +36,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
     filteredData,
     v => d3.sum(v, d => d.value),
     d => d.date,
+    d => d.category,
   )
   const days = d3.timeDays(new Date(year, 0, 1), new Date(year + 1, 0, 1));
 
@@ -56,11 +58,17 @@ export const AnnualHeatmap: React.FC<Props> = ({
     const week = d3.timeWeek.count(d3.timeYear(date), date);
     const day = date.getDay();
     const dateStr = date.toISOString().slice(0, 10);
-    const value = groupedData.get(dateStr) || 0;
+    const categoryEntries = Array.from(groupedData.get(dateStr)?.entries() || []);
+    const totalValue = categoryEntries.reduce(
+      (prev: number, current: [string, number]) => {
+        return prev + current[1];
+      }
+    , 0);
+
     const uniqueRectId = uuidv4();
     const stroke = {
       width: 0.07 * cellSize,
-      color: shadeColor(colorScale(value), -10)
+      color: shadeColor(colorScale(totalValue), -10)
     }
 
     const rectPos = {
@@ -99,7 +107,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
           y={rectPos.y}
           width={cellSize}
           height={cellSize}
-          fill={colorScale(value)}
+          fill={colorScale(totalValue)}
           rx={cellRadius}
           id={uniqueRectId}
           stroke={stroke.color}
@@ -112,7 +120,18 @@ export const AnnualHeatmap: React.FC<Props> = ({
               tooltipElement.style.display = "block";
               tooltipElement.style.left = `${e.clientX + 20}px`;
               tooltipElement.style.top = `${e.clientY}px`;
-              tooltipElement.innerHTML = `<p>${dateStr} (${date.toLocaleDateString(undefined, { weekday: 'long' })})</p><p>${Number(value.toPrecision(3))} ${units}</p>`;
+              let innerHTML = `
+              <p>
+                ${dateStr} (${date.toLocaleDateString(undefined, { weekday: 'long' })})
+              </p>`
+              categoryEntries.forEach(entry => {
+                innerHTML += `
+              <p>
+                ${entry[0]} ${Number(entry[1].toPrecision(3))} ${units}
+              </p>
+                `
+              })
+              tooltipElement.innerHTML = innerHTML;
             }
             const rectElement = document.getElementById(uniqueRectId)
             if (rectElement) {

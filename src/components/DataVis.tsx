@@ -200,15 +200,7 @@ const DataVis = (
             setSelectedOptionIndex={setSelectedValueCol}
           />
         )}
-        {
-          imageGroups.length > 0 ? (
-            <FilterCarousel
-              items={imageGroups}
-              selectedIndex={selectedCategory}
-              setSelectedIndex={setSelectedCategory}
-            />
-          ) :
-            categoryGroups.length > 0 && (
+        {categoryGroups.length > 0 && imageCol == null && (
               <Select
                 options={categoryGroups}
                 selectedOptionIndex={selectedCategory}
@@ -219,6 +211,15 @@ const DataVis = (
 
         }
       </div>
+      {imageGroups.length > 0 && 
+      (
+        <FilterCarousel
+          items={imageGroups}
+          selectedIndex={selectedCategory}
+          setSelectedIndex={setSelectedCategory}
+        />
+      ) 
+      }
 
       {/* <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
         {categoryCol &&

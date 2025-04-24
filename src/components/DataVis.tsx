@@ -92,7 +92,7 @@ const DataVis = (
       setFilteredData(data)
       return
     }
-    if (imageCol){
+    if (imageCol) {
       setFilteredData(data.filter(row => row[categoryCol] == imageGroups[selectedCategory].name))
     } else {
       setFilteredData(data.filter(row => row[categoryCol] == categoryGroups[selectedCategory]))
@@ -191,31 +191,34 @@ const DataVis = (
           colorScale={colorScale}
         />
       </div>
-      {valueCols.length > 1 && (
-        <Select
-          options={valueCols.map(col => col.name)}
-          selectedOptionIndex={selectedValueCol}
-          setSelectedOptionIndex={setSelectedValueCol}
-        />
-      )}
-      {
-      imageGroups.length > 0 ? (
-        <FilterCarousel
-          items={imageGroups}
-          selectedIndex={selectedCategory}
-          setSelectedIndex={setSelectedCategory}
-        />
-      ):
-      categoryGroups.length > 0 && (
-        <Select
-          options={categoryGroups}
-          selectedOptionIndex={selectedCategory}
-          setSelectedOptionIndex={setSelectedCategory}
-          defaultValue={"All"}
-        />
-      )
+      <div className="flex w-full gap-2">
 
-    }
+        {valueCols.length > 1 && (
+          <Select
+            options={valueCols.map(col => col.name)}
+            selectedOptionIndex={selectedValueCol}
+            setSelectedOptionIndex={setSelectedValueCol}
+          />
+        )}
+        {
+          imageGroups.length > 0 ? (
+            <FilterCarousel
+              items={imageGroups}
+              selectedIndex={selectedCategory}
+              setSelectedIndex={setSelectedCategory}
+            />
+          ) :
+            categoryGroups.length > 0 && (
+              <Select
+                options={categoryGroups}
+                selectedOptionIndex={selectedCategory}
+                setSelectedOptionIndex={setSelectedCategory}
+                defaultValue={"All"}
+              />
+            )
+
+        }
+      </div>
 
       {/* <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
         {categoryCol &&

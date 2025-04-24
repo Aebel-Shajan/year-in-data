@@ -165,7 +165,7 @@ const DataVis = (
       </div>
       <div className="overflow-x-scroll w-full flex flex-col gap-3">
         <AnnualHeatmap
-          data={structureData(filteredData, dateCol, valueCols[selectedValueCol].name)}
+          data={structureData(filteredData, dateCol, valueCols[selectedValueCol].name, categoryCol)}
           units={valueCols[selectedValueCol].units}
           colorScale={colorScale}
           year={year}
@@ -244,12 +244,14 @@ export default DataVis;
 function structureData(
   data: { [key: string]: unknown }[],
   dateCol: string,
-  valueCol: string
+  valueCol: string,
+  categoryCol: string | null
 ) {
   return data.map(row => {
     return {
       date: row[dateCol] as string,
-      value: row[valueCol] as number
+      value: row[valueCol] as number,
+      category: categoryCol ? row[categoryCol] as string : ""
     }
   })
 }

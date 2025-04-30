@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from "react"
 import { fetchData } from "../api/axiosClient"
 import Select from "./Select"
-import Barplot from "./D3Plots/Barplot"
 import { AnnualHeatmap } from "./D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
-import { groupByMonth, groupByWeekDay, createColorScale } from "./D3Plots/d3Utils"
+import {  createColorScale } from "./D3Plots/d3Utils"
 import Legend from "./D3Plots/Legend"
 import FilterCarousel from "./FilterCarousel/FilterCarousel"
 

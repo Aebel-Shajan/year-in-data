@@ -27,4 +27,13 @@ class ColoredFormatter(logging.Formatter):
         # Format final log output
         log_message = f"{log_color}{timestamp}{reset} | {log_color}{level}{reset} | {message}"
         return log_message
-
+    
+    
+def setup_colored_logger(logger: logging.Logger):
+    # Create a console handler
+    for handler in logger.handlers:
+        # Define a formatter with equal-width columns
+        formatter = ColoredFormatter(
+            '%(asctime)s | %(levelname)-8s | %(message)s', datefmt='%Y-%m-%d %H:%M:%S'
+        )
+        handler.setFormatter(formatter)

@@ -1,0 +1,16 @@
+download_from_drive = true
+cleanup_unziped_files = true
+cleanup_ziped_files = true
+
+
+process_github = true
+process_kindle = true
+process_strong = true
+
+[fitbit_config]
+process_fitbit = true
+process_calories = true
+process_sleep = true
+process_steps = true
+process_exercise = true
+

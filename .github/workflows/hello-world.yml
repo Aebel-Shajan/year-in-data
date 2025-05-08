@@ -10,3 +10,12 @@ jobs:
     steps:
       - name: Print Hello
         run: echo "🎉 Hello from GitHub Actions!"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      

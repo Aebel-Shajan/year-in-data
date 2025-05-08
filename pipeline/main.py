@@ -18,11 +18,11 @@ setup_colored_logger(logger)
 
 
 def download_files_from_drive(input_data_folder: Path, env_vars: config_loader.EnvVars):
-    if env_vars["DRIVE_SHARE_URL"] is None:
-        raise Exception("Expected DRIVE_SHARE_URL in .env folder!")
+    # if env_vars["DRIVE_SHARE_URL"] is None:
+    #     raise Exception("Expected DRIVE_SHARE_URL in .env folder!")
     logger.info("Downloading data from google drive...")
     gdown.download_folder(
-        url=env_vars["DRIVE_SHARE_URL"],
+        url="https://drive.google.com/drive/folders/17HJ72yP0IUGdNR0a1dMAbdkdoKx7UY_n", # I MOVED THE CONTENTS DUMBASS
         output=str(input_data_folder.absolute()),
         use_cookies=False
     )

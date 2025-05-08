@@ -8,7 +8,10 @@ on:
 jobs:
   run-and-store:
     runs-on: ubuntu-latest
-
+    
+    env:
+      DRIVE_SHARE_URL: ${{ secrets.DRIVE_SHARE_URL }}
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

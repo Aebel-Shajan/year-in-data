@@ -1,9 +1,9 @@
 name: Run Data Pipeline and Save to Output Branch
 
 on:
+  workflow_dispatch: 
   schedule:
     - cron: '0 0 1 * *'
-  workflow_dispatch: 
 
 jobs:
   run-and-store:

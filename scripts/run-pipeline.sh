@@ -20,18 +20,11 @@ git checkout --orphan data-output-temp
 echo "Moving pipeline data output to ./data ..."
 mkdir -p ./data/
 mv ./pipeline/data/output/* ./data
-git rm --cached -r ./ # just to be safe
+git restore --staged .
 git add ./data
 echo $(ls)
 
-echo "Removing everything else."
-git clean -f -d
-echo $(ls)
-echo "Removing files not in .gitignore"
-git clean -f -d
-
 echo "Commiting changes to git.."
-git add .
 git commit -m "Update pipeline output"
 echo "Pushing changes to repo..."
 git push -f origin data-output-temp:data-output

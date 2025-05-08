@@ -24,3 +24,21 @@ jobs:
           cd pipeline
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Run the pipeline
+        run: |
+          cd pipeline
+          python main.py
+
+      - name: Push output to `data-output` branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan data-output-temp
+          git rm -rf .
+          cp path/to/output/* .  # Copy output files to root
+          git add .
+          git commit -m "Update pipeline output"
+          git push -f origin data-output-temp:data-output
+
+        

@@ -1,0 +1,12 @@
+name: Hello World Test
+
+on:
+  workflow_dispatch:  # Allows manual runs from GitHub UI
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Print Hello
+        run: echo "🎉 Hello from GitHub Actions!"

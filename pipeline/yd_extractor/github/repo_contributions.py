@@ -96,6 +96,7 @@ def extract_repo_contributions(
         repos_url,
         json={"query": query, "variables": variables},
         headers=headers,
+        verify=False
     )
     if not response.ok:
         response.raise_for_status()

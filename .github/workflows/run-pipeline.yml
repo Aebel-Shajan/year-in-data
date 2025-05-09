@@ -16,7 +16,7 @@ jobs:
     env:
       DRIVE_SHARE_URL: ${{ secrets.DRIVE_SHARE_URL }}
       GITHUB_USERNAME: ${{ github.actor }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
     
     steps:
       - name: Checkout repository

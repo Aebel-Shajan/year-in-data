@@ -20,7 +20,7 @@ git checkout --orphan data-output-temp
 echo "Moving pipeline data output to ./data ..."
 mkdir -p ./data/
 mv ./pipeline/data/output/* ./data
-git restore --staged .
+# git restore --staged .
 git add ./data
 echo $(ls)
 

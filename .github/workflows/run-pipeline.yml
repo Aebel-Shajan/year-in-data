@@ -1,5 +1,9 @@
 name: Run Data Pipeline and Save to Output Branch
 
+permissions:                # Job-level permissions configuration starts here
+  contents: write           # 'write' access to repository contents
+  pull-requests: write      # 'write' access to pull requests
+  
 on:
   workflow_dispatch: 
   schedule:
@@ -11,7 +15,7 @@ jobs:
     
     env:
       DRIVE_SHARE_URL: ${{ secrets.DRIVE_SHARE_URL }}
-      GITHUB_USERNAME: ${{ secrets.GITHUB_ACTOR }}
+      GITHUB_USERNAME: ${{ github.actor }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     steps:

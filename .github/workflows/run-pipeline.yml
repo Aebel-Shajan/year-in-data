@@ -11,7 +11,7 @@ jobs:
     
     env:
       DRIVE_SHARE_URL: ${{ secrets.DRIVE_SHARE_URL }}
-      GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+      GITHUB_USERNAME: ${{ secrets.GITHUB_ACTOR }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     steps:

@@ -11,6 +11,8 @@ jobs:
     
     env:
       DRIVE_SHARE_URL: ${{ secrets.DRIVE_SHARE_URL }}
+      GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     steps:
       - name: Checkout repository
@@ -29,7 +31,4 @@ jobs:
       - name: Push to orphan branch
         run: |
           # Push the orphan branch (using authentication)
-          git push -f origin data-output-temp:data-output  # Replace target-branch with your desired branch name
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          git push -f origin data-output-temp:data-output 

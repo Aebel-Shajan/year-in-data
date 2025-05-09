@@ -26,3 +26,10 @@ jobs:
           chmod +x scripts/run-pipeline.sh
           ./scripts/run-pipeline.sh
 
+      - name: Push to orphan branch
+        run: |
+          # Push the orphan branch (using authentication)
+          git push -f origin data-output-temp:data-output  # Replace target-branch with your desired branch name
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

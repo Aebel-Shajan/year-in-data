@@ -8,24 +8,33 @@ import yd_extractor.kindle as kindle_extractor
 import yd_extractor.strong as strong_extractor
 import gdown
 
-from yd_extractor.utils.colored_logger import setup_colored_logger
+from yd_extractor.utils.logger import setup_aebels_logger, redirect_output_to_logger
 from yd_extractor.utils.utils import get_latest_file
 from config import config_loader
 
 # Create a logger
 logger = logging.getLogger()
-setup_colored_logger(logger)
+setup_aebels_logger(
+    logger=logger,
+    filter_strings=["https://drive.google.com/uc?id"], # Because gdown leaks google url.
+    resource_monitoring_interval=1.1,
+)
 
 
-def download_files_from_drive(input_data_folder: Path, env_vars: config_loader.EnvVars):
+def download_files_from_drive(
+    input_data_folder: Path, 
+    env_vars: config_loader.EnvVars
+):
     if env_vars["DRIVE_SHARE_URL"] is None:
         raise Exception("Expected DRIVE_SHARE_URL in .env folder!")
     logger.info("Downloading data from google drive...")
-    gdown.download_folder(
-        url=env_vars["DRIVE_SHARE_URL"],
-        output=str(input_data_folder.absolute()),
-        use_cookies=False
-    )
+    
+    with redirect_output_to_logger(logger, stderr_level=logging.INFO, name="gdown"):
+        gdown.download_folder(
+            url=env_vars["DRIVE_SHARE_URL"],
+            output=str(input_data_folder.absolute()),
+            use_cookies=False,
+        )
 
     
 def run_pipeline(

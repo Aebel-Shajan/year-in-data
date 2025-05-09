@@ -31,7 +31,6 @@ def extract_json_file_data(folder_path: str, file_name_prefix: str, keys_to_keep
     if len(file_names) == 0:
         raise Exception(f"No files found with prefix: {file_name_prefix}")
     full_data = []
-    log_memory_usage()
     for file_name in file_names:
         file_path = folder_path / file_name
         with open(file_path) as file:
@@ -40,7 +39,6 @@ def extract_json_file_data(folder_path: str, file_name_prefix: str, keys_to_keep
                 filtered_data = {key: data[key] for key in keys_to_keep if key in list(data.keys())}
                 if filtered_data.keys() != keys_to_keep:
                     full_data.append(filtered_data)
-    log_memory_usage()
             
 
     return pd.DataFrame(full_data)
@@ -79,10 +77,3 @@ def transform_time_series_data(df: pd.DataFrame) -> pd.DataFrame:
     ).reset_index()
     df["value"] = df["value"].astype(int)
     return df
-
-def log_memory_usage():
-    process = psutil.Process(os.getpid())
-    memory_info = process.memory_info()
-    cpu_info = process.cpu_percent(interval=1)
-    logger.info(f"Memory usage: {memory_info.rss / 1024 / 1024} MB")
-    logger.info(f"CPU usage: {cpu_info}%")

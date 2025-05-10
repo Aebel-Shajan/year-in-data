@@ -21,18 +21,36 @@ LOG_COLORS = {
 }
 
 class ColoredFormatter(logging.Formatter):
+    def __init__(self, *args, show_context=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.show_context = show_context
+
     def format(self, record):
         log_color = LOG_COLORS.get(record.levelno, "")
         reset = Style.RESET_ALL
 
         # Define fixed column widths
-        timestamp = self.formatTime(record, self.datefmt).ljust(20)  # Timestamp column (fixed width)
+        datefmt_length = 8
+        if len(self.datefmt) > 8:
+            datefmt_length = 20
+        timestamp = self.formatTime(record, self.datefmt).ljust(datefmt_length)  # Timestamp column (fixed width)
         level = record.levelname.ljust(8)  # Log level column (fixed width)
         context = record.name
         message = record.getMessage()  # Log message (variable width)
-
+        
+        header = f"{log_color}{timestamp}{reset} | {log_color}{level}{reset} | "
+        if self.show_context:
+            header += f"{log_color}{context}{reset}: "
+        
+        if '\n' in message:
+            header_length = datefmt_length + 3 + 8
+            indent = ' ' * header_length + " | "
+            if self.show_context:
+               indent += " " * len(context) 
+            message = f"\n{indent} ".join(message.splitlines())
+            
         # Format final log output
-        log_message = f"{log_color}{timestamp}{reset} | {log_color}{level}{reset} | {log_color}{context}{reset}: {message}"
+        log_message = header + f"{message}"
         return log_message
  
  
@@ -55,13 +73,14 @@ def get_cpu_memory_usage():
     return cpu_usage, memory_info
 
 
-def log_system_resources(logger, interval=5):
+def log_system_resources(logger: logging.Logger, interval=5):
     while True:
         cpu, memory = get_cpu_memory_usage()
         logger.info(
-            f"{Fore.CYAN + Style.BRIGHT}System Resource Usage | "
-            f"CPU: {cpu}% | "
-            f"Memory: {memory} MB{Style.RESET_ALL}"
+            f"{Fore.CYAN + Style.BRIGHT}System Resource Usage\n" + 
+            "=" * 20 + 
+            "\nCPU".ljust(7) + f": {cpu}% " + 
+            f"\nMemory".ljust(7) +  f": {memory} MB{Style.RESET_ALL}"
         )
         time.sleep(interval)
 
@@ -69,12 +88,17 @@ def log_system_resources(logger, interval=5):
 def setup_aebels_logger(
     logger: logging.Logger,
     filter_strings: list[str] = [],
-    resource_monitoring_interval: float = -1
+    resource_monitoring_interval: float = -1,
+    show_context: bool = True,
+    date_fmt: str = '%H:%M:%S',
 ):
     # Modify existing handlers on logger to user colored formattedr
     for handler in logger.handlers:
         # Define a formatter with equal-width columns
-        formatter = ColoredFormatter(datefmt='%Y-%m-%d %H:%M:%S')
+        formatter = ColoredFormatter(
+            show_context=show_context,
+            datefmt=date_fmt,
+        )
         handler.setFormatter(formatter)
         handler.addFilter(ExcludeStringFilter(filter_strings))
     

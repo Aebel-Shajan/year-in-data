@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e  # Exit immediately if a command exits with a non-zero status
-source ./utils.sh
 
 switch_or_create_orphan_branch() {
   local branch="$1"

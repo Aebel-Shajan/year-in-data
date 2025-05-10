@@ -35,4 +35,4 @@ jobs:
       - name: Push to orphan branch
         run: |
           # Push the orphan branch (using authentication)
-          git push -f origin data-output-temp:data-output 
+          git push -f origin data-output 

@@ -15,7 +15,7 @@ echo "Preparing to push output to data-output branch..."
 cd ..
 git config --global user.name "github-actions[bot]"
 git config --global user.email "github-actions[bot]@users.noreply.github.com"
-git checkout --orphan data-output-temp
+git switch -c data-output
 
 echo "Moving pipeline data output to ./data ..."
 mkdir -p ./data/

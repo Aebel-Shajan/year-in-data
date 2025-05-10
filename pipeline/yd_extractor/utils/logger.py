@@ -25,7 +25,22 @@ class ColoredFormatter(logging.Formatter):
         super().__init__(*args, **kwargs)
         self.show_context = show_context
 
-    def formatMessage(self, record):
+
+    def formatMessage(self, record: logging.LogRecord) -> str:
+        """Overrides basic formatMessage method. Uses colorama to output fancy colored text.
+
+        Args:
+            record (LogRecord): The log record containing all the information for the log entry.
+
+        Returns:
+            string: A formatted log message with colors and structured layout.
+            
+        Notes:
+            Why not override the format method? See the following link:
+            https://github.com/python/cpython/blob/7dddb4e667b5eb76cbe11755051ec139b0f437a9/Lib/logging/__init__.py#L682-L729
+            Overriding format also overrides some logic which prints out exception 
+            traceback. 
+        """
         log_color = LOG_COLORS.get(record.levelno, "")
         reset = Style.RESET_ALL
 

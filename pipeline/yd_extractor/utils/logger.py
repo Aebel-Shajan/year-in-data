@@ -1,4 +1,7 @@
+from datetime import datetime
 import logging
+from pathlib import Path
+import re
 import sys
 import threading
 import time
@@ -24,6 +27,7 @@ class ColoredFormatter(logging.Formatter):
     def __init__(self, *args, show_context=False, **kwargs):
         super().__init__(*args, **kwargs)
         self.show_context = show_context
+        
 
 
     def formatMessage(self, record: logging.LogRecord) -> str:
@@ -36,9 +40,10 @@ class ColoredFormatter(logging.Formatter):
             string: A formatted log message with colors and structured layout.
             
         Notes:
-            Why not override the format method? See the following link:
+            Why not override just the `logging.Formatter.format()` method? 
+            See the following link:
             https://github.com/python/cpython/blob/7dddb4e667b5eb76cbe11755051ec139b0f437a9/Lib/logging/__init__.py#L682-L729
-            Overriding format also overrides some logic which prints out exception 
+            Overriding format also overrides some which prints out exception 
             traceback. 
         """
         log_color = LOG_COLORS.get(record.levelno, "")
@@ -68,6 +73,15 @@ class ColoredFormatter(logging.Formatter):
         log_message = header + f"{message}"
         return log_message
  
+class NonColoredFormatter(logging.Formatter):
+    def __init__(self, formatter_to_override: logging.Formatter, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.formatter_to_override = formatter_to_override
+
+    def formatMessage(self, record):
+        message = self.formatter_to_override.formatMessage(record)
+        ansi_re = re.compile(r'\x1b\[[0-9;]*m')
+        return re.sub(ansi_re, '', message)
  
 class ExcludeStringFilter(logging.Filter):
     def __init__(self, excluded_substrings):
@@ -102,7 +116,30 @@ def log_system_resources_regularly(logger: logging.Logger, interval=5):
     while True:
         log_system_resources(logger)
         time.sleep(interval)
+        
+def add_date_file_handler(
+    logger: logging.Logger, 
+    log_dir:str="logs", 
+    base_filename:str="pipeline",
+    formatter_to_override: logging.Logger = logging.Formatter()
+):
+    # Ensure log directory exists
+    log_path = Path(log_dir)
+    log_path.mkdir(parents=True, exist_ok=True)
 
+    # Generate log filename: pipeline_YYYY-MM-DD.log
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    log_file = log_path / f"{base_filename}_{date_str}.log"
+
+    # Avoid duplicate handlers for the same file
+    if not any(isinstance(h, logging.FileHandler) and h.baseFilename == str(log_file) for h in logger.handlers):
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setFormatter(
+            NonColoredFormatter(
+                formatter_to_override
+            )
+        )
+        logger.addHandler(file_handler)
         
 def setup_aebels_logger(
     logger: logging.Logger,
@@ -110,17 +147,27 @@ def setup_aebels_logger(
     resource_monitoring_interval: float = -1,
     show_context: bool = True,
     date_fmt: str = '%H:%M:%S',
+    log_file_prefix: str = "pipeline_run" 
 ):
+    
+    colored_formatter = ColoredFormatter(
+        show_context=show_context,
+        datefmt=date_fmt,
+    )
     # Modify existing handlers on logger to user colored formattedr
     for handler in logger.handlers:
-        # Define a formatter with equal-width columns
-        formatter = ColoredFormatter(
-            show_context=show_context,
-            datefmt=date_fmt,
-        )
-        handler.setFormatter(formatter)
-        handler.addFilter(ExcludeStringFilter(filter_strings))
+        if isinstance(handler, logging.StreamHandler):
+            # Define a formatter with equal-width columns
+            
+            handler.setFormatter(colored_formatter)
+            handler.addFilter(ExcludeStringFilter(filter_strings))
     
+    
+    add_date_file_handler(
+        logger, 
+        base_filename=log_file_prefix,
+        formatter_to_override=colored_formatter,
+    )
     
     if resource_monitoring_interval > 1:
         # Create and start the background thread for resource logging
@@ -188,3 +235,4 @@ def redirect_output_to_logger(
         logger.name = old_name
         sys.stdout = old_stdout
         sys.stderr = old_stderr
+        

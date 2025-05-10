@@ -25,7 +25,7 @@ class ColoredFormatter(logging.Formatter):
         super().__init__(*args, **kwargs)
         self.show_context = show_context
 
-    def format(self, record):
+    def formatMessage(self, record):
         log_color = LOG_COLORS.get(record.levelno, "")
         reset = Style.RESET_ALL
 
@@ -73,15 +73,19 @@ def get_cpu_memory_usage():
     return cpu_usage, memory_info
 
 
-def log_system_resources(logger: logging.Logger, interval=5):
+def log_system_resources(logger: logging.Logger):
+    cpu, memory = get_cpu_memory_usage()
+    logger.info(
+        f"{Fore.CYAN + Style.BRIGHT}System Resource Usage\n" + 
+        "=" * 20 + 
+        "\nCPU".ljust(7) + f": {cpu}% " + 
+        f"\nMemory".ljust(7) +  f": {memory} MB{Style.RESET_ALL}"
+    )
+
+
+def log_system_resources_regularly(logger: logging.Logger, interval=5):
     while True:
-        cpu, memory = get_cpu_memory_usage()
-        logger.info(
-            f"{Fore.CYAN + Style.BRIGHT}System Resource Usage\n" + 
-            "=" * 20 + 
-            "\nCPU".ljust(7) + f": {cpu}% " + 
-            f"\nMemory".ljust(7) +  f": {memory} MB{Style.RESET_ALL}"
-        )
+        log_system_resources(logger)
         time.sleep(interval)
 
         
@@ -106,7 +110,7 @@ def setup_aebels_logger(
     if resource_monitoring_interval > 1:
         # Create and start the background thread for resource logging
         resource_thread = threading.Thread(
-            target=log_system_resources,
+            target=log_system_resources_regularly,
             args=(logger, resource_monitoring_interval),
             daemon=True,
         )

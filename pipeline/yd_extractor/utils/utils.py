@@ -88,39 +88,6 @@ def get_latest_file(folder_path: Path, file_name_glob: str) -> Path:
     return files[0]
 
 
-def unzip_file(zip_file_path: Path, output_path: Path):
-    """Unzips the specified zip file into the specified output folder.
-
-    Args:
-        zip_file_path (Path): Path to the zip file.
-        output_path (Path): The output folder path to unzip to.
-    """
-    with zipfile.ZipFile(zip_file_path, "r") as zip_ref:
-        logger.info(f"Extracting zip file: {zip_file_path} into {output_path}")
-        zip_ref.extractall(output_path)
-
-
-
-
-def extract_folder_from_zip(zip_file_path: Path, prefix: str, output_path: Path):
-    """Extractrs specific folder from zip file.
-
-    Args:
-        zip_file_path (Path): Path to the zip file.
-        prefix (str): Relative name of folder/files in zip file.
-        output_path (Path): The output folder path to unzip to.
-    """
-    with zipfile.ZipFile(zip_file_path, "r") as zip_ref:
-        # Get a list of files in the ZIP archive
-        all_files = zip_ref.namelist()
-
-        # Filter only files inside the specific folder
-        folder_files = [f for f in all_files if f.startswith(prefix)]
-
-        # Extract only the filtered files
-        for file in folder_files:
-            zip_ref.extract(file, output_path)
-
 def extract_specific_files_flat(zip_file_path: Path, prefix: str, output_path: Path):
     """
     Extracts specific files which have the same prefix from a ZIP archive and saves 

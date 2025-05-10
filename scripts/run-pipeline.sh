@@ -5,12 +5,15 @@ set -e  # Exit immediately if a command exits with a non-zero status
 switch_or_create_orphan_branch() {
   local branch="$1"
 
+  git fetch
+
   if git show-ref --quiet refs/heads/"$branch"; then
     echo "Branch '$branch' exists. Switching to it."
     git reset --hard
     git switch "$branch"
   else
     echo "Branch '$branch' does not exist. Creating orphan branch."
+    git reset --hard
     git switch --orphan "$branch"
     git reset --hard
   fi

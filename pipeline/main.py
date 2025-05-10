@@ -107,7 +107,7 @@ def run_pipeline(
                 )
                 df.to_csv(output_data_folder / "fitbit_exercise.csv", index=False)
         except Exception as e:
-            logger.error("Error whilst trying process fitbit data", exc_info=True)
+            logger.error(f"Error whilst trying process fitbit data {e}", exc_info=True)
         
     # Github
     if config.process_github: 
@@ -139,7 +139,7 @@ def run_pipeline(
             )
             df.to_csv(output_data_folder / "reading.csv", index=False)
         except Exception as e:
-            logger.error("Error whilst trying to process Kindle data", exc_info=True)
+            logger.error(f"Error whilst trying to process Kindle data {e}", exc_info=True)
         
     # Strong
     if config.process_strong:
@@ -152,7 +152,7 @@ def run_pipeline(
                 df = strong_extractor.process_workouts(csv)
                 df.to_csv(output_data_folder / "strong_workouts.csv")
         except Exception as e:
-            logger.error("Error whilst trying to process Strong data", exc_info=True)
+            logger.error(f"Error whilst trying to process Strong data {e}", exc_info=True)
     
     
     if config.cleanup_ziped_files:

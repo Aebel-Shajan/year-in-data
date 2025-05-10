@@ -102,6 +102,12 @@ def extract_specific_files_flat(zip_file_path: Path, prefix: str, output_path: P
     # Ensure the output directory exists
     os.makedirs(output_path, exist_ok=True)
 
+    logger.info(
+        f"Extracting files from '{os.path.relpath(zip_file_path)}'"
+        f"\nwhich have prefix '{prefix}' "
+        f"\ninto '{os.path.relpath(output_path)}' ..."
+    )
+    
     # Open the ZIP file
     with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
        

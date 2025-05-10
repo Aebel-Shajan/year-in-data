@@ -29,7 +29,8 @@ def extract_json_file_data(folder_path: str, file_name_prefix: str, keys_to_keep
     """
     file_names = [f for f in os.listdir(folder_path) if f.startswith(file_name_prefix)]
     if len(file_names) == 0:
-        raise Exception(f"No files found with prefix: {file_name_prefix}")
+        logger.error(f"No files found with prefix: {file_name_prefix}")
+        
     full_data = []
     for file_name in file_names:
         file_path = folder_path / file_name
@@ -39,8 +40,14 @@ def extract_json_file_data(folder_path: str, file_name_prefix: str, keys_to_keep
                 filtered_data = {key: data[key] for key in keys_to_keep if key in list(data.keys())}
                 if filtered_data.keys() != keys_to_keep:
                     full_data.append(filtered_data)
-            
 
+            del data_list  # Free memory used by data_list
+            # TODO: When I delete the data_list variable I find that memory usage goes 
+            #   down by 200MB. I know python has its own garbage collection system but I
+            #   found my self hitting memory limits in small docker containers with RAM 
+            #   ~500MB. Am I doing something wrong here??
+          
+          
     return pd.DataFrame(full_data)
 
 def transform_time_series_data(df: pd.DataFrame) -> pd.DataFrame:

@@ -5,8 +5,9 @@ import pandas as pd
 from yd_extractor.utils.pandas import validate_columns
 from yd_extractor.utils.utils import extract_specific_files_flat
 
-from .utils import extract_json_file_data
-
+from yd_extractor.fitbit.utils import extract_json_file_data
+import logging
+logger = logging.getLogger(__name__)
 
 def extract_sleep(folder_path: str) -> pd.DataFrame:
     """Extract sleep data from files from the folder path. The files have the name format
@@ -80,6 +81,7 @@ def process_sleep(
     cleanup: bool=True
 ) -> pd.DataFrame:
     # Unzip and extract calories jsons from zip file.
+    logger.info("Processing fitbit sleep...")
     data_folder = inputs_folder / "sleep"
     extract_specific_files_flat(
         zip_file_path=zip_path,
@@ -90,7 +92,11 @@ def process_sleep(
     
     df_standardized = transform_sleep(df_raw)
     
+    logger.info("Finished processing fitbit sleep")
+    
+    
     if cleanup:
+        logger.info(f"Removing folder {data_folder} from zip...")
         shutil.rmtree(data_folder)
         
     return df_standardized

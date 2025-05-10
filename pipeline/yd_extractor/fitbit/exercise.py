@@ -6,6 +6,9 @@ import pandas as pd
 from yd_extractor.fitbit.utils import extract_json_file_data
 from yd_extractor.utils.pandas import convert_columns_to_numeric, validate_columns
 from yd_extractor.utils.utils import extract_specific_files_flat
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def extract_exercise(folder_path: str) -> pd.DataFrame:
@@ -88,6 +91,7 @@ def process_exercise(
 ) -> pd.DataFrame:
     
     # Unzip and extract jsons from zip file.
+    logger.info("Processing fitbit exercises...")
     data_folder = inputs_folder / "exercise"
     extract_specific_files_flat(
         zip_file_path=zip_path,
@@ -98,7 +102,10 @@ def process_exercise(
     
     df_standardized = transform_exercise(df_raw)
     
+    logger.info("Finished processing fitbit exercises...")
+    
     if cleanup:
+        logger.info(f"Removing folder {data_folder} from zip...")
         shutil.rmtree(data_folder)
         
     return df_standardized

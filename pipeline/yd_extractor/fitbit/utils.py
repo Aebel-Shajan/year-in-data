@@ -29,7 +29,8 @@ def extract_json_file_data(folder_path: str, file_name_prefix: str, keys_to_keep
     """
     file_names = [f for f in os.listdir(folder_path) if f.startswith(file_name_prefix)]
     if len(file_names) == 0:
-        raise Exception(f"No files found with prefix: {file_name_prefix}")
+        logger.error(f"No files found with prefix: {file_name_prefix}")
+        
     full_data = []
     for file_name in file_names:
         file_path = folder_path / file_name

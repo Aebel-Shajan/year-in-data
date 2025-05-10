@@ -59,10 +59,10 @@ class ColoredFormatter(logging.Formatter):
         
         if '\n' in message:
             header_length = datefmt_length + 3 + 8
-            indent = ' ' * header_length + " | "
+            indent = ' ' * header_length + " |"
             if self.show_context:
-               indent += " " * len(context) 
-            message = f"\n{indent} ".join(message.splitlines())
+               indent += " " * (len(context) + 2)
+            message = f"\n{indent}  ".join(message.splitlines())
             
         # Format final log output
         log_message = header + f"{message}"

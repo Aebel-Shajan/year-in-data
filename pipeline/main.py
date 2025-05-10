@@ -21,6 +21,7 @@ setup_aebels_logger(
         "https://drive.google.com/uc?id"
     ],  # Because gdown leaks google url.
     # resource_monitoring_interval=1.1,
+    show_context=False
 )
 
 

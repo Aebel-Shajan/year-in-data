@@ -7,8 +7,6 @@ from yd_extractor.utils.logger import redirect_output_to_logger, log_system_reso
 
 from yd_extractor.fitbit.utils import extract_json_file_data, transform_time_series_data
 import logging
-
-
 logger = logging.getLogger(__name__)
 
 def process_calories(

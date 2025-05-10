@@ -1,7 +1,8 @@
 import pandas as pd
 from yd_extractor.utils.pandas import detect_delimiter, parse_duration, validate_columns
 from typing import BinaryIO
-
+import logging
+logger = logging.getLogger(__name__)
 
 def extract_workouts(csv_file: BinaryIO):
     df_raw = pd.read_csv(
@@ -87,7 +88,9 @@ def transform_workouts(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 def process_workouts(csv_file: BinaryIO) -> pd.DataFrame:
+    logger.info("Processing strong workouts...")
     df_raw = extract_workouts(csv_file)
     df_transformed = transform_workouts(df_raw)
+    logger.info("Finished processing strong workouts...")
     return df_transformed
 

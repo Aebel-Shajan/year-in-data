@@ -43,8 +43,6 @@ def run_pipeline(
     env_vars: config_loader.EnvVars,
 ):
     # Unpack config
-    cleanup_ziped_files = config.cleanup_ziped_files
-    cleanup_unziped_files = config.cleanup_unziped_files
     fitbit_config = config.fitbit_config
 
     # Setup folder structure
@@ -74,7 +72,7 @@ def run_pipeline(
                 df = fitbit_extractor.process_calories(
                     inputs_folder=input_data_folder,
                     zip_path=latest_google_zip,
-                    cleanup=cleanup_unziped_files,
+                    cleanup=config.cleanup_unziped_files,
                 )
                 df.to_csv(output_data_folder / "fitbit_calories.csv", index=False)
 
@@ -83,7 +81,7 @@ def run_pipeline(
                 df = fitbit_extractor.process_sleep(
                     inputs_folder=input_data_folder,
                     zip_path=latest_google_zip,
-                    cleanup=cleanup_unziped_files,
+                    cleanup=config.cleanup_unziped_files,
                 )
                 df.to_csv(output_data_folder / "fitbit_sleep.csv", index=False)
 
@@ -92,7 +90,7 @@ def run_pipeline(
                 df = fitbit_extractor.process_steps(
                     inputs_folder=input_data_folder,
                     zip_path=latest_google_zip,
-                    cleanup=cleanup_unziped_files,
+                    cleanup=config.cleanup_unziped_files,
                 )
                 df.to_csv(output_data_folder / "fitbit_steps.csv", index=False)
 
@@ -101,7 +99,7 @@ def run_pipeline(
                 df = fitbit_extractor.process_exercise(
                     inputs_folder=input_data_folder,
                     zip_path=latest_google_zip,
-                    cleanup=cleanup_unziped_files,
+                    cleanup=config.cleanup_unziped_files,
                 )
                 df.to_csv(output_data_folder / "fitbit_exercise.csv", index=False)
         except Exception as e:

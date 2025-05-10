@@ -6,7 +6,8 @@ from typing import BinaryIO, Union
 
 from yd_extractor.utils.pandas import detect_delimiter, validate_columns
 from yd_extractor.utils.utils import extract_specific_files_flat
-
+import logging
+logger = logging.getLogger(__name__)
 
 def extract_reading(csv_file: BinaryIO):
     # Read in csv from config into a pandas dataframe
@@ -80,6 +81,7 @@ def process_reading(
     Read in kindle data from csv file.
 
     """
+    logger.info("Processing amazon kindle reading...")
     kindle_search_prefix = (
         "Kindle.Devices.ReadingSession" "/Kindle.Devices.ReadingSession.csv"
     )
@@ -94,8 +96,11 @@ def process_reading(
         df_raw = extract_reading(csv)
 
     df_processed = transform_reading(df_raw)
+    
+    logger.info("Finished processing amazon kindle reading..")
 
     if cleanup:
+        logger.info(f"Removing folder {data_folder} from zip...")
         shutil.rmtree(data_folder)
     return df_processed
 

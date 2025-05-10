@@ -140,6 +140,8 @@ def process_repo_contributions(
     github_token: str,
     year=2025
 ) -> pd.DataFrame:
+    logger.info("Processing github repo contirbutions...")
     df_raw = extract_repo_contributions(github_token, year)
     df_transformed = transform_repo_contributions(df_raw)
+    logger.info("Finished processing github repo contributions.")
     return df_transformed

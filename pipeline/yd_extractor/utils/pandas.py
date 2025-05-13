@@ -22,13 +22,19 @@ def detect_delimiter(csv_file: BinaryIO) -> str:
     str
         The detected delimiter (e.g. ',', ';', '\t', etc.).
     """
-    original_pos = csv_file.tell()
-    content = csv_file.read(1024)
-    if type(content) != str:
-        content = content.decode('utf-8')
-    csv_file.seek(original_pos)
-    dialect = csv.Sniffer().sniff(content)
-    return dialect.delimiter
+    delimeter = ","
+    try:
+        original_pos = csv_file.tell()
+        content = csv_file.read(1024)
+        if type(content) != str:
+            content = content.decode('utf-8')
+        csv_file.seek(original_pos)
+        dialect = csv.Sniffer().sniff(content)
+        delimeter = dialect.delimiter
+    except:
+        delimeter = ","
+    return delimeter
+        
 
 
 def check_columns_exist(df: pd.DataFrame, columns: list[str]) -> bool:

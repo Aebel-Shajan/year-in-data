@@ -11,11 +11,7 @@ logger = logging.getLogger(__name__)
 
 def extract_reading(csv_file: BinaryIO):
     # Read in csv from config into a pandas dataframe
-    delimeter = ","
-    try:
-        delimeter = detect_delimiter(csv_file)
-    except:
-        delimeter = ","
+    delimeter = detect_delimiter(csv_file)
     df_raw = pd.read_csv(
         csv_file,
         delimiter=delimeter,
@@ -75,7 +71,7 @@ def transform_reading(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def process_reading(
-    inputs_folder: Path, zip_path: Path, cleanup: bool = True
+    inputs_folder: Path, zip_path: Path, cleanup: bool = True,
 ) -> pd.DataFrame:
     """
     Read in kindle data from csv file.

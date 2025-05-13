@@ -173,4 +173,4 @@ if __name__ == "__main__":
     gh_token = os.environ.get("GITHUB_TOKEN")
 
     df = process_repo_contributions(gh_token)
-    df.to_csv("data/output/github_repo_contributions.py", index=False)
+    df.to_csv("data/output/github_repo_contributions.csv", index=False)

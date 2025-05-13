@@ -131,7 +131,7 @@ def run_pipeline(
                 zip_path=latest_zip,
                 cleanup=config.cleanup_unziped_files,
             )
-            df.to_csv(output_data_folder / "reading.csv", index=False)
+            df.to_csv(output_data_folder / "kindle_reading.csv", index=False)
         except Exception as e:
             logger.exception(f"Error whilst trying to process Kindle data")
 

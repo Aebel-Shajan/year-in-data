@@ -108,7 +108,7 @@ def run_pipeline(
     # Github
     if config.process_github:
         try:
-            if env_vars["GITHUB_TOKEN"] is None or env_vars["GITHUB_USERNAME"] is None:
+            if env_vars["GITHUB_TOKEN"] is None:
                 error_message = (
                     "Couldn't process github data due to missing environment variables!"
                 )
@@ -116,7 +116,7 @@ def run_pipeline(
             df = github_extractor.process_repo_contributions(
                 github_token=env_vars["GITHUB_TOKEN"]
             )
-            df.to_csv(output_data_folder / "repo_contributions.csv", index=False)
+            df.to_csv(output_data_folder / "github_repo_contributions.csv", index=False)
         except Exception as e:
             logger.exception(f"Error whilst trying to process GitHub data")
 

@@ -1,11 +1,19 @@
-from pathlib import Path
-import pandas as pd
-import requests
 import logging
+from datetime import datetime
+from pathlib import Path
 
-from yd_extractor.utils.pandas import convert_columns_to_numeric, validate_columns
+import pandas as pd
+import pandera as pa
+import requests
+from pandera.typing.pandas import DataFrame
+
+from yd_extractor.github.schemas import (GithubRepoContributions,
+                                         RawGithubRepoContributions)
+from yd_extractor.utils.pandas import (convert_columns_to_numeric,
+                                       validate_columns)
 
 logger = logging.getLogger(__name__)
+
 
 def unpack_contributions_dict(contributions_for_repo: dict) -> list[dict]:
     """Unpacks contribution dicts obtained from the using a graphql query on github
@@ -40,8 +48,8 @@ def unpack_contributions_dict(contributions_for_repo: dict) -> list[dict]:
         ```
         [
             {
-                commitCount: int
-                occurredAt: str
+                commit_count: int
+                occurred_at: str
                 repository_name: str,
                 repository_url: str,
                 repositroy_image: str
@@ -52,8 +60,8 @@ def unpack_contributions_dict(contributions_for_repo: dict) -> list[dict]:
     node_list = contributions_for_repo["contributions"]["nodes"]
     node_list = [
         {
-            "commitCount": node["commitCount"],
-            "occurredAt": node["occurredAt"],
+            "commit_count": node["commitCount"],
+            "occured_at": node["occurredAt"],
             "repository_name": node["repository"][
                 "name"
             ],  # these should all be the same :p
@@ -64,27 +72,30 @@ def unpack_contributions_dict(contributions_for_repo: dict) -> list[dict]:
     ]
     return node_list
 
-#TODO make year a parameter!!
+
+@pa.check_types
 def extract_repo_contributions(
-    github_token: str,
-    year: int
-) -> pd.DataFrame:
-    
+    github_token: str, year: int
+) -> DataFrame[RawGithubRepoContributions]:
+
     if year < 2005:
         raise Exception("Can't load contributions from before 2005!")
-    
+
+    logger.info(
+        f"Making request to https://api.github.com/graphql for repo contribution"
+        f"data from {year}"
+    )
+
     # Load query from seperate file
     query = None
     path_to_query = (
-        Path(__file__).parent / 
-        "graphql" /
-        "GetUserRepoContributions.graphql"
+        Path(__file__).parent / "graphql" / "GetUserRepoContributions.graphql"
     )
     with open(path_to_query, "r") as file:
         query = file.read()
     if query is None:
         raise Exception("Couldn't load query GetUserRepoContributions!")
-    
+
     # Post request to github graphql api
     variables = {
         "from": f"{year}-01-01T00:00:00Z",
@@ -96,7 +107,7 @@ def extract_repo_contributions(
         repos_url,
         json={"query": query, "variables": variables},
         headers=headers,
-        verify=False
+        verify=False,
     )
     if not response.ok:
         response.raise_for_status()
@@ -110,38 +121,56 @@ def extract_repo_contributions(
     for repo_contributions in contributions_by_repos:
         full_contribution_list.extend(unpack_contributions_dict(repo_contributions))
 
-    df_raw = pd.DataFrame(full_contribution_list)
-    return df_raw
+    df = pd.DataFrame(full_contribution_list)
+    if df.empty:
+        df = RawGithubRepoContributions.empty()
+    df = RawGithubRepoContributions.validate(df)
+    return df
 
-def transform_repo_contributions(df: pd.DataFrame) -> pd.DataFrame:
-    validate_columns(
-        df,
+
+@pa.check_types
+def transform_repo_contributions(
+    df: DataFrame[RawGithubRepoContributions],
+) -> DataFrame[GithubRepoContributions]:
+    df["date"] = df["occured_at"].dt.date
+    df = df.rename(columns={"commit_count": "total_commits"})
+    df = df[
         [
-            "commitCount",
-            "occurredAt",
+            "date",
+            "total_commits",
             "repository_name",
             "repository_url",
             "repository_image",
-        ],
-    )
-    df = df.rename(
-        columns={
-            "commitCount": "total_commits", 
-            "occurredAt": "date"
-        }
-    )
-    df["date"] = pd.to_datetime(df["date"], format="ISO8601").dt.date
-    df = convert_columns_to_numeric(df, columns=["total_commits"])
-    
+        ]
+    ]
+    if df.empty:
+        df = GithubRepoContributions.empty()
+    df = GithubRepoContributions.validate(df)
     return df
 
 
 def process_repo_contributions(
-    github_token: str,
-    year=2025
+    github_token: str, start_year: int = 2020
 ) -> pd.DataFrame:
-    logger.info("Processing github repo contirbutions...")
-    df_raw = extract_repo_contributions(github_token, year)
+    logger.info("Processing github repo contributions...")
+    df_raw = pd.DataFrame()
+    current_year = datetime.now().year
+    for year in range(start_year, current_year + 1):
+        df = extract_repo_contributions(github_token, year)
+        df_raw = pd.concat([df_raw, df], ignore_index=True)
+
     df_transformed = transform_repo_contributions(df_raw)
     logger.info("Finished processing github repo contributions.")
     return df_transformed
+
+
+if __name__ == "__main__":
+    import os
+
+    import dotenv
+
+    dotenv.load_dotenv("config/.env")
+    gh_token = os.environ.get("GITHUB_TOKEN")
+
+    df = process_repo_contributions(gh_token)
+    df.to_csv("data/output/github_repo_contributions.py", index=False)

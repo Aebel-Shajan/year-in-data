@@ -67,7 +67,6 @@ def process_screen_time(
             df_app_info_map = proccess_app_info_map(app_info_path)
         df = transform_screen_time(df, df_app_info_map)
         if load_function:
-            logger.info("Loading screen time data.")
             load_function(df, "app_usage_screen_time")
     except Exception:
         logger.exception("Error whilst processing screen time.")

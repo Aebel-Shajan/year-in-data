@@ -1,9 +1,10 @@
 import csv
+import logging
 import re
 from typing import BinaryIO
+
 import pandas as pd
 import pandera as pa
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -27,14 +28,13 @@ def detect_delimiter(csv_file: BinaryIO) -> str:
         original_pos = csv_file.tell()
         content = csv_file.read(1024)
         if type(content) != str:
-            content = content.decode('utf-8')
+            content = content.decode("utf-8")
         csv_file.seek(original_pos)
         dialect = csv.Sniffer().sniff(content)
         delimeter = dialect.delimiter
     except:
         delimeter = ","
     return delimeter
-        
 
 
 def check_columns_exist(df: pd.DataFrame, columns: list[str]) -> bool:
@@ -109,8 +109,8 @@ def parse_duration(duration: str) -> float:
 def convert_columns_to_numeric(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     validate_columns(df, columns_to_validate=columns)
     for column in columns:
-            df.loc[:, column] = pd.to_numeric(df[column])
-            
+        df.loc[:, column] = pd.to_numeric(df[column])
+
     return df
 
 
@@ -124,18 +124,17 @@ def rename_df_from_schema(df: pd.DataFrame, schema: pa.DataFrameModel) -> pd.Dat
 
     Returns
     -------
-        pd.DataFrame: Dataframe with names which match the attributes found in the 
+        pd.DataFrame: Dataframe with names which match the attributes found in the
             schema.
     """
     rename_fields = {}
-    
+
     for key, value in schema._collect_fields().items():
         current_name = key
         new_name = value[1].original_name
         if value[1].regex:
             matching_columns = [
-                col for col in df.columns 
-                if re.match(current_name, col)
+                col for col in df.columns if re.match(current_name, col)
             ]
             if len(matching_columns) == 1:
                 current_name = matching_columns[0]
@@ -146,6 +145,5 @@ def rename_df_from_schema(df: pd.DataFrame, schema: pa.DataFrameModel) -> pd.Dat
                     f"{schema.__class__.__name__}."
                 )
         rename_fields[current_name] = new_name
-            
-    return df.rename(columns=rename_fields)
 
+    return df.rename(columns=rename_fields)

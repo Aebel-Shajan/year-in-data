@@ -1,12 +1,15 @@
+import logging
 from pathlib import Path
-from pandera.typing.pandas import DataFrame
-from yd_extractor.app_usage.schemas import RawAppUsageScreenTime, AppUsageScreenTime, AppInfoMap
-from yd_extractor.utils.pandas import rename_df_from_schema
-from yd_extractor.app_usage.app_info_map import proccess_app_info_map
+from typing import Callable, Optional
+
 import pandas as pd
 import pandera as pa
-from typing import Callable, Optional
-import logging
+from pandera.typing.pandas import DataFrame
+
+from yd_extractor.app_usage.app_info_map import proccess_app_info_map
+from yd_extractor.app_usage.schemas import (AppInfoMap, AppUsageScreenTime,
+                                            RawAppUsageScreenTime)
+from yd_extractor.utils.pandas import rename_df_from_schema
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +28,7 @@ def extract_screen_time(
 @pa.check_types
 def transform_screen_time(
     df: DataFrame[RawAppUsageScreenTime],
-    df_app_info_map: Optional[DataFrame[AppInfoMap]]=None,
+    df_app_info_map: Optional[DataFrame[AppInfoMap]] = None,
 ) -> DataFrame[AppUsageScreenTime]:
     logger.info("Transforming screen time data.")
     df = rename_df_from_schema(df, RawAppUsageScreenTime)
@@ -37,7 +40,7 @@ def transform_screen_time(
     ]
     df = df[~df["app_name"].isin(names_to_drop)]
     df["date"] = pd.to_datetime(df["date"], format="%m/%d/%y")
-    df['duration_minutes'] = pd.to_timedelta(df["duration"]).dt.total_seconds() / 60
+    df["duration_minutes"] = pd.to_timedelta(df["duration"]).dt.total_seconds() / 60
     df["duration_minutes"] = df["duration_minutes"].round().astype(int)
     df = df[df["duration_minutes"] > 0]
     df = df.drop(columns=["duration"])
@@ -46,7 +49,7 @@ def transform_screen_time(
         df = pd.merge(
             df,
             df_app_info_map,
-            how='left',
+            how="left",
         )
         df["image"] = df["image"].fillna("")
         df["category"] = df["category"].fillna("")
@@ -56,8 +59,8 @@ def transform_screen_time(
 
 def process_screen_time(
     csv_file_path: Path,
-    app_info_path: Optional[Path]=None,
-    load_function: Optional[Callable[[pd.DataFrame, str], None]]=None,
+    app_info_path: Optional[Path] = None,
+    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
 ) -> DataFrame[AppUsageScreenTime]:
     df = AppUsageScreenTime.empty()
     try:
@@ -73,18 +76,15 @@ def process_screen_time(
     return df
 
 
-
-
 if __name__ == "__main__":
     csv_file_path = "data/input/AUM_V4_Activity_2025-05-10_21-56-06.csv"
     app_info_path = "data/input/AUM_V4_App_2025-05-14_14-53-26.csv"
     logger = logging.getLogger()
     logging.basicConfig(level=logging.INFO)
+
     def load_to_csv(df: pd.DataFrame, name: str):
-        df.to_csv("data/output/"+name + ".csv", index=False)
+        df.to_csv("data/output/" + name + ".csv", index=False)
+
     process_screen_time(
-        csv_file_path,
-        app_info_path=app_info_path,
-        load_function=load_to_csv
+        csv_file_path, app_info_path=app_info_path, load_function=load_to_csv
     )
-    

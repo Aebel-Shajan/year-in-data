@@ -1,14 +1,15 @@
-from pathlib import Path
+import logging
 import shutil
+from pathlib import Path
 from typing import Callable, Optional
-import pandas as pd
 
-from yd_extractor.utils.utils import extract_specific_files_flat
-from yd_extractor.fitbit.schemas import FitbitSleep, RawFitbitSleep
-from yd_extractor.fitbit.utils import extract_json_file_data
+import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
-import logging
+
+from yd_extractor.fitbit.schemas import FitbitSleep, RawFitbitSleep
+from yd_extractor.fitbit.utils import extract_json_file_data
+from yd_extractor.utils.utils import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 
@@ -87,8 +88,8 @@ def transform_sleep(df: DataFrame[RawFitbitSleep]) -> DataFrame[FitbitSleep]:
         df.groupby(["date"])
         .aggregate(
             {
-                "start_time": "first", 
-                "end_time": "last", 
+                "start_time": "first",
+                "end_time": "last",
                 "total_sleep_hours": "sum",
             }
         )

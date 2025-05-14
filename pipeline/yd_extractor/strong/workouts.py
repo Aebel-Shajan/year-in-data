@@ -1,15 +1,15 @@
-import pandas as pd
-from yd_extractor.utils.pandas import (
-    detect_delimiter,
-    rename_df_from_schema,
-)
-from yd_extractor.strong.schemas import RawStrongWorkouts, StrongWorkouts
-from pandera.typing.pandas import DataFrame
-import pandera as pa
-from typing import BinaryIO
 import logging
+from typing import BinaryIO
+
+import pandas as pd
+import pandera as pa
+from pandera.typing.pandas import DataFrame
+
+from yd_extractor.strong.schemas import RawStrongWorkouts, StrongWorkouts
+from yd_extractor.utils.pandas import detect_delimiter, rename_df_from_schema
 
 logger = logging.getLogger(__name__)
+
 
 @pa.check_types()
 def extract_workouts(csv_file: BinaryIO) -> DataFrame[RawStrongWorkouts]:

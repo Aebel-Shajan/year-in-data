@@ -1,18 +1,20 @@
-from pathlib import Path
+import logging
 import shutil
+from pathlib import Path
+
 import pandas as pd
 
+from yd_extractor.fitbit.utils import (extract_json_file_data,
+                                       transform_time_series_data)
+from yd_extractor.utils.logger import (log_system_resources,
+                                       redirect_output_to_logger)
 from yd_extractor.utils.utils import extract_specific_files_flat
-from yd_extractor.utils.logger import redirect_output_to_logger, log_system_resources
 
-from yd_extractor.fitbit.utils import extract_json_file_data, transform_time_series_data
-import logging
 logger = logging.getLogger(__name__)
 
+
 def process_calories(
-    inputs_folder: Path,
-    zip_path: Path,
-    cleanup: bool=True
+    inputs_folder: Path, zip_path: Path, cleanup: bool = True
 ) -> pd.DataFrame:
     """Extract calories from folder then apply some transformations on data."""
     # Unzip and extract calories jsons from zip file.
@@ -21,15 +23,15 @@ def process_calories(
     extract_specific_files_flat(
         zip_file_path=zip_path,
         prefix="Takeout/Fitbit/Global Export Data/calories",
-        output_path=data_folder
+        output_path=data_folder,
     )
     df_raw = extract_json_file_data(
         folder_path=data_folder,
         file_name_prefix="calories",
-        keys_to_keep=["dateTime", "value"]
+        keys_to_keep=["dateTime", "value"],
     )
     log_system_resources(logger)
-    
+
     with redirect_output_to_logger(logger, stdout_level=logging.DEBUG):
         logger.debug("Size of fitbit calories df_raw:")
         df_raw.info()
@@ -38,9 +40,9 @@ def process_calories(
         logger.debug(f"Size of fitbit calories df_transformed:")
         df_transformed.info()
     logger.info("Finished processing fitbit calories")
-    
+
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")
         shutil.rmtree(data_folder)
-        
+
     return df_transformed

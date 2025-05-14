@@ -2,15 +2,16 @@ import logging
 import os
 from pathlib import Path
 
+import gdown
+
 import yd_extractor.fitbit as fitbit_extractor
 import yd_extractor.github as github_extractor
 import yd_extractor.kindle as kindle_extractor
 import yd_extractor.strong as strong_extractor
-import gdown
-
-from yd_extractor.utils.logger import setup_aebels_logger, redirect_output_to_logger
-from yd_extractor.utils.utils import get_latest_file
 from config import config_loader
+from yd_extractor.utils.logger import (redirect_output_to_logger,
+                                       setup_aebels_logger)
+from yd_extractor.utils.utils import get_latest_file
 
 # Create a logger
 logger = logging.getLogger()
@@ -21,7 +22,7 @@ setup_aebels_logger(
         "https://drive.google.com/uc?id"
     ],  # Because gdown leaks google url.
     # resource_monitoring_interval=1.1,
-    show_context=False
+    show_context=False,
 )
 
 

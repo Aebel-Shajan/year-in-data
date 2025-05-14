@@ -2,13 +2,19 @@ import json
 import os
 
 import pandas as pd
-import psutil
+import pandera as pa
+from pandera.typing.pandas import DataFrame
+from yd_extractor.fitbit.schemas import RawTimeSeriesData, TimeSeriesData
+from yd_extractor.utils.pandas import rename_df_from_schema
 import logging
-from yd_extractor.utils.pandas import validate_columns
+import datetime
 logger = logging.getLogger(__name__)
 
-
-def extract_json_file_data(folder_path: str, file_name_prefix: str, keys_to_keep: list[str]) -> pd.DataFrame:
+def extract_json_file_data(
+    folder_path: str, 
+    file_name_prefix: str, 
+    keys_to_keep: list[str],
+) -> pd.DataFrame:
     """Extract fitbit data from the folder path containing jsons. The files in the folder
     have the format like : "{file_name_prefix}-YYYY-MM-DD.json".
 
@@ -48,9 +54,14 @@ def extract_json_file_data(folder_path: str, file_name_prefix: str, keys_to_keep
             #   ~500MB. Am I doing something wrong here??
           
           
-    return pd.DataFrame(full_data)
+    df = pd.DataFrame(full_data)
+    return df
 
-def transform_time_series_data(df: pd.DataFrame) -> pd.DataFrame:
+
+@pa.check_types
+def transform_time_series_data(
+    df: DataFrame[RawTimeSeriesData]
+) -> DataFrame[TimeSeriesData]:
     """Apply transformations to dataframe containing timeseries data.
 
     Parameters
@@ -67,20 +78,13 @@ def transform_time_series_data(df: pd.DataFrame) -> pd.DataFrame:
         * date with type datetime.
         * value with type integer.
     """
-    columns_to_keep = ["dateTime", "value"]
-    validate_columns(df, columns_to_keep)
-    df = df[columns_to_keep]
-    df = df.rename(
-        columns={
-            "dateTime": "date",
-        }
-    )
-    df.loc[:, "value"] = pd.to_numeric(df["value"])
-    df.loc[:, "date"] = pd.to_datetime(df["date"], format="%m/%d/%y %H:%M:%S").dt.date
+    df = rename_df_from_schema(df, RawTimeSeriesData)
+    df["date"] = pd.to_datetime(df["date"], format="%m/%d/%y %H:%M:%S").dt.date
     df = df.groupby(["date"]).aggregate(
         {
             "value": "sum",
         }
     ).reset_index()
-    df["value"] = df["value"].astype(int)
+    df["date"] = pd.to_datetime(df["date"])
+    df = TimeSeriesData.validate(df)
     return df

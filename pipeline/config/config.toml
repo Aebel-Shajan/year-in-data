@@ -6,6 +6,7 @@ cleanup_ziped_files = true
 process_github = true
 process_kindle = true
 process_strong = true
+process_app_usage = true
 
 [fitbit_config]
 process_fitbit = true

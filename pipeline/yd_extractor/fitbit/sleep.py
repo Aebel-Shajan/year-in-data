@@ -115,7 +115,7 @@ def process_sleep(
         df = extract_sleep(data_folder, zip_path)
         df = transform_sleep(df)
         if load_function:
-            load_function(df, "fitbit_sleep")
+            load_function(df, "fitbit_sleep", FitbitSleep)
 
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")

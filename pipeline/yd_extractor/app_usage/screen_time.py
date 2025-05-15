@@ -71,7 +71,7 @@ def process_screen_time(
             df_app_info_map = proccess_app_info_map(app_info_path)
         df = transform_screen_time(df, df_app_info_map)
         if load_function:
-            load_function(df, "app_usage_screen_time")
+            load_function(df, "app_usage_screen_time", AppUsageScreenTime)
         
     return df
 

@@ -84,7 +84,7 @@ def process_asin_map(
         df = extract_asin_map(data_folder, zip_path)
         df = transform_asin_map(df)
         if load_function:
-            load_function(df, "kindle_asin_map")
+            load_function(df, "kindle_asin_map", AsinMap)
 
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")

@@ -9,6 +9,7 @@ from yd_extractor.utils.pipeline_stage import PipelineStage
 from yd_extractor.fitbit.utils import (extract_json_file_data,
                                        transform_time_series_data)
 from yd_extractor.utils.utils import extract_specific_files_flat
+from yd_extractor.fitbit.schemas import TimeSeriesData
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ def process_steps(
         )
         df = transform_time_series_data(df)
         if load_function:
-            load_function(df, "fitbit_steps")
+            load_function(df, "fitbit_steps", TimeSeriesData)
 
 
     if cleanup:

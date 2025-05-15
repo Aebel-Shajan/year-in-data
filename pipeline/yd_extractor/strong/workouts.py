@@ -88,6 +88,6 @@ def process_workouts(
         df = extract_workouts(csv_path)
         df = transform_workouts(df)
         if load_function:
-            load_function(df, "strong_workouts")
+            load_function(df, "strong_workouts", StrongWorkouts)
     return df
 

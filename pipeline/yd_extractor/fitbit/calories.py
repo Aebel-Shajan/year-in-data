@@ -48,7 +48,7 @@ def process_calories(
             df.info()
             
         if load_function:
-            load_function(df, "fitbit_calories")
+            load_function(df, "fitbit_calories", TimeSeriesData)
 
         
     if cleanup:

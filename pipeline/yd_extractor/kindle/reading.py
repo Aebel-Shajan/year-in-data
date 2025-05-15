@@ -1,12 +1,13 @@
 import logging
 import shutil
 from pathlib import Path
-from typing import Union
+from typing import Callable, Optional, Union
 
 import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
+from yd_extractor.utils.pipeline_stage import PipelineStage
 from yd_extractor.kindle.asin_map import process_asin_map
 from yd_extractor.kindle.schemas import (AsinMap, KindleReading,
                                          RawKindleReading)
@@ -89,22 +90,27 @@ def process_reading(
     inputs_folder: Path,
     zip_path: Path,
     cleanup: bool = True,
+    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
 ) -> pd.DataFrame:
     """
     Read in kindle data from csv file.
 
     """
-    logger.info("Processing amazon kindle reading...")
-    data_folder = inputs_folder / "kindle"
-    df_raw = extract_reading(data_folder, zip_path)
-    asin_map = process_asin_map(inputs_folder, zip_path, cleanup)
-    df_processed = transform_reading(df_raw, asin_map)
-    logger.info("Finished processing amazon kindle reading..")
-
+    df = KindleReading.empty()
+    
+    with PipelineStage(logger, "kindle_reading"):
+        data_folder = inputs_folder / "kindle"
+        df = extract_reading(data_folder, zip_path)
+        asin_map = process_asin_map(inputs_folder, zip_path, cleanup)
+        df = transform_reading(df, asin_map)
+        if load_function:
+            load_function(df, "kindle_reading")
+        
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")
         shutil.rmtree(data_folder)
-    return df_processed
+        
+    return df
 
 
 def is_valid_asin(asin: str) -> bool:

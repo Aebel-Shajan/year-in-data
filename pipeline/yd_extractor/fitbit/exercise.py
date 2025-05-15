@@ -7,6 +7,7 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
+from yd_extractor.utils.pipeline_stage import PipelineStage
 from yd_extractor.fitbit.schemas import FitbitExercise, RawFitbitExercise
 from yd_extractor.fitbit.utils import extract_json_file_data
 from yd_extractor.utils.pandas import (convert_columns_to_numeric,
@@ -105,13 +106,13 @@ def process_exercise(
 
     # Unzip and extract jsons from zip file.
     data_folder = inputs_folder / "exercise"
-    try:
+    
+    with PipelineStage(logger, "fitbit_exercise"):
         df = extract_exercise(data_folder, zip_path)
         df = transform_exercise(df)
         if load_function:
             load_function(df, "fitbit_exercise")
-    except Exception:
-        logger.exception("Error whilst processing exercise!")
+
 
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")

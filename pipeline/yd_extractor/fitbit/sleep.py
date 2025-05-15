@@ -7,6 +7,7 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
+from yd_extractor.utils.pipeline_stage import PipelineStage
 from yd_extractor.fitbit.schemas import FitbitSleep, RawFitbitSleep
 from yd_extractor.fitbit.utils import extract_json_file_data
 from yd_extractor.utils.utils import extract_specific_files_flat
@@ -109,13 +110,12 @@ def process_sleep(
     # Unzip and extract calories jsons from zip file.
     df = FitbitSleep.empty()
     data_folder = inputs_folder / "sleep"
-    try:
+    
+    with PipelineStage(logger, "fitbit_sleep"):
         df = extract_sleep(data_folder, zip_path)
         df = transform_sleep(df)
         if load_function:
             load_function(df, "fitbit_sleep")
-    except Exception:
-        logger.exception("Error whilst processing sleep!")
 
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")

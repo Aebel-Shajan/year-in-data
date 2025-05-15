@@ -1,10 +1,11 @@
 import logging
-from typing import BinaryIO
+from typing import BinaryIO, Callable, Optional
 
 import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
+from yd_extractor.utils.pipeline_stage import PipelineStage
 from yd_extractor.strong.schemas import RawStrongWorkouts, StrongWorkouts
 from yd_extractor.utils.pandas import detect_delimiter, rename_df_from_schema
 
@@ -12,12 +13,13 @@ logger = logging.getLogger(__name__)
 
 
 @pa.check_types()
-def extract_workouts(csv_file: BinaryIO) -> DataFrame[RawStrongWorkouts]:
-    df_raw = pd.read_csv(
-        csv_file,
-        delimiter=detect_delimiter(csv_file),
-        parse_dates=["Date"],
-    )
+def extract_workouts(csv_path: str) -> DataFrame[RawStrongWorkouts]:
+    with open(csv_path) as csv_file:
+        df_raw = pd.read_csv(
+            csv_file,
+            delimiter=detect_delimiter(csv_file),
+            parse_dates=["Date"],
+        )
     RawStrongWorkouts.validate(df_raw)
     return df_raw
 
@@ -78,9 +80,14 @@ def transform_workouts(df: DataFrame[RawStrongWorkouts]) -> DataFrame[StrongWork
     return df
 
 
-def process_workouts(csv_file: BinaryIO) -> pd.DataFrame:
-    logger.info("Processing strong workouts...")
-    df_raw = extract_workouts(csv_file)
-    df_transformed = transform_workouts(df_raw)
-    logger.info("Finished processing strong workouts...")
-    return df_transformed
+def process_workouts(
+    csv_path: str,
+    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,    
+) -> pd.DataFrame:
+    with PipelineStage(logger, "strong_workouts"):
+        df = extract_workouts(csv_path)
+        df = transform_workouts(df)
+        if load_function:
+            load_function(df, "strong_workouts")
+    return df
+

@@ -32,6 +32,7 @@ class PipelineConfig(BaseModel):
     process_github: bool
     process_kindle: bool
     process_strong: bool
+    process_app_usage: bool
 
     @classmethod
     def from_toml(cls, file_path: str) -> "PipelineConfig":

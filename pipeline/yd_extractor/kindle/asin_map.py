@@ -3,11 +3,13 @@ import logging
 import os
 import shutil
 from pathlib import Path
+from typing import Callable, Optional
 
 import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
+from yd_extractor.utils.pipeline_stage import PipelineStage
 from yd_extractor.kindle.schemas import AsinMap, RawAsinMap
 from yd_extractor.utils.utils import extract_specific_files_flat
 
@@ -73,16 +75,21 @@ def process_asin_map(
     inputs_folder: Path,
     zip_path: Path,
     cleanup: bool = True,
+    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
+    
 ) -> DataFrame[AsinMap]:
-    logger.info("Processing kindle asin map...")
-    data_folder = inputs_folder / "kindle_asin_map"
-    df_raw = extract_asin_map(data_folder, zip_path)
-    df_transformed = transform_asin_map(df_raw)
+    df = AsinMap.empty()
+    with PipelineStage(logger, "kindle_asin_map"):
+        data_folder = inputs_folder / "kindle_asin_map"
+        df = extract_asin_map(data_folder, zip_path)
+        df = transform_asin_map(df)
+        if load_function:
+            load_function(df, "kindle_asin_map")
 
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")
         shutil.rmtree(data_folder)
-    return df_transformed
+    return df
 
 
 if __name__ == "__main__":

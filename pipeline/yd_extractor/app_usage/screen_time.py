@@ -6,6 +6,7 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
+from yd_extractor.utils.pipeline_stage import PipelineStage
 from yd_extractor.app_usage.app_info_map import proccess_app_info_map
 from yd_extractor.app_usage.schemas import (AppInfoMap, AppUsageScreenTime,
                                             RawAppUsageScreenTime)
@@ -63,7 +64,7 @@ def process_screen_time(
     load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
 ) -> DataFrame[AppUsageScreenTime]:
     df = AppUsageScreenTime.empty()
-    try:
+    with PipelineStage(logger, "app_usage_screen_time"):
         df = extract_screen_time(csv_file_path)
         df_app_info_map = None
         if app_info_path:
@@ -71,8 +72,7 @@ def process_screen_time(
         df = transform_screen_time(df, df_app_info_map)
         if load_function:
             load_function(df, "app_usage_screen_time")
-    except Exception:
-        logger.exception("Error whilst processing screen time.")
+        
     return df
 
 

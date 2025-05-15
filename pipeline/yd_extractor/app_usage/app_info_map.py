@@ -8,6 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from pandera.typing.pandas import DataFrame
 
+from yd_extractor.utils.pipeline_stage import PipelineStage
 from yd_extractor.app_usage.schemas import AppInfoMap, RawAppInfoMap
 from yd_extractor.utils.pandas import rename_df_from_schema
 
@@ -74,13 +75,12 @@ def proccess_app_info_map(
     load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
 ) -> DataFrame[AppInfoMap]:
     df = AppInfoMap.empty()
-    try:
+
+    with PipelineStage(logger, "app_usage_app_info"):
         df = extract_app_info_map(csv_file_path)
         df = transform_app_info_map(df)
         if load_function:
             load_function(df, "app_info_map")
-    except Exception:
-        logger.exception("Error whilst processing app info")
     return df
 
 

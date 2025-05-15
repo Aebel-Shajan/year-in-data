@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 from pathlib import Path
+from typing import Callable, Optional
 
 import pandas as pd
 import pandera as pa
@@ -11,6 +12,7 @@ from yd_extractor.github.schemas import (GithubRepoContributions,
                                          RawGithubRepoContributions)
 from yd_extractor.utils.pandas import (convert_columns_to_numeric,
                                        validate_columns)
+from yd_extractor.utils.pipeline_stage import PipelineStage
 
 logger = logging.getLogger(__name__)
 
@@ -150,25 +152,36 @@ def transform_repo_contributions(
 
 
 def process_repo_contributions(
-    github_token: str, start_year: int = 2020
+    github_token: Optional[str], 
+    start_year: int = 2020,
+    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
 ) -> pd.DataFrame:
     logger.info("Processing github repo contributions...")
-    df_raw = pd.DataFrame()
-    current_year = datetime.now().year
-    for year in range(start_year, current_year + 1):
-        df = extract_repo_contributions(github_token, year)
-        df_raw = pd.concat([df_raw, df], ignore_index=True)
-
-    df_transformed = transform_repo_contributions(df_raw)
-    logger.info("Finished processing github repo contributions.")
-    return df_transformed
+    df = GithubRepoContributions.empty()
+    with PipelineStage(logger, "repo_contributions"):
+        if github_token is None:
+            error_message = (
+                "Couldn't process github data due to missing environment variables!"
+            )
+            raise Exception(error_message)
+        
+        df = RawGithubRepoContributions.empty()
+        current_year = datetime.now().year
+        for year in range(start_year, current_year + 1):
+            df_raw = extract_repo_contributions(github_token, year)
+            df = pd.concat([df, df_raw], ignore_index=True)
+        df = transform_repo_contributions(df)
+        
+        if load_function:
+            load_function(df, "github_repo_contributions")
+    return df
 
 
 if __name__ == "__main__":
     import os
-
     import dotenv
-
+    
+    logging.basicConfig(level=logging.INFO)
     dotenv.load_dotenv("config/.env")
     gh_token = os.environ.get("GITHUB_TOKEN")
 

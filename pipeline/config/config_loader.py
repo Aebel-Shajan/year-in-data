@@ -1,11 +1,13 @@
-from typing import Optional
-from dotenv import load_dotenv
-import toml
+import logging
 import os
+from typing import Optional
+
+import toml
+from dotenv import load_dotenv
 from pydantic import BaseModel
-import logging 
 
 logger = logging.getLogger(__name__)
+
 
 class FitbitConfig(BaseModel):
     process_fitbit: bool
@@ -13,12 +15,14 @@ class FitbitConfig(BaseModel):
     process_sleep: bool
     process_steps: bool
     process_exercise: bool
-    
+
+
 class EnvVars(BaseModel):
     DRIVE_SHARE_URL: Optional[str] = None
-    GITHUB_TOKEN:  Optional[str] = None
-    GITHUB_USERNAME:  Optional[str] = None
-    
+    GITHUB_TOKEN: Optional[str] = None
+    GITHUB_USERNAME: Optional[str] = None
+
+
 # Pydantic model to validate and parse config
 class PipelineConfig(BaseModel):
     download_from_drive: bool
@@ -28,6 +32,7 @@ class PipelineConfig(BaseModel):
     process_github: bool
     process_kindle: bool
     process_strong: bool
+    process_app_usage: bool
 
     @classmethod
     def from_toml(cls, file_path: str) -> "PipelineConfig":
@@ -35,9 +40,11 @@ class PipelineConfig(BaseModel):
         config_data = toml.load(file_path)
         return cls(**config_data)
 
+
 # Load the config from the TOML file
 def load_config(config_path: str) -> PipelineConfig:
     return PipelineConfig.from_toml(config_path)
+
 
 def load_env_vars() -> EnvVars:
     load_dotenv(override=True)

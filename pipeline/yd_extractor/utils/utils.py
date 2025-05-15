@@ -5,7 +5,6 @@ import sqlite3
 import zipfile
 from pathlib import Path
 
-
 # Setup logger
 logger = logging.getLogger(__name__)
 
@@ -90,8 +89,8 @@ def get_latest_file(folder_path: Path, file_name_glob: str) -> Path:
 
 def extract_specific_files_flat(zip_file_path: Path, prefix: str, output_path: Path):
     """
-    Extracts specific files which have the same prefix from a ZIP archive and saves 
-    them to the given output directory without preserving their original folder 
+    Extracts specific files which have the same prefix from a ZIP archive and saves
+    them to the given output directory without preserving their original folder
     structure.
 
     Args:
@@ -107,10 +106,10 @@ def extract_specific_files_flat(zip_file_path: Path, prefix: str, output_path: P
         f"\nwhich have prefix '{prefix}' "
         f"\ninto '{os.path.relpath(output_path)}' ..."
     )
-    
+
     # Open the ZIP file
-    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-       
+    with zipfile.ZipFile(zip_file_path, "r") as zip_ref:
+
         for file_name in zip_ref.namelist():
             if file_name.startswith(prefix):
                 # Extract the file to a temp location
@@ -118,9 +117,7 @@ def extract_specific_files_flat(zip_file_path: Path, prefix: str, output_path: P
                     # Get only the filename, ignoring directories
                     file_name = os.path.basename(file_name)
                     out_file_path = os.path.join(output_path, file_name)
-                    
+
                     # Write the extracted file to the output directory
                     with open(out_file_path, "wb") as output_file:
                         output_file.write(source_file.read())
-
-    

@@ -1,15 +1,22 @@
-from pathlib import Path
+import logging
 import shutil
-import pandas as pd
+from pathlib import Path
+from typing import Callable, Optional
 
-from yd_extractor.utils.pandas import validate_columns
+import pandas as pd
+import pandera as pa
+from pandera.typing.pandas import DataFrame
+
+from yd_extractor.utils.pipeline_stage import PipelineStage
+from yd_extractor.fitbit.schemas import FitbitSleep, RawFitbitSleep
+from yd_extractor.fitbit.utils import extract_json_file_data
 from yd_extractor.utils.utils import extract_specific_files_flat
 
-from yd_extractor.fitbit.utils import extract_json_file_data
-import logging
 logger = logging.getLogger(__name__)
 
-def extract_sleep(folder_path: str) -> pd.DataFrame:
+
+@pa.check_types
+def extract_sleep(data_folder: Path, zip_path: Path) -> DataFrame[RawFitbitSleep]:
     """Extract sleep data from files from the folder path. The files have the name format
     "sleep-YYYY-MM-DD.json".
 
@@ -18,6 +25,11 @@ def extract_sleep(folder_path: str) -> pd.DataFrame:
     folder_path : str
         Path to folder containing jsons with sleep data.
     """
+    extract_specific_files_flat(
+        zip_file_path=zip_path,
+        prefix="Takeout/Fitbit/Global Export Data/sleep",
+        output_path=data_folder,
+    )
     keys_to_keep = [
         "logId",
         "dateOfSleep",
@@ -31,15 +43,15 @@ def extract_sleep(folder_path: str) -> pd.DataFrame:
         "timeInBed",
         "efficiency",
     ]
-    df_sleep_raw = extract_json_file_data(
-        folder_path,
-        file_name_prefix="sleep",
-        keys_to_keep=keys_to_keep
+    df = extract_json_file_data(
+        data_folder, file_name_prefix="sleep", keys_to_keep=keys_to_keep
     )
-    return df_sleep_raw
-    
-# no standardise 😔
-def transform_sleep(df: pd.DataFrame) -> pd.DataFrame:
+    df = RawFitbitSleep.validate(df)
+    return df
+
+
+@pa.check_types
+def transform_sleep(df: DataFrame[RawFitbitSleep]) -> DataFrame[FitbitSleep]:
     """Apply transformations to sleep dataframe, then saves dataframe in table:
     `year_in_data.fitbit_sleep_data_processed`
 
@@ -51,52 +63,62 @@ def transform_sleep(df: pd.DataFrame) -> pd.DataFrame:
 
     """
     # Select only important data for current analysis
-    columns_to_keep = ["dateOfSleep", "startTime", "endTime", "duration"]
-    validate_columns(df, columns_to_keep)
-    df = df[columns_to_keep]
+    df = df[
+        [
+            "dateOfSleep",
+            "startTime",
+            "endTime",
+            "minutesAsleep",
+        ]
+    ]
     df = df.rename(
         columns={
             "dateOfSleep": "date",
             "startTime": "start_time",
             "endTime": "end_time",
-            "duration": "total_duration",
+            "minutesAsleep": "total_sleep_minutes",
         }
     )
-    df["total_duration_hours"] = df["total_duration"].apply(
-        lambda x: round(x / (1000 * 60 * 60), 2)
+    df["total_sleep_hours"] = df["total_sleep_minutes"].apply(
+        lambda x: round(x / 60, 2)
     )
-    df = df.drop(columns=["total_duration"])
-    df.loc[:, "date"] = pd.to_datetime(df["date"]).dt.date
+    df = df.drop(columns=["total_sleep_minutes"])
     df.loc[:, "start_time"] = pd.to_datetime(df["start_time"]).dt.time
     df.loc[:, "end_time"] = pd.to_datetime(df["end_time"]).dt.time
-    df = df.groupby(["date"]).aggregate(
-        {"start_time": "min", "end_time": "max", "total_duration_hours": "sum"}
-    ).reset_index()
+    df = (
+        df.groupby(["date"])
+        .aggregate(
+            {
+                "start_time": "first",
+                "end_time": "last",
+                "total_sleep_hours": "sum",
+            }
+        )
+        .reset_index()
+    )
+    df["total_sleep_hours"] = df["total_sleep_hours"].round(2)
+    df = FitbitSleep.validate(df)
     return df
 
 
 def process_sleep(
     inputs_folder: Path,
     zip_path: Path,
-    cleanup: bool=True
+    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
+    cleanup: bool = True,
 ) -> pd.DataFrame:
     # Unzip and extract calories jsons from zip file.
-    logger.info("Processing fitbit sleep...")
+    df = FitbitSleep.empty()
     data_folder = inputs_folder / "sleep"
-    extract_specific_files_flat(
-        zip_file_path=zip_path,
-        prefix="Takeout/Fitbit/Global Export Data/sleep",
-        output_path=data_folder
-    )
-    df_raw = extract_sleep(data_folder)
     
-    df_standardized = transform_sleep(df_raw)
-    
-    logger.info("Finished processing fitbit sleep")
-    
-    
+    with PipelineStage(logger, "fitbit_sleep"):
+        df = extract_sleep(data_folder, zip_path)
+        df = transform_sleep(df)
+        if load_function:
+            load_function(df, "fitbit_sleep")
+
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")
         shutil.rmtree(data_folder)
-        
-    return df_standardized
+
+    return df

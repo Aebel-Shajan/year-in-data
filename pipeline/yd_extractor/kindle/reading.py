@@ -1,108 +1,116 @@
-from pathlib import Path
-import shutil
-import pandas as pd
-
-from typing import BinaryIO, Union
-
-from yd_extractor.utils.pandas import detect_delimiter, validate_columns
-from yd_extractor.utils.utils import extract_specific_files_flat
 import logging
+import shutil
+from pathlib import Path
+from typing import Callable, Optional, Union
+
+import pandas as pd
+import pandera as pa
+from pandera.typing.pandas import DataFrame
+
+from yd_extractor.utils.pipeline_stage import PipelineStage
+from yd_extractor.kindle.asin_map import process_asin_map
+from yd_extractor.kindle.schemas import (AsinMap, KindleReading,
+                                         RawKindleReading)
+from yd_extractor.utils.pandas import detect_delimiter, rename_df_from_schema
+from yd_extractor.utils.utils import extract_specific_files_flat
+
 logger = logging.getLogger(__name__)
 
-def extract_reading(csv_file: BinaryIO):
+
+@pa.check_types
+def extract_reading(data_folder: Path, zip_file_path) -> DataFrame[RawKindleReading]:
+    kindle_search_prefix = (
+        "Kindle.Devices.ReadingSession" "/Kindle.Devices.ReadingSession.csv"
+    )
+    extract_specific_files_flat(
+        zip_file_path=zip_file_path,
+        prefix=kindle_search_prefix,
+        output_path=data_folder,
+    )
+    csv_path = data_folder / "Kindle.Devices.ReadingSession.csv"
     # Read in csv from config into a pandas dataframe
-    delimeter = ","
-    try:
+    df = None
+    with open(csv_path) as csv_file:
         delimeter = detect_delimiter(csv_file)
-    except:
-        delimeter = ","
-    df_raw = pd.read_csv(
-        csv_file,
-        delimiter=delimeter,
-        parse_dates=["start_timestamp", "end_timestamp"],
-    )
-    return df_raw
+        df = pd.read_csv(
+            csv_file,
+            delimiter=delimeter,
+            parse_dates=["start_timestamp", "end_timestamp"],
+        )
+    df = RawKindleReading.validate(df)
+    return df
 
 
-def transform_reading(df: pd.DataFrame) -> pd.DataFrame:
-    columns_to_keep = [
-        "ASIN",
-        "start_timestamp",
-        "total_reading_millis",
-        "number_of_page_flips",
-    ]
-    validate_columns(df, columns_to_keep)
-    df = df[columns_to_keep].copy()
-    df = df.rename(
-        columns={
-            "start_timestamp": "start_time",
-            "total_reading_millis": "total_reading_milliseconds",
-            "ASIN": "asin",
-        }
+def transform_reading(
+    df: DataFrame[RawKindleReading],
+    asin_map: DataFrame[AsinMap],
+) -> DataFrame[KindleReading]:
+    df = rename_df_from_schema(df, RawKindleReading)
+    df = df[df["start_timestamp"] != "Not Available"]
+    df["start_timestamp"] = pd.to_datetime(df["start_timestamp"])
+    df.loc[:, "date"] = df["start_timestamp"].dt.date
+    df.loc[:, "start_time"] = df["start_timestamp"].dt.time
+    df["total_reading_minutes"] = df["total_reading_millis"].apply(
+        lambda x: round(x / (60 * 1000))
     )
-    df = df[pd.to_datetime(df["start_time"], errors="coerce").notna()]
-    df.loc[:, "date"] = pd.to_datetime(df["start_time"], format="ISO8601").dt.date
-    df.loc[:, "start_time"] = pd.to_datetime(df["start_time"], format="ISO8601").dt.time
-    df["asin"] = df["asin"].astype(str)
-    df["image"] = df["asin"].apply(get_asin_image)
+    df.drop("total_reading_millis", axis=1)
     df = (
-        df.groupby(["asin", "date", "image"])
+        df.groupby(["asin", "date"])
         .aggregate(
             {
                 "start_time": "min",
-                "total_reading_milliseconds": "sum",
+                "total_reading_minutes": "sum",
                 "number_of_page_flips": "sum",
             }
         )
         .reset_index()
     )
-    df["total_reading_minutes"] = df["total_reading_milliseconds"].apply(
-        lambda x: round(x / (60 * 1000))
-    )
-    df = df.drop(columns=["total_reading_milliseconds"])
-    df = df[df["total_reading_minutes"] >= 15]
+
+    # Inner join on asin map
+    df = asin_map.merge(df, how="inner", on="asin")
+    df = df.rename(columns={"product_name": "book_name"})
+    df["image"] = df["asin"].apply(get_asin_image)
+
     df = df[
         [
             "date",
             "start_time",
             "asin",
+            "book_name",
             "total_reading_minutes",
             "image",
             "number_of_page_flips",
         ]
     ]
+    df = KindleReading.validate(df)
     return df
 
 
 def process_reading(
-    inputs_folder: Path, zip_path: Path, cleanup: bool = True
+    inputs_folder: Path,
+    zip_path: Path,
+    cleanup: bool = True,
+    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
 ) -> pd.DataFrame:
     """
     Read in kindle data from csv file.
 
     """
-    logger.info("Processing amazon kindle reading...")
-    kindle_search_prefix = (
-        "Kindle.Devices.ReadingSession" "/Kindle.Devices.ReadingSession.csv"
-    )
-    data_folder = inputs_folder / "kindle"
-    extract_specific_files_flat(
-        zip_file_path=zip_path,
-        prefix=kindle_search_prefix,
-        output_path=data_folder,
-    )
-    csv_path = data_folder / "Kindle.Devices.ReadingSession.csv"
-    with open(csv_path) as csv:
-        df_raw = extract_reading(csv)
-
-    df_processed = transform_reading(df_raw)
+    df = KindleReading.empty()
     
-    logger.info("Finished processing amazon kindle reading..")
-
+    with PipelineStage(logger, "kindle_reading"):
+        data_folder = inputs_folder / "kindle"
+        df = extract_reading(data_folder, zip_path)
+        asin_map = process_asin_map(inputs_folder, zip_path, cleanup)
+        df = transform_reading(df, asin_map)
+        if load_function:
+            load_function(df, "kindle_reading")
+        
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")
         shutil.rmtree(data_folder)
-    return df_processed
+        
+    return df
 
 
 def is_valid_asin(asin: str) -> bool:
@@ -141,3 +149,12 @@ def get_asin_image(asin: str) -> Union[str, None]:
     if not is_valid_asin(asin):
         return None
     return f"https://images.amazon.com/images/P/{asin}.jpg"
+
+
+if __name__ == "__main__":
+    df = process_reading(
+        inputs_folder=Path("data/input"),
+        zip_path=Path("data/input/Kindle.zip"),
+    )
+    # breakpoint()
+    # df.to_csv(Path("data/output/kindle_reading.csv"), index=False)

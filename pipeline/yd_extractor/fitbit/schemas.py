@@ -88,6 +88,11 @@ class RawFitbitExercise(pa.DataFrameModel):
 
 
 class FitbitExercise(pa.DataFrameModel):
+    date: Series[pa.DateTime] = pa.Field(
+        metadata={
+            "tag": "date_column",
+        }
+    )
     activity_name: Series[str] = pa.Field(
         metadata={
             "tag": "category_column",

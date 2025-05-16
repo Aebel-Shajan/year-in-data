@@ -172,7 +172,11 @@ def get_nice_range(min_val: float, max_val:float) -> list[float]:
 def get_range_for_df_column(df: pd.DataFrame, column: str):
     if column not in df.columns:
         raise ValueError(f"Column provided ({column}) does not exist in DataFrame.")
-
+    df = df.groupby("date").aggregate(
+        {
+            column: "sum"
+        }
+    )
     min_val = get_nth_percentile(df, column, 10)
     max_val = get_nth_percentile(df, column, 90)
     return get_nice_range(min_val, max_val)

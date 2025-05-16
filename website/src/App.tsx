@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
-import { axiosInstance } from "./api/axiosClient";
 import DataVis from "./components/DataVis";
 
 
@@ -12,26 +11,30 @@ interface Routes {
 
 const HomePage = () => {
   const [dataEndpoints, setDataEndpoints] = useState<Routes[]>([])
-  const [year, setYear] = useState(2023)
+  const [year, setYear] = useState(2024)
 
 
   useEffect(() => {
-    axiosInstance
-      .get("/retrieve-data/data-routes")
-      .then(response => response.data)
-      .then((data) => {
-        console.log(data)
+
         const endpoints: Routes[] = []
-        const dataRoutes: string[] = data.data
+        const dataRoutes: string[] = [
+          "app_usage_screen_time",
+          "kindle_reading",
+          "github_repo_contributions",
+          "strong_workouts",
+          "fitbit_sleep",
+          "fitbit_exercises",
+          "fitbit_calories",
+          "fitbit_steps",
+
+        ]
         dataRoutes.forEach(route => {
           endpoints.push({
             "name": route,
-            "path": "/retrieve-data/" + route
+            "path": "/data/" + route + ".csv"
           })
         })
-        setDataEndpoints(endpoints.reverse())
-      })
-      .catch(e => console.error(e))
+        setDataEndpoints(endpoints)
 
   }, [])
 

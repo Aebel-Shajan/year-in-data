@@ -1,8 +1,4 @@
 
-import ThemeController from "./ThemeController";
-
-
-
 const Navbar = (
   {
     year,
@@ -36,13 +32,6 @@ const Navbar = (
             {range(2023, new Date().getFullYear()).map((year) => <li key={year}><a onClick={() => handleSelectYear(year)}>{year}</a></li>)}
           </ul>
         </div>
-
-      </div>
-
-
-
-      <div className="navbar-end flex-none gap-5">
-        <ThemeController />
 
       </div>
 

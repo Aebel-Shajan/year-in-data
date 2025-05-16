@@ -49,7 +49,6 @@ const DataVis = (
       index: number
     }
 ) => {
-
   const d3Colors = [d3.schemeGreens, d3.schemeBlues, d3.schemeOranges, d3.schemePurples, d3.schemeReds]
   const d3ColorIndex = index % d3Colors.length
   const [data, setData] = useState<Data[]>([])
@@ -59,7 +58,6 @@ const DataVis = (
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number>(-1)
   const [isLoading, setIsLoading] = useState(false);
   // const [range, setRange] = useState<[number, number] | null>(null);
-
 
 
   // Date col
@@ -82,14 +80,15 @@ const DataVis = (
     if (!categoryCol) return []
     const uniqueCategories = new Set()
     const newCategoryGroups: string[] = []
-    data.forEach(row => {
+    const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
+    filteredByYear.forEach(row => {
       if (!uniqueCategories.has(row[categoryCol])) {
         newCategoryGroups.push(row[categoryCol] as string)
         uniqueCategories.add(row[categoryCol])
       }
     })
     return newCategoryGroups
-  }, [categoryCol, data])
+  }, [categoryCol, data, year])
 
   // Image col
   const imageCol: string | null = getFirstColumnByTag(metadata, "image_column")
@@ -97,7 +96,8 @@ const DataVis = (
     if (!categoryCol || !imageCol) return []
     const uniqueImages = new Set()
     const newImageGroups: { name: string, imageUrl: string }[] = []
-    data.forEach(row => {
+    const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
+    filteredByYear.forEach(row => {
       if (!uniqueImages.has(row[categoryCol])) {
         newImageGroups.push({
           name: row[categoryCol] as string,
@@ -107,7 +107,7 @@ const DataVis = (
       }
     })
     return newImageGroups
-  }, [categoryCol, data, imageCol])
+  }, [categoryCol, data, imageCol, year])
 
   // Color scale
   const ticks: number[] = [1, 5, 10]
@@ -124,21 +124,25 @@ const DataVis = (
 
 
   useEffect(() => {
-    if (!categoryCol) return
+    const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
+    if (!categoryCol) {
+      setFilteredData(filteredByYear)
+      return
+    }
     if (selectedCategoryIndex == -1 || selectedCategoryIndex >= categoryGroups.length) {
-      setFilteredData(data)
+      setFilteredData(filteredByYear)
       return
     }
     if (imageCol) {
-      setFilteredData(data.filter(
+      setFilteredData(filteredByYear.filter(
         row => row[categoryCol] == imageGroups[selectedCategoryIndex].name
       ))
     } else {
-      setFilteredData(data.filter(
+      setFilteredData(filteredByYear.filter(
         row => row[categoryCol] == categoryGroups[selectedCategoryIndex]
       ))
     }
-  }, [selectedCategoryIndex])
+  }, [selectedCategoryIndex, year])
 
   useEffect(() => {
     let isMounted = true; // to avoid setting state on unmounted component
@@ -153,7 +157,8 @@ const DataVis = (
         const dataResponse = await fetchData(url) as string
         const data: Data[] = d3.csvParse(dataResponse)
         setData(data)
-        setFilteredData(data)
+        const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
+        setFilteredData(filteredByYear)
         // Fetch json metadata
         const metadataResponse = await fetchData("/metadata/" + name + "_metadata.json") as TableMetadataResponse
         const firstKey = Object.keys(metadataResponse)[0];
@@ -173,9 +178,7 @@ const DataVis = (
     return () => {
       isMounted = false;
     };
-  }, [url, year]); // empty dependency array = run once on mount
-
-
+  }, [url]); // empty dependency array = run once on mount
 
 
 

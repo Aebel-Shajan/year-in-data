@@ -23,7 +23,7 @@ const HomePage = () => {
           "github_repo_contributions",
           "strong_workouts",
           "fitbit_sleep",
-          "fitbit_exercises",
+          "fitbit_exercise",
           "fitbit_calories",
           "fitbit_steps",
 

@@ -173,7 +173,7 @@ def process_repo_contributions(
         df = transform_repo_contributions(df)
         
         if load_function:
-            load_function(df, "github_repo_contributions")
+            load_function(df, "github_repo_contributions", GithubRepoContributions)
     return df
 
 

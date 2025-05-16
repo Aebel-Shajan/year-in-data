@@ -67,9 +67,6 @@ class KindleReading(pa.DataFrameModel):
     )
     asin: Series[str] = pa.Field(
         nullable=False,
-        metadata={
-            "tag": "",
-        },
     )
     book_name: Series[str] = pa.Field(
         nullable=True,
@@ -81,18 +78,21 @@ class KindleReading(pa.DataFrameModel):
         nullable=False,
         metadata={
             "tag": "value_column",
+            "units": "minutes",
         },
     )
     image: Series[str] = pa.Field(
         nullable=False,
         metadata={
             "tag": "image_column",
+            "category": "book_name",
         },
     )
     number_of_page_flips: Series[int] = pa.Field(
         nullable=False,
         metadata={
             "tag": "value_column",
+            "units": "page flips",
         },
     )
 

@@ -80,7 +80,7 @@ def proccess_app_info_map(
         df = extract_app_info_map(csv_file_path)
         df = transform_app_info_map(df)
         if load_function:
-            load_function(df, "app_info_map")
+            load_function(df, "app_info_map", AppInfoMap)
     return df
 
 

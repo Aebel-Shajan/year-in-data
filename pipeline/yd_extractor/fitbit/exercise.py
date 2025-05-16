@@ -111,7 +111,7 @@ def process_exercise(
         df = extract_exercise(data_folder, zip_path)
         df = transform_exercise(df)
         if load_function:
-            load_function(df, "fitbit_exercise")
+            load_function(df, "fitbit_exercise", FitbitExercise)
 
 
     if cleanup:

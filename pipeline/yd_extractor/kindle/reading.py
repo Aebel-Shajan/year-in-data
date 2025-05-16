@@ -104,7 +104,7 @@ def process_reading(
         asin_map = process_asin_map(inputs_folder, zip_path, cleanup)
         df = transform_reading(df, asin_map)
         if load_function:
-            load_function(df, "kindle_reading")
+            load_function(df, "kindle_reading", KindleReading)
         
     if cleanup:
         logger.info(f"Removing folder {data_folder} from zip...")

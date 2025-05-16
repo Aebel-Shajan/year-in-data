@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from pathlib import Path
@@ -16,6 +17,7 @@ from yd_extractor.utils.logger import (
 )
 from yd_extractor.utils.utils import get_latest_file
 import pandas as pd
+import pandera as pa
 
 # Create a logger
 logger = logging.getLogger()
@@ -58,13 +60,21 @@ def run_pipeline(
     input_data_folder = root_dir / "data" / "input"
     output_data_folder = root_dir / "data" / "output"
 
-    def load_function(df: pd.DataFrame, name: str):
+    def load_function(df: pd.DataFrame, name: str, schema: pa.DataFrameModel):
         save_path = output_data_folder / (name + ".csv")
         logger.info(f"Saving file into {save_path}..")
         df.to_csv(save_path, index=False)
 
+        metadata = schema.get_metadata()
+
+        # Save to a JSON file
+        output_file = output_data_folder / "metadata" / (name + "_metadata.json")
+        with open(output_file, "w") as file:
+            json.dump(metadata, file, indent=2)
+
     os.makedirs(input_data_folder, exist_ok=True)
     os.makedirs(root_dir / "data" / "output", exist_ok=True)
+    os.makedirs(root_dir / "data" / "output" / "metadata", exist_ok=True)
     logger.info(f"Inputs and output data will be stored here: {root_dir / 'data'}")
 
     if config.download_from_drive:

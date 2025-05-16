@@ -27,12 +27,38 @@ class RawAppUsageScreenTime(pa.DataFrameModel):
 
 
 class AppUsageScreenTime(pa.DataFrameModel):
-    app_name: Series[str] = pa.Field()
-    date: Series[pa.Timestamp] = pa.Field()
-    time: Series[object] = pa.Field()
-    duration_minutes: Series[int] = pa.Field()
-    image: Optional[Series[str]] = pa.Field()
-    category: Optional[Series[str]] = pa.Field()
+    app_name: Series[str] = pa.Field(
+        metadata={
+            "tag": "category_column",
+        },
+    )
+    date: Series[pa.Timestamp] = pa.Field(
+        metadata={
+            "tag": "date_column",
+        },
+    )
+    time: Series[object] = pa.Field(
+        metadata={
+            "tag": "time_column",
+        },
+    )
+    duration_minutes: Series[int] = pa.Field(
+        metadata={
+            "tag": "value_column",
+            "units": "minutes",
+        }
+    )
+    image: Optional[Series[str]] = pa.Field(
+        metadata={
+            "tag": "image_column",
+            "category": "app_name",
+        },
+    )
+    category: Optional[Series[str]] = pa.Field(
+        # metadata={ # TODO: Add in future
+        #     "tag": "category_column",
+        # }
+    )
 
 
 class RawAppInfoMap(pa.DataFrameModel):

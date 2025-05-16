@@ -12,7 +12,7 @@ from yd_extractor.kindle.asin_map import process_asin_map
 from yd_extractor.kindle.schemas import (AsinMap, KindleReading,
                                          RawKindleReading)
 from yd_extractor.utils.pandas import detect_delimiter, rename_df_from_schema
-from yd_extractor.utils.utils import extract_specific_files_flat
+from yd_extractor.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 

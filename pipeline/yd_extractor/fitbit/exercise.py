@@ -12,7 +12,7 @@ from yd_extractor.fitbit.schemas import FitbitExercise, RawFitbitExercise
 from yd_extractor.fitbit.utils import extract_json_file_data
 from yd_extractor.utils.pandas import (convert_columns_to_numeric,
                                        validate_columns)
-from yd_extractor.utils.utils import extract_specific_files_flat
+from yd_extractor.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 

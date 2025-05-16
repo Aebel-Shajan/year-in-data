@@ -38,7 +38,9 @@ switch_or_create_orphan_branch data-output
 echo "Moving pipeline data output to ./data ..."
 mkdir -p ./data/
 mv ./pipeline/data/output/* ./data
+mv ./data/metadata ./
 git add ./data
+git add ./metadata
 echo $(ls)
 
 

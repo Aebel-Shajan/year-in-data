@@ -2,8 +2,16 @@ import json
 import logging
 import os
 import sqlite3
+from typing import Callable, Optional
 import zipfile
 from pathlib import Path
+
+import gdown
+import pandas as pd
+import pandera as pa
+
+from yd_extractor.utils.logger import redirect_output_to_logger
+from yd_extractor.utils.pandas import get_range_for_df_column
 
 # Setup logger
 logger = logging.getLogger(__name__)
@@ -121,3 +129,56 @@ def extract_specific_files_flat(zip_file_path: Path, prefix: str, output_path: P
                     # Write the extracted file to the output directory
                     with open(out_file_path, "wb") as output_file:
                         output_file.write(source_file.read())
+
+
+def download_files_from_drive(
+    input_data_folder: Path,
+    env_vars: dict,
+):
+    if env_vars["DRIVE_SHARE_URL"] is None:
+        raise Exception("Expected DRIVE_SHARE_URL in .env folder!")
+    logger.info("Downloading data from google drive...")
+
+    with redirect_output_to_logger(logger, stderr_level=logging.INFO, name="gdown"):
+        gdown.download_folder(
+            url=env_vars["DRIVE_SHARE_URL"],
+            output=str(input_data_folder.absolute()),
+            use_cookies=False,
+        )
+
+
+def get_metadata_from_schema(
+    schema: pa.DataFrameModel,
+    df: Optional[pd.DataFrame]=None,
+) -> dict:
+    metadata = schema.get_metadata()
+    schema_name = list(metadata.keys())[0]
+    column_metadata_dict = metadata[schema_name]["columns"]
+    for column in column_metadata_dict.keys():
+        if not column_metadata_dict[column]:
+            column_metadata_dict[column] = {}
+        if "tag" in column_metadata_dict[column].keys():
+            if column_metadata_dict[column]["tag"] == "value_column": 
+                logger.info(f"Getting range for {column} in {schema_name}")
+                range = [0, 1]
+                if df is not None:
+                    range = get_range_for_df_column(df, column)
+                column_metadata_dict[column]["range"] = range
+    return metadata
+
+        
+def create_load_function(output_data_folder: str) -> Callable:
+    def load_function(df: pd.DataFrame, name: str, schema: pa.DataFrameModel):
+        save_path = output_data_folder / (name + ".csv")
+        logger.info(f"Saving file into {save_path}..")
+        df.to_csv(save_path, index=False)
+
+        # Save to a JSON file
+        metadata = get_metadata_from_schema(schema, df)
+        output_file = output_data_folder / "metadata" / (name + "_metadata.json")
+        with open(output_file, "w") as file:
+            json.dump(metadata, file, indent=2)
+            
+    return load_function
+
+

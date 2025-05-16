@@ -1,7 +1,8 @@
 import csv
+import json
 import logging
 import re
-from typing import BinaryIO
+from typing import BinaryIO, Callable
 
 import pandas as pd
 import pandera as pa
@@ -147,3 +148,36 @@ def rename_df_from_schema(df: pd.DataFrame, schema: pa.DataFrameModel) -> pd.Dat
         rename_fields[current_name] = new_name
 
     return df.rename(columns=rename_fields)
+
+
+def get_nth_percentile(df: pd.DataFrame, column: str, nth_percentile: int):
+    if column not in df.columns:
+        raise ValueError(f"Column '{column}' not found in DataFrame.")
+
+    # Filter out zero values and compute the percentile
+    filtered = df[df[column] != 0.0][column]
+    if filtered.empty:
+        return None  # or some default value / raise error
+    return filtered.quantile(nth_percentile / 100.0)
+
+
+def get_nice_range(min_val: float, max_val:float) -> list[float]:
+    range_diff = max_val - min_val
+    magnitude = 10 ** (len(str(int(range_diff))) - 1)
+    lower_bound = (min_val // magnitude) * magnitude
+    upper_bound = ((max_val // magnitude) + 1) * magnitude
+    return [lower_bound, upper_bound]
+
+
+def get_range_for_df_column(df: pd.DataFrame, column: str):
+    if column not in df.columns:
+        raise ValueError(f"Column provided ({column}) does not exist in DataFrame.")
+    df = df.groupby("date").aggregate(
+        {
+            column: "sum"
+        }
+    )
+    min_val = get_nth_percentile(df, column, 10)
+    max_val = get_nth_percentile(df, column, 90)
+    return get_nice_range(min_val, max_val)
+

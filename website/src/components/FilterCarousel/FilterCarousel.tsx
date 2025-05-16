@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
 import styles from "./FilterCarousel.module.css"
+import itemStyles from "./FilterItem/FilterItem.module.css"
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import FilterItem from "./FilterItem/FilterItem";
 
-interface ItemType {
+export interface ItemType {
   name: string,
   imageUrl?: string,
 }
@@ -24,41 +26,23 @@ const FilterCarousel = (
   const [isHovered, setIsHovered] = useState(false)
 
   const itemImageElements = items.map((item, index) => {
-    const classes = [styles.itemContainer]
-    if (selectedIndex === index) {
-      classes.push(styles.itemSelected)
-    }
-
     return (
-      <div
-        className={classes.join(" ")}
-        key={`book-${index}`}
-        onClick={() => setSelectedIndex(index)}
-      >
-        {
-          item["imageUrl"]
-            ?
-            <img
-              className={styles.itemImage}
-              src={item["imageUrl"]} />
-            :
-            <div
-              className={styles.itemText}
-            >
-              {item["name"]}
-            </div>
-        }
-      </div>
+      <FilterItem
+        index={index}
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+        item={item}
+      />
     )
   })
 
   const showAllElement = (
     <div
-      className={[styles.itemContainer, selectedIndex === -1 ? styles.itemSelected : ""].join(" ")}
+      className={[itemStyles.itemContainer, selectedIndex === -1 ? itemStyles.itemSelected : ""].join(" ")}
       key={`book--1`}
       onClick={() => setSelectedIndex(-1)}
     >
-      <div className={styles.itemText}>
+      <div className={itemStyles.itemText}>
         Show all
       </div>
     </div>

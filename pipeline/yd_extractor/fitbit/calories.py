@@ -10,7 +10,7 @@ from yd_extractor.fitbit.utils import (extract_json_file_data,
                                        transform_time_series_data)
 from yd_extractor.utils.logger import (log_system_resources,
                                        redirect_output_to_logger)
-from yd_extractor.utils.utils import extract_specific_files_flat
+from yd_extractor.utils.io import extract_specific_files_flat
 from yd_extractor.fitbit.schemas import TimeSeriesData
 
 logger = logging.getLogger(__name__)

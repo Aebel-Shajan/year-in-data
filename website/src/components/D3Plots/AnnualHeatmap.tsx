@@ -58,7 +58,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
     const week = d3.timeWeek.count(d3.timeYear(date), date);
     const day = date.getDay();
     const dateStr = date.toISOString().slice(0, 10);
-    const categoryEntries = Array.from(groupedData.get(dateStr)?.entries() || []);
+    const categoryEntries = Array.from(groupedData.get(dateStr)?.entries() || []).sort((a, b) => (b[1] - a[1]) );
     const totalValue = categoryEntries.reduce(
       (prev: number, current: [string, number]) => {
         return prev + current[1];
@@ -124,7 +124,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
               <p>
                 ${dateStr} (${date.toLocaleDateString(undefined, { weekday: 'long' })})
               </p>`
-              categoryEntries.forEach(entry => {
+              categoryEntries.slice(0, 3).forEach(entry => {
                 innerHTML += `
               <p>
                 ${entry[0]} ${Number(entry[1].toPrecision(3))} ${units}

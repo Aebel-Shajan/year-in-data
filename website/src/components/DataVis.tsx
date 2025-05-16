@@ -7,12 +7,29 @@ import {  createColorScale } from "./D3Plots/d3Utils"
 import Legend from "./D3Plots/Legend"
 import FilterCarousel from "./FilterCarousel/FilterCarousel"
 
+type ColumnCategory = (
+  | "date_column" 
+  | "value_column" 
+  | "time_column" 
+  | "category_column" 
+  | "image_column" 
+  | "link_column"
+)
+interface ColumnMetdata {
+  tag: ColumnCategory | null
+  units: string | null
+  category: string | null
+  range?: [number, number] 
+}
 
-interface Metadata {
-  name: string,
-  type: string,
-  classification: string,
-  units: string
+interface TableMetadata {
+  [column: string]: ColumnMetdata | null
+}
+
+interface TableMetadataResponse {
+  [schemaName: string]: {
+    columns: TableMetadata
+  }
 }
 
 interface Data {
@@ -33,47 +50,55 @@ const DataVis = (
       index: number
     }
 ) => {
-
   const d3Colors = [d3.schemeGreens, d3.schemeBlues, d3.schemeOranges, d3.schemePurples, d3.schemeReds]
   const d3ColorIndex = index % d3Colors.length
   const [data, setData] = useState<Data[]>([])
+  const [metadata, setMetadata] = useState<TableMetadata>({})
   const [filteredData, setFilteredData] = useState<Data[]>([])
-  const [valueCols, setValueCols] = useState<Metadata[]>([])
-  const [dateCol, setDateCol] = useState<string>("date")
-  const [categoryCol, setCategoryCol] = useState<string | null>(null)
-  const [selectedValueCol, setSelectedValueCol] = useState<number>(0)
+  const [selectedValueColIndex, setSelectedValueColIndex] = useState<number>(0)
+  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number>(-1)
   const [isLoading, setIsLoading] = useState(false);
-  const [range, setRange] = useState<[number, number] | null>(null);
-  const [imageCol, setImageCol] = useState<string | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<number>(-1)
+  // const [range, setRange] = useState<[number, number] | null>(null);
 
-  let ticks: number[] = [0, 10]
-  if (range) {
-    ticks = d3.ticks(range[0], range[1], 4).filter((value) => value !== 0)
-    ticks.unshift(0.001)
-    ticks.pop()
+
+  // Date col
+  const dateCol: string = getFirstColumnByTag(metadata, "date_column") || "date"
+
+  // Value col
+  const possibleValueCols: string[] = getColumnsByTag(metadata, "value_column") 
+  const selectedValueCol  = possibleValueCols[selectedValueColIndex] 
+  const valueColMetada = metadata[selectedValueCol]
+  let valueColUnits = "units"
+  if (valueColMetada) {
+    if (valueColMetada.units) {
+      valueColUnits = valueColMetada.units
+    }
   }
-  const colorScale = createColorScale(ticks, d3Colors[d3ColorIndex])
-
-
+  
+  // Category col
+  const categoryCol: string | null = getFirstColumnByTag(metadata, "category_column")
   const categoryGroups: string[] = useMemo(() => {
     if (!categoryCol) return []
     const uniqueCategories = new Set()
     const newCategoryGroups: string[] = []
-    data.forEach(row => {
+    const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
+    filteredByYear.forEach(row => {
       if (!uniqueCategories.has(row[categoryCol])) {
         newCategoryGroups.push(row[categoryCol] as string)
         uniqueCategories.add(row[categoryCol])
       }
     })
     return newCategoryGroups
-  }, [categoryCol, data])
+  }, [categoryCol, data, year])
 
+  // Image col
+  const imageCol: string | null = getFirstColumnByTag(metadata, "image_column")
   const imageGroups: { name: string, imageUrl: string }[] = useMemo(() => {
     if (!categoryCol || !imageCol) return []
     const uniqueImages = new Set()
     const newImageGroups: { name: string, imageUrl: string }[] = []
-    data.forEach(row => {
+    const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
+    filteredByYear.forEach(row => {
       if (!uniqueImages.has(row[categoryCol])) {
         newImageGroups.push({
           name: row[categoryCol] as string,
@@ -83,20 +108,45 @@ const DataVis = (
       }
     })
     return newImageGroups
-  }, [categoryCol, data, imageCol])
+  }, [categoryCol, data, imageCol, year])
+
+  // Color scale
+  let ticks: number[] = [1, 5, 10]
+  if (metadata[selectedValueCol]) {
+    const range = metadata[selectedValueCol]["range"]
+    if (range) {
+      ticks = d3.ticks(range[0], range[1], 4).filter((value) => value !== 0)
+      ticks.unshift(0.001)
+      ticks.pop()
+    }
+  }
+  const colorScale = createColorScale(ticks, d3Colors[d3ColorIndex])
+
+
+  
+
+
 
   useEffect(() => {
-    if (!categoryCol) return
-    if (selectedCategory == -1 || selectedCategory >= categoryGroups.length) {
-      setFilteredData(data)
+    const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
+    if (!categoryCol) {
+      setFilteredData(filteredByYear)
+      return
+    }
+    if (selectedCategoryIndex == -1 || selectedCategoryIndex >= categoryGroups.length) {
+      setFilteredData(filteredByYear)
       return
     }
     if (imageCol) {
-      setFilteredData(data.filter(row => row[categoryCol] == imageGroups[selectedCategory].name))
+      setFilteredData(filteredByYear.filter(
+        row => row[categoryCol] == imageGroups[selectedCategoryIndex].name
+      ))
     } else {
-      setFilteredData(data.filter(row => row[categoryCol] == categoryGroups[selectedCategory]))
+      setFilteredData(filteredByYear.filter(
+        row => row[categoryCol] == categoryGroups[selectedCategoryIndex]
+      ))
     }
-  }, [selectedCategory, data, categoryCol, imageGroups])
+  }, [selectedCategoryIndex, year])
 
   useEffect(() => {
     let isMounted = true; // to avoid setting state on unmounted component
@@ -106,33 +156,18 @@ const DataVis = (
       setIsLoading(true);
       console.log(isLoading)
       try {
-        console.log(`Fetching data from ${url + "/" + year}`)
-        const response = await fetchData(url + "/" + year) as { [keys: string]: unknown }
-        const newMetadata = response["metadata"] as Metadata[]
-        const newData = response["data"] as Data[]
-        if (isMounted) {
-          setData(newData)
-          setFilteredData(newData)
-          setValueCols(newMetadata.filter((column) => column.classification == "value_column"))
-          let newDateCol = "date"
-          const foundDateCols = newMetadata.filter(column => column.classification == "date_column")
-          if (foundDateCols.length > 0) {
-            newDateCol = foundDateCols[0].name
-          }
-          let newCategoryCol = null
-          const foundCategoryCols = newMetadata.filter(column => column.classification == "category_column")
-          if (foundCategoryCols.length > 0) {
-            newCategoryCol = foundCategoryCols[0].name
-          }
-          let newImageCol = null
-          const foundImageCols = newMetadata.filter(column => column.classification == "image_column")
-          if (foundImageCols.length > 0) {
-            newImageCol = foundImageCols[0].name
-          }
-          setImageCol(newImageCol)
-          setDateCol(newDateCol)
-          setCategoryCol(newCategoryCol)
-        }
+        console.log(`Fetching data from ${url}`)
+        // Fetch csv data, convert to json
+        const dataResponse = await fetchData(url) as string
+        const data: Data[] = d3.csvParse(dataResponse)
+        setData(data)
+        const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
+        setFilteredData(filteredByYear)
+        // Fetch json metadata
+        const metadataResponse = await fetchData("/metadata/" + name + "_metadata.json") as TableMetadataResponse
+        const firstKey = Object.keys(metadataResponse)[0];
+        const metadata = metadataResponse[firstKey].columns;
+        setMetadata(metadata)
       } catch (error) {
         console.error('Error fetching:', error);
       } finally {
@@ -142,31 +177,14 @@ const DataVis = (
       }
     }
 
-
     getData();
 
     return () => {
       isMounted = false;
     };
-  }, [url, year]); // empty dependency array = run once on mount
+  }, [url]); // empty dependency array = run once on mount
 
 
-  useEffect(() => {
-    const fetchRange = async () => {
-      if (valueCols.length > 0) {
-        try {
-          const response = await fetchData(url + "/range/" + valueCols[selectedValueCol].name);
-          setRange(response as [number, number]);
-        } catch (error) {
-          console.error('Error fetching range:', error);
-        }
-      }
-    };
-
-    fetchRange();
-  }, [selectedValueCol, valueCols, url]);
-
-  if (valueCols.length == 0) return
 
   return (
     <div className="
@@ -180,8 +198,15 @@ const DataVis = (
       </div>
       <div className="overflow-x-scroll w-full flex flex-col gap-3">
         <AnnualHeatmap
-          data={structureData(filteredData, dateCol, valueCols[selectedValueCol].name, categoryCol)}
-          units={valueCols[selectedValueCol].units}
+          data={
+            structureData(
+              filteredData, 
+              dateCol, 
+              possibleValueCols[selectedValueColIndex], 
+              categoryCol,
+            )
+          }
+          units={valueColUnits}
           colorScale={colorScale}
           year={year}
         />
@@ -192,18 +217,18 @@ const DataVis = (
       </div>
       <div className="flex w-full gap-2">
 
-        {valueCols.length > 1 && (
+        {possibleValueCols.length > 1 && (
           <Select
-            options={valueCols.map(col => col.name)}
-            selectedOptionIndex={selectedValueCol}
-            setSelectedOptionIndex={setSelectedValueCol}
+            options={possibleValueCols}
+            selectedOptionIndex={selectedValueColIndex}
+            setSelectedOptionIndex={setSelectedValueColIndex}
           />
         )}
         {categoryGroups.length > 0 && imageCol == null && (
               <Select
                 options={categoryGroups}
-                selectedOptionIndex={selectedCategory}
-                setSelectedOptionIndex={setSelectedCategory}
+                selectedOptionIndex={selectedCategoryIndex}
+                setSelectedOptionIndex={setSelectedCategoryIndex}
                 defaultValue={"All"}
               />
             )
@@ -214,8 +239,8 @@ const DataVis = (
       (
         <FilterCarousel
           items={imageGroups}
-          selectedIndex={selectedCategory}
-          setSelectedIndex={setSelectedCategory}
+          selectedIndex={selectedCategoryIndex}
+          setSelectedIndex={setSelectedCategoryIndex}
         />
       ) 
       }
@@ -286,3 +311,26 @@ function structureData(
   })
 }
 
+function getColumnsByTag(
+  metadata: TableMetadata, 
+  column_category: ColumnCategory,
+): string[] {
+  
+  if (Object.keys(metadata).length == 0) return []
+  const value_cols = Object.keys(metadata).filter((key) => {
+    if (!metadata[key]) return false
+    return metadata[key].tag === column_category
+  })
+  return value_cols
+}
+
+function getFirstColumnByTag(
+  metadata: TableMetadata,
+  column_category: ColumnCategory,
+): null | string  {
+  const matchingCols = getColumnsByTag(metadata, column_category)
+  if (matchingCols.length > 0) {
+    return matchingCols[0]
+  }
+  return null
+}

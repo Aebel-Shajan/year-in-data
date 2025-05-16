@@ -11,7 +11,7 @@ from pandera.typing.pandas import DataFrame
 
 from yd_extractor.utils.pipeline_stage import PipelineStage
 from yd_extractor.kindle.schemas import AsinMap, RawAsinMap
-from yd_extractor.utils.utils import extract_specific_files_flat
+from yd_extractor.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 

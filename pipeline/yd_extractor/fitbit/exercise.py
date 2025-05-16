@@ -12,7 +12,7 @@ from yd_extractor.fitbit.schemas import FitbitExercise, RawFitbitExercise
 from yd_extractor.fitbit.utils import extract_json_file_data
 from yd_extractor.utils.pandas import (convert_columns_to_numeric,
                                        validate_columns)
-from yd_extractor.utils.utils import extract_specific_files_flat
+from yd_extractor.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +74,7 @@ def transform_exercise(df: DataFrame[RawFitbitExercise]) -> DataFrame[FitbitExer
     df.loc[:, "date"] = pd.to_datetime(
         df["start_time"], format="%m/%d/%y %H:%M:%S"
     ).dt.date
+    df["date"] = pd.to_datetime(df["date"])
     df.loc[:, "start_time"] = pd.to_datetime(
         df["start_time"], format="%m/%d/%y %H:%M:%S"
     ).dt.time
@@ -84,6 +85,7 @@ def transform_exercise(df: DataFrame[RawFitbitExercise]) -> DataFrame[FitbitExer
 
     df = df[
         [
+            "date",
             "activity_name",
             "average_heart_rate_bpm",
             "distance_km",

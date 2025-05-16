@@ -4,12 +4,13 @@ export const axiosInstance = axios.create({
   // baseURL: "https://aebelshajan.pythonanywhere.com/",
   // baseURL: "http://localhost:8000/",
   // baseURL: "http://67.205.140.3:8000",
-  baseURL: "https://ydapi.uk/",
+  // baseURL: "https://ydapi.uk/",
+  baseURL: "https://raw.githubusercontent.com/Aebel-Shajan/year-in-data/refs/heads/data-output/",
   // timeout: 5000, // Set a timeout of 5 seconds
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true
+  // headers: {
+  //   "Content-Type": "application/json",
+  // },
+  // withCredentials: true
 });
 
 // Export a function to fetch data

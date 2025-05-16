@@ -19,6 +19,7 @@ interface ColumnMetdata {
   tag: ColumnCategory | null
   units: string | null
   category: string | null
+  range?: [number, number] 
 }
 
 interface TableMetadata {
@@ -110,12 +111,15 @@ const DataVis = (
   }, [categoryCol, data, imageCol, year])
 
   // Color scale
-  const ticks: number[] = [1, 5, 10]
-  // if (range) {
-  //   ticks = d3.ticks(range[0], range[1], 4).filter((value) => value !== 0)
-    ticks.unshift(0.001)
-    ticks.pop()
-  // }
+  let ticks: number[] = [1, 5, 10]
+  if (metadata[selectedValueCol]) {
+    const range = metadata[selectedValueCol]["range"]
+    if (range) {
+      ticks = d3.ticks(range[0], range[1], 4).filter((value) => value !== 0)
+      ticks.unshift(0.001)
+      ticks.pop()
+    }
+  }
   const colorScale = createColorScale(ticks, d3Colors[d3ColorIndex])
 
 

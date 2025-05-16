@@ -152,7 +152,10 @@ def run_pipeline(
             folder_path=input_data_folder,
             file_name_glob="strong*.csv",
         )
-        strong_extractor.process_workouts(latest_csv)
+        strong_extractor.process_workouts(
+            latest_csv,
+            load_function,
+        )
     
     # App Usage
     if config.process_app_usage:

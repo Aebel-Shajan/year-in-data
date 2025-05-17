@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: cupcake --default, dim --prefersdark;
+  themes: cupcake --default
 }
 
 * {

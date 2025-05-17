@@ -22,9 +22,9 @@
   & > .itemText {
     background-color: white;
     color: black;
-    width: 7rem;
+    width: 5rem;
     padding: 0.5rem;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     display: flex;
     justify-content: center;
     align-items: center;

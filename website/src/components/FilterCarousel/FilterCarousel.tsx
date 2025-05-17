@@ -14,7 +14,7 @@ const FilterCarousel = (
     items,
     selectedIndex,
     setSelectedIndex,
-    height = 8
+    height = 4
   }: {
     items: ItemType[],
     selectedIndex: number,

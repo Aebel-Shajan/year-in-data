@@ -7,9 +7,9 @@ type LegendProps = {
 
 const Legend: React.FC<LegendProps> = ({ colorScale, ticks }) => {
   const uniqueTooltipId = uuidv4();
-  const legendBoxSize = 20
-  const spacing = 10
-  const fontSize = 8
+  const legendBoxSize = 15
+  const spacing = 4
+  const fontSize = 6
   const fullWidth = (legendBoxSize + spacing) * (ticks.length + 1) + spacing
   const fullHeight = legendBoxSize + 2 * spacing + fontSize
 

@@ -18,7 +18,7 @@ const Select = (
         value={index}
         key={String(option) + "-" + option}
       >
-        {option}
+        {option.split("_").join(" ")}
       </option>
     )
   })
@@ -29,7 +29,7 @@ const Select = (
       <select
         value={selectedOptionIndex}
         onChange={e => setSelectedOptionIndex(Number(e.target.value))}
-        className="select"
+        className="select text-xs"
       >
         {defaultValue == "" ?
           <option disabled={true} value={-1}>Pick an option</option>

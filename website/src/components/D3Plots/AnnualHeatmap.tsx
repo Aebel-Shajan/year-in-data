@@ -26,7 +26,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
   units,
   year,
   colorScale,
-  cellSize = 13,
+  cellSize = 10,
   cellPadding = 3,
   cellRadius = 2,
 }) => {
@@ -48,11 +48,11 @@ export const AnnualHeatmap: React.FC<Props> = ({
 
   const margin = {
     left: 35,
-    top: 35
+    top: 10
   }
   const width = (cellSize + cellPadding) * (weeksInYear + 1) - cellPadding + margin.left ;
   const height = (cellSize + cellPadding) * 7 - cellPadding +  margin.top;
-
+  const textSize = Math.min((margin.left - cellPadding)/3, margin.top * 0.9)
 
   const allDaysRects = days.map((date) => {
     const week = d3.timeWeek.count(d3.timeYear(date), date);
@@ -82,7 +82,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
           <text
             x={-cellPadding}
             y={rectPos.y + 0.5 * cellSize}
-            fontSize={(margin.left - cellPadding)/2.5}
+            fontSize={textSize}
             textAnchor="end"
             alignmentBaseline="middle"
           >
@@ -94,7 +94,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
             <text
               x={rectPos.x + 0.5 * cellSize}
               y={-cellPadding}
-              fontSize={(margin.left - cellPadding)/2.5}
+              fontSize={textSize}
               textAnchor="middle"
             >
               {date.toLocaleDateString(undefined, { month: 'short' })}
@@ -157,7 +157,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
   })
 
   return (
-    <div className="w-full relative overflow-scroll">
+    <div className="w-fit relative overflow-scroll">
       <svg width={width} height={height}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
           {allDaysRects}

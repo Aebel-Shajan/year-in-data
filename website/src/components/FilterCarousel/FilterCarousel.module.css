@@ -19,7 +19,7 @@
   gap: 1rem;
   overflow: scroll;
   scroll-behavior: smooth;
-  padding: 1rem 3rem;
+  padding: 0rem 1rem;
   position: relative;
 
 }
@@ -29,21 +29,20 @@
 }
 
 .navigation {
-  padding: 0.7rem;
-  height: var(--height);
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: white;
   color: black;
   position: absolute;
-  height: 100%;
   top: 50%;
   translate: 0 -50%;
   border-radius: 0.5rem;
   border: solid black 3px;
   cursor: pointer;
   z-index: 9;
+  font-size: small;
 }
 
 .navigation:hover {

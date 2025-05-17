@@ -188,15 +188,16 @@ const DataVis = (
 
   return (
     <div className="
-      p-4 bg-base-100 border-base-300 border-2 text-base-content rounded-md  w-250 
-      max-w-full flex flex-col gap-3"
+      p-2 bg-base-100 border-base-300 border-2 text-base-content rounded-lg w-full 
+      max-w-200 flex flex-col gap-3
+      "
     >
-      <div className="flex justify-between">
-        <h1 className="text-xl font-semibold">
+        <h1 className="font-semibold px-3 py-1 w-fit bg-base-100 ">
           {name.replace(/_/g, " ")}
         </h1>
-      </div>
-      <div className="overflow-x-scroll w-full flex flex-col gap-3">
+      <div className=" w-full flex flex-col gap-2">
+        <div className="flex  w-full overflow-x-scroll justify-center">
+
         <AnnualHeatmap
           data={
             structureData(
@@ -209,11 +210,14 @@ const DataVis = (
           units={valueColUnits}
           colorScale={colorScale}
           year={year}
-        />
-        <Legend
+          />
+          </div>
+          <div className="pl-3">
+          <Legend
           ticks={ticks}
           colorScale={colorScale}
-        />
+          />
+          </div>
       </div>
       <div className="flex w-full gap-2">
 

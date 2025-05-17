@@ -55,7 +55,7 @@ const HomePage = () => {
         setYear={setYear}    
       />
 
-      <div className="p-8 min-h-screen w-full flex flex-col items-center gap-5 pt-20">
+      <div className="min-h-screen w-full flex flex-col items-center gap-5 pt-20">
         {heatmaps}
       </div>
 

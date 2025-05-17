@@ -2,7 +2,7 @@
 
 Made this because I was too lazy to use habit tracker apps. 
 
-Instead use data collected about me by big companies (They care so much about me 🥹). 
+Instead use data collected about me by big companies. 
 
 https://year-in-data.vercel.app/
 
@@ -16,20 +16,17 @@ https://year-in-data.vercel.app/
 [How I went about extracting data](docs/GatheringData.md)
 
 ## Frontend
-* D3.js + Tailwind + DaisyUI + React
+* React Typescript
+* D3.js + Tailwind + DaisyUI
 
 ## Backend
-* Setup is a bit overkill but I wanted to learn more about APIs and hosting them.
-* nginx + docker + fastapi 
-* Gather data -> pandas dataframe -> apply transformations -> store in sqlite db.
-* https://github.com/Aebel-Shajan/yd_backend 
-* Hosted on Digital Ocean VPS droplet 
-* Cloudflare for domain stuff
-* Let's Encrypt (via Certbot) for https
+* python
+* pandas + pandera
+* github actions to run pipeline every month
 
-## Todo:
-* Dark mode broke
-* Mobile broke
-
-## In future
-* Remake this with github actions to run pipeline using data from google drive. (Logical, efficient way of doing this :P)
+## Todo :
+- [ ] Mac os screen time
+- [ ] Board game matches
+- [ ] Use github pages instead of vercel
+- [ ] Scrape image links into gh-pages branch (no more getting rate limited)
+- [ ] Add barcharts back in for more detailed view. (maybe)

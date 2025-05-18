@@ -7,6 +7,13 @@ from io import StringIO
 knowledge_db = os.path.expanduser("~/Library/Application Support/Knowledge/knowledgeC.db")
 
 def query_knowledge_database():
+    """
+    Executes sql query on knowledgeC.db sqlite db. Extract past 2 weeks of screen time.
+    
+    NOTES:
+        Yoinked from here:
+        https://github.com/FelixKohlhas/ScreenTime2CSV/tree/main
+    """
     # Check if knowledgeC.db exists
     if not os.path.exists(knowledge_db):
         print("Could not find knowledgeC.db at %s." % (knowledge_db))

@@ -143,6 +143,7 @@ def download_files_from_drive(
         url=env_vars["DRIVE_SHARE_URL"],
         output=str(input_data_folder.absolute()),
         use_cookies=False,
+        quiet=True,
     )
     logger.info("✅ Finished downloading data from google drive!")
     

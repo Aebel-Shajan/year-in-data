@@ -164,7 +164,7 @@ const DataVis = (
         const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
         setFilteredData(filteredByYear)
         // Fetch json metadata
-        const metadataResponse = await fetchData("/metadata/" + name + "_metadata.json") as TableMetadataResponse
+        const metadataResponse = await fetchData("data/metadata/" + name + "_metadata.json") as TableMetadataResponse
         const firstKey = Object.keys(metadataResponse)[0];
         const metadata = metadataResponse[firstKey].columns;
         setMetadata(metadata)

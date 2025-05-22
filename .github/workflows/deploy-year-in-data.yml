@@ -2,22 +2,24 @@ name: Run Data Pipeline and Save to Output Branch
 
 permissions:                # Job-level permissions configuration starts here
   contents: write           # 'write' access to repository contents
-  pull-requests: write      # 'write' access to pull requests
+
   
 on:
   workflow_dispatch: 
   schedule:
     - cron: '0 0 1 * *'
 
+
+env:
+  DRIVE_SHARE_URL: ${{ secrets.DRIVE_SHARE_URL }}
+  GITHUB_USERNAME: ${{ github.actor }}
+  GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+
 jobs:
   run-and-store:
     runs-on: ubuntu-latest
     
-    env:
-      DRIVE_SHARE_URL: ${{ secrets.DRIVE_SHARE_URL }}
-      GITHUB_USERNAME: ${{ github.actor }}
-      GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,10 +31,25 @@ jobs:
 
       - name: Run pipeline shell script
         run: |
-          chmod +x scripts/run-pipeline.sh
-          ./scripts/run-pipeline.sh
+          chmod +x scripts/run_pipeline.sh
+          ./scripts/run_pipeline.sh
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"  # Adjust as needed
+
+      - name: Build website
+        run: |
+          chmod +x scripts/build_website.sh
+          ./scripts/build_website.sh
+
+      - name: Commit output to gh-pages
+        run: |
+          chmod +x scripts/commit_to_gh_pages.sh
+          ./scripts/commit_to_gh_pages.sh
+          
       - name: Push to orphan branch
         run: |
           # Push the orphan branch (using authentication)
-          git push -f origin data-output 
+          git push -f origin gh-pages

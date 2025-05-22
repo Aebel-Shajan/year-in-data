@@ -51,5 +51,9 @@ jobs:
           
       - name: Push to orphan branch
         run: |
+          # Set Git config username and email
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           # Push the orphan branch (using authentication)
           git push -f origin gh-pages
+          

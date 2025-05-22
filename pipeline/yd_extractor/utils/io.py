@@ -137,14 +137,15 @@ def download_files_from_drive(
 ):
     if env_vars["DRIVE_SHARE_URL"] is None:
         raise Exception("Expected DRIVE_SHARE_URL in .env folder!")
-    logger.info("Downloading data from google drive...")
+    logger.info("🟡 Downloading data from google drive...")
 
-    with redirect_output_to_logger(logger, stderr_level=logging.INFO, name="gdown"):
-        gdown.download_folder(
-            url=env_vars["DRIVE_SHARE_URL"],
-            output=str(input_data_folder.absolute()),
-            use_cookies=False,
-        )
+    gdown.download_folder(
+        url=env_vars["DRIVE_SHARE_URL"],
+        output=str(input_data_folder.absolute()),
+        use_cookies=False,
+    )
+    logger.info("✅ Finished downloading data from google drive!")
+    
 
 
 def get_metadata_from_schema(

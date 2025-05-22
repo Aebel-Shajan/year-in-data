@@ -4,7 +4,7 @@ Made this because I was too lazy to use habit tracker apps.
 
 Instead use data collected about me by big companies. 
 
-[https://](https://aebel-shajan.github.io/year-in-data/)
+https://aebel-shajan.github.io/year-in-data/
 
 (old) Preview | (old) Also preview
 -|-

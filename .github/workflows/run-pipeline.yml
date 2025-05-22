@@ -32,7 +32,12 @@ jobs:
           chmod +x scripts/run-pipeline.sh
           ./scripts/run-pipeline.sh
 
-      - name: Push to orphan branch
-        run: |
-          # Push the orphan branch (using authentication)
-          git push -f origin data-output 
+            - name: Push to orphan branch
+              run: |
+                # Set Git config username and email
+                git config user.name "github actions bot"
+                git config user.email "actions@github.com"
+                
+                # Push the orphan branch (using authentication)
+                git push -f origin data-output 
+

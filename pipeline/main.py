@@ -19,9 +19,6 @@ logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
 setup_aebels_logger(
     logger=logger,
-    filter_strings=[
-        "https://drive.google.com/uc?id"
-    ],  # Because gdown leaks google url.
     # resource_monitoring_interval=1.1,
     show_context=False,
 )

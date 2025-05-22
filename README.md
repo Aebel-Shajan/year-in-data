@@ -4,7 +4,7 @@ Made this because I was too lazy to use habit tracker apps.
 
 Instead use data collected about me by big companies. 
 
-https://year-in-data.vercel.app/
+[https://](https://aebel-shajan.github.io/year-in-data/)
 
 (old) Preview | (old) Also preview
 -|-
@@ -20,6 +20,7 @@ https://year-in-data.vercel.app/
 * D3.js + Tailwind + DaisyUI
 
 ## Backend
+* Google drive for storage
 * python
 * pandas + pandera
 * github actions to run pipeline every month
@@ -27,6 +28,6 @@ https://year-in-data.vercel.app/
 ## Todo :
 - [ ] Mac os screen time
 - [ ] Board game matches
-- [ ] Use github pages instead of vercel
+- [x] Use github pages instead of vercel
 - [ ] Scrape image links into gh-pages branch (no more getting rate limited)
 - [ ] Add barcharts back in for more detailed view. (maybe)

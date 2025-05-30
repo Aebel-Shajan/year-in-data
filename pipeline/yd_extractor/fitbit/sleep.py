@@ -104,7 +104,7 @@ def transform_sleep(df: DataFrame[RawFitbitSleep]) -> DataFrame[FitbitSleep]:
 def process_sleep(
     inputs_folder: Path,
     zip_path: Path,
-    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
+    load_function: Optional[Callable[[pd.DataFrame, str,pa.DataFrameModel], None]] = None,
     cleanup: bool = True,
 ) -> pd.DataFrame:
     # Unzip and extract calories jsons from zip file.

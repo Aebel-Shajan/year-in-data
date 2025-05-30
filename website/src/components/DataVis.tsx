@@ -60,7 +60,6 @@ const DataVis = (
   const [isLoading, setIsLoading] = useState(false);
   // const [range, setRange] = useState<[number, number] | null>(null);
 
-
   // Date col
   const dateCol: string = getFirstColumnByTag(metadata, "date_column") || "date"
 
@@ -158,13 +157,16 @@ const DataVis = (
       try {
         console.log(`Fetching data from ${url}`)
         // Fetch csv data, convert to json
-        const dataResponse = await fetchData(url) as string
-        const data: Data[] = d3.csvParse(dataResponse)
+        const dataResponse = await fetchData(url)
+        // const data: Data[] = d3.csvParse(dataResponse as string)
+        const data = dataResponse as Data[]
         setData(data)
         const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
         setFilteredData(filteredByYear)
         // Fetch json metadata
-        const metadataResponse = await fetchData("data/metadata/" + name + "_metadata.json") as TableMetadataResponse
+        const metadataResponse = await fetchData("data/metadata/" + name 
+          // + "_metadata.json"
+        ) as TableMetadataResponse
         const firstKey = Object.keys(metadataResponse)[0];
         const metadata = metadataResponse[firstKey].columns;
         if (metadata) {
@@ -308,6 +310,7 @@ function structureData(
   valueCol: string,
   categoryCol: string | null
 ) {
+  console.log(dateCol, valueCol)
   return data.map(row => {
     return {
       date: row[dateCol] as string,

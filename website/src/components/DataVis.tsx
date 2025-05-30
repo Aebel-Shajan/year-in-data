@@ -67,7 +67,7 @@ const DataVis = (
   // Value col
   const possibleValueCols: string[] = getColumnsByTag(metadata, "value_column") 
   const selectedValueCol  = possibleValueCols[selectedValueColIndex] 
-  const valueColMetada = metadata[selectedValueCol]
+  const valueColMetada = metadata[selectedValueCol] 
   let valueColUnits = "units"
   if (valueColMetada) {
     if (valueColMetada.units) {
@@ -167,7 +167,9 @@ const DataVis = (
         const metadataResponse = await fetchData("data/metadata/" + name + "_metadata.json") as TableMetadataResponse
         const firstKey = Object.keys(metadataResponse)[0];
         const metadata = metadataResponse[firstKey].columns;
-        setMetadata(metadata)
+        if (metadata) {
+          setMetadata(metadata)
+        }
       } catch (error) {
         console.error('Error fetching:', error);
       } finally {

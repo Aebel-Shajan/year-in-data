@@ -1,3 +1,6 @@
 .venv/
 .DS_Store
 tmp-deploy
+temp_uploads/
+year_in_data.db
+node_modules/

@@ -35,7 +35,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
   const groupedData = d3.rollup(
     filteredData,
     v => d3.sum(v, d => d.value),
-    d => d.date,
+    d => (new Date(d.date)).toISOString().slice(0, 10),
     d => d.category,
   )
   const days = d3.timeDays(new Date(year, 0, 1), new Date(year + 1, 0, 1));

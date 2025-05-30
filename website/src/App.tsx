@@ -18,20 +18,21 @@ const HomePage = () => {
 
         const endpoints: Routes[] = []
         const dataRoutes: string[] = [
-          "app_usage_screen_time",
-          "kindle_reading",
-          "github_repo_contributions",
-          "strong_workouts",
+          // "app_usage_screen_time",
+          // "kindle_reading",
+          // "github_repo_contributions",
+          // "strong_workouts",
           "fitbit_sleep",
-          "fitbit_exercise",
-          "fitbit_calories",
-          "fitbit_steps",
+          // "fitbit_exercise",
+          // "fitbit_calories",
+          // "fitbit_steps",
 
         ]
         dataRoutes.forEach(route => {
           endpoints.push({
             "name": route,
-            "path": "/data/" + route + ".csv"
+            "path": "/data/" + route 
+            // + ".csv"
           })
         })
         setDataEndpoints(endpoints)

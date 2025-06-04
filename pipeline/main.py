@@ -52,7 +52,7 @@ def run_pipeline(
     if fitbit_config.process_fitbit:
         latest_google_zip = get_latest_file(
             folder_path=input_data_folder,
-            file_name_glob="takeout*.zip",
+            file_name_glob="google/takeout*.zip",
         )
 
         # Calories
@@ -102,7 +102,7 @@ def run_pipeline(
     if config.process_kindle:
         latest_zip = get_latest_file(
             folder_path=input_data_folder,
-            file_name_glob="Kindle*.zip",
+            file_name_glob="amazon/Kindle*.zip",
         )
         kindle_extractor.process_reading(
             inputs_folder=input_data_folder,
@@ -115,7 +115,7 @@ def run_pipeline(
     if config.process_strong:
         latest_csv = get_latest_file(
             folder_path=input_data_folder,
-            file_name_glob="strong*.csv",
+            file_name_glob="strong/strong*.csv",
         )
         strong_extractor.process_workouts(
             latest_csv,
@@ -126,13 +126,13 @@ def run_pipeline(
     if config.process_app_usage:
         screen_time_csv = get_latest_file(
             folder_path=input_data_folder,
-            file_name_glob="AUM_V4_Activity*.csv"
+            file_name_glob="app_usage/AUM_V4_Activity*.csv"
         )
         app_info_csv = None
         try:
             app_info_csv = get_latest_file(
                 folder_path=input_data_folder,
-                file_name_glob="AUM_V4_App*.csv"
+                file_name_glob="app_usage/AUM_V4_App*.csv"
             )
         except:
             logger.warning("Couldn't find app info file.")

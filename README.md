@@ -165,3 +165,67 @@ flowchart TD
     classDef Gold fill:#FFD600, stroke:#000000, color:#000000
 
 ```
+
+<details>
+<summary>
+Timeline (this was meant to be a week long project):
+</summary>
+
+![image](https://github.com/user-attachments/assets/12ea1bd9-6f4f-4e5f-9986-a4aaa3cac2a8)
+
+* Stage 1 (Pure python streamlit app):
+  * Motivation:
+    * Github activity heatmap is nice to look at, so why not do same with "Strong" app workouts.
+    * Didn't want to pay premium on "Strong" for the pretty graphs on
+  * What I did:
+    * Built python pipeline to etl strong workout data 
+    * Built streamlit app to handle file upload and display pyplots.
+
+* Stage 2 (JS interactivity using cal-heatmap):
+  * Motivation:
+    * Wanted to make heatmap have same interactivity as github heatmap.
+    * Also wanted to visualise more data sources (fitbit, kindle).
+  * What I did:
+    * Created a static website using Vite + React + TypeScript.
+    * Used library cal-heatmap to display interactive heatmaps.
+    * Ran Python data pipeline manually to generate heatmap data
+    * Heatmap data was stored on github repo
+    * Built and hosted website using Vercel
+
+* Stage 3 (Fast api):
+  * Motivation:
+    * Wanted to learn more about FASTAPI and VPS.
+    * Thought API would help improve data privacy. (No more data on github repo)
+  * What I did:
+    * Site still hosted on vercel
+    * Built a FastAPI backend hosted on a DigitalOcean VPS
+    * API processed input data and stored data on VPS
+    * Fetched heatmap data from api using axios. 
+
+* Stage 4 (Github actions, D3, tailwind) 
+  * Motivation:
+    * Wanted to learn more about CI/CD stuff.
+    * Wanted to learn about D3 and tailwind.
+    * Realized redundancy of having heatmap data private, because public website exposed the data anyway.
+  * What I did :
+    * Got rid of api
+    * Stored raw input data in Google Drive,
+    * Automated the Python data pipeline to run every month with GitHub Actions.
+    * Automated deploying the updated static site to GitHub Pages.
+
+* Stage 5 (Local app, refactored & structured data pipeline) [In progress]
+  * Motivation:
+    * Wanted an easy way of getting my macos screen time, so access to local file system is useful.
+    * Having everything local with no network access means more secure + private data storage.
+  * What I did:
+    * Current phase: Developing a local Electron app with:
+      * A local FastAPI backend
+      * With python pipeline:
+        * Started with basic python functions
+        * Tried Kedro (got stuck trying to use OmegaConf)
+        * Explored Strategy and Factory design patterns,
+        * Built a custom pipeline using abstract base classes (gave up)
+        * Finalized with Dagster, focusing on data assets over task-oriented pipelines. (nice 🙂)
+      * Used the same fronted setup.
+
+</details>

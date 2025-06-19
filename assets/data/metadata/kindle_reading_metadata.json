@@ -1,0 +1,37 @@
+{
+  "KindleReading": {
+    "columns": {
+      "date": {
+        "tag": "date_column"
+      },
+      "start_time": {
+        "tag": "date_column"
+      },
+      "asin": {},
+      "book_name": {
+        "tag": "category_column"
+      },
+      "total_reading_minutes": {
+        "tag": "value_column",
+        "units": "minutes",
+        "range": [
+          0.0,
+          200.0
+        ]
+      },
+      "image": {
+        "tag": "image_column",
+        "category": "book_name"
+      },
+      "number_of_page_flips": {
+        "tag": "value_column",
+        "units": "page flips",
+        "range": [
+          0.0,
+          200.0
+        ]
+      }
+    },
+    "dataframe": null
+  }
+}

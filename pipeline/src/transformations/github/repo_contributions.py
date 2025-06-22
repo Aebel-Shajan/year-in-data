@@ -8,11 +8,11 @@ import pandera as pa
 import requests
 from pandera.typing.pandas import DataFrame
 
-from yd_extractor.github.schemas import (GithubRepoContributions,
+from transformations.github.schemas import (GithubRepoContributions,
                                          RawGithubRepoContributions)
-from yd_extractor.utils.pandas import (convert_columns_to_numeric,
+from transformations.utils.pandas import (convert_columns_to_numeric,
                                        validate_columns)
-from yd_extractor.utils.pipeline_stage import PipelineStage
+from transformations.utils.pipeline_stage import PipelineStage
 
 logger = logging.getLogger(__name__)
 

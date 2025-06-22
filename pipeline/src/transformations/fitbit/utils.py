@@ -7,8 +7,8 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from yd_extractor.fitbit.schemas import RawTimeSeriesData, TimeSeriesData
-from yd_extractor.utils.pandas import rename_df_from_schema
+from transformations.fitbit.schemas import RawTimeSeriesData, TimeSeriesData
+from transformations.utils.pandas import rename_df_from_schema
 
 logger = logging.getLogger(__name__)
 

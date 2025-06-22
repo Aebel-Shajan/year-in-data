@@ -10,8 +10,8 @@ import gdown
 import pandas as pd
 import pandera as pa
 
-from yd_extractor.utils.logger import redirect_output_to_logger
-from yd_extractor.utils.pandas import get_range_for_df_column
+from transformations.utils.logger import redirect_output_to_logger
+from transformations.utils.pandas import get_range_for_df_column
 
 # Setup logger
 logger = logging.getLogger(__name__)

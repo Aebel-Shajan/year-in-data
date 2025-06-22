@@ -95,6 +95,63 @@ def get_latest_file(folder_path: Path, file_name_glob: str) -> Path:
     return files[0]
 
 
+def get_latest_valid_zip(
+    folder_path: Path, 
+    file_name_glob: str,
+    expected_file_path: str,
+) -> Path:
+    valid_zips = []
+    for file in folder_path.glob(file_name_glob):
+        is_valid_zip = validate_zip(
+            str(file),
+            expected_file_path,
+        )
+        if is_valid_zip:
+            valid_zips.append(file)
+    
+    # Search for most recent file
+    valid_zips.sort(key=os.path.getmtime, reverse=True)
+    if len(valid_zips) > 0:
+        return valid_zips[0]
+    else:
+        return None
+
+def validate_zip(
+    file_path: str,
+    search_prefix: str,
+) -> bool:
+    try:
+        is_zip = zipfile.is_zipfile(file_path)
+        if (not is_zip):
+            return False
+        
+        with zipfile.ZipFile(file_path, "r") as zip_ref:
+            if any(name.startswith(search_prefix) for name in zip_ref.namelist()):
+                return True
+    except Exception:
+        return False
+
+
+def validate_csv(
+    file_path: str, 
+    expected_schema: pa.DataFrameModel, 
+    expected_delimiter: str = ',',
+) -> str:
+    if not os.path.isfile(file_path):
+        return False
+    if not file_path.lower().endswith('.csv'):
+        return False
+
+    try:
+        df = pd.read_csv(file_path, delimiter=expected_delimiter)
+        print(df)
+        expected_schema.validate(df)
+        return True
+    except Exception as e:
+        logger.exception(e)
+        return False
+
+
 def extract_specific_files_flat(zip_file_path: Path, prefix: str, output_path: Path):
     """
     Extracts specific files which have the same prefix from a ZIP archive and saves

@@ -14,6 +14,8 @@ from yd_extractor.utils.logger import (
 )
 from yd_extractor.utils.io import download_files_from_drive, get_latest_file, create_load_function
 
+from yd_extractor.utils.io import get_latest_valid_zip
+
 # Create a logger
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
@@ -50,46 +52,49 @@ def run_pipeline(
 
     # Fitbit
     if fitbit_config.process_fitbit:
-        latest_google_zip = get_latest_file(
+        latest_google_zip = get_latest_valid_zip(
             folder_path=input_data_folder,
             file_name_glob="google/takeout*.zip",
+            expected_file_path="Takeout/Fitbit/Global Export Data",
         )
+        if latest_google_zip:
+            # Calories
+            if fitbit_config.process_calories:
+                fitbit_extractor.process_calories(
+                    inputs_folder=input_data_folder,
+                    zip_path=latest_google_zip,
+                    cleanup=config.cleanup_unziped_files,
+                    load_function=load_function,
+                )
 
-        # Calories
-        if fitbit_config.process_calories:
-            fitbit_extractor.process_calories(
-                inputs_folder=input_data_folder,
-                zip_path=latest_google_zip,
-                cleanup=config.cleanup_unziped_files,
-                load_function=load_function,
-            )
+            # Sleep
+            if fitbit_config.process_sleep:
+                fitbit_extractor.process_sleep(
+                    inputs_folder=input_data_folder,
+                    zip_path=latest_google_zip,
+                    cleanup=config.cleanup_unziped_files,
+                    load_function=load_function,
+                )
 
-        # Sleep
-        if fitbit_config.process_sleep:
-            fitbit_extractor.process_sleep(
-                inputs_folder=input_data_folder,
-                zip_path=latest_google_zip,
-                cleanup=config.cleanup_unziped_files,
-                load_function=load_function,
-            )
+            # Steps
+            if fitbit_config.process_steps:
+                fitbit_extractor.process_steps(
+                    inputs_folder=input_data_folder,
+                    zip_path=latest_google_zip,
+                    cleanup=config.cleanup_unziped_files,
+                    load_function=load_function,
+                )
 
-        # Steps
-        if fitbit_config.process_steps:
-            fitbit_extractor.process_steps(
-                inputs_folder=input_data_folder,
-                zip_path=latest_google_zip,
-                cleanup=config.cleanup_unziped_files,
-                load_function=load_function,
-            )
-
-        # Exercise
-        if fitbit_config.process_exercise:
-            fitbit_extractor.process_exercise(
-                inputs_folder=input_data_folder,
-                zip_path=latest_google_zip,
-                cleanup=config.cleanup_unziped_files,
-                load_function=load_function,
-            )
+            # Exercise
+            if fitbit_config.process_exercise:
+                fitbit_extractor.process_exercise(
+                    inputs_folder=input_data_folder,
+                    zip_path=latest_google_zip,
+                    cleanup=config.cleanup_unziped_files,
+                    load_function=load_function,
+                )
+        else:
+            logger.warning("Couldn't find zip for google fitbit data.")
 
     # Github
     if config.process_github:
@@ -100,27 +105,35 @@ def run_pipeline(
 
     # Kindle
     if config.process_kindle:
-        latest_zip = get_latest_file(
+        latest_zip = get_latest_valid_zip(
             folder_path=input_data_folder,
             file_name_glob="amazon/Kindle*.zip",
+            expected_file_path="Kindle.Devices.ReadingSession" "/Kindle.Devices.ReadingSession.csv",
         )
-        kindle_extractor.process_reading(
-            inputs_folder=input_data_folder,
-            zip_path=latest_zip,
-            cleanup=config.cleanup_unziped_files,
-            load_function=load_function,
-        )
+        if latest_zip:
+            kindle_extractor.process_reading(
+                inputs_folder=input_data_folder,
+                zip_path=latest_zip,
+                cleanup=config.cleanup_unziped_files,
+                load_function=load_function,
+            )
+        else:
+            logger.warning("Couldn't find zip for kindle data.")
 
     # Strong
     if config.process_strong:
-        latest_csv = get_latest_file(
-            folder_path=input_data_folder,
-            file_name_glob="strong/strong*.csv",
-        )
-        strong_extractor.process_workouts(
-            latest_csv,
-            load_function,
-        )
+        try:
+            latest_csv = get_latest_file(
+                folder_path=input_data_folder,
+                file_name_glob="strong/strong*.csv",
+            )
+            strong_extractor.process_workouts(
+                latest_csv,
+                load_function,
+            )
+        except:
+            logger.warning("Couldn't process strong data")
+
     
     # App Usage
     if config.process_app_usage:

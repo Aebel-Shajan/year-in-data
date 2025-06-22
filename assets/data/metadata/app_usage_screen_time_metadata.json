@@ -1,0 +1,29 @@
+{
+  "AppUsageScreenTime": {
+    "columns": {
+      "app_name": {
+        "tag": "category_column"
+      },
+      "date": {
+        "tag": "date_column"
+      },
+      "time": {
+        "tag": "time_column"
+      },
+      "duration_minutes": {
+        "tag": "value_column",
+        "units": "minutes",
+        "range": [
+          100.0,
+          900.0
+        ]
+      },
+      "image": {
+        "tag": "image_column",
+        "category": "app_name"
+      },
+      "category": {}
+    },
+    "dataframe": null
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "GithubRepoContributions": {
+    "columns": {
+      "date": {
+        "tag": "date_column"
+      },
+      "total_commits": {
+        "tag": "value_column",
+        "units": "commits",
+        "range": [
+          0.0,
+          20.0
+        ]
+      },
+      "repository_name": {
+        "tag": "category_column"
+      },
+      "repository_url": {
+        "tag": "link_column"
+      },
+      "repository_image": {
+        "tag": "image_column",
+        "category": "repository_name"
+      }
+    },
+    "dataframe": null
+  }
+}

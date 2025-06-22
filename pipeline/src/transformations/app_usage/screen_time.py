@@ -6,11 +6,11 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from yd_extractor.utils.pipeline_stage import PipelineStage
-from yd_extractor.app_usage.app_info_map import proccess_app_info_map
-from yd_extractor.app_usage.schemas import (AppInfoMap, AppUsageScreenTime,
+from transformations.utils.pipeline_stage import PipelineStage
+from transformations.app_usage.app_info_map import proccess_app_info_map
+from transformations.app_usage.schemas import (AppInfoMap, AppUsageScreenTime,
                                             RawAppUsageScreenTime)
-from yd_extractor.utils.pandas import rename_df_from_schema
+from transformations.utils.pandas import rename_df_from_schema
 
 logger = logging.getLogger(__name__)
 

@@ -7,12 +7,12 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from yd_extractor.utils.pipeline_stage import PipelineStage
-from yd_extractor.fitbit.schemas import FitbitExercise, RawFitbitExercise
-from yd_extractor.fitbit.utils import extract_json_file_data
-from yd_extractor.utils.pandas import (convert_columns_to_numeric,
+from transformations.utils.pipeline_stage import PipelineStage
+from transformations.fitbit.schemas import FitbitExercise, RawFitbitExercise
+from transformations.fitbit.utils import extract_json_file_data
+from transformations.utils.pandas import (convert_columns_to_numeric,
                                        validate_columns)
-from yd_extractor.utils.io import extract_specific_files_flat
+from transformations.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 

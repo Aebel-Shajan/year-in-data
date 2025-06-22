@@ -7,12 +7,12 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from yd_extractor.utils.pipeline_stage import PipelineStage
-from yd_extractor.kindle.asin_map import process_asin_map
-from yd_extractor.kindle.schemas import (AsinMap, KindleReading,
+from transformations.utils.pipeline_stage import PipelineStage
+from transformations.kindle.asin_map import process_asin_map
+from transformations.kindle.schemas import (AsinMap, KindleReading,
                                          RawKindleReading)
-from yd_extractor.utils.pandas import detect_delimiter, rename_df_from_schema
-from yd_extractor.utils.io import extract_specific_files_flat
+from transformations.utils.pandas import detect_delimiter, rename_df_from_schema
+from transformations.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 

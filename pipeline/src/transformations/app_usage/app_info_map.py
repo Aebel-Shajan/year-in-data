@@ -8,9 +8,9 @@ import requests
 from bs4 import BeautifulSoup
 from pandera.typing.pandas import DataFrame
 
-from yd_extractor.utils.pipeline_stage import PipelineStage
-from yd_extractor.app_usage.schemas import AppInfoMap, RawAppInfoMap
-from yd_extractor.utils.pandas import rename_df_from_schema
+from transformations.utils.pipeline_stage import PipelineStage
+from transformations.app_usage.schemas import AppInfoMap, RawAppInfoMap
+from transformations.utils.pandas import rename_df_from_schema
 
 logger = logging.getLogger(__name__)
 

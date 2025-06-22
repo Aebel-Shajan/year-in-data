@@ -7,10 +7,10 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from yd_extractor.utils.pipeline_stage import PipelineStage
-from yd_extractor.fitbit.schemas import FitbitSleep, RawFitbitSleep
-from yd_extractor.fitbit.utils import extract_json_file_data
-from yd_extractor.utils.io import extract_specific_files_flat
+from transformations.utils.pipeline_stage import PipelineStage
+from transformations.fitbit.schemas import FitbitSleep, RawFitbitSleep
+from transformations.fitbit.utils import extract_json_file_data
+from transformations.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 

@@ -3,18 +3,18 @@ import os
 from pathlib import Path
 
 
-import yd_extractor.fitbit as fitbit_extractor
-import yd_extractor.github as github_extractor
-import yd_extractor.kindle as kindle_extractor
-import yd_extractor.strong as strong_extractor
-from yd_extractor.app_usage.screen_time import process_screen_time
+import transformations.fitbit as fitbit_extractor
+import transformations.github as github_extractor
+import transformations.kindle as kindle_extractor
+import transformations.strong as strong_extractor
+from transformations.app_usage.screen_time import process_screen_time
 from config import config_loader
-from yd_extractor.utils.logger import (
+from transformations.utils.logger import (
     setup_aebels_logger,
 )
-from yd_extractor.utils.io import download_files_from_drive, get_latest_file, create_load_function
+from transformations.utils.io import download_files_from_drive, get_latest_file, create_load_function
 
-from yd_extractor.utils.io import get_latest_valid_zip
+from transformations.utils.io import get_latest_valid_zip
 
 # Create a logger
 logger = logging.getLogger()

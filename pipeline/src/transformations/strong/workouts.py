@@ -5,9 +5,9 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from yd_extractor.utils.pipeline_stage import PipelineStage
-from yd_extractor.strong.schemas import RawStrongWorkouts, StrongWorkouts
-from yd_extractor.utils.pandas import detect_delimiter, rename_df_from_schema
+from transformations.utils.pipeline_stage import PipelineStage
+from transformations.strong.schemas import RawStrongWorkouts, StrongWorkouts
+from transformations.utils.pandas import detect_delimiter, rename_df_from_schema
 
 logger = logging.getLogger(__name__)
 

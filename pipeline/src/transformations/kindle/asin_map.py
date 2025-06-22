@@ -9,9 +9,9 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from yd_extractor.utils.pipeline_stage import PipelineStage
-from yd_extractor.kindle.schemas import AsinMap, RawAsinMap
-from yd_extractor.utils.io import extract_specific_files_flat
+from transformations.utils.pipeline_stage import PipelineStage
+from transformations.kindle.schemas import AsinMap, RawAsinMap
+from transformations.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 

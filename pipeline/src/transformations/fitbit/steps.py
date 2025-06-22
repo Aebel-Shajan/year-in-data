@@ -5,11 +5,11 @@ from typing import Callable, Optional
 
 import pandas as pd
 
-from yd_extractor.utils.pipeline_stage import PipelineStage
-from yd_extractor.fitbit.utils import (extract_json_file_data,
+from transformations.utils.pipeline_stage import PipelineStage
+from transformations.fitbit.utils import (extract_json_file_data,
                                        transform_time_series_data)
-from yd_extractor.utils.io import extract_specific_files_flat
-from yd_extractor.fitbit.schemas import TimeSeriesData
+from transformations.utils.io import extract_specific_files_flat
+from transformations.fitbit.schemas import TimeSeriesData
 
 logger = logging.getLogger(__name__)
 

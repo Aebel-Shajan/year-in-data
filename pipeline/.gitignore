@@ -1,5 +1,16 @@
 .venv
-data/
+# Ignore everything under data/
+data/**
+
+# But do NOT ignore the folders themselves
+!data/
+!data/**/
+!data/**/*.gitkeep
+
+
+
+# DEFAULT PYTHON GITIGNORE
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

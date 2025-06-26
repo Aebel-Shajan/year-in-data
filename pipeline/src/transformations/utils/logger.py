@@ -1,88 +1,11 @@
 import logging
-import re
 import sys
-import threading
 import time
 from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 
 import psutil
-from colorama import Fore, Style, init
-
-# Initialize colorama for cross-platform support
-init(autoreset=True)
-
-# Define color mappings for different log levels
-LOG_COLORS = {
-    logging.DEBUG: Fore.CYAN,
-    logging.INFO: Fore.GREEN,
-    logging.WARNING: Fore.YELLOW,
-    logging.ERROR: Fore.RED,
-    logging.CRITICAL: Fore.RED + Style.BRIGHT,
-}
-
-
-class ColoredFormatter(logging.Formatter):
-    def __init__(self, *args, show_context=False, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.show_context = show_context
-
-    def formatMessage(self, record: logging.LogRecord) -> str:
-        """Overrides basic formatMessage method. Uses colorama to output fancy colored text.
-
-        Args:
-            record (LogRecord): The log record containing all the information for the log entry.
-
-        Returns:
-            string: A formatted log message with colors and structured layout.
-
-        Notes:
-            Why not override just the `logging.Formatter.format()` method?
-            See the following link:
-            https://github.com/python/cpython/blob/7dddb4e667b5eb76cbe11755051ec139b0f437a9/Lib/logging/__init__.py#L682-L729
-            Overriding format also overrides some which prints out exception
-            traceback.
-        """
-        log_color = LOG_COLORS.get(record.levelno, "")
-        reset = Style.RESET_ALL
-
-        # Define fixed column widths
-        datefmt_length = 8
-        if len(self.datefmt) > 8:
-            datefmt_length = 20
-        timestamp = self.formatTime(record, self.datefmt).ljust(
-            datefmt_length
-        )  # Timestamp column (fixed width)
-        level = record.levelname.ljust(8)  # Log level column (fixed width)
-        context = record.name
-        message = record.getMessage()  # Log message (variable width)
-
-        header = f"{log_color}{timestamp}{reset} | {log_color}{level}{reset} | "
-        if self.show_context:
-            header += f"{log_color}{context}{reset}: "
-
-        if "\n" in message:
-            header_length = datefmt_length + 3 + 8
-            indent = " " * header_length + " |"
-            if self.show_context:
-                indent += " " * (len(context) + 2)
-            message = f"\n{indent}  ".join(message.splitlines())
-
-        # Format final log output
-        log_message = header + f"{message}"
-        return log_message
-
-
-class NonColoredFormatter(logging.Formatter):
-    def __init__(self, formatter_to_override: logging.Formatter, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.formatter_to_override = formatter_to_override
-
-    def formatMessage(self, record):
-        message = self.formatter_to_override.formatMessage(record)
-        ansi_re = re.compile(r"\x1b\[[0-9;]*m")
-        return re.sub(ansi_re, "", message)
 
 
 class ExcludeStringFilter(logging.Filter):
@@ -145,43 +68,6 @@ def add_date_file_handler(
         file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(NonColoredFormatter(formatter_to_override))
         logger.addHandler(file_handler)
-
-
-def setup_aebels_logger(
-    logger: logging.Logger,
-    filter_strings: list[str] = [],
-    resource_monitoring_interval: float = -1,
-    show_context: bool = True,
-    date_fmt: str = "%H:%M:%S",
-    log_file_prefix: str = "pipeline_run",
-):
-
-    colored_formatter = ColoredFormatter(
-        show_context=show_context,
-        datefmt=date_fmt,
-    )
-    # Modify existing handlers on logger to user colored formattedr
-    for handler in logger.handlers:
-        if isinstance(handler, logging.StreamHandler):
-            # Define a formatter with equal-width columns
-
-            handler.setFormatter(colored_formatter)
-            handler.addFilter(ExcludeStringFilter(filter_strings))
-
-    add_date_file_handler(
-        logger,
-        base_filename=log_file_prefix,
-        formatter_to_override=colored_formatter,
-    )
-
-    if resource_monitoring_interval > 1:
-        # Create and start the background thread for resource logging
-        resource_thread = threading.Thread(
-            target=log_system_resources_regularly,
-            args=(logger, resource_monitoring_interval),
-            daemon=True,
-        )
-        resource_thread.start()
 
 
 # Other utils

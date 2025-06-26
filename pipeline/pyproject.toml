@@ -15,6 +15,7 @@ dependencies = [
     "pandas",
     "beautifulsoup4",    # For youtube html
     "lxml",              # For youtube html
+    "gdown", # For downloading personal data from shared drive url
 ]
 
 [project.optional-dependencies]
@@ -29,7 +30,3 @@ package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.dagster]
-module_name = ".definitions"
-code_location_name = "yd_dagster_pipeline"

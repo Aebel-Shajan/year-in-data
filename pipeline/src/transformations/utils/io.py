@@ -117,13 +117,13 @@ def get_latest_valid_zip(
 
 
 def get_latest_valid_csv(
-    folder_path: Path, 
+    folder_path: str, 
     file_name_glob: str,
     expected_schema: pa.DataFrameModel,
     expected_delimiter: Optional[str] = ",",
-) -> Path:
-    valid_files = []
-    for file in folder_path.glob(file_name_glob):
+) -> str:
+    valid_files: list[Path] = []
+    for file in Path(folder_path).glob(file_name_glob):
         is_valid = validate_csv(
             str(file),
             expected_schema,
@@ -135,7 +135,7 @@ def get_latest_valid_csv(
     # Search for most recent file
     valid_files.sort(key=os.path.getmtime, reverse=True)
     if len(valid_files) > 0:
-        return valid_files[0]
+        return str(valid_files[0])
     else:
         return None
 
@@ -169,7 +169,6 @@ def validate_csv(
 
     try:
         df = pd.read_csv(file_path, delimiter=expected_delimiter)
-        print(df)
         expected_schema.validate(df)
         return True
     except Exception as e:

@@ -115,6 +115,32 @@ def get_latest_valid_zip(
     else:
         return None
 
+
+def get_latest_valid_csv(
+    folder_path: Path, 
+    file_name_glob: str,
+    expected_schema: pa.DataFrameModel,
+    expected_delimiter: Optional[str] = ",",
+) -> Path:
+    valid_files = []
+    for file in folder_path.glob(file_name_glob):
+        is_valid = validate_csv(
+            str(file),
+            expected_schema,
+            expected_delimiter
+        )
+        if is_valid:
+            valid_files.append(file)
+    
+    # Search for most recent file
+    valid_files.sort(key=os.path.getmtime, reverse=True)
+    if len(valid_files) > 0:
+        return valid_files[0]
+    else:
+        return None
+
+
+
 def validate_zip(
     file_path: str,
     search_prefix: str,

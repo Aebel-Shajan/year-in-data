@@ -10,7 +10,6 @@ import gdown
 import pandas as pd
 import pandera as pa
 
-from transformations.utils.logger import redirect_output_to_logger
 from transformations.utils.pandas import get_range_for_df_column
 
 # Setup logger
@@ -201,6 +200,7 @@ def download_files_from_drive(
         output=str(input_data_folder.absolute()),
         use_cookies=False,
         quiet=True,
+        
     )
     logger.info("✅ Finished downloading data from google drive!")
     

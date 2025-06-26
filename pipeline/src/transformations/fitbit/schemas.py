@@ -25,6 +25,18 @@ class TimeSeriesData(pa.DataFrameModel):
         }
     )
 
+class FitbitCalories(pa.DataFrameModel):
+    date: Series[pa.Timestamp] = pa.Field(
+        metadata={
+            "tag": "date_column",
+        }
+    )
+    value: Series[float] = pa.Field(
+        metadata={
+            "tag": "value_column",
+            "units": "calories",
+        }
+    )
 
 class RawFitbitSleep(pa.DataFrameModel):
     class Config:

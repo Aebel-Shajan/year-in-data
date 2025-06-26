@@ -1,4 +1,8 @@
 .venv
+.dagster/*
+!.dagster/*.gitkeep
+
+
 # Ignore everything under data/
 data/**
 

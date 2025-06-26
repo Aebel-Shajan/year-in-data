@@ -42,7 +42,7 @@ def extract_json_file_data(
 
     full_data = []
     for file_name in file_names:
-        file_path = folder_path / file_name
+        file_path = folder_path + "/" +  file_name
         with open(file_path) as file:
             data_list = json.load(file)
             for data in data_list:

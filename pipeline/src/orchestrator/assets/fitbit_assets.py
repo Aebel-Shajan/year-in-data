@@ -57,7 +57,7 @@ def fitbit_calories(fitbit_calories_raw: pd.DataFrame) -> pd.DataFrame:
     kinds={"bronze"},
 )
 def fitbit_exercise_jsons(fitbit_zip: str) -> str:
-    output_folder = "data/bronze/stage/fitbit/calories"
+    output_folder = "data/bronze/stage/fitbit/exercise"
     json_folder_path = exercise.extract_exercise_jsons(
         data_folder=output_folder,
         zip_path=fitbit_zip,
@@ -121,7 +121,7 @@ def fitbit_sleep(fitbit_sleep_raw: pd.DataFrame) -> pd.DataFrame:
     kinds={"bronze"},
 )
 def fitbit_steps_jsons(fitbit_zip: str) -> str:
-    output_folder = "data/bronze/stage/fitbit/stage"
+    output_folder = "data/bronze/stage/fitbit/steps"
     extract_specific_files_flat(
         zip_file_path=fitbit_zip,
         prefix="Takeout/Fitbit/Global Export Data/steps",

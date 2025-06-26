@@ -1,7 +1,7 @@
 import logging
 import pandas as pd
 
-from transformations.fitbit.utils import (
+from transformations.fitbit.common import (
     extract_json_file_data,
     transform_time_series_data,
 )

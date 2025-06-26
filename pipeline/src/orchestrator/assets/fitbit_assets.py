@@ -1,8 +1,8 @@
 from pathlib import Path
 import dagster as dg
 import pandas as pd
-from transformations.utils.io import get_latest_valid_zip
-from transformations.fitbit import calories, exercise, sleep
+from transformations.utils.io import extract_specific_files_flat, get_latest_valid_zip
+from transformations.fitbit import calories, common, exercise, sleep
 from orchestrator.assets.common_assets import landing_zone
 
 
@@ -114,3 +114,38 @@ def fitbit_sleep(fitbit_sleep_raw: pd.DataFrame) -> pd.DataFrame:
     df = sleep.transform_sleep(fitbit_sleep_raw)
     return df
 
+
+# Steps 
+@dg.asset(
+    deps=[fitbit_zip],
+    kinds={"bronze"},
+)
+def fitbit_steps_jsons(fitbit_zip: str) -> str:
+    output_folder = "data/bronze/stage/fitbit/stage"
+    extract_specific_files_flat(
+        zip_file_path=fitbit_zip,
+        prefix="Takeout/Fitbit/Global Export Data/steps",
+        output_path=output_folder,
+    )
+    return output_folder
+
+
+@dg.asset(
+    deps=[fitbit_steps_jsons],
+    kinds={"silver"},
+)
+def fitbit_steps_raw(fitbit_steps_jsons: str) -> pd.DataFrame:
+    df = common.extract_json_file_data(
+        folder_path=fitbit_steps_jsons,
+        file_name_prefix="steps",
+        keys_to_keep=["dateTime", "value"],
+    )
+    return df
+    
+@dg.asset(
+    deps=[fitbit_steps_raw],
+    kinds={"gold"},
+)
+def fitbit_steps(fitbit_steps_raw: pd.DataFrame) -> pd.DataFrame:
+    df = common.transform_time_series_data(fitbit_steps_raw)
+    return df

@@ -2,7 +2,7 @@ from pathlib import Path
 import dagster as dg
 import pandas as pd
 from transformations.utils.io import get_latest_valid_zip
-from transformations.fitbit import calories, exercise
+from transformations.fitbit import calories, exercise, sleep
 from orchestrator.assets.common_assets import landing_zone
 
 
@@ -81,3 +81,36 @@ def fitbit_exercise_raw(fitbit_exercise_jsons: str) -> pd.DataFrame:
 def fitbit_exercise(fitbit_exercise_raw: pd.DataFrame) -> pd.DataFrame:
     df = exercise.transform_exercise(fitbit_exercise_raw)
     return df
+
+
+# Sleep
+@dg.asset(
+    deps=[fitbit_zip],
+    kinds={"bronze"},
+)
+def fitbit_sleep_jsons(fitbit_zip: str) -> str:
+    output_folder = "data/bronze/stage/fitbit/sleep"
+    json_folder_path = sleep.extract_sleep_jsons(
+        output_folder=output_folder,
+        zip_path=fitbit_zip,
+    )
+    return json_folder_path
+
+
+@dg.asset(
+    deps=[fitbit_sleep_jsons],
+    kinds={"silver"},
+)
+def fitbit_sleep_raw(fitbit_sleep_jsons: str) -> pd.DataFrame:
+    df = sleep.extract_sleep_jsons_into_dataframe(fitbit_sleep_jsons)
+    return df
+
+
+@dg.asset(
+    deps=[fitbit_sleep_raw],
+    kinds={"gold"}
+)
+def fitbit_sleep(fitbit_sleep_raw: pd.DataFrame) -> pd.DataFrame:
+    df = sleep.transform_sleep(fitbit_sleep_raw)
+    return df
+

@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 @pa.check_types
-def extract_app_info_map(csv_file_path: Path) -> DataFrame[RawAppInfoMap]:
+def extract_app_info_map(csv_file_path: str) -> DataFrame[RawAppInfoMap]:
     logger.info(f"Extracting app info data from {csv_file_path}...")
     with open(csv_file_path) as file:
         df = pd.read_csv(file)
@@ -24,7 +24,7 @@ def extract_app_info_map(csv_file_path: Path) -> DataFrame[RawAppInfoMap]:
     return df
 
 
-def get_play_store_icon(package_name):
+def get_play_store_icon(package_name: str) -> Optional[str]:
     url = f"https://play.google.com/store/apps/details"
     params = {"id": package_name, "hl": "en", "gl": "us"}
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -70,27 +70,3 @@ def transform_app_info_map(df: DataFrame[RawAppInfoMap]) -> DataFrame[AppInfoMap
     return df
 
 
-def proccess_app_info_map(
-    csv_file_path: Path,
-    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
-) -> DataFrame[AppInfoMap]:
-    df = AppInfoMap.empty()
-
-    with PipelineStage(logger, "app_usage_app_info"):
-        df = extract_app_info_map(csv_file_path)
-        df = transform_app_info_map(df)
-        if load_function:
-            load_function(df, "app_info_map", AppInfoMap)
-    return df
-
-
-if __name__ == "__main__":
-    # NOTE: FOR DEBUGGING
-    logger = logging.getLogger()
-    logging.basicConfig(level=logging.INFO)
-    logger.info("starting pipeline")
-    csv_file_path = "data/input/AUM_V4_App_2025-05-14_14-53-26.csv"
-    load_function = lambda df, name: df.to_csv(
-        "data/output/" + name + ".csv", index=False
-    )
-    proccess_app_info_map(csv_file_path, load_function)

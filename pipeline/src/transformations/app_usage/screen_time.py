@@ -1,13 +1,11 @@
 import logging
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Optional
 
 import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from transformations.utils.pipeline_stage import PipelineStage
-from transformations.app_usage.app_info_map import proccess_app_info_map
 from transformations.app_usage.schemas import (AppInfoMap, AppUsageScreenTime,
                                             RawAppUsageScreenTime)
 from transformations.utils.pandas import rename_df_from_schema
@@ -57,34 +55,3 @@ def transform_screen_time(
     df = AppUsageScreenTime.validate(df)
     return df
 
-
-def process_screen_time(
-    csv_file_path: Path,
-    app_info_path: Optional[Path] = None,
-    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
-) -> DataFrame[AppUsageScreenTime]:
-    df = AppUsageScreenTime.empty()
-    with PipelineStage(logger, "app_usage_screen_time"):
-        df = extract_screen_time(csv_file_path)
-        df_app_info_map = None
-        if app_info_path:
-            df_app_info_map = proccess_app_info_map(app_info_path)
-        df = transform_screen_time(df, df_app_info_map)
-        if load_function:
-            load_function(df, "app_usage_screen_time", AppUsageScreenTime)
-        
-    return df
-
-
-if __name__ == "__main__":
-    csv_file_path = "data/input/AUM_V4_Activity_2025-05-10_21-56-06.csv"
-    app_info_path = "data/input/AUM_V4_App_2025-05-14_14-53-26.csv"
-    logger = logging.getLogger()
-    logging.basicConfig(level=logging.INFO)
-
-    def load_to_csv(df: pd.DataFrame, name: str):
-        df.to_csv("data/output/" + name + ".csv", index=False)
-
-    process_screen_time(
-        csv_file_path, app_info_path=app_info_path, load_function=load_to_csv
-    )

@@ -1,6 +1,5 @@
 import dagster as dg
 from orchestrator.resources.custom_io_manager import CustomIOManager
-from orchestrator.assets import common_assets, kindle_assets, fitbit_assets
 import orchestrator.assets
 
 all_assets = dg.load_assets_from_package_module(orchestrator.assets)

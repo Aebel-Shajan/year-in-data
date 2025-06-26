@@ -1,22 +1,27 @@
 import logging
-import shutil
 from pathlib import Path
-from typing import Callable, Optional
 
 import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from transformations.utils.pipeline_stage import PipelineStage
 from transformations.fitbit.schemas import FitbitSleep, RawFitbitSleep
 from transformations.fitbit.utils import extract_json_file_data
 from transformations.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 
+def extract_sleep_jsons(zip_path: str, output_folder: str):
+    extract_specific_files_flat(
+        zip_file_path=zip_path,
+        prefix="Takeout/Fitbit/Global Export Data/sleep",
+        output_path=output_folder,
+    )
+    return output_folder
+
 
 @pa.check_types
-def extract_sleep(data_folder: Path, zip_path: Path) -> DataFrame[RawFitbitSleep]:
+def extract_sleep_jsons_into_dataframe(data_folder: Path) -> DataFrame[RawFitbitSleep]:
     """Extract sleep data from files from the folder path. The files have the name format
     "sleep-YYYY-MM-DD.json".
 
@@ -25,11 +30,6 @@ def extract_sleep(data_folder: Path, zip_path: Path) -> DataFrame[RawFitbitSleep
     folder_path : str
         Path to folder containing jsons with sleep data.
     """
-    extract_specific_files_flat(
-        zip_file_path=zip_path,
-        prefix="Takeout/Fitbit/Global Export Data/sleep",
-        output_path=data_folder,
-    )
     keys_to_keep = [
         "logId",
         "dateOfSleep",
@@ -101,24 +101,4 @@ def transform_sleep(df: DataFrame[RawFitbitSleep]) -> DataFrame[FitbitSleep]:
     return df
 
 
-def process_sleep(
-    inputs_folder: Path,
-    zip_path: Path,
-    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
-    cleanup: bool = True,
-) -> pd.DataFrame:
-    # Unzip and extract calories jsons from zip file.
-    df = FitbitSleep.empty()
-    data_folder = inputs_folder / "sleep"
-    
-    with PipelineStage(logger, "fitbit_sleep"):
-        df = extract_sleep(data_folder, zip_path)
-        df = transform_sleep(df)
-        if load_function:
-            load_function(df, "fitbit_sleep", FitbitSleep)
 
-    if cleanup:
-        logger.info(f"Removing folder {data_folder} from zip...")
-        shutil.rmtree(data_folder)
-
-    return df

@@ -6,7 +6,7 @@ import pandera as pa
 from pandera.typing.pandas import DataFrame
 
 from transformations.fitbit.schemas import FitbitSleep, RawFitbitSleep
-from transformations.fitbit.utils import extract_json_file_data
+from transformations.fitbit.common import extract_json_file_data
 from transformations.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)

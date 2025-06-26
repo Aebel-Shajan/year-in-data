@@ -1,24 +1,26 @@
 import logging
-import shutil
-from pathlib import Path
-from typing import Callable, Optional
 
 import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from transformations.utils.pipeline_stage import PipelineStage
 from transformations.fitbit.schemas import FitbitExercise, RawFitbitExercise
 from transformations.fitbit.utils import extract_json_file_data
-from transformations.utils.pandas import (convert_columns_to_numeric,
-                                       validate_columns)
 from transformations.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)
 
 
+def extract_exercise_jsons(zip_path: str, data_folder: str):
+    extract_specific_files_flat(
+        zip_file_path=zip_path,
+        prefix="Takeout/Fitbit/Global Export Data/exercise",
+        output_path=data_folder,
+    )
+    return data_folder
+
 @pa.check_types
-def extract_exercise(data_folder: str, zip_path: str) -> DataFrame[RawFitbitExercise]:
+def extract_exercise_jsons_into_dataframe(data_folder: str) -> DataFrame[RawFitbitExercise]:
     """Extract exercise data from files from the folder path. The files have the name
     format "exercise-YYYY-MM-DD.json".
 
@@ -27,11 +29,6 @@ def extract_exercise(data_folder: str, zip_path: str) -> DataFrame[RawFitbitExer
     folder_path : str
         Path to folder containing jsons with exercise data.
     """
-    extract_specific_files_flat(
-        zip_file_path=zip_path,
-        prefix="Takeout/Fitbit/Global Export Data/exercise",
-        output_path=data_folder,
-    )
     keys_to_keep = [
         "activityName",
         "averageHeartRate",
@@ -98,26 +95,3 @@ def transform_exercise(df: DataFrame[RawFitbitExercise]) -> DataFrame[FitbitExer
     df = FitbitExercise.validate(df)
     return df
 
-
-def process_exercise(
-    inputs_folder: Path,
-    zip_path: Path,
-    cleanup: bool = True,
-    load_function: Optional[Callable[[pd.DataFrame, str], None]] = None,
-) -> pd.DataFrame:
-
-    # Unzip and extract jsons from zip file.
-    data_folder = inputs_folder / "exercise"
-    
-    with PipelineStage(logger, "fitbit_exercise"):
-        df = extract_exercise(data_folder, zip_path)
-        df = transform_exercise(df)
-        if load_function:
-            load_function(df, "fitbit_exercise", FitbitExercise)
-
-
-    if cleanup:
-        logger.info(f"Removing folder {data_folder} from zip...")
-        shutil.rmtree(data_folder)
-
-    return df

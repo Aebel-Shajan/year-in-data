@@ -2,7 +2,7 @@ from pathlib import Path
 import dagster as dg
 import pandas as pd
 from transformations.utils.io import get_latest_valid_zip
-from transformations.fitbit import calories
+from transformations.fitbit import calories, exercise
 from orchestrator.assets.common_assets import landing_zone
 
 
@@ -23,7 +23,7 @@ def fitbit_zip(landing_zone: str) -> str:
             description="No valid google takeout zip found which contains fitbit data."
         )
 
-
+# Calories
 @dg.asset(
     deps=[fitbit_zip],
     kinds={"bronze"},
@@ -37,15 +37,47 @@ def fitbit_calories_jsons(fitbit_zip: str) -> str:
     deps=[fitbit_calories_jsons],
     kinds={"silver"},
 )
-def raw_fitbit_calories(fitbit_calories_jsons: str) -> pd.DataFrame:
+def fitbit_calories_raw(fitbit_calories_jsons: str) -> pd.DataFrame:
     df = calories.extract_calories_jsons_into_dataframe(fitbit_calories_jsons)
     return df
 
 
 @dg.asset(
-    deps=[raw_fitbit_calories],
+    deps=[fitbit_calories_raw],
     kinds={"gold"},
 )
-def fitbit_calories(raw_fitbit_calories: pd.DataFrame) -> pd.DataFrame:
-    df = calories.transform_calories(raw_fitbit_calories)
+def fitbit_calories(fitbit_calories_raw: pd.DataFrame) -> pd.DataFrame:
+    df = calories.transform_calories(fitbit_calories_raw)
+    return df
+
+
+# Exercise
+@dg.asset(
+    deps=[fitbit_zip],
+    kinds={"bronze"},
+)
+def fitbit_exercise_jsons(fitbit_zip: str) -> str:
+    output_folder = "data/bronze/stage/fitbit/calories"
+    json_folder_path = exercise.extract_exercise_jsons(
+        data_folder=output_folder,
+        zip_path=fitbit_zip,
+    )
+    return json_folder_path
+
+
+@dg.asset(
+    deps=[fitbit_exercise_jsons],
+    kinds={"silver"},
+)
+def fitbit_exercise_raw(fitbit_exercise_jsons: str) -> pd.DataFrame:
+    df = exercise.extract_exercise_jsons_into_dataframe(fitbit_exercise_jsons)
+    return df
+
+
+@dg.asset(
+    deps=[fitbit_exercise_raw],
+    kinds={"gold"}
+)
+def fitbit_exercise(fitbit_exercise_raw: pd.DataFrame) -> pd.DataFrame:
+    df = exercise.transform_exercise(fitbit_exercise_raw)
     return df

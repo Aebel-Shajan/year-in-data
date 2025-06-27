@@ -22,7 +22,10 @@ dependencies = [
 dev = [
     "dagster-webserver",
     "pytest",
-    "ipykernel",
+    "ipykernel[notebook]",
+    "ipython-sql",
+    "prettytable==2.1.0",
+    "nbstripout",
 ]
 
 [tool.setuptools]

@@ -114,9 +114,6 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# Jupyter Notebook
-*.ipynb
-
 # pyright
 pyrightconfig.json
 

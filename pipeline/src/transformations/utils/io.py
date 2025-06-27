@@ -95,12 +95,12 @@ def get_latest_file(folder_path: Path, file_name_glob: str) -> Path:
 
 
 def get_latest_valid_zip(
-    folder_path: Path, 
+    folder_path: str, 
     file_name_glob: str,
     expected_file_path: str,
-) -> Path:
+) -> str:
     valid_zips = []
-    for file in folder_path.glob(file_name_glob):
+    for file in Path(folder_path).glob(file_name_glob):
         is_valid_zip = validate_zip(
             str(file),
             expected_file_path,
@@ -111,7 +111,7 @@ def get_latest_valid_zip(
     # Search for most recent file
     valid_zips.sort(key=os.path.getmtime, reverse=True)
     if len(valid_zips) > 0:
-        return valid_zips[0]
+        return str(valid_zips[0])
     else:
         return None
 
@@ -176,7 +176,7 @@ def validate_csv(
         return False
 
 
-def extract_specific_files_flat(zip_file_path: Path, prefix: str, output_path: Path):
+def extract_specific_files_flat(zip_file_path: str, prefix: str, output_path: Path):
     """
     Extracts specific files which have the same prefix from a ZIP archive and saves
     them to the given output directory without preserving their original folder
@@ -189,7 +189,7 @@ def extract_specific_files_flat(zip_file_path: Path, prefix: str, output_path: P
     """
     # Ensure the output directory exists
     os.makedirs(output_path, exist_ok=True)
-
+    zip_file_path: Path = Path(zip_file_path)
     logger.info(
         f"Extracting files from '{os.path.relpath(zip_file_path)}'"
         f"\nwhich have prefix '{prefix}' "

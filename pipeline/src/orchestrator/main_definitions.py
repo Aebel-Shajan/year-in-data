@@ -9,7 +9,7 @@ all_resources = {
     "io_manager": CustomIOManager()
 }
 
-all_jobs = [common_jobs.run_pipeline_job]
+all_jobs = [common_jobs.run_pipeline_job, common_jobs.download_drive_files_job]
 
 defs = dg.Definitions(
     assets=all_assets,

@@ -2,7 +2,7 @@ from orchestrator.assets.common_assets import landing_zone
 import dagster as dg
 import pandas as pd
 from transformations.utils.io import get_latest_valid_csv
-from transformations.app_usage.schemas import RawAppUsageScreenTime, RawAppInfoMap
+from transformations.app_usage.schemas import RawAppUsageScreenTime, RawAppUsageAppInfo
 from transformations.app_usage import screen_time, app_info_map
 
 
@@ -42,7 +42,7 @@ def latest_app_usage_app_csv(landing_zone: str) -> str:
     csv_path = get_latest_valid_csv(
         folder_path=app_usage_folder,
         file_name_glob="*.csv",
-        expected_schema=RawAppInfoMap,
+        expected_schema=RawAppUsageAppInfo,
         expected_delimiter=",",
     )
     return csv_path

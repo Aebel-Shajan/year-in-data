@@ -61,7 +61,7 @@ class AppUsageScreenTime(pa.DataFrameModel):
     )
 
 
-class RawAppInfoMap(pa.DataFrameModel):
+class RawAppUsageAppInfo(pa.DataFrameModel):
     class Config:
         coerce = True
 
@@ -93,7 +93,7 @@ class RawAppInfoMap(pa.DataFrameModel):
     )
 
 
-class AppInfoMap(pa.DataFrameModel):
+class AppUsageAppInfo(pa.DataFrameModel):
     app_name: Series[str] = pa.Field()
     image: Series[str] = pa.Field()
     category: Series[str] = pa.Field()

@@ -10,6 +10,7 @@ import gdown
 import pandas as pd
 import pandera as pa
 
+from transformations.utils.env import EnvVars
 from transformations.utils.pandas import get_range_for_df_column
 
 # Setup logger
@@ -98,7 +99,7 @@ def get_latest_valid_zip(
     folder_path: str, 
     file_name_glob: str,
     expected_file_path: str,
-) -> str:
+) -> Optional[str]:
     valid_zips = []
     for file in Path(folder_path).glob(file_name_glob):
         is_valid_zip = validate_zip(
@@ -171,8 +172,8 @@ def validate_csv(
         df = pd.read_csv(file_path, delimiter=expected_delimiter)
         expected_schema.validate(df)
         return True
-    except Exception as e:
-        logger.exception(e)
+    except Exception:
+        logger.warning(f"{file_path} is not a valid csv for {expected_schema.__class__.__name__}")
         return False
 
 
@@ -214,14 +215,14 @@ def extract_specific_files_flat(zip_file_path: str, prefix: str, output_path: Pa
 
 def download_files_from_drive(
     input_data_folder: Path,
-    env_vars: dict,
+    env_vars: EnvVars,
 ):
-    if env_vars["DRIVE_SHARE_URL"] is None:
+    if env_vars.DRIVE_SHARE_URL is None:
         raise Exception("Expected DRIVE_SHARE_URL in .env folder!")
     logger.info("🟡 Downloading data from google drive...")
 
     gdown.download_folder(
-        url=env_vars["DRIVE_SHARE_URL"],
+        url=env_vars.DRIVE_SHARE_URL,
         output=str(input_data_folder.absolute()),
         use_cookies=False,
         quiet=True,

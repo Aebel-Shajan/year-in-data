@@ -16,31 +16,73 @@ class CatalogItem:
     kinds: str
 
 
+# Why use a CustomIOManager?
+
 class CustomIOManager(ConfigurableIOManager):
-    catalog_path: str = "data/data_catalog.yaml"
+    """CustomIOManager which handle loading input/output file/folder paths and pandas 
+    dataframes.
+    
+    Note:
+        Q) Why use a CustomIOManager? 
+        A) I wanted a way to handle loading files and sqlite tables without having it
+        entirely in memory or have it pickled. 
+        
+        Q) Why not use DuckDBPandasIOManager?
+        A) I tried but couldn't get it to work with files/file paths. Also I'm more used 
+        to sqlite3. Although I want to start using duckdb because I heard it handles 
+        schemas better and you can attach metadata to table columns.
+    """
+    catalog_db_path: str = "data/data_catalog.db"
+
+    def _ensure_catalog_table(self):
+        with sqlite3.connect(self.catalog_db_path) as conn:
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS catalog (
+                    asset_key TEXT PRIMARY KEY,
+                    type TEXT,
+                    location TEXT,
+                    kinds TEXT
+                )
+                """
+            )
 
     def _update_catalog(self, catalog_item: CatalogItem):
-        if os.path.exists(self.catalog_path):
-            with open(self.catalog_path) as f:
-                data = yaml.safe_load(f) or {}
-        else:
-            data = {}
+        self._ensure_catalog_table()
+        with sqlite3.connect(self.catalog_db_path) as conn:
+            conn.execute(
+                """
+                INSERT INTO catalog (asset_key, type, location, kinds)
+                VALUES (?, ?, ?, ?)
+                ON CONFLICT(asset_key) DO UPDATE SET
+                    type=excluded.type,
+                    location=excluded.location,
+                    kinds=excluded.kinds
+                """,
+                (
+                    catalog_item.asset_key,
+                    catalog_item.type,
+                    catalog_item.location,
+                    ",".join(catalog_item.kinds) if isinstance(catalog_item.kinds, list) else catalog_item.kinds,
+                ),
+            )
 
-        data[catalog_item.asset_key] = asdict(catalog_item)
-        with open(self.catalog_path, "w") as f:
-            yaml.safe_dump(data, f)
-
-    def _get_asset_info(self, asset_key: str) -> CatalogItem:
-        if not os.path.exists(self.catalog_path):
-            raise FileNotFoundError(f"{self.catalog_path} not found")
-
-        with open(self.catalog_path) as f:
-            data = yaml.safe_load(f) or {}
-
-        if asset_key not in data:
-            raise KeyError(f"Key '{asset_key}' not found in {self.catalog_path}")
-
-        return data[asset_key]
+    def _get_asset_info(self, asset_key: str) -> dict:
+        self._ensure_catalog_table()
+        with sqlite3.connect(self.catalog_db_path) as conn:
+            cur = conn.execute(
+                "SELECT asset_key, type, location, kinds FROM catalog WHERE asset_key = ?",
+                (asset_key,),
+            )
+            row = cur.fetchone()
+            if not row:
+                raise KeyError(f"Key '{asset_key}' not found in {self.catalog_db_path}")
+            return {
+                "asset_key": row[0],
+                "type": row[1],
+                "location": row[2],
+                "kinds": row[3].split(",") if row[3] else [],
+            }
 
     def handle_output(self, context: dg.OutputContext, obj: pd.DataFrame | str):
         asset_key = context.asset_key.path[-1]  # assumes single-level asset key
@@ -57,7 +99,7 @@ class CustomIOManager(ConfigurableIOManager):
                 kinds=list(asset_kinds),
             )
             context.log.info(
-                f"Updated YAML {self.catalog_path} with path for {asset_key}: {obj}"
+                f"Updated {self.catalog_db_path} with path for {asset_key}: {obj}"
             )
             context.add_output_metadata(
                 {

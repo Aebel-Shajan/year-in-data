@@ -1,5 +1,6 @@
 from dataclasses import dataclass, asdict
 import os
+from pathlib import Path
 import yaml
 import sqlite3
 import pandas as pd
@@ -88,8 +89,11 @@ class CustomIOManager(ConfigurableIOManager):
         asset_key = context.asset_key.path[-1]  # assumes single-level asset key
         asset_kinds = context.asset_spec.kinds
         medallion = "other"
-        if asset_kinds.intersection({"bronze", "silver", "gold"}):
-            medallion = list(asset_kinds.intersection({"bronze", "silver", "gold"}))[0]
+        medallion_list = {"bronze", "silver", "gold", "other"}
+        for medallion in medallion_list:
+            Path(f"data/{medallion}").mkdir(exist_ok=True)
+        if asset_kinds.intersection(medallion_list):
+            medallion = list(asset_kinds.intersection(medallion_list))[0]
 
         if isinstance(obj, str):
             asset_catalog = CatalogItem(

@@ -1,16 +1,20 @@
 import dagster as dg
 from orchestrator.resources.custom_io_manager import CustomIOManager
+from orchestrator.jobs import common_jobs
 import orchestrator.assets
 
 all_assets = dg.load_assets_from_package_module(orchestrator.assets)
 
-resources = {
+all_resources = {
     "io_manager": CustomIOManager()
 }
 
+all_jobs = [common_jobs.run_pipeline_job]
+
 defs = dg.Definitions(
     assets=all_assets,
-    resources=resources,
+    resources=all_resources,
+    jobs=all_jobs,
 )
 
 

@@ -6,7 +6,7 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from transformations.app_usage.schemas import (AppInfoMap, AppUsageScreenTime,
+from transformations.app_usage.schemas import (AppUsageAppInfo, AppUsageScreenTime,
                                             RawAppUsageScreenTime)
 from transformations.utils.pandas import rename_df_from_schema
 
@@ -27,7 +27,7 @@ def extract_screen_time(
 @pa.check_types
 def transform_screen_time(
     df: DataFrame[RawAppUsageScreenTime],
-    df_app_info_map: Optional[DataFrame[AppInfoMap]] = None,
+    df_app_info_map: Optional[DataFrame[AppUsageAppInfo]] = None,
 ) -> DataFrame[AppUsageScreenTime]:
     logger.info("Transforming screen time data.")
     df = rename_df_from_schema(df, RawAppUsageScreenTime)

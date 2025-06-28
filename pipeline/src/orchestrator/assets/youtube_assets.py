@@ -15,7 +15,10 @@ def latest_youtube_zip(landing_zone: str) -> str:
         file_name_glob="*zip",
         expected_file_path="Takeout/YouTube and YouTube Music/history/watch-history.html",
     )
+    if zip_path is None:
+        raise dg.Failure("Couldn't find google takeout zip which contains youtube watch history html.")
     return zip_path
+
 
 
 @dg.asset(

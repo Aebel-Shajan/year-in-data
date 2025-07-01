@@ -1,0 +1,33 @@
+{
+  "StrongWorkouts": {
+    "columns": {
+      "workout_number": {},
+      "date": {
+        "tag": "date_column"
+      },
+      "start_time": {
+        "tag": "start_time_column"
+      },
+      "workout_name": {
+        "tag": "category_column"
+      },
+      "workout_duration_minutes": {
+        "tag": "value_column",
+        "units": "minutes",
+        "range": [
+          40.0,
+          80.0
+        ]
+      },
+      "workout_volume": {
+        "tag": "value_column",
+        "units": "kg",
+        "range": [
+          2000.0,
+          6000.0
+        ]
+      }
+    },
+    "dataframe": null
+  }
+}

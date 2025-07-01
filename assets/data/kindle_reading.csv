@@ -1,0 +1,639 @@
+date,start_time,asin,book_name,total_reading_minutes,image,number_of_page_flips
+2021-04-17,07:40:49,B001GSTOAM,Clean Code,7,https://images.amazon.com/images/P/B001GSTOAM.jpg,45
+2021-05-12,13:29:55,B001GSTOAM,Clean Code,2,https://images.amazon.com/images/P/B001GSTOAM.jpg,6
+2023-03-25,11:14:26,B001GSTOAM,Clean Code,0,https://images.amazon.com/images/P/B001GSTOAM.jpg,1
+2024-02-12,22:44:45,B001GSTOAM,Clean Code,1,https://images.amazon.com/images/P/B001GSTOAM.jpg,33
+2024-05-09,16:09:15,B001GSTOAM,Clean Code,0,https://images.amazon.com/images/P/B001GSTOAM.jpg,1
+2024-12-16,23:44:57,B001GSTOAM,Clean Code,0,https://images.amazon.com/images/P/B001GSTOAM.jpg,2
+2025-01-05,23:59:48,B001GSTOAM,Clean Code,0,https://images.amazon.com/images/P/B001GSTOAM.jpg,1
+2025-04-07,23:08:58,B002RI9KAE,Snow Crash,1,https://images.amazon.com/images/P/B002RI9KAE.jpg,29
+2025-04-08,00:49:13,B002RI9KAE,Snow Crash,45,https://images.amazon.com/images/P/B002RI9KAE.jpg,75
+2025-04-09,20:44:59,B002RI9KAE,Snow Crash,30,https://images.amazon.com/images/P/B002RI9KAE.jpg,30
+2025-04-10,22:15:18,B002RI9KAE,Snow Crash,10,https://images.amazon.com/images/P/B002RI9KAE.jpg,15
+2025-04-11,20:52:43,B002RI9KAE,Snow Crash,25,https://images.amazon.com/images/P/B002RI9KAE.jpg,36
+2025-04-12,20:15:51,B002RI9KAE,Snow Crash,29,https://images.amazon.com/images/P/B002RI9KAE.jpg,32
+2025-04-13,18:38:56,B002RI9KAE,Snow Crash,151,https://images.amazon.com/images/P/B002RI9KAE.jpg,147
+2025-04-14,19:40:59,B002RI9KAE,Snow Crash,35,https://images.amazon.com/images/P/B002RI9KAE.jpg,41
+2025-04-15,20:47:49,B002RI9KAE,Snow Crash,78,https://images.amazon.com/images/P/B002RI9KAE.jpg,85
+2025-04-16,20:40:50,B002RI9KAE,Snow Crash,23,https://images.amazon.com/images/P/B002RI9KAE.jpg,26
+2025-04-17,16:52:54,B002RI9KAE,Snow Crash,184,https://images.amazon.com/images/P/B002RI9KAE.jpg,204
+2025-04-18,20:40:59,B002RI9KAE,Snow Crash,33,https://images.amazon.com/images/P/B002RI9KAE.jpg,56
+2025-04-19,22:19:06,B002RI9KAE,Snow Crash,37,https://images.amazon.com/images/P/B002RI9KAE.jpg,35
+2025-04-20,22:27:17,B002RI9KAE,Snow Crash,10,https://images.amazon.com/images/P/B002RI9KAE.jpg,7
+2025-04-21,18:12:19,B002RI9KAE,Snow Crash,22,https://images.amazon.com/images/P/B002RI9KAE.jpg,29
+2025-04-22,20:46:58,B002RI9KAE,Snow Crash,44,https://images.amazon.com/images/P/B002RI9KAE.jpg,48
+2025-04-23,13:57:54,B002RI9KAE,Snow Crash,321,https://images.amazon.com/images/P/B002RI9KAE.jpg,389
+2021-07-31,20:24:12,B002U3CBZM,Altered Carbon,22,https://images.amazon.com/images/P/B002U3CBZM.jpg,56
+2021-08-01,01:25:39,B002U3CBZM,Altered Carbon,0,https://images.amazon.com/images/P/B002U3CBZM.jpg,1
+2021-12-27,21:36:40,B002U3CBZM,Altered Carbon,0,https://images.amazon.com/images/P/B002U3CBZM.jpg,1
+2021-12-28,10:31:33,B002U3CBZM,Altered Carbon,0,https://images.amazon.com/images/P/B002U3CBZM.jpg,5
+2021-12-29,17:14:45,B002U3CBZM,Altered Carbon,210,https://images.amazon.com/images/P/B002U3CBZM.jpg,228
+2021-12-30,23:57:32,B002U3CBZM,Altered Carbon,2,https://images.amazon.com/images/P/B002U3CBZM.jpg,9
+2021-12-31,21:28:25,B002U3CBZM,Altered Carbon,49,https://images.amazon.com/images/P/B002U3CBZM.jpg,52
+2022-01-01,08:27:28,B002U3CBZM,Altered Carbon,26,https://images.amazon.com/images/P/B002U3CBZM.jpg,34
+2022-01-02,17:21:50,B002U3CBZM,Altered Carbon,69,https://images.amazon.com/images/P/B002U3CBZM.jpg,72
+2022-01-03,05:18:53,B002U3CBZM,Altered Carbon,149,https://images.amazon.com/images/P/B002U3CBZM.jpg,170
+2022-01-04,15:33:07,B002U3CBZM,Altered Carbon,30,https://images.amazon.com/images/P/B002U3CBZM.jpg,45
+2022-01-05,05:28:33,B002U3CBZM,Altered Carbon,20,https://images.amazon.com/images/P/B002U3CBZM.jpg,25
+2022-01-06,21:40:03,B002U3CBZM,Altered Carbon,45,https://images.amazon.com/images/P/B002U3CBZM.jpg,32
+2022-01-07,05:17:46,B002U3CBZM,Altered Carbon,141,https://images.amazon.com/images/P/B002U3CBZM.jpg,104
+2022-01-08,09:21:45,B002U3CBZM,Altered Carbon,0,https://images.amazon.com/images/P/B002U3CBZM.jpg,1
+2022-01-09,08:20:43,B002U3CBZM,Altered Carbon,111,https://images.amazon.com/images/P/B002U3CBZM.jpg,112
+2022-01-10,01:49:52,B002U3CBZM,Altered Carbon,68,https://images.amazon.com/images/P/B002U3CBZM.jpg,75
+2022-01-11,06:35:35,B002U3CBZM,Altered Carbon,153,https://images.amazon.com/images/P/B002U3CBZM.jpg,56
+2022-01-12,07:56:57,B002U3CBZM,Altered Carbon,221,https://images.amazon.com/images/P/B002U3CBZM.jpg,258
+2022-01-13,07:53:27,B002U3CBZM,Altered Carbon,20,https://images.amazon.com/images/P/B002U3CBZM.jpg,22
+2022-01-14,03:41:42,B002U3CBZM,Altered Carbon,1,https://images.amazon.com/images/P/B002U3CBZM.jpg,3
+2022-01-16,06:00:14,B002U3CBZM,Altered Carbon,25,https://images.amazon.com/images/P/B002U3CBZM.jpg,38
+2022-01-17,00:53:24,B002U3CBZM,Altered Carbon,14,https://images.amazon.com/images/P/B002U3CBZM.jpg,23
+2022-01-18,22:50:02,B002U3CBZM,Altered Carbon,31,https://images.amazon.com/images/P/B002U3CBZM.jpg,46
+2022-01-19,21:03:12,B002U3CBZM,Altered Carbon,20,https://images.amazon.com/images/P/B002U3CBZM.jpg,2
+2022-01-20,21:20:17,B002U3CBZM,Altered Carbon,45,https://images.amazon.com/images/P/B002U3CBZM.jpg,64
+2022-02-12,16:16:24,B002U3CBZM,Altered Carbon,0,https://images.amazon.com/images/P/B002U3CBZM.jpg,19
+2022-05-10,20:54:19,B002U3CBZM,Altered Carbon,0,https://images.amazon.com/images/P/B002U3CBZM.jpg,2
+2022-08-20,17:34:25,B002U3CBZM,Altered Carbon,0,https://images.amazon.com/images/P/B002U3CBZM.jpg,2
+2024-09-19,22:33:01,B002VBV1HC,The Eye Of The World,4,https://images.amazon.com/images/P/B002VBV1HC.jpg,4
+2024-09-20,21:25:20,B002VBV1HC,The Eye Of The World,33,https://images.amazon.com/images/P/B002VBV1HC.jpg,58
+2024-09-21,20:54:48,B002VBV1HC,The Eye Of The World,43,https://images.amazon.com/images/P/B002VBV1HC.jpg,85
+2024-09-22,21:42:22,B002VBV1HC,The Eye Of The World,31,https://images.amazon.com/images/P/B002VBV1HC.jpg,45
+2024-09-23,17:16:28,B002VBV1HC,The Eye Of The World,24,https://images.amazon.com/images/P/B002VBV1HC.jpg,32
+2024-09-24,22:59:10,B002VBV1HC,The Eye Of The World,14,https://images.amazon.com/images/P/B002VBV1HC.jpg,40
+2024-09-25,18:15:41,B002VBV1HC,The Eye Of The World,40,https://images.amazon.com/images/P/B002VBV1HC.jpg,48
+2024-09-27,19:54:16,B002VBV1HC,The Eye Of The World,48,https://images.amazon.com/images/P/B002VBV1HC.jpg,40
+2024-09-28,20:39:42,B002VBV1HC,The Eye Of The World,63,https://images.amazon.com/images/P/B002VBV1HC.jpg,75
+2024-09-29,16:58:02,B002VBV1HC,The Eye Of The World,99,https://images.amazon.com/images/P/B002VBV1HC.jpg,99
+2024-09-30,19:56:02,B002VBV1HC,The Eye Of The World,56,https://images.amazon.com/images/P/B002VBV1HC.jpg,58
+2024-10-02,01:04:38,B002VBV1HC,The Eye Of The World,48,https://images.amazon.com/images/P/B002VBV1HC.jpg,60
+2024-10-03,19:00:12,B002VBV1HC,The Eye Of The World,14,https://images.amazon.com/images/P/B002VBV1HC.jpg,52
+2024-10-05,23:08:38,B002VBV1HC,The Eye Of The World,33,https://images.amazon.com/images/P/B002VBV1HC.jpg,47
+2024-10-06,21:45:45,B002VBV1HC,The Eye Of The World,36,https://images.amazon.com/images/P/B002VBV1HC.jpg,40
+2024-10-07,20:42:57,B002VBV1HC,The Eye Of The World,46,https://images.amazon.com/images/P/B002VBV1HC.jpg,56
+2024-10-08,20:26:26,B002VBV1HC,The Eye Of The World,97,https://images.amazon.com/images/P/B002VBV1HC.jpg,119
+2024-10-09,21:53:04,B002VBV1HC,The Eye Of The World,76,https://images.amazon.com/images/P/B002VBV1HC.jpg,78
+2024-10-10,18:46:33,B002VBV1HC,The Eye Of The World,125,https://images.amazon.com/images/P/B002VBV1HC.jpg,121
+2024-10-11,19:58:08,B002VBV1HC,The Eye Of The World,80,https://images.amazon.com/images/P/B002VBV1HC.jpg,122
+2024-10-12,16:13:01,B002VBV1HC,The Eye Of The World,56,https://images.amazon.com/images/P/B002VBV1HC.jpg,63
+2024-10-13,13:27:35,B002VBV1HC,The Eye Of The World,124,https://images.amazon.com/images/P/B002VBV1HC.jpg,138
+2024-10-14,20:08:38,B002VBV1HC,The Eye Of The World,104,https://images.amazon.com/images/P/B002VBV1HC.jpg,114
+2024-10-15,09:15:11,B002VBV1HC,The Eye Of The World,147,https://images.amazon.com/images/P/B002VBV1HC.jpg,142
+2024-10-16,06:21:22,B002VBV1HC,The Eye Of The World,83,https://images.amazon.com/images/P/B002VBV1HC.jpg,79
+2024-10-17,19:50:02,B002VBV1HC,The Eye Of The World,97,https://images.amazon.com/images/P/B002VBV1HC.jpg,91
+2024-10-18,17:02:19,B002VBV1HC,The Eye Of The World,68,https://images.amazon.com/images/P/B002VBV1HC.jpg,54
+2024-10-19,13:24:53,B002VBV1HC,The Eye Of The World,78,https://images.amazon.com/images/P/B002VBV1HC.jpg,112
+2024-10-20,22:08:39,B002VBV1HC,The Eye Of The World,31,https://images.amazon.com/images/P/B002VBV1HC.jpg,39
+2024-10-21,22:29:35,B002VBV1HC,The Eye Of The World,30,https://images.amazon.com/images/P/B002VBV1HC.jpg,30
+2024-10-22,20:41:16,B002VBV1HC,The Eye Of The World,77,https://images.amazon.com/images/P/B002VBV1HC.jpg,65
+2024-10-23,03:07:31,B002VBV1HC,The Eye Of The World,126,https://images.amazon.com/images/P/B002VBV1HC.jpg,170
+2021-05-11,17:55:19,B003GK2180,The Hitchhiker's Guide to the Galaxy,1,https://images.amazon.com/images/P/B003GK2180.jpg,2
+2021-05-14,20:24:57,B003GK2180,The Hitchhiker's Guide to the Galaxy,36,https://images.amazon.com/images/P/B003GK2180.jpg,55
+2021-05-15,11:51:19,B003GK2180,The Hitchhiker's Guide to the Galaxy,58,https://images.amazon.com/images/P/B003GK2180.jpg,72
+2021-05-16,01:40:14,B003GK2180,The Hitchhiker's Guide to the Galaxy,57,https://images.amazon.com/images/P/B003GK2180.jpg,80
+2021-05-17,06:28:44,B003GK2180,The Hitchhiker's Guide to the Galaxy,58,https://images.amazon.com/images/P/B003GK2180.jpg,89
+2021-05-18,04:10:44,B003GK2180,The Hitchhiker's Guide to the Galaxy,13,https://images.amazon.com/images/P/B003GK2180.jpg,37
+2021-05-20,11:46:39,B003GK2180,The Hitchhiker's Guide to the Galaxy,18,https://images.amazon.com/images/P/B003GK2180.jpg,30
+2021-05-21,01:08:50,B003GK2180,The Hitchhiker's Guide to the Galaxy,55,https://images.amazon.com/images/P/B003GK2180.jpg,70
+2021-05-22,03:07:39,B003GK2180,The Hitchhiker's Guide to the Galaxy,0,https://images.amazon.com/images/P/B003GK2180.jpg,1
+2021-05-23,11:40:31,B003GK2180,The Hitchhiker's Guide to the Galaxy,0,https://images.amazon.com/images/P/B003GK2180.jpg,1
+2021-05-25,20:49:06,B003GK2180,The Hitchhiker's Guide to the Galaxy,16,https://images.amazon.com/images/P/B003GK2180.jpg,37
+2021-05-27,15:01:40,B003GK2180,The Hitchhiker's Guide to the Galaxy,143,https://images.amazon.com/images/P/B003GK2180.jpg,227
+2021-05-28,03:46:37,B003GK2180,The Hitchhiker's Guide to the Galaxy,0,https://images.amazon.com/images/P/B003GK2180.jpg,5
+2021-12-29,21:08:05,B003GK2180,The Hitchhiker's Guide to the Galaxy,0,https://images.amazon.com/images/P/B003GK2180.jpg,22
+2024-11-22,17:20:23,B0043M6780,Hyperion (Hyperion Cantos Book 1),17,https://images.amazon.com/images/P/B0043M6780.jpg,21
+2024-11-23,21:30:53,B0043M6780,Hyperion (Hyperion Cantos Book 1),60,https://images.amazon.com/images/P/B0043M6780.jpg,48
+2024-11-24,21:48:07,B0043M6780,Hyperion (Hyperion Cantos Book 1),26,https://images.amazon.com/images/P/B0043M6780.jpg,23
+2024-11-25,00:36:38,B0043M6780,Hyperion (Hyperion Cantos Book 1),138,https://images.amazon.com/images/P/B0043M6780.jpg,134
+2024-11-26,22:44:46,B0043M6780,Hyperion (Hyperion Cantos Book 1),32,https://images.amazon.com/images/P/B0043M6780.jpg,23
+2024-11-27,08:01:30,B0043M6780,Hyperion (Hyperion Cantos Book 1),67,https://images.amazon.com/images/P/B0043M6780.jpg,52
+2024-11-28,21:40:24,B0043M6780,Hyperion (Hyperion Cantos Book 1),64,https://images.amazon.com/images/P/B0043M6780.jpg,43
+2024-11-29,22:05:23,B0043M6780,Hyperion (Hyperion Cantos Book 1),63,https://images.amazon.com/images/P/B0043M6780.jpg,31
+2024-11-30,00:14:26,B0043M6780,Hyperion (Hyperion Cantos Book 1),180,https://images.amazon.com/images/P/B0043M6780.jpg,153
+2024-12-01,10:44:41,B0043M6780,Hyperion (Hyperion Cantos Book 1),63,https://images.amazon.com/images/P/B0043M6780.jpg,52
+2024-12-02,00:22:51,B0043M6780,Hyperion (Hyperion Cantos Book 1),32,https://images.amazon.com/images/P/B0043M6780.jpg,42
+2024-12-03,00:44:35,B0043M6780,Hyperion (Hyperion Cantos Book 1),92,https://images.amazon.com/images/P/B0043M6780.jpg,83
+2024-12-04,22:16:01,B0043M6780,Hyperion (Hyperion Cantos Book 1),35,https://images.amazon.com/images/P/B0043M6780.jpg,35
+2024-12-05,01:48:56,B0043M6780,Hyperion (Hyperion Cantos Book 1),96,https://images.amazon.com/images/P/B0043M6780.jpg,84
+2024-12-06,21:18:24,B0043M6780,Hyperion (Hyperion Cantos Book 1),82,https://images.amazon.com/images/P/B0043M6780.jpg,57
+2024-12-07,20:22:23,B0043M6780,Hyperion (Hyperion Cantos Book 1),112,https://images.amazon.com/images/P/B0043M6780.jpg,149
+2024-12-08,00:04:57,B0043M6780,Hyperion (Hyperion Cantos Book 1),67,https://images.amazon.com/images/P/B0043M6780.jpg,59
+2025-02-09,16:33:14,B0043M67DA,Endymion,2,https://images.amazon.com/images/P/B0043M67DA.jpg,14
+2025-02-21,23:47:40,B0043M67DA,Endymion,0,https://images.amazon.com/images/P/B0043M67DA.jpg,1
+2024-12-22,23:36:34,B00486U2RS,Accelerando,23,https://images.amazon.com/images/P/B00486U2RS.jpg,29
+2024-12-23,22:56:42,B00486U2RS,Accelerando,24,https://images.amazon.com/images/P/B00486U2RS.jpg,12
+2024-12-24,23:06:32,B00486U2RS,Accelerando,42,https://images.amazon.com/images/P/B00486U2RS.jpg,44
+2024-12-29,16:06:16,B00486U2RS,Accelerando,103,https://images.amazon.com/images/P/B00486U2RS.jpg,91
+2024-12-30,00:03:57,B00486U2RS,Accelerando,1,https://images.amazon.com/images/P/B00486U2RS.jpg,1
+2024-12-31,20:31:43,B00486U2RS,Accelerando,108,https://images.amazon.com/images/P/B00486U2RS.jpg,94
+2025-01-01,05:56:03,B00486U2RS,Accelerando,114,https://images.amazon.com/images/P/B00486U2RS.jpg,109
+2025-01-02,00:56:58,B00486U2RS,Accelerando,64,https://images.amazon.com/images/P/B00486U2RS.jpg,61
+2025-01-03,20:27:07,B00486U2RS,Accelerando,6,https://images.amazon.com/images/P/B00486U2RS.jpg,6
+2025-01-04,07:08:58,B00486U2RS,Accelerando,108,https://images.amazon.com/images/P/B00486U2RS.jpg,105
+2025-01-05,15:48:45,B00486U2RS,Accelerando,219,https://images.amazon.com/images/P/B00486U2RS.jpg,196
+2025-01-06,00:27:21,B00486U2RS,Accelerando,102,https://images.amazon.com/images/P/B00486U2RS.jpg,91
+2025-01-07,16:35:06,B00486U2RS,Accelerando,67,https://images.amazon.com/images/P/B00486U2RS.jpg,103
+2025-01-09,05:44:48,B00486U2RS,Accelerando,86,https://images.amazon.com/images/P/B00486U2RS.jpg,72
+2025-01-28,01:01:34,B00486U2RS,Accelerando,0,https://images.amazon.com/images/P/B00486U2RS.jpg,1
+2025-02-09,16:21:03,B00486U2RS,Accelerando,0,https://images.amazon.com/images/P/B00486U2RS.jpg,1
+2024-12-21,01:49:57,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),0,https://images.amazon.com/images/P/B004JHY6OQ.jpg,1
+2024-12-22,11:08:54,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),1,https://images.amazon.com/images/P/B004JHY6OQ.jpg,3
+2025-01-12,18:54:25,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),46,https://images.amazon.com/images/P/B004JHY6OQ.jpg,53
+2025-01-13,00:42:25,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),0,https://images.amazon.com/images/P/B004JHY6OQ.jpg,1
+2025-01-14,21:53:29,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),24,https://images.amazon.com/images/P/B004JHY6OQ.jpg,21
+2025-01-15,21:58:40,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),33,https://images.amazon.com/images/P/B004JHY6OQ.jpg,34
+2025-01-16,22:53:43,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),14,https://images.amazon.com/images/P/B004JHY6OQ.jpg,18
+2025-01-17,23:09:10,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),12,https://images.amazon.com/images/P/B004JHY6OQ.jpg,10
+2025-01-18,23:47:36,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),20,https://images.amazon.com/images/P/B004JHY6OQ.jpg,25
+2025-01-19,00:08:52,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),33,https://images.amazon.com/images/P/B004JHY6OQ.jpg,28
+2025-01-20,21:31:05,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),29,https://images.amazon.com/images/P/B004JHY6OQ.jpg,35
+2025-01-21,21:33:42,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),42,https://images.amazon.com/images/P/B004JHY6OQ.jpg,41
+2025-01-22,21:31:59,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),48,https://images.amazon.com/images/P/B004JHY6OQ.jpg,58
+2025-01-23,02:56:04,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),98,https://images.amazon.com/images/P/B004JHY6OQ.jpg,93
+2025-01-24,05:16:38,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),66,https://images.amazon.com/images/P/B004JHY6OQ.jpg,73
+2025-01-25,15:21:50,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),52,https://images.amazon.com/images/P/B004JHY6OQ.jpg,41
+2025-01-26,22:07:02,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),52,https://images.amazon.com/images/P/B004JHY6OQ.jpg,54
+2025-01-27,22:02:28,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),38,https://images.amazon.com/images/P/B004JHY6OQ.jpg,41
+2025-01-28,01:01:46,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),82,https://images.amazon.com/images/P/B004JHY6OQ.jpg,98
+2025-01-29,21:57:29,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),39,https://images.amazon.com/images/P/B004JHY6OQ.jpg,37
+2025-01-30,05:15:04,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),66,https://images.amazon.com/images/P/B004JHY6OQ.jpg,67
+2025-01-31,21:43:28,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),33,https://images.amazon.com/images/P/B004JHY6OQ.jpg,30
+2025-02-01,14:10:30,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),8,https://images.amazon.com/images/P/B004JHY6OQ.jpg,19
+2025-02-02,22:01:23,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),45,https://images.amazon.com/images/P/B004JHY6OQ.jpg,47
+2025-02-03,05:50:16,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),81,https://images.amazon.com/images/P/B004JHY6OQ.jpg,79
+2025-02-04,21:26:58,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),54,https://images.amazon.com/images/P/B004JHY6OQ.jpg,68
+2025-02-05,22:26:04,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),22,https://images.amazon.com/images/P/B004JHY6OQ.jpg,46
+2025-02-06,21:04:38,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),50,https://images.amazon.com/images/P/B004JHY6OQ.jpg,45
+2025-02-07,22:35:15,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),27,https://images.amazon.com/images/P/B004JHY6OQ.jpg,27
+2025-02-08,13:32:39,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),59,https://images.amazon.com/images/P/B004JHY6OQ.jpg,73
+2025-02-09,00:20:54,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),61,https://images.amazon.com/images/P/B004JHY6OQ.jpg,61
+2025-02-21,23:47:28,B004JHY6OQ,The Fall of Hyperion (Hyperion Cantos Book 2),0,https://images.amazon.com/images/P/B004JHY6OQ.jpg,1
+2022-03-01,10:26:31,B004Z0TU0W,How to Read a Book,96,https://images.amazon.com/images/P/B004Z0TU0W.jpg,207
+2022-03-02,18:24:11,B004Z0TU0W,How to Read a Book,0,https://images.amazon.com/images/P/B004Z0TU0W.jpg,3
+2022-03-03,08:23:36,B004Z0TU0W,How to Read a Book,0,https://images.amazon.com/images/P/B004Z0TU0W.jpg,3
+2022-04-03,09:54:02,B00590YMHI,Dune Messiah,33,https://images.amazon.com/images/P/B00590YMHI.jpg,61
+2022-04-04,21:29:23,B00590YMHI,Dune Messiah,20,https://images.amazon.com/images/P/B00590YMHI.jpg,27
+2022-04-05,20:52:58,B00590YMHI,Dune Messiah,28,https://images.amazon.com/images/P/B00590YMHI.jpg,48
+2022-04-06,15:12:10,B00590YMHI,Dune Messiah,52,https://images.amazon.com/images/P/B00590YMHI.jpg,97
+2022-04-07,10:12:37,B00590YMHI,Dune Messiah,0,https://images.amazon.com/images/P/B00590YMHI.jpg,3
+2023-09-03,20:49:41,B00590YMHI,Dune Messiah,1,https://images.amazon.com/images/P/B00590YMHI.jpg,7
+2023-09-16,14:13:53,B00590YMHI,Dune Messiah,1,https://images.amazon.com/images/P/B00590YMHI.jpg,3
+2023-09-19,22:58:14,B00590YMHI,Dune Messiah,0,https://images.amazon.com/images/P/B00590YMHI.jpg,1
+2023-09-22,20:28:45,B00590YMHI,Dune Messiah,0,https://images.amazon.com/images/P/B00590YMHI.jpg,1
+2021-04-19,20:12:42,B005FVNIW6,Ender's Game,50,https://images.amazon.com/images/P/B005FVNIW6.jpg,104
+2021-04-20,20:45:33,B005FVNIW6,Ender's Game,37,https://images.amazon.com/images/P/B005FVNIW6.jpg,42
+2021-04-21,01:21:23,B005FVNIW6,Ender's Game,0,https://images.amazon.com/images/P/B005FVNIW6.jpg,3
+2021-04-23,07:18:30,B005FVNIW6,Ender's Game,316,https://images.amazon.com/images/P/B005FVNIW6.jpg,376
+2021-04-24,07:29:45,B005FVNIW6,Ender's Game,40,https://images.amazon.com/images/P/B005FVNIW6.jpg,26
+2021-04-26,07:06:46,B005FVNIW6,Ender's Game,110,https://images.amazon.com/images/P/B005FVNIW6.jpg,164
+2021-04-30,21:36:57,B005FVNIW6,Ender's Game,33,https://images.amazon.com/images/P/B005FVNIW6.jpg,68
+2021-05-01,05:26:20,B005FVNIW6,Ender's Game,37,https://images.amazon.com/images/P/B005FVNIW6.jpg,53
+2021-05-02,10:20:12,B005FVNIW6,Ender's Game,143,https://images.amazon.com/images/P/B005FVNIW6.jpg,186
+2024-10-10,20:24:32,B005FVNIW6,Ender's Game,0,https://images.amazon.com/images/P/B005FVNIW6.jpg,1
+2021-05-04,16:48:48,B005IYNQAY,Speaker for the Dead,23,https://images.amazon.com/images/P/B005IYNQAY.jpg,65
+2021-05-05,13:25:22,B005IYNQAY,Speaker for the Dead,59,https://images.amazon.com/images/P/B005IYNQAY.jpg,86
+2021-05-07,23:42:31,B005IYNQAY,Speaker for the Dead,26,https://images.amazon.com/images/P/B005IYNQAY.jpg,44
+2021-05-08,22:15:09,B005IYNQAY,Speaker for the Dead,12,https://images.amazon.com/images/P/B005IYNQAY.jpg,14
+2021-05-09,21:58:31,B005IYNQAY,Speaker for the Dead,26,https://images.amazon.com/images/P/B005IYNQAY.jpg,46
+2021-05-10,06:28:51,B005IYNQAY,Speaker for the Dead,79,https://images.amazon.com/images/P/B005IYNQAY.jpg,126
+2021-05-11,19:19:04,B005IYNQAY,Speaker for the Dead,83,https://images.amazon.com/images/P/B005IYNQAY.jpg,82
+2021-05-12,07:30:35,B005IYNQAY,Speaker for the Dead,324,https://images.amazon.com/images/P/B005IYNQAY.jpg,393
+2021-05-13,06:43:11,B005IYNQAY,Speaker for the Dead,155,https://images.amazon.com/images/P/B005IYNQAY.jpg,171
+2021-05-14,15:02:15,B005IYNQAY,Speaker for the Dead,57,https://images.amazon.com/images/P/B005IYNQAY.jpg,53
+2023-10-08,08:41:51,B005LCYR7Y,11.22.63,114,https://images.amazon.com/images/P/B005LCYR7Y.jpg,112
+2023-10-09,19:18:08,B005LCYR7Y,11.22.63,35,https://images.amazon.com/images/P/B005LCYR7Y.jpg,21
+2023-10-10,20:43:30,B005LCYR7Y,11.22.63,30,https://images.amazon.com/images/P/B005LCYR7Y.jpg,54
+2023-10-11,15:15:12,B005LCYR7Y,11.22.63,1,https://images.amazon.com/images/P/B005LCYR7Y.jpg,2
+2023-10-13,21:37:52,B005LCYR7Y,11.22.63,16,https://images.amazon.com/images/P/B005LCYR7Y.jpg,19
+2023-10-14,21:33:24,B005LCYR7Y,11.22.63,24,https://images.amazon.com/images/P/B005LCYR7Y.jpg,9
+2023-10-15,21:25:12,B005LCYR7Y,11.22.63,29,https://images.amazon.com/images/P/B005LCYR7Y.jpg,73
+2023-10-16,06:25:37,B005LCYR7Y,11.22.63,0,https://images.amazon.com/images/P/B005LCYR7Y.jpg,1
+2023-10-18,21:05:24,B005LCYR7Y,11.22.63,29,https://images.amazon.com/images/P/B005LCYR7Y.jpg,48
+2023-10-19,21:10:51,B005LCYR7Y,11.22.63,25,https://images.amazon.com/images/P/B005LCYR7Y.jpg,27
+2023-10-21,05:11:04,B005LCYR7Y,11.22.63,14,https://images.amazon.com/images/P/B005LCYR7Y.jpg,11
+2023-10-23,21:24:13,B005LCYR7Y,11.22.63,30,https://images.amazon.com/images/P/B005LCYR7Y.jpg,58
+2023-10-24,21:47:04,B005LCYR7Y,11.22.63,20,https://images.amazon.com/images/P/B005LCYR7Y.jpg,20
+2023-10-25,06:46:04,B005LCYR7Y,11.22.63,68,https://images.amazon.com/images/P/B005LCYR7Y.jpg,91
+2023-10-27,20:51:53,B005LCYR7Y,11.22.63,39,https://images.amazon.com/images/P/B005LCYR7Y.jpg,37
+2023-10-28,21:03:47,B005LCYR7Y,11.22.63,23,https://images.amazon.com/images/P/B005LCYR7Y.jpg,56
+2023-10-29,04:04:38,B005LCYR7Y,11.22.63,77,https://images.amazon.com/images/P/B005LCYR7Y.jpg,76
+2023-10-30,03:18:25,B005LCYR7Y,11.22.63,33,https://images.amazon.com/images/P/B005LCYR7Y.jpg,46
+2023-10-31,20:05:09,B005LCYR7Y,11.22.63,89,https://images.amazon.com/images/P/B005LCYR7Y.jpg,112
+2023-11-01,21:41:21,B005LCYR7Y,11.22.63,35,https://images.amazon.com/images/P/B005LCYR7Y.jpg,47
+2023-11-02,20:28:17,B005LCYR7Y,11.22.63,39,https://images.amazon.com/images/P/B005LCYR7Y.jpg,40
+2023-11-03,21:18:13,B005LCYR7Y,11.22.63,52,https://images.amazon.com/images/P/B005LCYR7Y.jpg,43
+2023-11-04,22:00:51,B005LCYR7Y,11.22.63,21,https://images.amazon.com/images/P/B005LCYR7Y.jpg,21
+2023-11-05,05:28:24,B005LCYR7Y,11.22.63,105,https://images.amazon.com/images/P/B005LCYR7Y.jpg,85
+2023-11-06,21:23:27,B005LCYR7Y,11.22.63,41,https://images.amazon.com/images/P/B005LCYR7Y.jpg,57
+2023-11-07,20:33:10,B005LCYR7Y,11.22.63,77,https://images.amazon.com/images/P/B005LCYR7Y.jpg,78
+2023-11-09,21:09:50,B005LCYR7Y,11.22.63,19,https://images.amazon.com/images/P/B005LCYR7Y.jpg,17
+2023-11-10,21:10:59,B005LCYR7Y,11.22.63,74,https://images.amazon.com/images/P/B005LCYR7Y.jpg,57
+2023-11-11,22:13:50,B005LCYR7Y,11.22.63,49,https://images.amazon.com/images/P/B005LCYR7Y.jpg,57
+2023-11-12,22:36:34,B005LCYR7Y,11.22.63,18,https://images.amazon.com/images/P/B005LCYR7Y.jpg,11
+2023-11-15,22:10:38,B005LCYR7Y,11.22.63,22,https://images.amazon.com/images/P/B005LCYR7Y.jpg,38
+2023-11-17,22:27:25,B005LCYR7Y,11.22.63,12,https://images.amazon.com/images/P/B005LCYR7Y.jpg,12
+2023-11-19,20:21:10,B005LCYR7Y,11.22.63,44,https://images.amazon.com/images/P/B005LCYR7Y.jpg,66
+2023-11-21,00:39:45,B005LCYR7Y,11.22.63,39,https://images.amazon.com/images/P/B005LCYR7Y.jpg,51
+2023-11-22,21:55:43,B005LCYR7Y,11.22.63,10,https://images.amazon.com/images/P/B005LCYR7Y.jpg,1
+2023-11-23,22:12:06,B005LCYR7Y,11.22.63,27,https://images.amazon.com/images/P/B005LCYR7Y.jpg,26
+2023-11-24,23:20:13,B005LCYR7Y,11.22.63,17,https://images.amazon.com/images/P/B005LCYR7Y.jpg,30
+2023-11-25,07:55:08,B005LCYR7Y,11.22.63,82,https://images.amazon.com/images/P/B005LCYR7Y.jpg,72
+2023-11-26,08:12:00,B005LCYR7Y,11.22.63,72,https://images.amazon.com/images/P/B005LCYR7Y.jpg,58
+2023-11-27,15:10:13,B005LCYR7Y,11.22.63,111,https://images.amazon.com/images/P/B005LCYR7Y.jpg,177
+2023-11-28,21:53:18,B005LCYR7Y,11.22.63,47,https://images.amazon.com/images/P/B005LCYR7Y.jpg,39
+2023-11-29,17:14:00,B005LCYR7Y,11.22.63,77,https://images.amazon.com/images/P/B005LCYR7Y.jpg,78
+2023-11-30,00:12:59,B005LCYR7Y,11.22.63,91,https://images.amazon.com/images/P/B005LCYR7Y.jpg,96
+2023-12-01,23:15:42,B005LCYR7Y,11.22.63,46,https://images.amazon.com/images/P/B005LCYR7Y.jpg,40
+2023-12-02,23:54:47,B005LCYR7Y,11.22.63,32,https://images.amazon.com/images/P/B005LCYR7Y.jpg,26
+2023-12-03,08:17:23,B005LCYR7Y,11.22.63,65,https://images.amazon.com/images/P/B005LCYR7Y.jpg,64
+2024-01-09,20:37:59,B005LCYR7Y,11.22.63,0,https://images.amazon.com/images/P/B005LCYR7Y.jpg,1
+2024-05-25,13:10:39,B005LCYR7Y,11.22.63,0,https://images.amazon.com/images/P/B005LCYR7Y.jpg,1
+2024-10-10,20:24:23,B005LCYR7Y,11.22.63,0,https://images.amazon.com/images/P/B005LCYR7Y.jpg,1
+2024-11-10,20:53:12,B007HLIUN4,Why Nations Fail,43,https://images.amazon.com/images/P/B007HLIUN4.jpg,69
+2024-11-11,22:28:56,B007HLIUN4,Why Nations Fail,29,https://images.amazon.com/images/P/B007HLIUN4.jpg,34
+2024-11-12,20:46:35,B007HLIUN4,Why Nations Fail,93,https://images.amazon.com/images/P/B007HLIUN4.jpg,136
+2024-11-13,22:03:10,B007HLIUN4,Why Nations Fail,48,https://images.amazon.com/images/P/B007HLIUN4.jpg,41
+2024-11-14,22:02:41,B007HLIUN4,Why Nations Fail,80,https://images.amazon.com/images/P/B007HLIUN4.jpg,82
+2024-11-15,08:25:11,B007HLIUN4,Why Nations Fail,86,https://images.amazon.com/images/P/B007HLIUN4.jpg,102
+2024-11-16,21:46:11,B007HLIUN4,Why Nations Fail,67,https://images.amazon.com/images/P/B007HLIUN4.jpg,84
+2024-11-17,21:24:18,B007HLIUN4,Why Nations Fail,114,https://images.amazon.com/images/P/B007HLIUN4.jpg,103
+2024-11-18,13:15:08,B007HLIUN4,Why Nations Fail,178,https://images.amazon.com/images/P/B007HLIUN4.jpg,128
+2024-11-19,23:01:29,B007HLIUN4,Why Nations Fail,25,https://images.amazon.com/images/P/B007HLIUN4.jpg,20
+2024-11-20,21:14:38,B007HLIUN4,Why Nations Fail,73,https://images.amazon.com/images/P/B007HLIUN4.jpg,74
+2024-11-21,07:43:52,B007HLIUN4,Why Nations Fail,90,https://images.amazon.com/images/P/B007HLIUN4.jpg,105
+2024-11-22,13:03:07,B007HLIUN4,Why Nations Fail,21,https://images.amazon.com/images/P/B007HLIUN4.jpg,40
+2023-09-10,20:14:29,B008TVFXMM,Flatland,5,https://images.amazon.com/images/P/B008TVFXMM.jpg,4
+2023-09-11,15:01:12,B008TVFXMM,Flatland,28,https://images.amazon.com/images/P/B008TVFXMM.jpg,34
+2023-09-12,20:21:30,B008TVFXMM,Flatland,21,https://images.amazon.com/images/P/B008TVFXMM.jpg,20
+2023-09-14,20:18:09,B008TVFXMM,Flatland,33,https://images.amazon.com/images/P/B008TVFXMM.jpg,33
+2023-09-15,20:08:29,B008TVFXMM,Flatland,40,https://images.amazon.com/images/P/B008TVFXMM.jpg,50
+2023-09-16,21:13:45,B008TVFXMM,Flatland,13,https://images.amazon.com/images/P/B008TVFXMM.jpg,18
+2023-09-17,03:15:58,B008TVFXMM,Flatland,126,https://images.amazon.com/images/P/B008TVFXMM.jpg,136
+2024-01-09,20:38:17,B008TVFXMM,Flatland,0,https://images.amazon.com/images/P/B008TVFXMM.jpg,1
+2024-02-12,00:02:40,B008TVFXMM,Flatland,0,https://images.amazon.com/images/P/B008TVFXMM.jpg,2
+2024-05-27,20:25:06,B008TVFXMM,Flatland,4,https://images.amazon.com/images/P/B008TVFXMM.jpg,12
+2023-12-13,21:47:26,B00GIUG3ES,Red Rising,29,https://images.amazon.com/images/P/B00GIUG3ES.jpg,47
+2023-12-14,22:27:19,B00GIUG3ES,Red Rising,19,https://images.amazon.com/images/P/B00GIUG3ES.jpg,13
+2023-12-22,23:10:00,B00GIUG3ES,Red Rising,20,https://images.amazon.com/images/P/B00GIUG3ES.jpg,29
+2023-12-23,22:59:11,B00GIUG3ES,Red Rising,23,https://images.amazon.com/images/P/B00GIUG3ES.jpg,18
+2023-12-24,23:43:06,B00GIUG3ES,Red Rising,18,https://images.amazon.com/images/P/B00GIUG3ES.jpg,12
+2023-12-26,02:42:59,B00GIUG3ES,Red Rising,21,https://images.amazon.com/images/P/B00GIUG3ES.jpg,8
+2023-12-27,22:34:52,B00GIUG3ES,Red Rising,29,https://images.amazon.com/images/P/B00GIUG3ES.jpg,36
+2023-12-28,15:52:37,B00GIUG3ES,Red Rising,62,https://images.amazon.com/images/P/B00GIUG3ES.jpg,54
+2023-12-29,01:07:19,B00GIUG3ES,Red Rising,60,https://images.amazon.com/images/P/B00GIUG3ES.jpg,57
+2023-12-30,20:59:36,B00GIUG3ES,Red Rising,74,https://images.amazon.com/images/P/B00GIUG3ES.jpg,57
+2023-12-31,02:01:01,B00GIUG3ES,Red Rising,71,https://images.amazon.com/images/P/B00GIUG3ES.jpg,28
+2024-01-02,02:11:05,B00GIUG3ES,Red Rising,49,https://images.amazon.com/images/P/B00GIUG3ES.jpg,41
+2024-01-03,20:49:20,B00GIUG3ES,Red Rising,243,https://images.amazon.com/images/P/B00GIUG3ES.jpg,129
+2024-01-04,01:48:17,B00GIUG3ES,Red Rising,0,https://images.amazon.com/images/P/B00GIUG3ES.jpg,1
+2024-01-05,00:53:24,B00GIUG3ES,Red Rising,502,https://images.amazon.com/images/P/B00GIUG3ES.jpg,280
+2024-01-09,20:37:48,B00GIUG3ES,Red Rising,0,https://images.amazon.com/images/P/B00GIUG3ES.jpg,1
+2024-01-16,01:02:34,B00GIUG3ES,Red Rising,0,https://images.amazon.com/images/P/B00GIUG3ES.jpg,1
+2024-01-24,22:18:48,B00GIUG3ES,Red Rising,0,https://images.amazon.com/images/P/B00GIUG3ES.jpg,1
+2024-12-05,22:46:00,B00GIUG3ES,Red Rising,0,https://images.amazon.com/images/P/B00GIUG3ES.jpg,1
+2021-12-31,22:20:59,B00K7ED54M,Sapiens,0,https://images.amazon.com/images/P/B00K7ED54M.jpg,11
+2022-01-03,19:47:06,B00K7ED54M,Sapiens,1,https://images.amazon.com/images/P/B00K7ED54M.jpg,5
+2022-01-25,21:21:31,B00K7ED54M,Sapiens,60,https://images.amazon.com/images/P/B00K7ED54M.jpg,87
+2022-01-26,06:21:54,B00K7ED54M,Sapiens,102,https://images.amazon.com/images/P/B00K7ED54M.jpg,113
+2022-01-28,20:29:05,B00K7ED54M,Sapiens,38,https://images.amazon.com/images/P/B00K7ED54M.jpg,48
+2022-01-29,12:40:40,B00K7ED54M,Sapiens,87,https://images.amazon.com/images/P/B00K7ED54M.jpg,67
+2022-01-31,21:17:08,B00K7ED54M,Sapiens,19,https://images.amazon.com/images/P/B00K7ED54M.jpg,19
+2022-02-01,10:44:02,B00K7ED54M,Sapiens,79,https://images.amazon.com/images/P/B00K7ED54M.jpg,96
+2022-02-02,07:27:50,B00K7ED54M,Sapiens,19,https://images.amazon.com/images/P/B00K7ED54M.jpg,21
+2022-02-04,22:06:14,B00K7ED54M,Sapiens,15,https://images.amazon.com/images/P/B00K7ED54M.jpg,20
+2022-02-05,12:52:49,B00K7ED54M,Sapiens,0,https://images.amazon.com/images/P/B00K7ED54M.jpg,7
+2022-02-10,20:45:49,B00K7ED54M,Sapiens,29,https://images.amazon.com/images/P/B00K7ED54M.jpg,36
+2022-02-12,16:18:41,B00K7ED54M,Sapiens,24,https://images.amazon.com/images/P/B00K7ED54M.jpg,46
+2022-02-14,14:59:08,B00K7ED54M,Sapiens,57,https://images.amazon.com/images/P/B00K7ED54M.jpg,59
+2022-02-15,22:23:32,B00K7ED54M,Sapiens,26,https://images.amazon.com/images/P/B00K7ED54M.jpg,78
+2022-02-17,22:10:46,B00K7ED54M,Sapiens,25,https://images.amazon.com/images/P/B00K7ED54M.jpg,25
+2022-02-18,22:06:38,B00K7ED54M,Sapiens,20,https://images.amazon.com/images/P/B00K7ED54M.jpg,52
+2022-02-21,00:53:29,B00K7ED54M,Sapiens,49,https://images.amazon.com/images/P/B00K7ED54M.jpg,54
+2022-02-23,21:42:46,B00K7ED54M,Sapiens,36,https://images.amazon.com/images/P/B00K7ED54M.jpg,66
+2022-02-24,22:52:50,B00K7ED54M,Sapiens,20,https://images.amazon.com/images/P/B00K7ED54M.jpg,19
+2022-02-25,22:50:02,B00K7ED54M,Sapiens,39,https://images.amazon.com/images/P/B00K7ED54M.jpg,33
+2022-02-26,12:27:30,B00K7ED54M,Sapiens,58,https://images.amazon.com/images/P/B00K7ED54M.jpg,90
+2022-02-27,14:30:01,B00K7ED54M,Sapiens,39,https://images.amazon.com/images/P/B00K7ED54M.jpg,42
+2022-03-01,00:01:14,B00K7ED54M,Sapiens,93,https://images.amazon.com/images/P/B00K7ED54M.jpg,237
+2024-01-06,02:09:49,B00N9AVETO,Golden Son,156,https://images.amazon.com/images/P/B00N9AVETO.jpg,118
+2024-01-07,05:58:24,B00N9AVETO,Golden Son,261,https://images.amazon.com/images/P/B00N9AVETO.jpg,198
+2024-01-08,00:13:24,B00N9AVETO,Golden Son,92,https://images.amazon.com/images/P/B00N9AVETO.jpg,88
+2024-01-09,20:37:29,B00N9AVETO,Golden Son,16,https://images.amazon.com/images/P/B00N9AVETO.jpg,22
+2024-01-10,23:36:02,B00N9AVETO,Golden Son,44,https://images.amazon.com/images/P/B00N9AVETO.jpg,37
+2024-01-11,19:11:15,B00N9AVETO,Golden Son,1,https://images.amazon.com/images/P/B00N9AVETO.jpg,5
+2024-01-12,00:27:58,B00N9AVETO,Golden Son,124,https://images.amazon.com/images/P/B00N9AVETO.jpg,125
+2024-01-13,16:20:09,B00N9AVETO,Golden Son,87,https://images.amazon.com/images/P/B00N9AVETO.jpg,61
+2024-01-14,09:08:51,B00N9AVETO,Golden Son,121,https://images.amazon.com/images/P/B00N9AVETO.jpg,92
+2024-01-15,00:24:37,B00N9AVETO,Golden Son,128,https://images.amazon.com/images/P/B00N9AVETO.jpg,112
+2024-01-16,01:01:53,B00N9AVETO,Golden Son,0,https://images.amazon.com/images/P/B00N9AVETO.jpg,2
+2024-01-24,22:19:07,B00N9AVETO,Golden Son,0,https://images.amazon.com/images/P/B00N9AVETO.jpg,1
+2024-01-16,01:06:25,B00X61MXTG,Morning Star,131,https://images.amazon.com/images/P/B00X61MXTG.jpg,124
+2024-01-17,21:49:51,B00X61MXTG,Morning Star,79,https://images.amazon.com/images/P/B00X61MXTG.jpg,54
+2024-01-18,17:49:10,B00X61MXTG,Morning Star,168,https://images.amazon.com/images/P/B00X61MXTG.jpg,139
+2024-01-19,20:58:31,B00X61MXTG,Morning Star,91,https://images.amazon.com/images/P/B00X61MXTG.jpg,99
+2024-01-20,21:10:31,B00X61MXTG,Morning Star,60,https://images.amazon.com/images/P/B00X61MXTG.jpg,55
+2024-01-21,07:06:56,B00X61MXTG,Morning Star,0,https://images.amazon.com/images/P/B00X61MXTG.jpg,9
+2024-01-22,10:38:56,B00X61MXTG,Morning Star,29,https://images.amazon.com/images/P/B00X61MXTG.jpg,23
+2024-01-23,23:17:02,B00X61MXTG,Morning Star,28,https://images.amazon.com/images/P/B00X61MXTG.jpg,22
+2024-01-24,20:22:25,B00X61MXTG,Morning Star,115,https://images.amazon.com/images/P/B00X61MXTG.jpg,93
+2024-01-27,22:54:00,B00X61MXTG,Morning Star,19,https://images.amazon.com/images/P/B00X61MXTG.jpg,14
+2024-01-30,22:29:17,B00X61MXTG,Morning Star,17,https://images.amazon.com/images/P/B00X61MXTG.jpg,27
+2024-01-31,08:15:38,B00X61MXTG,Morning Star,104,https://images.amazon.com/images/P/B00X61MXTG.jpg,73
+2024-02-01,07:44:19,B00X61MXTG,Morning Star,40,https://images.amazon.com/images/P/B00X61MXTG.jpg,33
+2024-02-04,00:29:16,B00X61MXTG,Morning Star,91,https://images.amazon.com/images/P/B00X61MXTG.jpg,83
+2024-02-05,22:16:55,B00X61MXTG,Morning Star,37,https://images.amazon.com/images/P/B00X61MXTG.jpg,31
+2024-02-06,23:04:22,B00X61MXTG,Morning Star,19,https://images.amazon.com/images/P/B00X61MXTG.jpg,18
+2024-02-10,22:40:03,B00X61MXTG,Morning Star,74,https://images.amazon.com/images/P/B00X61MXTG.jpg,52
+2024-02-11,08:03:12,B00X61MXTG,Morning Star,44,https://images.amazon.com/images/P/B00X61MXTG.jpg,30
+2024-02-12,22:39:43,B00X61MXTG,Morning Star,0,https://images.amazon.com/images/P/B00X61MXTG.jpg,9
+2022-03-29,14:29:53,B00Y16BEM2,Prisoners of Geography,91,https://images.amazon.com/images/P/B00Y16BEM2.jpg,106
+2022-03-30,21:45:56,B00Y16BEM2,Prisoners of Geography,17,https://images.amazon.com/images/P/B00Y16BEM2.jpg,28
+2022-04-02,16:19:03,B00Y16BEM2,Prisoners of Geography,122,https://images.amazon.com/images/P/B00Y16BEM2.jpg,124
+2022-04-03,10:41:48,B00Y16BEM2,Prisoners of Geography,52,https://images.amazon.com/images/P/B00Y16BEM2.jpg,59
+2022-04-05,21:21:15,B00Y16BEM2,Prisoners of Geography,43,https://images.amazon.com/images/P/B00Y16BEM2.jpg,27
+2022-04-06,13:38:38,B00Y16BEM2,Prisoners of Geography,134,https://images.amazon.com/images/P/B00Y16BEM2.jpg,176
+2022-04-07,06:07:53,B00Y16BEM2,Prisoners of Geography,121,https://images.amazon.com/images/P/B00Y16BEM2.jpg,168
+2022-04-08,14:09:39,B00Y16BEM2,Prisoners of Geography,0,https://images.amazon.com/images/P/B00Y16BEM2.jpg,1
+2022-04-09,22:07:29,B00Y16BEM2,Prisoners of Geography,13,https://images.amazon.com/images/P/B00Y16BEM2.jpg,29
+2022-04-10,21:52:43,B00Y16BEM2,Prisoners of Geography,9,https://images.amazon.com/images/P/B00Y16BEM2.jpg,5
+2022-04-11,10:05:53,B00Y16BEM2,Prisoners of Geography,0,https://images.amazon.com/images/P/B00Y16BEM2.jpg,2
+2022-04-13,22:42:16,B00Y16BEM2,Prisoners of Geography,38,https://images.amazon.com/images/P/B00Y16BEM2.jpg,22
+2022-04-14,00:29:02,B00Y16BEM2,Prisoners of Geography,10,https://images.amazon.com/images/P/B00Y16BEM2.jpg,33
+2022-04-15,22:06:43,B00Y16BEM2,Prisoners of Geography,26,https://images.amazon.com/images/P/B00Y16BEM2.jpg,25
+2022-04-16,06:26:41,B00Y16BEM2,Prisoners of Geography,38,https://images.amazon.com/images/P/B00Y16BEM2.jpg,31
+2022-04-20,10:08:56,B00Y16BEM2,Prisoners of Geography,0,https://images.amazon.com/images/P/B00Y16BEM2.jpg,4
+2022-04-21,17:01:19,B00Y16BEM2,Prisoners of Geography,10,https://images.amazon.com/images/P/B00Y16BEM2.jpg,1
+2022-05-10,20:52:22,B00Y16BEM2,Prisoners of Geography,0,https://images.amazon.com/images/P/B00Y16BEM2.jpg,5
+2022-08-20,17:35:15,B00Y16BEM2,Prisoners of Geography,0,https://images.amazon.com/images/P/B00Y16BEM2.jpg,1
+2022-01-03,19:50:02,B012UTQ6CY,Seven Brief Lessons on Physics,79,https://images.amazon.com/images/P/B012UTQ6CY.jpg,121
+2022-03-03,08:24:13,B019CGXTP0,Homo Deus,105,https://images.amazon.com/images/P/B019CGXTP0.jpg,275
+2022-03-05,11:42:43,B019CGXTP0,Homo Deus,0,https://images.amazon.com/images/P/B019CGXTP0.jpg,2
+2022-03-08,14:45:19,B019CGXTP0,Homo Deus,6,https://images.amazon.com/images/P/B019CGXTP0.jpg,24
+2022-03-09,13:59:15,B019CGXTP0,Homo Deus,27,https://images.amazon.com/images/P/B019CGXTP0.jpg,28
+2022-03-10,13:33:08,B019CGXTP0,Homo Deus,0,https://images.amazon.com/images/P/B019CGXTP0.jpg,1
+2022-03-11,15:48:20,B019CGXTP0,Homo Deus,0,https://images.amazon.com/images/P/B019CGXTP0.jpg,2
+2022-03-14,13:17:29,B019CGXTP0,Homo Deus,0,https://images.amazon.com/images/P/B019CGXTP0.jpg,3
+2022-03-15,21:41:05,B019CGXTP0,Homo Deus,5,https://images.amazon.com/images/P/B019CGXTP0.jpg,4
+2022-04-03,11:35:19,B019CGXTP0,Homo Deus,10,https://images.amazon.com/images/P/B019CGXTP0.jpg,13
+2022-05-10,20:55:01,B019CGXTP0,Homo Deus,25,https://images.amazon.com/images/P/B019CGXTP0.jpg,35
+2022-05-12,20:43:55,B019CGXTP0,Homo Deus,11,https://images.amazon.com/images/P/B019CGXTP0.jpg,2
+2023-03-26,23:06:11,B019CGXTP0,Homo Deus,20,https://images.amazon.com/images/P/B019CGXTP0.jpg,34
+2023-03-27,07:16:22,B019CGXTP0,Homo Deus,0,https://images.amazon.com/images/P/B019CGXTP0.jpg,5
+2023-03-29,21:18:41,B019CGXTP0,Homo Deus,0,https://images.amazon.com/images/P/B019CGXTP0.jpg,4
+2023-10-07,21:27:29,B019CGXTP0,Homo Deus,18,https://images.amazon.com/images/P/B019CGXTP0.jpg,20
+2023-10-08,07:06:28,B019CGXTP0,Homo Deus,0,https://images.amazon.com/images/P/B019CGXTP0.jpg,2
+2023-12-04,23:54:34,B019CGXTP0,Homo Deus,17,https://images.amazon.com/images/P/B019CGXTP0.jpg,27
+2023-12-06,21:26:00,B019CGXTP0,Homo Deus,33,https://images.amazon.com/images/P/B019CGXTP0.jpg,37
+2023-12-07,21:12:58,B019CGXTP0,Homo Deus,24,https://images.amazon.com/images/P/B019CGXTP0.jpg,18
+2023-12-08,23:08:40,B019CGXTP0,Homo Deus,23,https://images.amazon.com/images/P/B019CGXTP0.jpg,50
+2023-12-10,16:26:18,B019CGXTP0,Homo Deus,15,https://images.amazon.com/images/P/B019CGXTP0.jpg,11
+2023-12-11,22:16:09,B019CGXTP0,Homo Deus,1,https://images.amazon.com/images/P/B019CGXTP0.jpg,8
+2023-12-13,07:35:02,B019CGXTP0,Homo Deus,10,https://images.amazon.com/images/P/B019CGXTP0.jpg,2
+2024-02-12,23:18:00,B019CGXTP0,Homo Deus,11,https://images.amazon.com/images/P/B019CGXTP0.jpg,18
+2024-02-13,08:37:04,B019CGXTP0,Homo Deus,0,https://images.amazon.com/images/P/B019CGXTP0.jpg,2
+2024-02-23,22:03:19,B019CGXTP0,Homo Deus,34,https://images.amazon.com/images/P/B019CGXTP0.jpg,24
+2024-02-24,09:14:16,B019CGXTP0,Homo Deus,41,https://images.amazon.com/images/P/B019CGXTP0.jpg,35
+2024-03-18,21:51:37,B019CGXTP0,Homo Deus,54,https://images.amazon.com/images/P/B019CGXTP0.jpg,39
+2024-03-23,21:45:57,B019CGXTP0,Homo Deus,33,https://images.amazon.com/images/P/B019CGXTP0.jpg,44
+2024-03-24,10:40:16,B019CGXTP0,Homo Deus,11,https://images.amazon.com/images/P/B019CGXTP0.jpg,1
+2024-03-28,21:49:29,B019CGXTP0,Homo Deus,1,https://images.amazon.com/images/P/B019CGXTP0.jpg,2
+2024-04-06,14:42:28,B019CGXTP0,Homo Deus,38,https://images.amazon.com/images/P/B019CGXTP0.jpg,32
+2024-04-10,21:20:24,B019CGXTP0,Homo Deus,30,https://images.amazon.com/images/P/B019CGXTP0.jpg,30
+2024-04-21,19:40:17,B019CGXTP0,Homo Deus,26,https://images.amazon.com/images/P/B019CGXTP0.jpg,28
+2024-04-22,21:06:56,B019CGXTP0,Homo Deus,27,https://images.amazon.com/images/P/B019CGXTP0.jpg,41
+2024-04-24,01:31:01,B019CGXTP0,Homo Deus,12,https://images.amazon.com/images/P/B019CGXTP0.jpg,9
+2024-04-25,21:33:01,B019CGXTP0,Homo Deus,26,https://images.amazon.com/images/P/B019CGXTP0.jpg,18
+2024-04-26,00:31:19,B019CGXTP0,Homo Deus,47,https://images.amazon.com/images/P/B019CGXTP0.jpg,37
+2024-04-28,17:26:13,B019CGXTP0,Homo Deus,139,https://images.amazon.com/images/P/B019CGXTP0.jpg,105
+2024-04-30,21:50:42,B019CGXTP0,Homo Deus,26,https://images.amazon.com/images/P/B019CGXTP0.jpg,56
+2024-05-01,20:51:45,B019CGXTP0,Homo Deus,32,https://images.amazon.com/images/P/B019CGXTP0.jpg,22
+2024-05-03,22:30:07,B019CGXTP0,Homo Deus,12,https://images.amazon.com/images/P/B019CGXTP0.jpg,10
+2024-05-04,21:44:12,B019CGXTP0,Homo Deus,21,https://images.amazon.com/images/P/B019CGXTP0.jpg,16
+2024-05-06,17:19:35,B019CGXTP0,Homo Deus,37,https://images.amazon.com/images/P/B019CGXTP0.jpg,26
+2024-05-07,21:46:00,B019CGXTP0,Homo Deus,19,https://images.amazon.com/images/P/B019CGXTP0.jpg,16
+2024-05-08,20:15:55,B019CGXTP0,Homo Deus,21,https://images.amazon.com/images/P/B019CGXTP0.jpg,39
+2023-09-23,20:58:24,B01BKS2X0K,Neuromancer,3,https://images.amazon.com/images/P/B01BKS2X0K.jpg,4
+2023-09-25,21:55:59,B01BKS2X0K,Neuromancer,12,https://images.amazon.com/images/P/B01BKS2X0K.jpg,1
+2023-09-26,21:31:15,B01BKS2X0K,Neuromancer,17,https://images.amazon.com/images/P/B01BKS2X0K.jpg,25
+2023-09-27,20:26:51,B01BKS2X0K,Neuromancer,9,https://images.amazon.com/images/P/B01BKS2X0K.jpg,9
+2023-09-28,21:32:00,B01BKS2X0K,Neuromancer,3,https://images.amazon.com/images/P/B01BKS2X0K.jpg,1
+2023-09-30,15:27:59,B01BKS2X0K,Neuromancer,0,https://images.amazon.com/images/P/B01BKS2X0K.jpg,1
+2023-10-01,17:20:06,B01BKS2X0K,Neuromancer,26,https://images.amazon.com/images/P/B01BKS2X0K.jpg,37
+2023-10-02,07:01:38,B01BKS2X0K,Neuromancer,0,https://images.amazon.com/images/P/B01BKS2X0K.jpg,2
+2023-10-07,19:00:39,B01BKS2X0K,Neuromancer,0,https://images.amazon.com/images/P/B01BKS2X0K.jpg,2
+2025-02-21,23:47:51,B01BKS2X0K,Neuromancer,0,https://images.amazon.com/images/P/B01BKS2X0K.jpg,1
+2025-02-22,23:24:50,B01BKS2X0K,Neuromancer,13,https://images.amazon.com/images/P/B01BKS2X0K.jpg,35
+2025-02-23,21:19:25,B01BKS2X0K,Neuromancer,38,https://images.amazon.com/images/P/B01BKS2X0K.jpg,46
+2025-02-24,21:08:07,B01BKS2X0K,Neuromancer,58,https://images.amazon.com/images/P/B01BKS2X0K.jpg,64
+2025-02-25,21:56:41,B01BKS2X0K,Neuromancer,23,https://images.amazon.com/images/P/B01BKS2X0K.jpg,20
+2025-02-26,20:43:26,B01BKS2X0K,Neuromancer,56,https://images.amazon.com/images/P/B01BKS2X0K.jpg,75
+2025-02-27,20:57:19,B01BKS2X0K,Neuromancer,60,https://images.amazon.com/images/P/B01BKS2X0K.jpg,66
+2025-02-28,22:59:57,B01BKS2X0K,Neuromancer,17,https://images.amazon.com/images/P/B01BKS2X0K.jpg,21
+2025-03-01,22:32:51,B01BKS2X0K,Neuromancer,35,https://images.amazon.com/images/P/B01BKS2X0K.jpg,46
+2025-03-02,09:35:13,B01BKS2X0K,Neuromancer,70,https://images.amazon.com/images/P/B01BKS2X0K.jpg,84
+2025-03-03,21:50:53,B01BKS2X0K,Neuromancer,27,https://images.amazon.com/images/P/B01BKS2X0K.jpg,41
+2025-03-04,22:50:40,B01BKS2X0K,Neuromancer,16,https://images.amazon.com/images/P/B01BKS2X0K.jpg,16
+2025-03-05,21:37:55,B01BKS2X0K,Neuromancer,52,https://images.amazon.com/images/P/B01BKS2X0K.jpg,56
+2025-03-06,00:11:29,B01BKS2X0K,Neuromancer,39,https://images.amazon.com/images/P/B01BKS2X0K.jpg,37
+2025-03-07,19:14:53,B01BKS2X0K,Neuromancer,18,https://images.amazon.com/images/P/B01BKS2X0K.jpg,11
+2025-03-08,12:31:01,B01BKS2X0K,Neuromancer,66,https://images.amazon.com/images/P/B01BKS2X0K.jpg,97
+2025-03-09,07:17:23,B01BKS2X0K,Neuromancer,60,https://images.amazon.com/images/P/B01BKS2X0K.jpg,64
+2024-12-12,22:31:36,B01GNJ5RWM,The Island of doctor Moreau,0,https://images.amazon.com/images/P/B01GNJ5RWM.jpg,32
+2024-12-13,15:52:46,B01GNJ5RWM,The Island of doctor Moreau,33,https://images.amazon.com/images/P/B01GNJ5RWM.jpg,34
+2024-12-14,14:45:58,B01GNJ5RWM,The Island of doctor Moreau,151,https://images.amazon.com/images/P/B01GNJ5RWM.jpg,139
+2024-12-15,23:21:10,B01GNJ5RWM,The Island of doctor Moreau,12,https://images.amazon.com/images/P/B01GNJ5RWM.jpg,11
+2024-12-16,22:00:07,B01GNJ5RWM,The Island of doctor Moreau,95,https://images.amazon.com/images/P/B01GNJ5RWM.jpg,80
+2025-01-02,01:36:18,B01GNJ5RWM,The Island of doctor Moreau,2,https://images.amazon.com/images/P/B01GNJ5RWM.jpg,4
+2025-02-04,22:22:59,B01GNJ5RWM,The Island of doctor Moreau,0,https://images.amazon.com/images/P/B01GNJ5RWM.jpg,1
+2022-04-16,18:19:49,B01N5AX61W,Atomic Habits,0,https://images.amazon.com/images/P/B01N5AX61W.jpg,1
+2022-04-19,18:58:19,B01N5AX61W,Atomic Habits,0,https://images.amazon.com/images/P/B01N5AX61W.jpg,1
+2022-08-20,17:34:48,B01N5AX61W,Atomic Habits,0,https://images.amazon.com/images/P/B01N5AX61W.jpg,4
+2024-05-25,13:10:55,B01N5AX61W,Atomic Habits,0,https://images.amazon.com/images/P/B01N5AX61W.jpg,1
+2024-05-27,21:29:56,B01N5AX61W,Atomic Habits,20,https://images.amazon.com/images/P/B01N5AX61W.jpg,24
+2024-05-28,23:04:36,B01N5AX61W,Atomic Habits,15,https://images.amazon.com/images/P/B01N5AX61W.jpg,16
+2024-05-29,23:17:47,B01N5AX61W,Atomic Habits,23,https://images.amazon.com/images/P/B01N5AX61W.jpg,18
+2024-05-31,21:37:50,B01N5AX61W,Atomic Habits,17,https://images.amazon.com/images/P/B01N5AX61W.jpg,30
+2024-06-02,11:49:35,B01N5AX61W,Atomic Habits,0,https://images.amazon.com/images/P/B01N5AX61W.jpg,1
+2024-06-04,22:03:51,B01N5AX61W,Atomic Habits,9,https://images.amazon.com/images/P/B01N5AX61W.jpg,16
+2024-06-05,22:14:28,B01N5AX61W,Atomic Habits,11,https://images.amazon.com/images/P/B01N5AX61W.jpg,18
+2024-06-06,23:32:47,B01N5AX61W,Atomic Habits,12,https://images.amazon.com/images/P/B01N5AX61W.jpg,28
+2024-10-23,21:34:59,B01N5AX61W,Atomic Habits,13,https://images.amazon.com/images/P/B01N5AX61W.jpg,11
+2024-10-24,22:14:18,B01N5AX61W,Atomic Habits,28,https://images.amazon.com/images/P/B01N5AX61W.jpg,38
+2024-12-10,20:37:55,B01N5AX61W,Atomic Habits,65,https://images.amazon.com/images/P/B01N5AX61W.jpg,82
+2024-12-11,22:01:38,B01N5AX61W,Atomic Habits,55,https://images.amazon.com/images/P/B01N5AX61W.jpg,74
+2024-12-12,21:25:41,B01N5AX61W,Atomic Habits,41,https://images.amazon.com/images/P/B01N5AX61W.jpg,41
+2024-12-14,17:09:35,B01N5AX61W,Atomic Habits,0,https://images.amazon.com/images/P/B01N5AX61W.jpg,1
+2024-12-16,22:59:44,B01N5AX61W,Atomic Habits,0,https://images.amazon.com/images/P/B01N5AX61W.jpg,1
+2025-03-26,21:26:19,B07B5WBFLT,Foundation,12,https://images.amazon.com/images/P/B07B5WBFLT.jpg,18
+2025-03-27,22:31:41,B07B5WBFLT,Foundation,21,https://images.amazon.com/images/P/B07B5WBFLT.jpg,23
+2025-03-28,21:49:32,B07B5WBFLT,Foundation,23,https://images.amazon.com/images/P/B07B5WBFLT.jpg,25
+2025-03-29,12:41:21,B07B5WBFLT,Foundation,294,https://images.amazon.com/images/P/B07B5WBFLT.jpg,297
+2025-03-30,22:02:10,B07B5WBFLT,Foundation,27,https://images.amazon.com/images/P/B07B5WBFLT.jpg,35
+2025-03-31,07:05:40,B07B5WBFLT,Foundation,135,https://images.amazon.com/images/P/B07B5WBFLT.jpg,165
+2025-04-16,20:41:08,B07B5WBFLT,Foundation,0,https://images.amazon.com/images/P/B07B5WBFLT.jpg,5
+2025-04-28,22:02:47,B07B5X9WTZ,Second Foundation,31,https://images.amazon.com/images/P/B07B5X9WTZ.jpg,24
+2025-04-29,00:08:03,B07B5X9WTZ,Second Foundation,85,https://images.amazon.com/images/P/B07B5X9WTZ.jpg,84
+2025-04-30,22:23:32,B07B5X9WTZ,Second Foundation,21,https://images.amazon.com/images/P/B07B5X9WTZ.jpg,36
+2025-05-01,06:30:19,B07B5X9WTZ,Second Foundation,98,https://images.amazon.com/images/P/B07B5X9WTZ.jpg,104
+2021-11-13,18:10:41,B07B5ZQN2C,"I, Robot",100,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,72
+2021-11-14,13:15:46,B07B5ZQN2C,"I, Robot",82,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,41
+2021-11-15,20:40:23,B07B5ZQN2C,"I, Robot",48,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,50
+2021-11-16,10:16:03,B07B5ZQN2C,"I, Robot",0,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,2
+2021-11-17,20:37:36,B07B5ZQN2C,"I, Robot",21,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,48
+2021-11-18,21:54:45,B07B5ZQN2C,"I, Robot",17,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,10
+2021-11-19,09:27:02,B07B5ZQN2C,"I, Robot",0,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,1
+2021-11-21,21:32:58,B07B5ZQN2C,"I, Robot",25,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,43
+2021-11-30,22:24:57,B07B5ZQN2C,"I, Robot",72,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,118
+2021-12-13,22:01:32,B07B5ZQN2C,"I, Robot",17,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,22
+2021-12-26,20:47:41,B07B5ZQN2C,"I, Robot",0,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,3
+2021-12-27,21:37:10,B07B5ZQN2C,"I, Robot",126,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,182
+2021-12-28,09:10:42,B07B5ZQN2C,"I, Robot",150,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,233
+2021-12-30,23:57:15,B07B5ZQN2C,"I, Robot",0,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,1
+2022-01-07,06:41:49,B07B5ZQN2C,"I, Robot",0,https://images.amazon.com/images/P/B07B5ZQN2C.jpg,1
+2025-03-31,17:35:27,B07B64BHFS,Foundation and Empire,27,https://images.amazon.com/images/P/B07B64BHFS.jpg,27
+2025-04-01,21:21:03,B07B64BHFS,Foundation and Empire,23,https://images.amazon.com/images/P/B07B64BHFS.jpg,25
+2025-04-02,20:34:50,B07B64BHFS,Foundation and Empire,39,https://images.amazon.com/images/P/B07B64BHFS.jpg,50
+2025-04-03,22:16:44,B07B64BHFS,Foundation and Empire,21,https://images.amazon.com/images/P/B07B64BHFS.jpg,24
+2025-04-04,20:53:50,B07B64BHFS,Foundation and Empire,53,https://images.amazon.com/images/P/B07B64BHFS.jpg,70
+2025-04-05,21:17:01,B07B64BHFS,Foundation and Empire,29,https://images.amazon.com/images/P/B07B64BHFS.jpg,29
+2025-04-06,17:45:10,B07B64BHFS,Foundation and Empire,174,https://images.amazon.com/images/P/B07B64BHFS.jpg,189
+2025-04-07,18:43:07,B07B64BHFS,Foundation and Empire,142,https://images.amazon.com/images/P/B07B64BHFS.jpg,148
+2025-04-23,15:57:34,B07B64BHFS,Foundation and Empire,0,https://images.amazon.com/images/P/B07B64BHFS.jpg,1
+2022-01-03,10:47:26,B07D1G6DTF,Digital Minimalism,129,https://images.amazon.com/images/P/B07D1G6DTF.jpg,186
+2022-05-10,20:53:56,B07D1G6DTF,Digital Minimalism,0,https://images.amazon.com/images/P/B07D1G6DTF.jpg,5
+2023-10-01,20:43:09,B07D1G6DTF,Digital Minimalism,24,https://images.amazon.com/images/P/B07D1G6DTF.jpg,38
+2023-10-02,02:32:28,B07D1G6DTF,Digital Minimalism,207,https://images.amazon.com/images/P/B07D1G6DTF.jpg,215
+2023-10-31,21:33:56,B07D1G6DTF,Digital Minimalism,2,https://images.amazon.com/images/P/B07D1G6DTF.jpg,2
+2023-11-06,22:08:30,B07D1G6DTF,Digital Minimalism,0,https://images.amazon.com/images/P/B07D1G6DTF.jpg,1
+2023-11-09,22:00:37,B07D1G6DTF,Digital Minimalism,0,https://images.amazon.com/images/P/B07D1G6DTF.jpg,1
+2024-06-22,08:56:23,B07D1G6DTF,Digital Minimalism,0,https://images.amazon.com/images/P/B07D1G6DTF.jpg,1
+2024-12-16,23:44:16,B07D1G6DTF,Digital Minimalism,0,https://images.amazon.com/images/P/B07D1G6DTF.jpg,1
+2024-12-17,21:52:58,B07D1G6DTF,Digital Minimalism,52,https://images.amazon.com/images/P/B07D1G6DTF.jpg,41
+2024-12-18,22:03:56,B07D1G6DTF,Digital Minimalism,63,https://images.amazon.com/images/P/B07D1G6DTF.jpg,77
+2024-12-20,00:02:22,B07D1G6DTF,Digital Minimalism,27,https://images.amazon.com/images/P/B07D1G6DTF.jpg,64
+2024-12-21,01:16:31,B07D1G6DTF,Digital Minimalism,29,https://images.amazon.com/images/P/B07D1G6DTF.jpg,60
+2025-01-02,01:35:37,B07D1G6DTF,Digital Minimalism,0,https://images.amazon.com/images/P/B07D1G6DTF.jpg,3
+2025-02-09,21:12:40,B07VRS84D1,"Pragmatic Programmer, The",16,https://images.amazon.com/images/P/B07VRS84D1.jpg,33
+2025-02-10,21:17:13,B07VRS84D1,"Pragmatic Programmer, The",47,https://images.amazon.com/images/P/B07VRS84D1.jpg,98
+2025-02-11,21:56:54,B07VRS84D1,"Pragmatic Programmer, The",61,https://images.amazon.com/images/P/B07VRS84D1.jpg,135
+2025-02-12,21:27:10,B07VRS84D1,"Pragmatic Programmer, The",73,https://images.amazon.com/images/P/B07VRS84D1.jpg,130
+2025-02-13,22:47:52,B07VRS84D1,"Pragmatic Programmer, The",12,https://images.amazon.com/images/P/B07VRS84D1.jpg,26
+2025-02-14,23:00:25,B07VRS84D1,"Pragmatic Programmer, The",25,https://images.amazon.com/images/P/B07VRS84D1.jpg,58
+2025-02-15,22:01:53,B07VRS84D1,"Pragmatic Programmer, The",41,https://images.amazon.com/images/P/B07VRS84D1.jpg,115
+2025-02-16,21:51:05,B07VRS84D1,"Pragmatic Programmer, The",36,https://images.amazon.com/images/P/B07VRS84D1.jpg,94
+2025-02-17,11:50:25,B07VRS84D1,"Pragmatic Programmer, The",129,https://images.amazon.com/images/P/B07VRS84D1.jpg,328
+2025-02-19,21:59:08,B07VRS84D1,"Pragmatic Programmer, The",44,https://images.amazon.com/images/P/B07VRS84D1.jpg,82
+2025-02-20,22:26:07,B07VRS84D1,"Pragmatic Programmer, The",30,https://images.amazon.com/images/P/B07VRS84D1.jpg,84
+2025-02-21,23:32:58,B07VRS84D1,"Pragmatic Programmer, The",14,https://images.amazon.com/images/P/B07VRS84D1.jpg,37
+2023-09-03,20:50:21,B07W9LYXD9,The Metamorphosis (AmazonClassics Edition),15,https://images.amazon.com/images/P/B07W9LYXD9.jpg,56
+2023-09-05,20:48:14,B07W9LYXD9,The Metamorphosis (AmazonClassics Edition),0,https://images.amazon.com/images/P/B07W9LYXD9.jpg,1
+2023-09-06,15:28:46,B07W9LYXD9,The Metamorphosis (AmazonClassics Edition),10,https://images.amazon.com/images/P/B07W9LYXD9.jpg,1
+2023-09-08,19:13:48,B07W9LYXD9,The Metamorphosis (AmazonClassics Edition),57,https://images.amazon.com/images/P/B07W9LYXD9.jpg,9
+2023-09-09,20:54:53,B07W9LYXD9,The Metamorphosis (AmazonClassics Edition),75,https://images.amazon.com/images/P/B07W9LYXD9.jpg,97
+2023-09-10,19:19:23,B07W9LYXD9,The Metamorphosis (AmazonClassics Edition),45,https://images.amazon.com/images/P/B07W9LYXD9.jpg,39
+2024-05-14,19:25:32,B07W9LYXD9,The Metamorphosis (AmazonClassics Edition),0,https://images.amazon.com/images/P/B07W9LYXD9.jpg,1
+2024-05-24,22:01:45,B07W9LYXD9,The Metamorphosis (AmazonClassics Edition),0,https://images.amazon.com/images/P/B07W9LYXD9.jpg,1
+2024-02-15,23:43:36,B07ZH244RZ,The Most Dangerous Game (AmazonClassics Edition),21,https://images.amazon.com/images/P/B07ZH244RZ.jpg,28
+2024-02-16,05:35:19,B07ZH244RZ,The Most Dangerous Game (AmazonClassics Edition),18,https://images.amazon.com/images/P/B07ZH244RZ.jpg,15
+2024-02-18,23:57:48,B07ZH244RZ,The Most Dangerous Game (AmazonClassics Edition),10,https://images.amazon.com/images/P/B07ZH244RZ.jpg,7
+2024-02-19,00:08:15,B07ZH244RZ,The Most Dangerous Game (AmazonClassics Edition),0,https://images.amazon.com/images/P/B07ZH244RZ.jpg,2
+2023-10-02,19:49:07,B0863CKDFQ,One Billion Years to the End of the World (Penguin Science Fiction),4,https://images.amazon.com/images/P/B0863CKDFQ.jpg,2
+2023-10-03,00:27:23,B0863CKDFQ,One Billion Years to the End of the World (Penguin Science Fiction),73,https://images.amazon.com/images/P/B0863CKDFQ.jpg,68
+2023-10-05,13:41:01,B0863CKDFQ,One Billion Years to the End of the World (Penguin Science Fiction),82,https://images.amazon.com/images/P/B0863CKDFQ.jpg,99
+2023-10-06,20:48:55,B0863CKDFQ,One Billion Years to the End of the World (Penguin Science Fiction),21,https://images.amazon.com/images/P/B0863CKDFQ.jpg,19
+2023-10-07,06:31:39,B0863CKDFQ,One Billion Years to the End of the World (Penguin Science Fiction),203,https://images.amazon.com/images/P/B0863CKDFQ.jpg,189
+2023-10-09,11:18:31,B0863CKDFQ,One Billion Years to the End of the World (Penguin Science Fiction),0,https://images.amazon.com/images/P/B0863CKDFQ.jpg,1
+2024-01-09,20:38:10,B0863CKDFQ,One Billion Years to the End of the World (Penguin Science Fiction),0,https://images.amazon.com/images/P/B0863CKDFQ.jpg,1
+2024-03-23,21:42:53,B0863CKDFQ,One Billion Years to the End of the World (Penguin Science Fiction),0,https://images.amazon.com/images/P/B0863CKDFQ.jpg,1
+2024-05-24,22:02:02,B0863CKDFQ,One Billion Years to the End of the World (Penguin Science Fiction),0,https://images.amazon.com/images/P/B0863CKDFQ.jpg,1
+2024-11-02,20:56:29,B08FFJS3YW,Project Hail Mary,90,https://images.amazon.com/images/P/B08FFJS3YW.jpg,119
+2024-11-03,18:16:48,B08FFJS3YW,Project Hail Mary,37,https://images.amazon.com/images/P/B08FFJS3YW.jpg,43
+2024-11-04,20:29:27,B08FFJS3YW,Project Hail Mary,126,https://images.amazon.com/images/P/B08FFJS3YW.jpg,130
+2024-11-05,18:05:55,B08FFJS3YW,Project Hail Mary,113,https://images.amazon.com/images/P/B08FFJS3YW.jpg,132
+2024-11-06,13:22:31,B08FFJS3YW,Project Hail Mary,72,https://images.amazon.com/images/P/B08FFJS3YW.jpg,86
+2024-11-07,21:08:56,B08FFJS3YW,Project Hail Mary,100,https://images.amazon.com/images/P/B08FFJS3YW.jpg,114
+2024-11-08,21:45:47,B08FFJS3YW,Project Hail Mary,131,https://images.amazon.com/images/P/B08FFJS3YW.jpg,107
+2024-11-09,07:34:21,B08FFJS3YW,Project Hail Mary,62,https://images.amazon.com/images/P/B08FFJS3YW.jpg,76
+2024-11-10,11:53:36,B08FFJS3YW,Project Hail Mary,50,https://images.amazon.com/images/P/B08FFJS3YW.jpg,60
+2022-03-09,13:59:30,B08JV3W3VC,How To Win Friends and Influence People,2,https://images.amazon.com/images/P/B08JV3W3VC.jpg,2
+2022-03-29,16:45:52,B08JV3W3VC,How To Win Friends and Influence People,91,https://images.amazon.com/images/P/B08JV3W3VC.jpg,149
+2022-04-02,18:59:19,B08JV3W3VC,How To Win Friends and Influence People,15,https://images.amazon.com/images/P/B08JV3W3VC.jpg,8
+2022-04-03,09:52:40,B08JV3W3VC,How To Win Friends and Influence People,0,https://images.amazon.com/images/P/B08JV3W3VC.jpg,1
+2022-04-06,19:42:10,B08JV3W3VC,How To Win Friends and Influence People,53,https://images.amazon.com/images/P/B08JV3W3VC.jpg,81
+2022-04-07,06:08:48,B08JV3W3VC,How To Win Friends and Influence People,48,https://images.amazon.com/images/P/B08JV3W3VC.jpg,52
+2022-04-12,12:51:10,B08JV3W3VC,How To Win Friends and Influence People,0,https://images.amazon.com/images/P/B08JV3W3VC.jpg,1
+2022-04-14,00:28:33,B08JV3W3VC,How To Win Friends and Influence People,0,https://images.amazon.com/images/P/B08JV3W3VC.jpg,2
+2022-04-16,18:19:43,B08JV3W3VC,How To Win Friends and Influence People,0,https://images.amazon.com/images/P/B08JV3W3VC.jpg,1
+2022-06-22,20:54:22,B08JV3W3VC,How To Win Friends and Influence People,9,https://images.amazon.com/images/P/B08JV3W3VC.jpg,16
+2023-12-03,22:54:01,B08JV3W3VC,How To Win Friends and Influence People,18,https://images.amazon.com/images/P/B08JV3W3VC.jpg,24
+2024-12-16,23:44:40,B08JV3W3VC,How To Win Friends and Influence People,0,https://images.amazon.com/images/P/B08JV3W3VC.jpg,1
+2024-05-26,22:46:23,B08NDJC2YK,The Power Of Awareness,1,https://images.amazon.com/images/P/B08NDJC2YK.jpg,7
+2024-10-03,18:59:42,B08NDJC2YK,The Power Of Awareness,0,https://images.amazon.com/images/P/B08NDJC2YK.jpg,1
+2024-12-08,10:20:56,B08NDJC2YK,The Power Of Awareness,1,https://images.amazon.com/images/P/B08NDJC2YK.jpg,13
+2024-12-09,23:09:56,B08NDJC2YK,The Power Of Awareness,15,https://images.amazon.com/images/P/B08NDJC2YK.jpg,15
+2024-12-10,20:13:31,B08NDJC2YK,The Power Of Awareness,1,https://images.amazon.com/images/P/B08NDJC2YK.jpg,2
+2024-12-14,17:09:43,B08NDJC2YK,The Power Of Awareness,0,https://images.amazon.com/images/P/B08NDJC2YK.jpg,1
+2025-03-09,22:07:47,B08WGSM9CJ,Data Pipelines Pocket Reference,16,https://images.amazon.com/images/P/B08WGSM9CJ.jpg,124
+2025-03-10,21:36:38,B08WGSM9CJ,Data Pipelines Pocket Reference,34,https://images.amazon.com/images/P/B08WGSM9CJ.jpg,50
+2025-03-11,21:22:24,B08WGSM9CJ,Data Pipelines Pocket Reference,31,https://images.amazon.com/images/P/B08WGSM9CJ.jpg,71
+2025-03-12,23:42:44,B08WGSM9CJ,Data Pipelines Pocket Reference,8,https://images.amazon.com/images/P/B08WGSM9CJ.jpg,26
+2025-03-13,20:56:07,B08WGSM9CJ,Data Pipelines Pocket Reference,1,https://images.amazon.com/images/P/B08WGSM9CJ.jpg,1
+2025-03-31,17:11:59,B08WGSM9CJ,Data Pipelines Pocket Reference,2,https://images.amazon.com/images/P/B08WGSM9CJ.jpg,5
+2025-04-23,22:15:40,B08WGSM9CJ,Data Pipelines Pocket Reference,1,https://images.amazon.com/images/P/B08WGSM9CJ.jpg,35
+2024-06-07,00:31:11,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),11,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,8
+2024-06-11,05:45:38,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,10
+2024-06-12,00:35:27,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),52,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,75
+2024-06-20,21:44:38,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),33,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,20
+2024-06-22,15:19:03,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,2
+2024-06-23,06:36:59,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),16,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,17
+2024-06-25,11:27:37,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,3
+2024-06-26,04:56:04,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,1
+2024-06-27,04:42:48,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,2
+2024-07-01,21:42:22,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),8,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,10
+2024-07-02,02:57:10,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,1
+2024-07-04,17:38:32,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),63,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,68
+2024-08-07,20:33:11,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),37,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,28
+2024-08-12,22:29:58,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,1
+2024-08-23,22:09:37,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),30,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,28
+2024-09-04,14:41:29,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,1
+2024-11-17,08:49:39,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,1
+2024-12-16,23:44:48,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,1
+2024-12-21,01:47:17,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,1
+2024-12-29,21:35:48,B0BPCK4XW9,The Dark Forest (The Three-Body Problem Book 2),0,https://images.amazon.com/images/P/B0BPCK4XW9.jpg,1
+2024-05-08,20:44:00,B0BPCM5BL1,The Three-Body Problem,18,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,28
+2024-05-09,14:17:56,B0BPCM5BL1,The Three-Body Problem,121,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,97
+2024-05-10,21:38:00,B0BPCM5BL1,The Three-Body Problem,27,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,18
+2024-05-13,22:49:18,B0BPCM5BL1,The Three-Body Problem,22,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,32
+2024-05-14,16:28:40,B0BPCM5BL1,The Three-Body Problem,201,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,128
+2024-05-15,14:23:22,B0BPCM5BL1,The Three-Body Problem,80,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,49
+2024-05-17,20:00:40,B0BPCM5BL1,The Three-Body Problem,53,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,40
+2024-05-20,18:35:29,B0BPCM5BL1,The Three-Body Problem,28,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,30
+2024-05-21,20:29:09,B0BPCM5BL1,The Three-Body Problem,41,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,35
+2024-05-23,13:16:29,B0BPCM5BL1,The Three-Body Problem,51,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,56
+2024-05-24,12:53:36,B0BPCM5BL1,The Three-Body Problem,73,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,65
+2024-05-25,12:17:03,B0BPCM5BL1,The Three-Body Problem,96,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,68
+2024-05-26,22:13:19,B0BPCM5BL1,The Three-Body Problem,31,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,35
+2024-10-23,05:15:06,B0BPCM5BL1,The Three-Body Problem,0,https://images.amazon.com/images/P/B0BPCM5BL1.jpg,1
+2024-10-25,20:16:03,B0BS37DHM3,Technofeudalism,68,https://images.amazon.com/images/P/B0BS37DHM3.jpg,72
+2024-10-26,17:50:09,B0BS37DHM3,Technofeudalism,111,https://images.amazon.com/images/P/B0BS37DHM3.jpg,120
+2024-10-27,21:13:30,B0BS37DHM3,Technofeudalism,58,https://images.amazon.com/images/P/B0BS37DHM3.jpg,69
+2024-10-28,22:30:54,B0BS37DHM3,Technofeudalism,57,https://images.amazon.com/images/P/B0BS37DHM3.jpg,61
+2024-10-30,02:01:18,B0BS37DHM3,Technofeudalism,67,https://images.amazon.com/images/P/B0BS37DHM3.jpg,71
+2024-10-31,23:58:03,B0BS37DHM3,Technofeudalism,7,https://images.amazon.com/images/P/B0BS37DHM3.jpg,23
+2024-11-01,00:20:07,B0BS37DHM3,Technofeudalism,33,https://images.amazon.com/images/P/B0BS37DHM3.jpg,37
+2024-11-02,20:08:10,B0BS37DHM3,Technofeudalism,36,https://images.amazon.com/images/P/B0BS37DHM3.jpg,63
+2025-04-24,21:02:29,B0CKCRZXGV,Building ETL Pipelines with Python,18,https://images.amazon.com/images/P/B0CKCRZXGV.jpg,76
+2025-04-25,09:12:03,B0CKCRZXGV,Building ETL Pipelines with Python,56,https://images.amazon.com/images/P/B0CKCRZXGV.jpg,145
+2025-04-26,22:52:50,B0CKCRZXGV,Building ETL Pipelines with Python,13,https://images.amazon.com/images/P/B0CKCRZXGV.jpg,28
+2025-04-27,07:09:25,B0CKCRZXGV,Building ETL Pipelines with Python,15,https://images.amazon.com/images/P/B0CKCRZXGV.jpg,30
+2025-04-28,21:22:53,B0CKCRZXGV,Building ETL Pipelines with Python,29,https://images.amazon.com/images/P/B0CKCRZXGV.jpg,110
+2025-03-13,20:57:35,B0DZD18WRP,Careless People,44,https://images.amazon.com/images/P/B0DZD18WRP.jpg,47
+2025-03-14,22:17:07,B0DZD18WRP,Careless People,50,https://images.amazon.com/images/P/B0DZD18WRP.jpg,47
+2025-03-15,14:58:22,B0DZD18WRP,Careless People,100,https://images.amazon.com/images/P/B0DZD18WRP.jpg,105
+2025-03-16,22:25:10,B0DZD18WRP,Careless People,44,https://images.amazon.com/images/P/B0DZD18WRP.jpg,41
+2025-03-17,21:50:43,B0DZD18WRP,Careless People,51,https://images.amazon.com/images/P/B0DZD18WRP.jpg,58
+2025-03-18,22:42:22,B0DZD18WRP,Careless People,43,https://images.amazon.com/images/P/B0DZD18WRP.jpg,37
+2025-03-19,21:25:47,B0DZD18WRP,Careless People,61,https://images.amazon.com/images/P/B0DZD18WRP.jpg,74
+2025-03-20,11:20:25,B0DZD18WRP,Careless People,71,https://images.amazon.com/images/P/B0DZD18WRP.jpg,91
+2025-03-21,23:41:11,B0DZD18WRP,Careless People,21,https://images.amazon.com/images/P/B0DZD18WRP.jpg,22
+2025-03-22,18:46:10,B0DZD18WRP,Careless People,34,https://images.amazon.com/images/P/B0DZD18WRP.jpg,28
+2025-03-23,22:14:58,B0DZD18WRP,Careless People,43,https://images.amazon.com/images/P/B0DZD18WRP.jpg,50
+2025-03-24,22:14:37,B0DZD18WRP,Careless People,19,https://images.amazon.com/images/P/B0DZD18WRP.jpg,17
+2025-03-25,23:00:34,B0DZD18WRP,Careless People,78,https://images.amazon.com/images/P/B0DZD18WRP.jpg,73

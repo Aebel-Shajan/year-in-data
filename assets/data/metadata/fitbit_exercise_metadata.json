@@ -1,0 +1,55 @@
+{
+  "FitbitExercise": {
+    "columns": {
+      "date": {
+        "tag": "date_column"
+      },
+      "activity_name": {
+        "tag": "category_column"
+      },
+      "average_heart_rate_bpm": {
+        "tag": "value_column",
+        "range": [
+          100.0,
+          400.0
+        ]
+      },
+      "calories": {
+        "tag": "value_column",
+        "units": "calories",
+        "range": [
+          200.0,
+          900.0
+        ]
+      },
+      "distance_km": {
+        "tag": "value_column",
+        "units": "km",
+        "range": [
+          2.0,
+          9.0
+        ]
+      },
+      "active_duration_minutes": {
+        "tag": "value_column",
+        "units": "minutes",
+        "range": [
+          1000000.0,
+          5000000.0
+        ]
+      },
+      "start_time": {
+        "tag": "time_column"
+      },
+      "pace_minutes_per_km": {
+        "tag": "value_column",
+        "units": "minutes per km",
+        "range": [
+          0.0,
+          20.0
+        ]
+      }
+    },
+    "dataframe": null
+  }
+}

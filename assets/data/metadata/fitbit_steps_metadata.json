@@ -1,0 +1,18 @@
+{
+  "TimeSeriesData": {
+    "columns": {
+      "date": {
+        "tag": "date_column"
+      },
+      "value": {
+        "tag": "value_column",
+        "units": "units",
+        "range": [
+          0.0,
+          20000.0
+        ]
+      }
+    },
+    "dataframe": null
+  }
+}

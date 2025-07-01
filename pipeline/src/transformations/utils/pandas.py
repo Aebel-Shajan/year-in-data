@@ -1,8 +1,12 @@
 import csv
+import importlib
+import inspect
 import json
 import logging
+import os
 import re
-from typing import BinaryIO, Callable
+from types import ModuleType
+from typing import BinaryIO, Callable, List
 
 import pandas as pd
 import pandera as pa
@@ -181,3 +185,26 @@ def get_range_for_df_column(df: pd.DataFrame, column: str):
     max_val = get_nth_percentile(df, column, 90)
     return get_nice_range(min_val, max_val)
 
+
+def get_all_schema_models(package: ModuleType) -> List[pa.DataFrameModel]:
+    schema_classes = []
+    root_path = package.__path__[0]
+    base_package = package.__name__
+
+    for dirpath, _, filenames in os.walk(root_path):
+        for filename in filenames:
+            if filename.endswith(".py") and not filename.startswith("__"):
+                file_path = os.path.join(dirpath, filename)
+                rel_path = os.path.relpath(file_path, root_path)
+                module_name = os.path.splitext(rel_path)[0].replace(os.sep, ".")
+                full_module_name = f"{base_package}.{module_name}"
+
+                try:
+                    module = importlib.import_module(full_module_name)
+                    for name, obj in inspect.getmembers(module, inspect.isclass):
+                        if issubclass(obj, pa.DataFrameModel) and obj is not pa.DataFrameModel:
+                            schema_classes.append(obj)
+                except Exception:
+                    continue  # Skip modules that fail to import
+
+    return schema_classes

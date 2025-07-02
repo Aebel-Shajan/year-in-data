@@ -1,9 +1,12 @@
 from pathlib import Path
 import dagster as dg
+from orchestrator import dagster_types
 import pandas as pd
 from transformations.utils.io import extract_specific_files_flat, get_latest_valid_zip
 from transformations.fitbit import calories, common, exercise, sleep
 from orchestrator.assets.common_assets import landing_zone
+from dagster_pandera import pandera_schema_to_dagster_type
+from schemas import fitbit_schemas
 
 
 @dg.asset(
@@ -36,6 +39,7 @@ def fitbit_calories_jsons(fitbit_zip: str) -> str:
 @dg.asset(
     deps=[fitbit_calories_jsons],
     kinds={"silver"},
+    dagster_type=dagster_types.RAW_TIME_SERIES_DATA,
 )
 def fitbit_calories_raw(fitbit_calories_jsons: str) -> pd.DataFrame:
     df = calories.extract_calories_jsons_into_dataframe(fitbit_calories_jsons)
@@ -45,6 +49,7 @@ def fitbit_calories_raw(fitbit_calories_jsons: str) -> pd.DataFrame:
 @dg.asset(
     deps=[fitbit_calories_raw],
     kinds={"gold"},
+    dagster_type=pandera_schema_to_dagster_type(fitbit_schemas.FitbitCalories)
 )
 def fitbit_calories(fitbit_calories_raw: pd.DataFrame) -> pd.DataFrame:
     df = calories.transform_calories(fitbit_calories_raw)
@@ -68,6 +73,7 @@ def fitbit_exercise_jsons(fitbit_zip: str) -> str:
 @dg.asset(
     deps=[fitbit_exercise_jsons],
     kinds={"silver"},
+    dagster_type=pandera_schema_to_dagster_type(fitbit_schemas.RawFitbitExercise)
 )
 def fitbit_exercise_raw(fitbit_exercise_jsons: str) -> pd.DataFrame:
     df = exercise.extract_exercise_jsons_into_dataframe(fitbit_exercise_jsons)
@@ -76,7 +82,8 @@ def fitbit_exercise_raw(fitbit_exercise_jsons: str) -> pd.DataFrame:
 
 @dg.asset(
     deps=[fitbit_exercise_raw],
-    kinds={"gold"}
+    kinds={"gold"},
+    dagster_type=pandera_schema_to_dagster_type(fitbit_schemas.FitbitExercise)
 )
 def fitbit_exercise(fitbit_exercise_raw: pd.DataFrame) -> pd.DataFrame:
     df = exercise.transform_exercise(fitbit_exercise_raw)
@@ -100,6 +107,7 @@ def fitbit_sleep_jsons(fitbit_zip: str) -> str:
 @dg.asset(
     deps=[fitbit_sleep_jsons],
     kinds={"silver"},
+    dagster_type=pandera_schema_to_dagster_type(fitbit_schemas.RawFitbitSleep),
 )
 def fitbit_sleep_raw(fitbit_sleep_jsons: str) -> pd.DataFrame:
     df = sleep.extract_sleep_jsons_into_dataframe(fitbit_sleep_jsons)
@@ -108,7 +116,8 @@ def fitbit_sleep_raw(fitbit_sleep_jsons: str) -> pd.DataFrame:
 
 @dg.asset(
     deps=[fitbit_sleep_raw],
-    kinds={"gold"}
+    kinds={"gold"},
+    dagster_type=pandera_schema_to_dagster_type(fitbit_schemas.FitbitSleep),
 )
 def fitbit_sleep(fitbit_sleep_raw: pd.DataFrame) -> pd.DataFrame:
     df = sleep.transform_sleep(fitbit_sleep_raw)
@@ -133,6 +142,7 @@ def fitbit_steps_jsons(fitbit_zip: str) -> str:
 @dg.asset(
     deps=[fitbit_steps_jsons],
     kinds={"silver"},
+    dagster_type=dagster_types.RAW_TIME_SERIES_DATA,
 )
 def fitbit_steps_raw(fitbit_steps_jsons: str) -> pd.DataFrame:
     df = common.extract_json_file_data(
@@ -145,6 +155,7 @@ def fitbit_steps_raw(fitbit_steps_jsons: str) -> pd.DataFrame:
 @dg.asset(
     deps=[fitbit_steps_raw],
     kinds={"gold"},
+    dagster_type=pandera_schema_to_dagster_type(fitbit_schemas.TimeSeriesData)
 )
 def fitbit_steps(fitbit_steps_raw: pd.DataFrame) -> pd.DataFrame:
     df = common.transform_time_series_data(fitbit_steps_raw)

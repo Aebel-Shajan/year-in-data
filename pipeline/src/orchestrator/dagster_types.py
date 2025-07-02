@@ -1,0 +1,7 @@
+
+
+from dagster_pandera import pandera_schema_to_dagster_type
+from schemas import fitbit_schemas
+
+
+RAW_TIME_SERIES_DATA = pandera_schema_to_dagster_type(fitbit_schemas.RawTimeSeriesData)

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import DataVis from "./components/DataVis";
+import { fetchData } from "./api/axiosClient";
 
 
 
@@ -15,28 +16,34 @@ const HomePage = () => {
 
 
   useEffect(() => {
-
-        const endpoints: Routes[] = []
-        const dataRoutes: string[] = [
-          "app_usage_screen_time",
-          "kindle_reading",
-          "github_repo_contributions",
-          "strong_workouts",
-          "fitbit_sleep",
-          "fitbit_exercise",
-          "fitbit_calories",
-          "fitbit_steps",
-
-        ]
-        dataRoutes.forEach(route => {
-          endpoints.push({
-            "name": route,
-            "path": "/data/" + route + ".csv"
-          })
+    function createEndpoints(tableNames: string[]) {
+      const endpoints: Routes[] = []
+      tableNames.forEach(tableName => {
+        endpoints.push({
+          "name": tableName,
+          "path": "/tables/" + tableName
         })
-        setDataEndpoints(endpoints)
+      })
+      setDataEndpoints(endpoints)
+    }
 
-  }, [])
+    const orderedTableNames = [
+      "app_usage_screen_time",
+      "github_repo_contributions",
+      "kindle_reading",
+      "strong_workouts",
+      "fitbit_calories",
+      "fitbit_exercise",
+      "fitbit_sleep",
+      "fitbit_steps",
+      "youtube_watch_history",
+    ]
+    createEndpoints(orderedTableNames)
+    // fetchData<string[]>("/tables/list_all_tables")
+    //   .then(createEndpoints)
+    //   .catch(reason => alert("Unable to get data from backend: " + reason))
+  }, [year])
+
 
   const heatmaps = dataEndpoints.map((route, index) => {
     return (<DataVis
@@ -47,12 +54,11 @@ const HomePage = () => {
       index={index}
     />)
   })
-
   return (
     <div className="min-h-screen bg-base-200 max-w-screen overflow-x-hidden">
       <Navbar
         year={year}
-        setYear={setYear}    
+        setYear={setYear}
       />
 
       <div className="min-h-screen w-full flex flex-col items-center gap-5 pt-20">

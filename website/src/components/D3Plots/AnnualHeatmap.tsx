@@ -35,7 +35,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
   const groupedData = d3.rollup(
     filteredData,
     v => d3.sum(v, d => d.value),
-    d => d.date,
+    d => (new Date(d.date)).toISOString().slice(0, 10),
     d => d.category,
   )
   const days = d3.timeDays(new Date(year, 0, 1), new Date(year + 1, 0, 1));
@@ -64,7 +64,6 @@ export const AnnualHeatmap: React.FC<Props> = ({
         return prev + current[1];
       }
     , 0);
-
     const uniqueRectId = uuidv4();
     const stroke = {
       width: 0.07 * cellSize,
@@ -76,7 +75,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
       y: day * (cellSize + cellPadding)
     }
     return (
-      <>
+      <g key={uuidv4()}>
         {
           week == 1 &&
           <text
@@ -152,7 +151,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
           }}
         >
         </rect>
-      </>
+      </g>
     );
   })
 

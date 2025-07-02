@@ -2,8 +2,10 @@ from orchestrator.assets.common_assets import landing_zone
 import dagster as dg
 import pandas as pd
 from transformations.utils.io import get_latest_valid_csv
-from schemas.app_usage_schemas import RawAppUsageScreenTime, RawAppUsageAppInfo
+from schemas.app_usage_schemas import AppUsageScreenTime, RawAppUsageScreenTime, RawAppUsageAppInfo
 from transformations.app_usage import screen_time, app_info_map
+from pandera.typing import DataFrame
+from dagster_pandera import pandera_schema_to_dagster_type
 
 
 
@@ -26,6 +28,7 @@ def latest_app_usage_activity_csv(landing_zone: str) -> str:
 @dg.asset(
     deps=[latest_app_usage_activity_csv],
     kinds={"silver"},
+    dagster_type=pandera_schema_to_dagster_type(RawAppUsageScreenTime),
 )
 def app_usage_screen_time_raw(latest_app_usage_activity_csv: str) -> pd.DataFrame:
     df = screen_time.extract_screen_time(latest_app_usage_activity_csv)
@@ -68,7 +71,8 @@ def app_usage_app_info(app_usage_app_info_raw: pd.DataFrame) -> pd.DataFrame:
 
 @dg.asset(
     deps=[app_usage_app_info, app_usage_screen_time_raw],
-    kinds={"gold"}
+    kinds={"gold"},
+    dagster_type=pandera_schema_to_dagster_type(AppUsageScreenTime),
 )
 def app_usage_screen_time(
     app_usage_app_info: pd.DataFrame, 

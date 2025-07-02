@@ -13,10 +13,13 @@ import pandera.pandas as pa
 from typing import List
 import schemas
 import dagster as dg
+import logging
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/tables")
 # I wanted to define column sementic data in pandera schema column metadata.
-
+# I know this is messy af, I couldn't be bothered to do things right, I decided to
+#  to put all the semantic info with the pandera schema.
 
 def get_schema_metadata(assets_def: dg.AssetsDefinition) -> TableSchema:
     """Converts pandera schema metadata into a TableSchema object we defined."""
@@ -55,11 +58,15 @@ def get_schema_metadata(assets_def: dg.AssetsDefinition) -> TableSchema:
                 datetime_column = column
             elif column_tag == "value_column":
                 range = (0, 10)
+                units = "units"
                 if column in df.columns:
                     range = get_range_for_df_column(df, column)
+                if "units" in column_metadata.keys():
+                    logger.warning(f"Please define units for column {column} in schema {schema_name}")
+                    units=column_metadata["units"]
                 value_columns[column] = ValueColumn(
                     name=column,
-                    units=column_metadata["units"],
+                    units=units,
                     range=range
                 )
             elif column_tag == "category_column":
@@ -135,6 +142,7 @@ def get_table(
                 records=df.to_dict(orient='records')
             )
     except Exception as e:
+        logger.exception(f"Error whilst getting records for {table_name}")
         raise HTTPException(
             500,
             detail=str(e)

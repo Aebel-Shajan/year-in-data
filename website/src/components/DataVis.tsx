@@ -76,6 +76,7 @@ const DataVis = (
   const [schema, setSchema] = useState<TableSchema | null>(null)
   const [selectedValueCol, setSelectedValueCol] = useState<string | null>(null)
   const [selectedCategoryCol, setSelectedCategoryCol] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
@@ -100,6 +101,7 @@ const DataVis = (
         if (!selectedCategoryCol) {
           setSelectedCategoryCol(categoryCols[0])
         }
+        setSelectedCategory("all")
         setSchema(schema)
       })
       .catch(error => {
@@ -124,6 +126,17 @@ const DataVis = (
       value: value
     }
   })
+  let distinctCategories: string[] = []
+  if (selectedCategoryCol) {
+    distinctCategories = Array.from(new Set(data.map(row => String(row[selectedCategoryCol]))));
+    distinctCategories.unshift("all")
+  }
+  const distinctCategoryOptions = distinctCategories.map(value => {
+    return {
+      label: value,
+      value: value,
+    }
+  })
 
   // Value col
   const possibleValueCols: string[] = Object.keys(schema.value_columns)
@@ -146,12 +159,15 @@ const DataVis = (
   const colorScale = createColorScale(ticks, d3Colors[d3ColorIndex])
 
 
-  const heatmap_data = structureData(
+  let heatmap_data = structureData(
     data,
     dateCol,
     selectedValueCol,
     selectedCategoryCol,
   )
+  if (selectedCategory != "all") {
+    heatmap_data = heatmap_data.filter(value => value.category == selectedCategory)
+  }
 
   return (
     <div className="
@@ -189,8 +205,6 @@ const DataVis = (
             labelLeft="value column"
           />
         }
-
-
         {
           categoryColOptions.length > 0 &&
           <Select
@@ -199,6 +213,16 @@ const DataVis = (
             setSelectedValue={setSelectedCategoryCol}
             labelLeft="category column"
           />
+        }
+        {
+          distinctCategories.length > 0 &&
+          <Select
+            options={distinctCategoryOptions}
+            selectedValue={selectedCategory}
+            setSelectedValue={setSelectedCategory}
+            labelLeft="category"
+          />
+
         }
       </div>
       {/* {imageGroups.length > 0 && 

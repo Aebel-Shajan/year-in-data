@@ -187,7 +187,7 @@ def get_range_for_df_column(df: pd.DataFrame, column: str):
 
 
 def get_all_schema_models(package: ModuleType) -> List[pa.DataFrameModel]:
-    schema_classes = []
+    schema_classes: List[pa.DataFrameModel] = []
     root_path = package.__path__[0]
     base_package = package.__name__
 

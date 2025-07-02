@@ -6,7 +6,7 @@ from transformations.fitbit.common import (
     transform_time_series_data,
 )
 from transformations.utils.io import extract_specific_files_flat
-from transformations.fitbit.schemas import FitbitCalories, RawTimeSeriesData
+from schemas.fitbit_schemas import FitbitCalories, RawTimeSeriesData
 
 
 logger = logging.getLogger(__name__)

@@ -6,7 +6,7 @@ import pandera as pa
 from pandera.typing.pandas import DataFrame
 
 from transformations.utils.pipeline_stage import PipelineStage
-from transformations.strong.schemas import RawStrongWorkouts, StrongWorkouts
+from schemas.strong_schemas import RawStrongWorkouts, StrongWorkouts
 from transformations.utils.pandas import detect_delimiter, rename_df_from_schema
 
 logger = logging.getLogger(__name__)

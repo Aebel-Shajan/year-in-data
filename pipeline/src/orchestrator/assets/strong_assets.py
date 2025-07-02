@@ -1,7 +1,7 @@
 import dagster as dg
 from orchestrator.assets.common_assets import landing_zone
 from transformations.utils.io import get_latest_valid_csv
-from transformations.strong.schemas import RawStrongWorkouts
+from schemas.strong_schemas import RawStrongWorkouts
 from transformations.strong import workouts
 import pandas as pd
 

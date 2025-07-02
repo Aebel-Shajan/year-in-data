@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from pandera.typing.pandas import DataFrame
 
 from transformations.utils.pipeline_stage import PipelineStage
-from transformations.app_usage.schemas import AppUsageAppInfo, RawAppUsageAppInfo
+from schemas.app_usage_schemas import AppUsageAppInfo, RawAppUsageAppInfo
 from transformations.utils.pandas import rename_df_from_schema
 
 logger = logging.getLogger(__name__)

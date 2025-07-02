@@ -4,7 +4,7 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from transformations.fitbit.schemas import FitbitExercise, RawFitbitExercise
+from schemas.fitbit_schemas import FitbitExercise, RawFitbitExercise
 from transformations.fitbit.common import extract_json_file_data
 from transformations.utils.io import extract_specific_files_flat
 

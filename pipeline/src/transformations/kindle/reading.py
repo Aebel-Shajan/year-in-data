@@ -5,7 +5,7 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from transformations.kindle.schemas import (AsinMap, KindleReading,
+from schemas.kindle_schemas import (AsinMap, KindleReading,
                                          RawKindleReading)
 from transformations.utils.pandas import detect_delimiter, rename_df_from_schema
 from transformations.utils.io import extract_specific_files_flat

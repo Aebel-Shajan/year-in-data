@@ -2,7 +2,7 @@ from orchestrator.assets.common_assets import landing_zone
 import dagster as dg
 import pandas as pd
 from transformations.utils.io import get_latest_valid_csv
-from transformations.app_usage.schemas import RawAppUsageScreenTime, RawAppUsageAppInfo
+from schemas.app_usage_schemas import RawAppUsageScreenTime, RawAppUsageAppInfo
 from transformations.app_usage import screen_time, app_info_map
 
 

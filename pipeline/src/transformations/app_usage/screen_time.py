@@ -6,7 +6,7 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from transformations.app_usage.schemas import (AppUsageAppInfo, AppUsageScreenTime,
+from schemas.app_usage_schemas import (AppUsageAppInfo, AppUsageScreenTime,
                                             RawAppUsageScreenTime)
 from transformations.utils.pandas import rename_df_from_schema
 

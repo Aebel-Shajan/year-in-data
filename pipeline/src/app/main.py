@@ -1,11 +1,24 @@
 import time
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import tables
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("uvicorn")
 
 app = FastAPI(title="Year in data backend")
+origins = [
+    "http://localhost:5173",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 app.include_router(tables.router)
 
 @app.middleware("http")

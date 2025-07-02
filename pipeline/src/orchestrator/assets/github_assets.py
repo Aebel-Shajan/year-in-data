@@ -3,6 +3,8 @@ import dagster as dg
 import pandas as pd
 from transformations.utils.env import load_env_vars
 from transformations.github import repo_contributions
+from schemas import github_schemas
+from dagster_pandera import pandera_schema_to_dagster_type
 
 @dg.asset(
     kinds={"bronze"},
@@ -30,6 +32,7 @@ def github_repo_contribution_jsons() -> str:
 @dg.asset(
     kinds={"silver"},
     deps=[github_repo_contribution_jsons],
+    dagster_type=pandera_schema_to_dagster_type(github_schemas.RawGithubRepoContributions),
 )
 def github_repo_contributions_raw(github_repo_contribution_jsons: str) -> pd.DataFrame:
     df = repo_contributions.extract_repo_contributions(github_repo_contribution_jsons)
@@ -38,6 +41,7 @@ def github_repo_contributions_raw(github_repo_contribution_jsons: str) -> pd.Dat
 @dg.asset(
     kinds={"gold"},
     deps=[github_repo_contributions_raw],
+    dagster_type=pandera_schema_to_dagster_type(github_schemas.GithubRepoContributions),
 )
 def github_repo_contributions(github_repo_contributions_raw: pd.DataFrame) -> pd.DataFrame:
     df = repo_contributions.transform_repo_contributions(github_repo_contributions_raw)

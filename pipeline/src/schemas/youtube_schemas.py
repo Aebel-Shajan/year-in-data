@@ -2,6 +2,15 @@ import pandera as pa
 from pandera.typing.pandas import Series, DateTime
 
 
+
+class RawYoutubeWatchHistory(pa.DataFrameModel):
+    datetime_str: Series[str] = pa.Field()
+    video_name: Series[str] = pa.Field()
+    video_url: Series[str] = pa.Field()
+    channel_name: Series[str] = pa.Field()
+    channel_url: Series[str] = pa.Field()
+    
+
 class YoutubeWatchHistory(pa.DataFrameModel):
     video_name: Series[str] = pa.Field(
         metadata={

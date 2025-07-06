@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { fetchData } from "../api/axiosClient"
-import Select from "./Select"
+// import Select from "./Select"
 import { AnnualHeatmap } from "./D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
 import { createColorScale } from "./D3Plots/d3Utils"
 import Legend from "./D3Plots/Legend"
+import Select from "react-select";
+
 // import FilterCarousel from "./FilterCarousel/FilterCarousel"
 
 // type ColumnCategory = (
@@ -76,7 +78,7 @@ const DataVis = (
   const [schema, setSchema] = useState<TableSchema | null>(null)
   const [selectedValueCol, setSelectedValueCol] = useState<string | null>(null)
   const [selectedCategoryCol, setSelectedCategoryCol] = useState<string | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
@@ -101,7 +103,7 @@ const DataVis = (
         if (!selectedCategoryCol) {
           setSelectedCategoryCol(categoryCols[0])
         }
-        setSelectedCategory("all")
+        setSelectedCategories([])
         setSchema(schema)
       })
       .catch(error => {
@@ -119,17 +121,23 @@ const DataVis = (
   const dateCol: string = schema.datetime_column
 
   // Category col
-  const allCategoryCols: string[] = Object.keys(schema.category_columns)
-  const categoryColOptions = allCategoryCols.map(value => {
-    return {
-      label: value.replace(/_/g, " "),
-      value: value
-    }
-  })
+  // const allCategoryCols: string[] = Object.keys(schema.category_columns)
+  // const categoryColOptions = allCategoryCols.map(value => {
+  //   return {
+  //     label: value.replace(/_/g, " "),
+  //     value: value
+  //   }
+  // })
   let distinctCategories: string[] = []
   if (selectedCategoryCol) {
-    distinctCategories = Array.from(new Set(data.map(row => String(row[selectedCategoryCol]))));
-    distinctCategories.unshift("all")
+    // Group by category, sum values, then order by sum descending
+    const grouped = d3.rollups(
+      data,
+      v => d3.sum(v, d => Number(d[selectedValueCol])),
+      d => String(d[selectedCategoryCol])
+    );
+    grouped.sort((a, b) => d3.descending(a[1], b[1]));
+    distinctCategories = grouped.map(([category]) => category);
   }
   const distinctCategoryOptions = distinctCategories.map(value => {
     return {
@@ -139,14 +147,14 @@ const DataVis = (
   })
 
   // Value col
-  const possibleValueCols: string[] = Object.keys(schema.value_columns)
   const valueColUnits = schema.value_columns[selectedValueCol].units
-  const valueColsOptions = possibleValueCols.map(value => {
-    return {
-      label: value.replace(/_/g, " "),
-      value: value
-    }
-  })
+  // const possibleValueCols: string[] = Object.keys(schema.value_columns)
+  // const valueColsOptions = possibleValueCols.map(value => {
+  //   return {
+  //     label: value.replace(/_/g, " "),
+  //     value: value
+  //   }
+  // })
 
   // Color scale
   let ticks: number[] = [1, 5, 10]
@@ -165,8 +173,8 @@ const DataVis = (
     selectedValueCol,
     selectedCategoryCol,
   )
-  if (selectedCategory != "all") {
-    heatmap_data = heatmap_data.filter(value => value.category == selectedCategory)
+  if (selectedCategories.length > 0) {
+    heatmap_data = heatmap_data.filter(value => selectedCategories.includes(value.category))
   }
 
   return (
@@ -196,7 +204,7 @@ const DataVis = (
         </div>
       </div>
       <div className="flex w-full gap-2">
-        {
+        {/* {
           valueColsOptions.length > 1 &&
           <Select
             options={valueColsOptions}
@@ -223,7 +231,16 @@ const DataVis = (
             labelLeft="category"
           />
 
-        }
+        } */}
+
+        <Select
+          isMulti
+          options={distinctCategoryOptions}
+          value={distinctCategoryOptions.filter(opt => selectedCategories.includes(opt.value))}
+          onChange={(selectedOptions) =>
+            setSelectedCategories(selectedOptions.map(opt => opt.value))
+          }
+        />
       </div>
       {/* {imageGroups.length > 0 && 
       (

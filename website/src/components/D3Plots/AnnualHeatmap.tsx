@@ -124,10 +124,19 @@ export const AnnualHeatmap: React.FC<Props> = ({
                 ${dateStr} (${date.toLocaleDateString(undefined, { weekday: 'long' })})
               </p>`
               categoryEntries.slice(0, 3).forEach(entry => {
+                let valueDisplay = "";
+                if (units === "minutes") {
+                  const totalMinutes = Number(entry[1]);
+                  const hours = Math.floor(totalMinutes / 60);
+                  const minutes = Math.round(totalMinutes % 60);
+                    valueDisplay = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+                } else {
+                  valueDisplay = `${Number(entry[1].toPrecision(3))} ${units}`;
+                }
                 innerHTML += `
-              <p>
-                ${entry[0]} ${Number(entry[1].toPrecision(3))} ${units}
-              </p>
+                <p>
+                ${entry[0]} ${valueDisplay}
+                </p>
                 `
               })
               tooltipElement.innerHTML = innerHTML;

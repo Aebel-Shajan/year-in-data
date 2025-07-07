@@ -4,6 +4,8 @@ import pandas as pd
 from transformations.kindle import reading, asin_map
 from transformations.utils.io import get_latest_valid_zip
 from orchestrator.assets.common_assets import landing_zone
+from  schemas import kindle_schemas
+from dagster_pandera import pandera_schema_to_dagster_type
 
 
 @dg.asset(
@@ -39,6 +41,7 @@ def kindle_reading_csv(kindle_zip: str) -> str:
 @dg.asset(
     deps=[kindle_reading_csv],
     kinds={"silver"},
+    dagster_type=pandera_schema_to_dagster_type(kindle_schemas.RawKindleReading)
 )
 def kindle_reading_raw(kindle_reading_csv: str) -> pd.DataFrame:
     df = reading.extract_reading_csv_into_df(kindle_reading_csv)
@@ -58,6 +61,7 @@ def kindle_digital_content_jsons(kindle_zip: str) -> str:
 @dg.asset(
     deps=[kindle_digital_content_jsons],
     kinds={"silver"},
+    dagster_type=pandera_schema_to_dagster_type(kindle_schemas.RawAsinMap),
 )
 def kindle_asin_map_raw(kindle_digital_content_jsons: str) -> pd.DataFrame:
     df = asin_map.extract_asin_map(kindle_digital_content_jsons)
@@ -65,7 +69,8 @@ def kindle_asin_map_raw(kindle_digital_content_jsons: str) -> pd.DataFrame:
 
 @dg.asset(
     deps=[kindle_asin_map_raw],
-    kinds={"silver"}
+    kinds={"silver"},
+    dagster_type=pandera_schema_to_dagster_type(kindle_schemas.AsinMap),
 )
 def kindle_asin_map(kindle_asin_map_raw: pd.DataFrame) -> pd.DataFrame:
     df = asin_map.transform_asin_map(kindle_asin_map_raw)
@@ -74,7 +79,8 @@ def kindle_asin_map(kindle_asin_map_raw: pd.DataFrame) -> pd.DataFrame:
 # Derived
 @dg.asset(
     deps=[kindle_reading_raw, kindle_asin_map],
-    kinds={"gold"}
+    kinds={"gold"},
+    dagster_type=pandera_schema_to_dagster_type(kindle_schemas.KindleReading),
 )
 def kindle_reading(
     kindle_reading_raw: pd.DataFrame, 

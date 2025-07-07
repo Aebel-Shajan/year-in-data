@@ -13,9 +13,11 @@ dependencies = [
     "dagster",
     "pandera",
     "pandas",
+    "dagster-pandera",
     "beautifulsoup4",    # For youtube html
     "lxml",              # For youtube html
     "gdown", # For downloading personal data from shared drive url
+    "fastapi[standard]"
 ]
 
 [project.optional-dependencies]

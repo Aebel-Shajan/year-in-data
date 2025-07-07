@@ -9,18 +9,18 @@ from bs4 import BeautifulSoup
 from pandera.typing.pandas import DataFrame
 
 from transformations.utils.pipeline_stage import PipelineStage
-from transformations.app_usage.schemas import AppInfoMap, RawAppInfoMap
+from schemas.app_usage_schemas import AppUsageAppInfo, RawAppUsageAppInfo
 from transformations.utils.pandas import rename_df_from_schema
 
 logger = logging.getLogger(__name__)
 
 
 @pa.check_types
-def extract_app_info_map(csv_file_path: str) -> DataFrame[RawAppInfoMap]:
+def extract_app_info_map(csv_file_path: str) -> DataFrame[RawAppUsageAppInfo]:
     logger.info(f"Extracting app info data from {csv_file_path}...")
     with open(csv_file_path) as file:
         df = pd.read_csv(file)
-    df = RawAppInfoMap.validate(df)
+    df = RawAppUsageAppInfo.validate(df)
     return df
 
 
@@ -50,9 +50,9 @@ def get_play_store_icon(package_name: str) -> Optional[str]:
 
 
 @pa.check_types
-def transform_app_info_map(df: DataFrame[RawAppInfoMap]) -> DataFrame[AppInfoMap]:
+def transform_app_info_map(df: DataFrame[RawAppUsageAppInfo]) -> DataFrame[AppUsageAppInfo]:
     logger.info("Tranforming app info data...")
-    df = rename_df_from_schema(df, RawAppInfoMap)
+    df = rename_df_from_schema(df, RawAppUsageAppInfo)
     df = df.dropna()
     df = df[~df["updated_time"].dt.year.isin([2009, 1970])]  # Removes system apps
     df = df[
@@ -66,7 +66,7 @@ def transform_app_info_map(df: DataFrame[RawAppInfoMap]) -> DataFrame[AppInfoMap
     df["image"] = df["package_name"].apply(get_play_store_icon)
     df["image"] = df["image"].fillna("")
     df = df.drop("package_name", axis=1)
-    df = AppInfoMap.validate(df)
+    df = AppUsageAppInfo.validate(df)
     return df
 
 

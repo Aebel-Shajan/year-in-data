@@ -7,7 +7,7 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from transformations.fitbit.schemas import RawTimeSeriesData, TimeSeriesData
+from schemas.fitbit_schemas import RawTimeSeriesData, TimeSeriesData
 from transformations.utils.pandas import rename_df_from_schema
 
 logger = logging.getLogger(__name__)

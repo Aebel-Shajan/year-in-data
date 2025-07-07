@@ -7,7 +7,7 @@ import pandera as pa
 import requests
 from pandera.typing.pandas import DataFrame
 
-from transformations.github.schemas import (GithubRepoContributions,
+from schemas.github_schemas import (GithubRepoContributions,
                                          RawGithubRepoContributions)
 
 logger = logging.getLogger(__name__)

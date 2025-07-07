@@ -5,7 +5,6 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 def extract_youtube_html(zip_path: str, output_folder: str) -> str:
-    output_folder = "testdata/youtube"
     extract_specific_files_flat(
         zip_path,
         prefix="Takeout/YouTube and YouTube Music/history/watch-history.html",

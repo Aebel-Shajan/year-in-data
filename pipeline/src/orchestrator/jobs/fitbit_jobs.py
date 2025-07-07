@@ -3,7 +3,5 @@ from orchestrator.assets import fitbit_assets
 
 fitbit_calories_job = dg.define_asset_job(
     name="fitbit_calories_job",
-    selection=[
-        dg.AssetSelection(fitbit_assets.fitbit_calories).downstream()
-    ],
+    selection=dg.AssetSelection.assets(fitbit_assets.calories).upstream(),
 )

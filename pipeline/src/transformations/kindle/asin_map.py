@@ -7,7 +7,7 @@ import pandas as pd
 import pandera as pa
 from pandera.typing.pandas import DataFrame
 
-from transformations.kindle.schemas import AsinMap, RawAsinMap
+from schemas.kindle_schemas import AsinMap, RawAsinMap
 from transformations.utils.io import extract_specific_files_flat
 
 logger = logging.getLogger(__name__)

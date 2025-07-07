@@ -1,39 +1,61 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { fetchData } from "../api/axiosClient"
-import Select from "./Select"
+// import Select from "./Select"
 import { AnnualHeatmap } from "./D3Plots/AnnualHeatmap"
 import * as d3 from "d3";
-import {  createColorScale } from "./D3Plots/d3Utils"
+import { createColorScale } from "./D3Plots/d3Utils"
 import Legend from "./D3Plots/Legend"
-import FilterCarousel from "./FilterCarousel/FilterCarousel"
+import Select from "react-select";
 
-type ColumnCategory = (
-  | "date_column" 
-  | "value_column" 
-  | "time_column" 
-  | "category_column" 
-  | "image_column" 
-  | "link_column"
-)
-interface ColumnMetdata {
-  tag: ColumnCategory | null
-  units: string | null
-  category: string | null
-  range?: [number, number] 
+// import FilterCarousel from "./FilterCarousel/FilterCarousel"
+
+// type ColumnCategory = (
+//   | "date_column" 
+//   | "value_column" 
+//   | "time_column" 
+//   | "category_column" 
+//   | "image_column" 
+//   | "link_column"
+// )
+
+interface ValueColumn {
+  name: string;
+  units: string;
+  range: [number, number];
 }
 
-interface TableMetadata {
-  [column: string]: ColumnMetdata | null
+interface CategoryColumn {
+  name: string;
+  // orderedDistinctCategories?: string[];
+  imageColumn?: string;
+  // linkColumn?: string;
 }
 
-interface TableMetadataResponse {
-  [schemaName: string]: {
-    columns: TableMetadata
-  }
+interface TableSchema {
+  datetime_column: string;
+  value_columns: { [key: string]: ValueColumn };
+  category_columns: { [key: string]: CategoryColumn };
+}
+
+interface TableEventRecords {
+  schema: TableSchema;
+  records: Data[]
 }
 
 interface Data {
   [key: string]: string | number
+}
+
+const DataVisContainer = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="
+      p-2 bg-base-100 border-base-300 border-2 text-base-content rounded-lg w-full 
+      max-w-200 flex flex-col gap-3
+      "
+    >
+      {children}
+    </div>
+  )
 }
 
 const DataVis = (
@@ -50,141 +72,110 @@ const DataVis = (
       index: number
     }
 ) => {
-  const d3Colors = [d3.schemeGreens, d3.schemeBlues, d3.schemeOranges, d3.schemePurples, d3.schemeReds]
+  const d3Colors = [d3.schemeGreens, d3.schemeBlues, d3.schemeOranges, d3.schemePurples]
   const d3ColorIndex = index % d3Colors.length
   const [data, setData] = useState<Data[]>([])
-  const [metadata, setMetadata] = useState<TableMetadata>({})
-  const [filteredData, setFilteredData] = useState<Data[]>([])
-  const [selectedValueColIndex, setSelectedValueColIndex] = useState<number>(0)
-  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number>(-1)
-  const [isLoading, setIsLoading] = useState(false);
-  // const [range, setRange] = useState<[number, number] | null>(null);
+  const [schema, setSchema] = useState<TableSchema | null>(null)
+  const [selectedValueCol, setSelectedValueCol] = useState<string | null>(null)
+  const [selectedCategoryCol, setSelectedCategoryCol] = useState<string | null>(null)
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [success, setSuccess] = useState(false)
 
+  useEffect(() => {
+    fetchData<TableEventRecords>(url + "/" + year)
+      .then(response => {
+        setData(response.records)
+        const schema = response.schema
+        const valueCols = Object.keys(response.schema.value_columns)
+        const categoryCols = Object.keys(response.schema.category_columns)
+        if (schema.datetime_column.length === 0) {
+          setSuccess(false)
+          throw new Error("Expected datetime column in schema")
+        }
+        if (valueCols.length === 0) {
+          setSuccess(false)
+          throw new Error("No value columns found in schema")
+        }
+        setSuccess(true)
+        if (!selectedValueCol) {
+          setSelectedValueCol(valueCols[0])
+        }
+        if (!selectedCategoryCol) {
+          setSelectedCategoryCol(categoryCols[0])
+        }
+        setSelectedCategories([])
+        setSchema(schema)
+      })
+      .catch(error => {
+        console.error('Error fetching:', error);
+      })
+  }, [url, year]); // empty dependency array = run once on mount
+
+  if (!success || !schema || !selectedValueCol) {
+    return <DataVisContainer>
+      Error fetching data from {url}
+    </DataVisContainer>
+  }
 
   // Date col
-  const dateCol: string = getFirstColumnByTag(metadata, "date_column") || "date"
+  const dateCol: string = schema.datetime_column
+
+  // Category col
+  // const allCategoryCols: string[] = Object.keys(schema.category_columns)
+  // const categoryColOptions = allCategoryCols.map(value => {
+  //   return {
+  //     label: value.replace(/_/g, " "),
+  //     value: value
+  //   }
+  // })
+  let distinctCategories: string[] = []
+  if (selectedCategoryCol) {
+    // Group by category, sum values, then order by sum descending
+    const grouped = d3.rollups(
+      data,
+      v => d3.sum(v, d => Number(d[selectedValueCol])),
+      d => String(d[selectedCategoryCol])
+    );
+    grouped.sort((a, b) => d3.descending(a[1], b[1]));
+    distinctCategories = grouped.map(([category]) => category);
+  }
+  const distinctCategoryOptions = distinctCategories.map(value => {
+    return {
+      label: value,
+      value: value,
+    }
+  })
 
   // Value col
-  const possibleValueCols: string[] = getColumnsByTag(metadata, "value_column") 
-  const selectedValueCol  = possibleValueCols[selectedValueColIndex] 
-  const valueColMetada = metadata[selectedValueCol]
-  let valueColUnits = "units"
-  if (valueColMetada) {
-    if (valueColMetada.units) {
-      valueColUnits = valueColMetada.units
-    }
-  }
-  
-  // Category col
-  const categoryCol: string | null = getFirstColumnByTag(metadata, "category_column")
-  const categoryGroups: string[] = useMemo(() => {
-    if (!categoryCol) return []
-    const uniqueCategories = new Set()
-    const newCategoryGroups: string[] = []
-    const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
-    filteredByYear.forEach(row => {
-      if (!uniqueCategories.has(row[categoryCol])) {
-        newCategoryGroups.push(row[categoryCol] as string)
-        uniqueCategories.add(row[categoryCol])
-      }
-    })
-    return newCategoryGroups
-  }, [categoryCol, data, year])
-
-  // Image col
-  const imageCol: string | null = getFirstColumnByTag(metadata, "image_column")
-  const imageGroups: { name: string, imageUrl: string }[] = useMemo(() => {
-    if (!categoryCol || !imageCol) return []
-    const uniqueImages = new Set()
-    const newImageGroups: { name: string, imageUrl: string }[] = []
-    const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
-    filteredByYear.forEach(row => {
-      if (!uniqueImages.has(row[categoryCol])) {
-        newImageGroups.push({
-          name: row[categoryCol] as string,
-          imageUrl: row[imageCol] as string
-        })
-        uniqueImages.add(row[categoryCol])
-      }
-    })
-    return newImageGroups
-  }, [categoryCol, data, imageCol, year])
+  const valueColUnits = schema.value_columns[selectedValueCol].units
+  // const possibleValueCols: string[] = Object.keys(schema.value_columns)
+  // const valueColsOptions = possibleValueCols.map(value => {
+  //   return {
+  //     label: value.replace(/_/g, " "),
+  //     value: value
+  //   }
+  // })
 
   // Color scale
   let ticks: number[] = [1, 5, 10]
-  if (metadata[selectedValueCol]) {
-    const range = metadata[selectedValueCol]["range"]
-    if (range) {
-      ticks = d3.ticks(range[0], range[1], 4).filter((value) => value !== 0)
-      ticks.unshift(0.001)
-      ticks.pop()
-    }
+  const valueColrange = schema.value_columns[selectedValueCol].range
+  if (valueColrange) {
+    ticks = d3.ticks(valueColrange[0], valueColrange[1], 4).filter((value) => value !== 0)
+    ticks.unshift(0.001)
+    ticks.pop()
   }
   const colorScale = createColorScale(ticks, d3Colors[d3ColorIndex])
 
 
-  
-
-
-
-  useEffect(() => {
-    const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
-    if (!categoryCol) {
-      setFilteredData(filteredByYear)
-      return
-    }
-    if (selectedCategoryIndex == -1 || selectedCategoryIndex >= categoryGroups.length) {
-      setFilteredData(filteredByYear)
-      return
-    }
-    if (imageCol) {
-      setFilteredData(filteredByYear.filter(
-        row => row[categoryCol] == imageGroups[selectedCategoryIndex].name
-      ))
-    } else {
-      setFilteredData(filteredByYear.filter(
-        row => row[categoryCol] == categoryGroups[selectedCategoryIndex]
-      ))
-    }
-  }, [selectedCategoryIndex, year])
-
-  useEffect(() => {
-    let isMounted = true; // to avoid setting state on unmounted component
-
-    const getData = async () => {
-      if (isLoading) return;
-      setIsLoading(true);
-      console.log(isLoading)
-      try {
-        console.log(`Fetching data from ${url}`)
-        // Fetch csv data, convert to json
-        const dataResponse = await fetchData(url) as string
-        const data: Data[] = d3.csvParse(dataResponse)
-        setData(data)
-        const filteredByYear = data.filter(row => new Date(row[dateCol]).getFullYear() == year)
-        setFilteredData(filteredByYear)
-        // Fetch json metadata
-        const metadataResponse = await fetchData("data/metadata/" + name + "_metadata.json") as TableMetadataResponse
-        const firstKey = Object.keys(metadataResponse)[0];
-        const metadata = metadataResponse[firstKey].columns;
-        setMetadata(metadata)
-      } catch (error) {
-        console.error('Error fetching:', error);
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    getData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [url]); // empty dependency array = run once on mount
-
-
+  let heatmap_data = structureData(
+    data,
+    dateCol,
+    selectedValueCol,
+    selectedCategoryCol,
+  )
+  if (selectedCategories.length > 0) {
+    heatmap_data = heatmap_data.filter(value => selectedCategories.includes(value.category))
+  }
 
   return (
     <div className="
@@ -192,54 +183,66 @@ const DataVis = (
       max-w-200 flex flex-col gap-3
       "
     >
-        <h1 className="font-semibold px-3 py-1 w-fit bg-base-100 ">
-          {name.replace(/_/g, " ")}
-        </h1>
+      <h1 className="font-semibold px-3 py-1 w-fit bg-base-100 ">
+        {name.replace(/_/g, " ")}
+      </h1>
       <div className=" w-full flex flex-col gap-2">
         <div className="flex  w-full overflow-x-scroll justify-center">
 
-        <AnnualHeatmap
-          data={
-            structureData(
-              filteredData, 
-              dateCol, 
-              possibleValueCols[selectedValueColIndex], 
-              categoryCol,
-            )
-          }
-          units={valueColUnits}
-          colorScale={colorScale}
-          year={year}
+          <AnnualHeatmap
+            data={heatmap_data}
+            units={valueColUnits}
+            colorScale={colorScale}
+            year={year}
           />
-          </div>
-          <div className="pl-3">
+        </div>
+        <div className="pl-3">
           <Legend
-          ticks={ticks}
-          colorScale={colorScale}
+            ticks={ticks}
+            colorScale={colorScale}
           />
-          </div>
+        </div>
       </div>
       <div className="flex w-full gap-2">
-
-        {possibleValueCols.length > 1 && (
+        {/* {
+          valueColsOptions.length > 1 &&
           <Select
-            options={possibleValueCols}
-            selectedOptionIndex={selectedValueColIndex}
-            setSelectedOptionIndex={setSelectedValueColIndex}
+            options={valueColsOptions}
+            selectedValue={selectedValueCol}
+            setSelectedValue={setSelectedValueCol}
+            labelLeft="value column"
           />
-        )}
-        {categoryGroups.length > 0 && imageCol == null && (
-              <Select
-                options={categoryGroups}
-                selectedOptionIndex={selectedCategoryIndex}
-                setSelectedOptionIndex={setSelectedCategoryIndex}
-                defaultValue={"All"}
-              />
-            )
-
         }
+        {
+          categoryColOptions.length > 0 &&
+          <Select
+            options={categoryColOptions}
+            selectedValue={selectedCategoryCol}
+            setSelectedValue={setSelectedCategoryCol}
+            labelLeft="category column"
+          />
+        }
+        {
+          distinctCategories.length > 0 &&
+          <Select
+            options={distinctCategoryOptions}
+            selectedValue={selectedCategory}
+            setSelectedValue={setSelectedCategory}
+            labelLeft="category"
+          />
+
+        } */}
+
+        <Select
+          isMulti
+          options={distinctCategoryOptions}
+          value={distinctCategoryOptions.filter(opt => selectedCategories.includes(opt.value))}
+          onChange={(selectedOptions) =>
+            setSelectedCategories(selectedOptions.map(opt => opt.value))
+          }
+        />
       </div>
-      {imageGroups.length > 0 && 
+      {/* {imageGroups.length > 0 && 
       (
         <FilterCarousel
           items={imageGroups}
@@ -247,7 +250,7 @@ const DataVis = (
           setSelectedIndex={setSelectedCategoryIndex}
         />
       ) 
-      }
+      }  */}
 
       {/* <div className="w-full flex flex-col  gap-3  pb-10 pt-0">
         {categoryCol &&
@@ -315,26 +318,3 @@ function structureData(
   })
 }
 
-function getColumnsByTag(
-  metadata: TableMetadata, 
-  column_category: ColumnCategory,
-): string[] {
-  
-  if (Object.keys(metadata).length == 0) return []
-  const value_cols = Object.keys(metadata).filter((key) => {
-    if (!metadata[key]) return false
-    return metadata[key].tag === column_category
-  })
-  return value_cols
-}
-
-function getFirstColumnByTag(
-  metadata: TableMetadata,
-  column_category: ColumnCategory,
-): null | string  {
-  const matchingCols = getColumnsByTag(metadata, column_category)
-  if (matchingCols.length > 0) {
-    return matchingCols[0]
-  }
-  return null
-}

@@ -62,7 +62,7 @@ class KindleReading(pa.DataFrameModel):
     start_time: Series[object] = pa.Field(
         nullable=False,
         metadata={
-            "tag": "date_column",
+            # "tag": "date_column",
         },
     )
     asin: Series[str] = pa.Field(

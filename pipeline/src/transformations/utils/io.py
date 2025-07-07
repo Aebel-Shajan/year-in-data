@@ -6,10 +6,12 @@ from typing import Callable, Optional
 import zipfile
 from pathlib import Path
 
+import re
 import gdown
 import pandas as pd
 import pandera as pa
 
+from transformations.utils.env import EnvVars
 from transformations.utils.pandas import get_range_for_df_column
 
 # Setup logger
@@ -35,31 +37,36 @@ def load_graphql_query(file_path: str) -> str:
     return query
 
 
-def write_db_to_jsons(db_path: str, output_path: str):
+def to_snake_case(name):
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
+
+
+def write_sqlite_db_to_csvs(db_path: str, output_dir: str, schemas: list[pa.DataFrameModel]) -> str:
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
+    
+    schema_dict = {
+        to_snake_case(schema.__name__): schema
+        for schema in schemas
+    }
 
     # Get all table names
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = cursor.fetchall()
-
     for table_name in tables:
         table_name = table_name[0]
-        cursor.execute(f"SELECT * FROM {table_name}")
-        rows = cursor.fetchall()
-
-        # Get column names
-        cursor.execute(f"PRAGMA table_info({table_name})")
-        columns = [col[1] for col in cursor.fetchall()]
-
-        # Convert to list of dictionaries
-        data = [dict(zip(columns, row)) for row in rows]
-
-        # Write to JSON file
-        with open(f"{output_path}/{table_name}.json", "w") as json_file:
-            json.dump(data, json_file, indent=4)
-
-    conn.close()
+        df = pd.read_sql(f"select * from {table_name};", con=conn)
+        try:
+            df_schema = schema_dict[table_name]
+            metadata = get_metadata_from_schema(df_schema, df)
+            metadata_output_dir = output_dir + "/metadata"
+            Path(metadata_output_dir).mkdir(parents=True, exist_ok=True)
+            with open(metadata_output_dir + f"/{table_name}.json", "w") as f:
+                json.dump(metadata, f, indent=4)
+            df.to_csv(f"{output_dir}/{table_name}.csv", index=False)
+        except:
+            logger.exception(f"Couldn't generate metadata for {table_name}")
+      
 
 
 def get_latest_file(folder_path: Path, file_name_glob: str) -> Path:
@@ -98,7 +105,7 @@ def get_latest_valid_zip(
     folder_path: str, 
     file_name_glob: str,
     expected_file_path: str,
-) -> str:
+) -> Optional[str]:
     valid_zips = []
     for file in Path(folder_path).glob(file_name_glob):
         is_valid_zip = validate_zip(
@@ -171,8 +178,8 @@ def validate_csv(
         df = pd.read_csv(file_path, delimiter=expected_delimiter)
         expected_schema.validate(df)
         return True
-    except Exception as e:
-        logger.exception(e)
+    except Exception:
+        logger.warning(f"{file_path} is not a valid csv for {expected_schema.__class__.__name__}")
         return False
 
 
@@ -214,14 +221,14 @@ def extract_specific_files_flat(zip_file_path: str, prefix: str, output_path: Pa
 
 def download_files_from_drive(
     input_data_folder: Path,
-    env_vars: dict,
+    env_vars: EnvVars,
 ):
-    if env_vars["DRIVE_SHARE_URL"] is None:
+    if env_vars.DRIVE_SHARE_URL is None:
         raise Exception("Expected DRIVE_SHARE_URL in .env folder!")
     logger.info("🟡 Downloading data from google drive...")
 
     gdown.download_folder(
-        url=env_vars["DRIVE_SHARE_URL"],
+        url=env_vars.DRIVE_SHARE_URL,
         output=str(input_data_folder.absolute()),
         use_cookies=False,
         quiet=True,

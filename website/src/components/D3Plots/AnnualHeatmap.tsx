@@ -35,7 +35,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
   const groupedData = d3.rollup(
     filteredData,
     v => d3.sum(v, d => d.value),
-    d => d.date,
+    d => (new Date(d.date)).toISOString().slice(0, 10),
     d => d.category,
   )
   const days = d3.timeDays(new Date(year, 0, 1), new Date(year + 1, 0, 1));
@@ -64,7 +64,6 @@ export const AnnualHeatmap: React.FC<Props> = ({
         return prev + current[1];
       }
     , 0);
-
     const uniqueRectId = uuidv4();
     const stroke = {
       width: 0.07 * cellSize,
@@ -76,7 +75,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
       y: day * (cellSize + cellPadding)
     }
     return (
-      <>
+      <g key={uuidv4()}>
         {
           week == 1 &&
           <text
@@ -125,10 +124,19 @@ export const AnnualHeatmap: React.FC<Props> = ({
                 ${dateStr} (${date.toLocaleDateString(undefined, { weekday: 'long' })})
               </p>`
               categoryEntries.slice(0, 3).forEach(entry => {
+                let valueDisplay = "";
+                if (units === "minutes") {
+                  const totalMinutes = Number(entry[1]);
+                  const hours = Math.floor(totalMinutes / 60);
+                  const minutes = Math.round(totalMinutes % 60);
+                    valueDisplay = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+                } else {
+                  valueDisplay = `${Number(entry[1].toPrecision(3))} ${units}`;
+                }
                 innerHTML += `
-              <p>
-                ${entry[0]} ${Number(entry[1].toPrecision(3))} ${units}
-              </p>
+                <p>
+                ${entry[0]} ${valueDisplay}
+                </p>
                 `
               })
               tooltipElement.innerHTML = innerHTML;
@@ -152,7 +160,7 @@ export const AnnualHeatmap: React.FC<Props> = ({
           }}
         >
         </rect>
-      </>
+      </g>
     );
   })
 

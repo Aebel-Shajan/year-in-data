@@ -1,0 +1,24 @@
+{
+  "FitbitSleep": {
+    "columns": {
+      "date": {
+        "tag": "date_column"
+      },
+      "start_time": {
+        "tag": "time_column"
+      },
+      "end_time": {
+        "tag": "time_column"
+      },
+      "total_sleep_hours": {
+        "tag": "value_column",
+        "units": "hours",
+        "range": [
+          5.0,
+          9.0
+        ]
+      }
+    },
+    "dataframe": null
+  }
+}

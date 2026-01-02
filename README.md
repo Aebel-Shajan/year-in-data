@@ -1,231 +1,73 @@
-# years in data (2023, 2024, 2025)
+# React + TypeScript + Vite
 
-Made this because I was too lazy to use habit tracker apps. 
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Instead use data collected about me by big companies. 
+Currently, two official plugins are available:
 
-https://aebel-shajan.github.io/year-in-data/
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-(old) Preview | (old) Also preview
--|-
-![demo](docs/page_1.jpg) | ![demo2](docs/page_2.jpg)
+## React Compiler
 
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
+## Expanding the ESLint configuration
 
-# Info
-[How I went about extracting data](docs/GatheringData.md)
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## Frontend
-* React Typescript
-* D3.js + Tailwind + DaisyUI
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-## Backend
-* Google drive for storage
-* python
-* pandas + pandera
-* github actions to run pipeline every month
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-## Todo :
-- [ ] Mac os screen time
-- [ ] Board game matches
-- [x] Use github pages instead of vercel
-- [ ] Scrape image links into gh-pages branch (no more getting rate limited)
-- [ ] Add barcharts back in for more detailed view. (maybe)
-
-
-## Data assets:
-```mermaid
----
-config:
-  look: classic
-  layout: dagre
----
-flowchart TD
-    n1["multiple amazon zips"] --> n2["kindle reading session csv"] & n3["Digital content ownership jsons"]
-    n2 --> n4["raw_kindle_reading"]
-    n3 --> n5["raw_asin_map"]
-    n4 --> n6["kindle_reading"]
-    n9["github graphql api credentials (in env file)"] --> n8["github repo response jsons"]
-    n7["multiple google zip"] --> n10["Fitbit calories jsons"] & n11["Fitbit exercise jsons"] & n12["Fitbit sleep jsons"] & n13["Fitbit steps jsons"] & n24["youtube watch history html"]
-    n8 --> n14["raw_github_repo_contributions"]
-    n14 --> n15["github_repo_contributions"]
-    n10 --> n16["raw_fitibit_calories"]
-    n16 --> n17["fitbit_calories"]
-    n18["raw_fitibit_exercise"] --> n19["fitbit_exercise"]
-    n11 --> n18
-    n20["raw_fitbit_sleep"] --> n21["fitbit_sleep"]
-    n22["raw_fitbit_steps"] --> n23["fitbit_steps"]
-    n12 --> n20
-    n13 --> n22
-    n24 --> n25["raw_youtube_watch_history"]
-    n25 --> n26["youtube_watch_history"]
-    n27["multiple strong csvs"] --> n31["latest valid strong csv"]
-    n31 --> n28["raw_strong_workouts"]
-    n32["multiple app usage csvs"] --> n33["app usage activity csv"] & n34["app usage app info csv"]
-    n33 --> n35["raw_app_usage_screen_time"]
-    n34 --> n36["raw_app_info"]
-    n35 --> n37["app_usage_screen_time"]
-    n36 --> n38["app_usage_app_info"]
-    n37 --> n39["app_usage_screen_time_with_images"]
-    n38 --> n39
-    n28 --> n29["strong_workouts"] & n30["strong_exercises"]
-    n5 --> n41["kindle_asin_map"]
-    n6 --> n42["kindle_reading_with_images"]
-    n41 --> n42
-    n40["Gold should have:<br>* date column<br>* value column (optionally multiple)<br>* category column (optional)<br>* start_time column (optional)<br>* end_time column (optional)<br>* image column (optional)"]
-    n1@{ shape: docs}
-    n2@{ shape: doc}
-    n3@{ shape: docs}
-    n4@{ shape: db}
-    n5@{ shape: cyl}
-    n6@{ shape: cyl}
-    n9@{ shape: doc}
-    n8@{ shape: docs}
-    n7@{ shape: docs}
-    n10@{ shape: docs}
-    n11@{ shape: docs}
-    n12@{ shape: docs}
-    n13@{ shape: docs}
-    n24@{ shape: doc}
-    n14@{ shape: db}
-    n15@{ shape: cyl}
-    n16@{ shape: cyl}
-    n17@{ shape: cyl}
-    n18@{ shape: cyl}
-    n19@{ shape: cyl}
-    n20@{ shape: cyl}
-    n21@{ shape: cyl}
-    n22@{ shape: cyl}
-    n23@{ shape: cyl}
-    n25@{ shape: db}
-    n26@{ shape: db}
-    n27@{ shape: docs}
-    n31@{ shape: doc}
-    n28@{ shape: cyl}
-    n32@{ shape: docs}
-    n35@{ shape: cyl}
-    n36@{ shape: cyl}
-    n37@{ shape: cyl}
-    n38@{ shape: cyl}
-    n39@{ shape: cyl}
-    n29@{ shape: cyl}
-    n30@{ shape: cyl}
-    n41@{ shape: cyl}
-    n42@{ shape: cyl}
-    n40@{ shape: text}
-     n1:::Bronze
-     n2:::Bronze
-     n3:::Bronze
-     n4:::Silver
-     n5:::Silver
-     n6:::Gold
-     n9:::Bronze
-     n8:::Bronze
-     n7:::Bronze
-     n10:::Bronze
-     n11:::Bronze
-     n12:::Bronze
-     n13:::Bronze
-     n24:::Bronze
-     n14:::Silver
-     n15:::Gold
-     n16:::Silver
-     n17:::Gold
-     n18:::Silver
-     n19:::Gold
-     n20:::Silver
-     n21:::Gold
-     n22:::Silver
-     n23:::Gold
-     n25:::Silver
-     n26:::Gold
-     n27:::Bronze
-     n31:::Bronze
-     n28:::Silver
-     n32:::Bronze
-     n33:::Bronze
-     n34:::Bronze
-     n35:::Silver
-     n36:::Silver
-     n37:::Gold
-     n38:::Gold
-     n38:::Silver
-     n39:::Gold
-     n29:::Gold
-     n30:::Gold
-     n41:::Gold
-     n41:::Silver
-     n42:::Gold
-     n40:::Peach
-     n40:::Bronze
-     n40:::Gold
-    classDef Peach stroke-width:1px, stroke-dasharray:none, stroke:#FBB35A, fill:#FFEFDB, color:#8F632D
-    classDef Bronze fill:#FFE0B2
-    classDef Silver fill:#757575, stroke:#424242, color:#FFFFFF
-    classDef Gold fill:#FFD600, stroke:#000000, color:#000000
-
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-<details>
-<summary>
-Timeline (this was meant to be a week long project):
-</summary>
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-![image](https://github.com/user-attachments/assets/12ea1bd9-6f4f-4e5f-9986-a4aaa3cac2a8)
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-* Stage 1 (Pure python streamlit app):
-  * Motivation:
-    * Github activity heatmap is nice to look at, so why not do same with "Strong" app workouts.
-    * Didn't want to pay premium on "Strong" for the pretty graphs on
-  * What I did:
-    * Built python pipeline to etl strong workout data 
-    * Built streamlit app to handle file upload and display pyplots.
-
-* Stage 2 (JS interactivity using cal-heatmap):
-  * Motivation:
-    * Wanted to make heatmap have same interactivity as github heatmap.
-    * Also wanted to visualise more data sources (fitbit, kindle).
-  * What I did:
-    * Created a static website using Vite + React + TypeScript.
-    * Used library cal-heatmap to display interactive heatmaps.
-    * Ran Python data pipeline manually to generate heatmap data
-    * Heatmap data was stored on github repo
-    * Built and hosted website using Vercel
-
-* Stage 3 (Fast api):
-  * Motivation:
-    * Wanted to learn more about FASTAPI and VPS.
-    * Thought API would help improve data privacy. (No more data on github repo)
-  * What I did:
-    * Site still hosted on vercel
-    * Built a FastAPI backend hosted on a DigitalOcean VPS
-    * API processed input data and stored data on VPS
-    * Fetched heatmap data from api using axios. 
-
-* Stage 4 (Github actions, D3, tailwind) 
-  * Motivation:
-    * Wanted to learn more about CI/CD stuff.
-    * Wanted to learn about D3 and tailwind.
-    * Realized redundancy of having heatmap data private, because public website exposed the data anyway.
-  * What I did :
-    * Got rid of api
-    * Stored raw input data in Google Drive,
-    * Automated the Python data pipeline to run every month with GitHub Actions.
-    * Automated deploying the updated static site to GitHub Pages.
-
-* Stage 5 (Local app, refactored & structured data pipeline) [In progress]
-  * Motivation:
-    * Wanted an easy way of getting my macos screen time, so access to local file system is useful.
-    * Having everything local with no network access means more secure + private data storage.
-  * What I did:
-    * Current phase: Developing a local Electron app with:
-      * A local FastAPI backend
-      * With python pipeline:
-        * Started with basic python functions
-        * Tried Kedro (got stuck trying to use OmegaConf)
-        * Explored Strategy and Factory design patterns,
-        * Built a custom pipeline using abstract base classes (gave up)
-        * Finalized with Dagster, focusing on data assets over task-oriented pipelines. (nice 🙂)
-      * Used the same fronted setup.
-
-</details>
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```

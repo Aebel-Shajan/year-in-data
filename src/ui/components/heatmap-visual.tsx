@@ -180,7 +180,7 @@ function HeatmapMonthLabels(
   }
 ) {
   const monthLabels = getMonthNames().map((monthName, monthIndex) => {
-    const firstDay = new Date(Date.UTC(2026, monthIndex, 1)) // utc cus otherwise it defaults to local
+    const firstDay = new Date(Date.UTC(2025, monthIndex, 1)) // utc cus otherwise it defaults to local
     const heatmapPos = getHeatmapPosition(8, monthIndex, getWeekNumber(firstDay) + 1.5, heatmapSettings)
     return (
       <text
@@ -206,7 +206,7 @@ function DayCircleMatrix(
   }
 ) {
 
-  const circleSvgMatrix = getAllUTCdatesInYear(2026).map(date => {
+  const circleSvgMatrix = getAllUTCdatesInYear(2025).map(date => {
     return (
       <DayCircleCell
         date={date}

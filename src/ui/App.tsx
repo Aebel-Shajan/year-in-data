@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Button } from './components/ui/button'
 import DarkModeToggle from './components/dark-mode-toggle'
 import { HeatmapVisual } from './components/visualisations/heatmap-visual'
+import * as d3 from 'd3'
+import { Treemap } from './components/visualisations/treemap'
 
 
 function App() {
@@ -23,6 +25,26 @@ function App() {
   }, [])
 
 
+  const groupedByUsageMap = d3.rollup(
+    data,
+    v => d3.sum(v, d => d["usage"]),
+    d => d["app"]
+  )
+  const flattenedList = Array.from(groupedByUsageMap).map(([app, usage]) => {
+    return {app, usage}
+  })
+  const treeData: Tree = {
+    type: "node",
+    name: "boss",
+    value: 0,
+    children: flattenedList.sort((a, b) => b.usage - a.usage).map(row => {
+      return {
+        type: "leaf",
+        name: row["app"],
+        value: row["usage"]
+      }
+    })
+  }
 
 
 
@@ -35,10 +57,15 @@ function App() {
             extract screen time
           </Button>
         </div>
-        <div className='min-h-full flex-1 bg-background rounded-xl overflow-x-hidden p-3'>
+        <div className='min-h-full flex-1 bg-background rounded-xl overflow-x-hidden p-3 flex flex-col gap-3'>
           <div className='p-2 outline rounded-xl overflow-scroll'>
             <HeatmapVisual data={data} />
           </div>
+
+          <div className='p-2 outline rounded-xl overflow-scroll flex justify-center'>
+            <Treemap data={treeData} width={600} height={300} />
+          </div>
+
         </div>
       </div>
 

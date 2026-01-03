@@ -54,3 +54,26 @@ Links:
     * https://www.electronjs.org/docs/latest/tutorial/ipc
     * https://github.com/N-Ziermann-YouTube/electron-course/blob/main/src/electron/preload.cts
 
+
+* git: 5f2ed61270edc83a050040a0f199c878afcdf12d
+* Start: 19:00
+* End: 22:04
+* What I want to do:
+    * Add tree map component to app
+    * Move action button to menu bar at top of page instead of sidebar. (Don't abstract yet. Repeat yourself a couple of times to get the gist of what needs repeating and what doesn't.)
+* What I did:
+    * Installed d3 and created tree map component
+    * Created new folder to contain all visualisations.
+    * Moved action button to main container which contains title.
+    * I installed recharts and added a barplot for montly data.
+* What broke:
+    * The text kept overflowing from outside the rectangle in the tree map. So I used clip masking to stop that. Also don't display text when rectangle can't contain it.
+    * I tried to do a stacked barchart for each category but that adds uneeded complexity to everything
+* What I could do next:
+    * Add a tooltip to each rectangle.
+    * Add a loading indicator and user feedback after user presses `extractScreenTime`
+    * Migrate custom treemap component to use recharts version as it also has one with a tooltip.
+* Links:
+    * for tree map: https://www.react-graph-gallery.com/treemap
+    * for clipping stuff contained in svg: https://gsap.com/community/forums/topic/16517-how-to-give-svg-element-overflow-hidden/
+    * recharts: https://recharts.github.io/en-US/

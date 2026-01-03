@@ -53,11 +53,21 @@ function App() {
       <div className='w-full h-full bg-slate-500 flex p-3 gap-2'>
         <div className='w-50 h-full flex flex-col gap-3 bg-background rounded-xl p-3'>
           <DarkModeToggle />
+
+        </div>
+        <div className='min-h-full flex-1 bg-background rounded-xl overflow-x-hidden p-3 flex flex-col gap-3'>
+          <div className='p-3 outline rounded-xl overflow-scroll flex items-center justify-between'>
+            <div className='font-extrabold text-2xl'>
+              Screen time
+            </div>
+            <div className='flex'>
+
           <Button variant="outline" onClick={() => extractScreenTime()}>
             extract screen time
           </Button>
-        </div>
-        <div className='min-h-full flex-1 bg-background rounded-xl overflow-x-hidden p-3 flex flex-col gap-3'>
+            </div>
+          </div>
+
           <div className='p-2 outline rounded-xl overflow-scroll'>
             <HeatmapVisual data={data} />
           </div>

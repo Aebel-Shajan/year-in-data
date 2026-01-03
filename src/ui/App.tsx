@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Button } from './components/ui/button'
 import DarkModeToggle from './components/dark-mode-toggle'
-import { HeatmapVisual } from './components/heatmap-visual'
+import { HeatmapVisual } from './components/visualisations/heatmap-visual'
 
 
 function App() {

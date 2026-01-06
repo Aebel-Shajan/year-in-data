@@ -80,3 +80,60 @@ windows laptop.
 
 Links:
 * [Python code to extract screen time](https://github.com/FelixKohlhas/ScreenFlux)
+
+## Chatgpt 
+Getting this was eaasy.
+1. go here: https://chatgpt.com/#settings/DataControls
+2. Click export data
+3. go to email and click download link (may tiake a while to get email)
+
+Size:
+* around 200mb (mainly cus of images you send chatgpt + audio files. all my audio convos 😭)
+
+Folder structure:
+* audio chats: `{id_of_chat}/audio/file_{some_id}.wav`
+* uploaded image: `{name_of_image}.{png|jpg}`
+* dalle generations: `dalle-generations/file-{some_id}.webp`
+* user conversations: `conversations.json`
+
+Schema:
+* for `conversations.json`
+```json
+{
+    "title": string,
+    "create_time": float,
+    "update_time": float,
+    "mapping": {
+        "{conversation_id}": {
+            ...
+            "message": {
+                ...
+                "author": {
+                    "role": "assistant"| "user"
+                }
+                "content": {
+                    "content_type": "text"|"reasoning_recap"|"code"|"thoughts"|"audio_transcription"|"system_error",
+                    "parts": string[]
+                }
+                ...
+            }
+            ...
+            "parent": "{parent_id}",
+            "children": [
+                "{child_id}"
+            ]
+        },
+        ...
+
+        ...
+    }
+    
+}
+```
+
+Links:
+* https://chatgpt.com/#settings/DataControls
+* https://www.reddit.com/r/dataisbeautiful/comments/1c74xmd/oc_i_created_a_website_to_analyze_conversations/?captcha=1
+* https://www.markwk.com/quantified-chatgpt.html
+* https://github.com/Fybex/chatgpt-conversations-analysis/blob/main/chatgpt_analysis.ipynb
+

@@ -26,4 +26,5 @@ dist-ssr
 dist-electron
 dist-react
 dist
-data
+notebooks/data/*
+!notebooks/data/.gitkeep

@@ -5,6 +5,8 @@ Electron to visualise a bunch of stuff from last year (2025).
 ## docs
 * [devlog](./docs/devlog.md)
 * [wireframe](./docs/wireframe.excalidraw.json)
+* notebooks:
+  * [chatgpt](./notebooks/chatgpt.ipynb)
 
 
 ## Tech used

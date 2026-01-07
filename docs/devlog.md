@@ -95,4 +95,31 @@ Links:
     * me 
 * What I could do next:
     * finish chatgpt processing script
+* Links:
+
+
+## 2025-01-07
+* git: 
+* Start: 18:15
+* End: 21:19
+* What I want to do:
+    * Start logging errors
+    * Use polars to process chatgpt data
+* What I did:
+    * Created `docs/error-log.md`
+    * Researched using deno for jupyter notebooks
+    * Installed deno and the jupyter kernel using `deno jupyter --install`
+    * Created `notebooks/chatgpt.ipynb` to play around with my chatgpt export data
+* What broke:
+    * Couldn't load data into a polars dataframe, because the datatype in one of my columns was whack.
+* What next:
+    * Investigate how to get intellisense for ts in deno jupyter notebooks. I actually had to look at docs 🥺🤢
+    * Move over logic from notebook for chatgpt into its own script
+* Links:
+    * https://docs.deno.com/runtime/getting_started/installation/
+    * https://docs.deno.com/runtime/reference/cli/jupyter/
+    * https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno
+    * https://docs.pola.rs/user-guide/expressions/aggregation/#basic-aggregations
+    * https://pola-rs.github.io/nodejs-polars/interfaces/pl.DataFrame.html
+
 

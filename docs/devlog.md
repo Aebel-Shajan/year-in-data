@@ -77,3 +77,22 @@ Links:
     * for tree map: https://www.react-graph-gallery.com/treemap
     * for clipping stuff contained in svg: https://gsap.com/community/forums/topic/16517-how-to-give-svg-element-overflow-hidden/
     * recharts: https://recharts.github.io/en-US/
+
+## 2025-01-06
+* git:caae669fe96e928d9316b447579f74d31e36f10f
+* Start: 18:57
+* End: 21:00
+* What I want to do:
+    * Add a new script to the package.json to rebuild sqlite dependency
+    * Move logic for screentime into own page screenTimePage.tsx
+    * Create new page for processing chatgpt history
+* What I did:
+    * Added "postInstall" to package.json
+    * Updated Readme with a bunch of stuff
+    * Researched chatgpt data.
+    * watched ig reels
+* What broke:  
+    * me 
+* What I could do next:
+    * finish chatgpt processing script
+

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron"
+import { app, BrowserWindow, dialog, ipcMain } from "electron"
 import path from "path"
 import { getPreloadPath, isDev } from "./util.js"
 import { etl_screentime, ScreenTimeRecord } from "./etl/screentime.js"
@@ -38,6 +38,17 @@ app.on("ready", () => {
   `);
     const records: ScreenTimeRecord[] = stmt.all(year.toString()) as ScreenTimeRecord[];
     return records;
+  });
+
+  ipcMain.handle("select-file", async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: "Select a file",
+      properties: ["openFile"],
+      filters: [{ name: "zip files", extensions: ["zip"] }]
+    });
+
+    if (result.canceled) return null;
+    return result.filePaths[0];
   });
 })
 

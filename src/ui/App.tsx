@@ -1,113 +1,54 @@
-import { useEffect, useState } from 'react'
-import { Button } from './components/ui/button'
+import { useState } from 'react'
 import DarkModeToggle from './components/dark-mode-toggle'
-import { HeatmapVisual } from './components/visualisations/heatmap-visual'
-import * as d3 from 'd3'
-import { Treemap, type Tree } from './components/visualisations/treemap'
-import MonthlyBarChart from './components/visualisations/montthly-barchart'
-
+import ScreenTimeDashboard from './pages/screentime-dashboard'
+import ChatGptMessageDashboard from './pages/chatgpt-message-dashboard';
+import { Button } from './components/ui/button';
+declare global {
+  interface Window {
+    electronAPI: {
+      getScreenTimeByYear: (year: number) => Promise<any[]>;
+      extractScreenTime: () => Promise<void>;
+      selectFile: () => Promise<any>;
+    };
+  }
+}
 
 function App() {
-  const [data, setData] = useState([])
 
-  async function fetchScreenTimeByYear(year: number) {
-    const records = await window.electronAPI.getScreenTimeByYear(year)
-    // console.log(`Screen time for ${year}:`, records);
-    return records;
+  const [selectedPage, setSelectedPage] = useState("screenTime")
+
+  // i cba implementing hash router 
+  const pageMapping: { [key: string]: React.ReactNode } = {
+    "screenTime": <ScreenTimeDashboard />,
+    "chatgptMessages": <ChatGptMessageDashboard />
   }
 
-  async function extractScreenTime() {
-    await window.electronAPI.extractScreenTime()
-    fetchScreenTimeByYear(2025).then(newData => setData(newData))
-  }
-
-  useEffect(() => {
-    fetchScreenTimeByYear(2025).then(newData => setData(newData))
-  }, [])
-
-
-  const groupedByUsageMap = d3.rollup(
-    data,
-    v => d3.sum(v, d => d["usage"]),
-    d => d["app"]
-  )
-  const flattenedList = Array.from(groupedByUsageMap).map(([app, usage]) => {
-    return { app, usage }
-  })
-  const treeData: Tree = {
-    type: "node",
-    name: "boss",
-    value: 0,
-    children: flattenedList.sort((a, b) => b.usage - a.usage).map(row => {
-      return {
-        type: "leaf",
-        name: row["app"],
-        value: row["usage"]
-      }
-    })
-  }
-
-  const groupedByMonthMap = d3.rollup(
-    data,
-    v => d3.sum(v, d => d["usage"]),
-    d => {
-      return (new Date(d["start_time"])).toLocaleString("en-US", { month: "short" })
-    }
-  )
-  const shortMonthNames = [
-    "Jan", "Feb", "Mar", "Apr",
-    "May", "Jun", "Jul", "Aug",
-    "Sep", "Oct", "Nov", "Dec"
-  ];
-  const flattenedMonthList = shortMonthNames.map((month) => {
-    let value = groupedByMonthMap.get(month) 
-    if (value == undefined) {
-      value = 0
-    }
-    return {
-      month,
-      value
-    }
-  })
-  console.log(flattenedMonthList)
 
   return (
     <>
       <div className='w-full h-full bg-slate-500 flex p-3 gap-2'>
-        <div className='w-50 h-full flex flex-col gap-3 bg-background rounded-xl p-3'>
-          <DarkModeToggle />
-
-        </div>
-        <div className=' flex-1 bg-background rounded-xl overflow-x-hidden overflow-y-scroll w-full h-full'>
-          <div className=' w-full h-fit p-3 flex flex-col gap-3'>
-
-            <div className='p-3 outline rounded-xl flex items-center justify-between sticky top-3 bg-background'>
-              <div className='font-extrabold text-2xl'>
-                Screen time
-              </div>
-              <div className='flex'>
-
-                <Button variant="outline" onClick={() => extractScreenTime()}>
-                  extract screen time
+        <div className='w-50 h-full flex flex-col gap-3 bg-background rounded-xl '>
+          <div className='font-extrabold text-xl w-full border-b border-accent flex items-center justify-center py-5'>
+            📊 year-in-data
+          </div>
+          <div className='flex flex-col w-full flex-1 px-2'>
+            {Object.keys(pageMapping).map((pageName) => {
+              return (
+                <Button onClick={() => setSelectedPage(pageName)} variant={"ghost"} className='flex justify-start'>
+                  {pageName}
                 </Button>
-              </div>
-            </div>
-
-            <div className='p-2 outline rounded-xl overflow-scroll h-50'>
-              <HeatmapVisual data={data} />
-            </div>
-
-            <div className='p-2 outline rounded-xl overflow-scroll flex justify-center h-80'>
-              <Treemap data={treeData} width={600} height={300} />
-            </div>
-
-            <div className='p-2 outline rounded-xl overflow-scroll flex justify-center'>
-              <MonthlyBarChart data={flattenedMonthList} />
-            </div>
-
+              )
+            })}
+          </div>
+          <div className='p-4'>
+          <DarkModeToggle />
 
           </div>
 
+
+        </div>
+        <div className=' flex-1 bg-background rounded-xl overflow-x-hidden overflow-y-scroll w-full h-full'>
+          {pageMapping[selectedPage]}
         </div>
       </div>
 

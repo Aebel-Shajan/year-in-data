@@ -3,17 +3,20 @@ import path from "path";
 import os from "os";
 import sqlite3, { Database } from "better-sqlite3";
 
-interface Row {
-  app: string;
-  usage: number;
-  start_time: number;
-  end_time: number;
-  created_at: number;
-  tz: number | null;
-  device_id: string | null;
-  device_model: string | null;
-}
-
+export const screenTimeSql  = `
+CREATE TABLE IF NOT EXISTS screen_time (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  app TEXT NOT NULL,
+  device_id TEXT,
+  device_model TEXT,
+  usage REAL,
+  timezone INTEGER,
+  created_at TEXT,
+  start_time TEXT,
+  end_time TEXT,
+  UNIQUE(app, device_id, start_time)
+)
+`
 export interface ScreenTimeRecord {
   app: string;
   device_id: string;
@@ -25,12 +28,24 @@ export interface ScreenTimeRecord {
   end_time: string;
 }
 
+interface ScreenTimeRaw {
+  app: string;
+  usage: number;
+  start_time: number;
+  end_time: number;
+  created_at: number;
+  tz: number | null;
+  device_id: string | null;
+  device_model: string | null;
+}
+
+
 const knowledgeDb = path.join(
   os.homedir(),
   "Library/Application Support/Knowledge/knowledgeC.db"
 );
 
-function extractScreenTime(): Row[] {
+function extractScreenTime(): ScreenTimeRaw[] {
   if (!fs.existsSync(knowledgeDb)) {
     console.error(`Could not find knowledgeC.db at ${knowledgeDb}.`);
     process.exit(1);
@@ -68,13 +83,13 @@ function extractScreenTime(): Row[] {
       ZSTARTDATE DESC
   `;
 
-  const rows: Row[] = db.prepare(query).all() as Row[];
+  const rows: ScreenTimeRaw[] = db.prepare(query).all() as ScreenTimeRaw[];
   db.close();
 
   return rows;
 }
 
-function transformScreenTime(rows: Row[]): ScreenTimeRecord[] {
+function transformScreenTime(rows: ScreenTimeRaw[]): ScreenTimeRecord[] {
   return rows.map((r) => {
     const { app, usage, start_time, end_time, created_at, tz, device_id, device_model } = r;
     return {

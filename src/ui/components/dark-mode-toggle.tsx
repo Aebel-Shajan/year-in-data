@@ -10,7 +10,7 @@ export default function DarkModeToggle() {
   }, [dark]);
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2 w-full justify-between">
       <label htmlFor="airplane-mode">Dark mode</label>
       <Switch id="airplane-mode" checked={dark} onCheckedChange={(checked: boolean) => setDark(checked)} />
     </div>

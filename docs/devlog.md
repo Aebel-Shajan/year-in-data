@@ -123,3 +123,25 @@ Links:
     * https://pola-rs.github.io/nodejs-polars/interfaces/pl.DataFrame.html
 
 
+## 2025-01-08
+* git: 5b873aa797e3e7a55ad33462275c6fb2f9d74a0d
+* Start: 20:22
+* End: 23:35
+* What I want to do:
+    * Let the user pick a file from the file browser in electron
+    * Process chatgpt zip in electron
+* What I did:
+    * Experimented using db migrations and failed.
+    * Watch youtube shorts 
+    * I seperated out the dashboards into their own components based on the data being displayed (No dry zone)
+    * For the chatgpt message dashboard I added a button to open up a dialog and select a file. (much more complicated than i thought)
+* What broke:
+    * I realised doing `npm run transpile:electron` didn't also move the `.sql` files to the `dist-electron` folder, that put a stop in my plan to store sql schemas in `sql` files. Also stopped me from writing my own db migration scripts to version track schema changes for the sqlite db.
+* What next:
+    * finish etl script for chatgpt messages
+    * add dashboards visuals to chatgpt message dashboard
+    * maybe use drizzle / zod or something in the futre. cba now
+* Links:
+    * https://orm.drizzle.team/docs/get-started/sqlite-new
+    * https://ui.shadcn.com/docs/components/dialog
+    

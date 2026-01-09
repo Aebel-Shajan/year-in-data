@@ -3,13 +3,10 @@ import DarkModeToggle from './components/dark-mode-toggle'
 import ScreenTimeDashboard from './pages/screentime-dashboard'
 import ChatGptMessageDashboard from './pages/chatgpt-message-dashboard';
 import { Button } from './components/ui/button';
+import type { IpcAPI } from 'src/electron/sharedTypes';
 declare global {
   interface Window {
-    electronAPI: {
-      getScreenTimeByYear: (year: number) => Promise<any[]>;
-      extractScreenTime: () => Promise<void>;
-      selectFile: () => Promise<any>;
-    };
+    electronAPI: IpcAPI
   }
 }
 

@@ -27,3 +27,7 @@ export interface ChatGptMessagesRecord {
   full_content: string,
 }
 
+
+export function etlChatGptMessages() {
+  
+}

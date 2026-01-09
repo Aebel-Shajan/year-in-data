@@ -1,0 +1,87 @@
+import { BrowserWindow, dialog, ipcMain } from "electron";
+import { etlScreentime } from "./etl/screentime.js";
+import { etlChatGptMessages } from "./etl/chatGptMessages.js";
+import { type Database as DatabaseType } from "better-sqlite3";
+import { EtlResult, IpcAPI } from "./sharedTypes.js";
+
+const TABLE_ETL_MAP: Record<string, (db: DatabaseType) => void> = {
+  "screen_time": etlScreentime,
+  "chatgptMessages": etlChatGptMessages,
+}
+
+export function registerIpcHandlers(mainWindow: BrowserWindow, db: DatabaseType) {
+  const serviceFunctionMapping: IpcAPI = {
+    "selectFile": () => selectFile(mainWindow),
+    "runEtl": (tableName: string) => runEtl(db, tableName),
+    "getDataByYear": (tableName: string, year: number, dateColumn: string) => getDataByYear(db, tableName, year, dateColumn)
+  }
+  Object.entries(serviceFunctionMapping).forEach(([channel, listener]) => {
+    ipcMain.handle(channel, (_e, ...args) => listener(...args))
+  })
+
+}
+
+async function selectFile(mainWindow: BrowserWindow) {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    title: "Select a file",
+    properties: ["openFile"],
+    filters: [{ name: "zip files", extensions: ["zip"] }]
+  });
+
+  if (result.canceled) return null;
+  return result.filePaths[0];
+}
+
+async function runEtl(db: DatabaseType, tableName: string,): Promise<EtlResult> {
+  const message = `Attempting to run etl for ${tableName}`
+  console.log(message)
+  if (!Object.keys(TABLE_ETL_MAP).includes(tableName)) {
+    const message = `Couldn't find tableName ${tableName} in sqlite db`
+    console.log(message)
+    return {
+      success: false,
+      runMetadata: {
+        message: message
+      },
+    }
+  }
+  try {
+    console.log(`running etl for ${tableName}`)
+    const etlFunction = TABLE_ETL_MAP[tableName]
+    const metadata = etlFunction(db)
+    return {
+      success: true,
+      runMetadata: metadata ?? {}
+    }
+  } catch {
+    const message = "error running etl"
+    console.log(message)
+    dialog.showErrorBox("Error", message)
+
+    return {
+      success: false,
+      runMetadata: {
+        message
+      },
+    }
+  }
+}
+
+async function getDataByYear(
+  db: DatabaseType,
+  tableName: string,
+  year: number,
+  dateColumn: string
+): Promise<Record<string, string | number>[]> {
+  console.log("Getting screen time from db")
+  //  TEMPORARY FOR DEV
+  // TODO: ADD SOME SAFETY TO THIS
+  console.log(tableName, year, dateColumn)
+  const stmt = db.prepare(`
+    SELECT * FROM ${tableName}
+    WHERE strftime('%Y', ${dateColumn}) = '${year}'
+    ORDER BY ${dateColumn} DESC
+  `,);
+  const records: Record<string, string | number>[] = stmt.all() as Record<string, string | number>[];
+  return records;
+}

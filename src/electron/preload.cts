@@ -1,7 +1,11 @@
 import { contextBridge, ipcRenderer } from "electron";
+import { IpcAPI } from "./sharedTypes";
 
-contextBridge.exposeInMainWorld('electronAPI', {
-  extractScreenTime: () => ipcRenderer.invoke("etl-screen-time"),
-  getScreenTimeByYear: (year: number) => ipcRenderer.invoke("get-screen-time-by-year", year),
-  selectFile: () => ipcRenderer.invoke("select-file")
-})
+// could be more concise but this is more readable ig + we have type ch
+const api: IpcAPI = {
+  runEtl: (...args) => ipcRenderer.invoke("runEtl", ...args),
+  getDataByYear: (...args)  => ipcRenderer.invoke("getDataByYear", ...args),
+  selectFile: (...args) => ipcRenderer.invoke("selectFile", ...args)
+}
+
+contextBridge.exposeInMainWorld('electronAPI', api)

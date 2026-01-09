@@ -28,3 +28,4 @@ dist-react
 dist
 notebooks/data/*
 !notebooks/data/.gitkeep
+year-in-data.db

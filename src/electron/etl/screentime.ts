@@ -105,19 +105,6 @@ function transformScreenTime(rows: ScreenTimeRaw[]): ScreenTimeRecord[] {
   });
 }
 
-
-
-function groupByMonth(records: ScreenTimeRecord[]): Record<string, ScreenTimeRecord[]> {
-  const grouped: Record<string, ScreenTimeRecord[]> = {};
-  for (const r of records) {
-    const month = r.created_at.slice(0, 7); // YYYY-MM
-    if (!grouped[month]) grouped[month] = [];
-    grouped[month].push(r);
-  }
-  return grouped;
-}
-
-
 function loadScreenTimeToSqlite(db: Database, records: ScreenTimeRecord[]) {
   const insert = db.prepare(`
     INSERT OR IGNORE INTO screen_time
@@ -134,11 +121,9 @@ function loadScreenTimeToSqlite(db: Database, records: ScreenTimeRecord[]) {
   console.log(`Inserted ${records.length} screen time records.`);
 }
 
-export function etl_screentime(db: Database) {
+export function etlScreentime(db: Database) {
   const rows = extractScreenTime();
   const records = transformScreenTime(rows);
   loadScreenTimeToSqlite(db, records)
-  // Uncomment to upload to S3
-  // await uploadToS3(grouped);
 }
 

@@ -145,3 +145,25 @@ Links:
     * https://orm.drizzle.team/docs/get-started/sqlite-new
     * https://ui.shadcn.com/docs/components/dialog
     
+
+## 2025-01-09
+* git: e7698603b31e9344d2895911d388131b6c127202
+* Start: 19:12
+* End: 22:20
+* What I want to do:
+    * Dry `runEtl`, `getDataForYear` and `selectFile` functions in electron backend
+    * Create interface `IpcApi` inside common types folder so it can be used by both frontend and backend.
+    * Finish chatgpt etl script.
+* What I did:
+    * Created a framework (almost) for setting functions which are use by ipcMain and ipcRenderer.
+    * Changed location of db to enable easier debugging
+    * Created a shared types in `src/electron/sharedType.ts`
+    * Used `dialog.showErrorBox` in main process to emulate `alert` in frontend.
+    * Installed Electron fiddle, good for replicating behaviour from docs. 
+* What broke:
+    * When I tried to put the shared types in `src/sharedTypes.ts` the folder structure of the transpiled electron changes. As a result I had to update the `"main"` key in `package.json`. The next time i ran `npm run dev` I was not getting any electron logs in the terminal. I have no idea what caused this so I decided not to mess with the folder structure of the output electron js code in `dist-electron`.
+* What next:
+    * Finish chatgpt etl script.
+* Links:
+    * https://stackoverflow.com/questions/70552056/window-alert-for-electron-on-main-js
+    * https://www.electronjs.org/fiddle

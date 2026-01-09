@@ -31,5 +31,5 @@
       ]
     }
   },
-  "include": ["src/ui"]
+  "include": ["src/ui", "src/electron/sharedTypes.ts"]
 }

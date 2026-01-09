@@ -8,17 +8,21 @@ import { useEffect, useState } from "react";
 
 
 export default function ScreenTimeDashboard() {
-
   const [data, setData] = useState<any[]>([])
+  const table_name = "screen_time"
+
 
   async function fetchScreenTimeByYear(year: number) {
-    const records = await window.electronAPI.getScreenTimeByYear(year)
+    const records = await window.electronAPI.getDataByYear(table_name, year, "start_time")
     // console.log(`Screen time for ${year}:`, records);
     return records;
   }
 
   async function extractScreenTime() {
-    await window.electronAPI.extractScreenTime()
+    const response = await window.electronAPI.runEtl(table_name)
+    if (response.success) {
+      console.log(`Failed to run etl for ${table_name}`)
+    }
     fetchScreenTimeByYear(2025).then(newData => setData(newData))
   }
 
@@ -70,7 +74,6 @@ export default function ScreenTimeDashboard() {
       value
     }
   })
-  console.log(flattenedMonthList)
 
   return (
     <div className=' w-full h-fit p-3 flex flex-col gap-3'>

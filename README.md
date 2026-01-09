@@ -65,25 +65,25 @@ npm run dev
 ## Folder structure
 ```shell
 tree -L 2 -I "node_modules" --dirsfirst
+
 .
-├── dist-electron # build file
-│   ├── etl
-│   ├── electron-db.js
-│   ├── main.js
-│   ├── preload.cjs
-│   └── util.js
 ├── docs # Docs / markdown dump
+│   ├── GatheringData.md
 │   ├── devlog.md
+│   ├── error-log.md
 │   └── wireframe.excalidraw.json
-├── public # public assets, should probs delete this
+├── notebooks # Notebooks to do data investigation
+│   ├── data
+│   └── chatgpt.ipynb
+├── public
 │   └── vite.svg
-├── src 
+├── src
 │   ├── electron # Where electron ts code is 
 │   └── ui # Where frontend react-ts code is
-├── README.md 
-├── components.json # config for shadcn
-├── index.html # entry point for frontend
-├── package-lock.json 
+├── README.md
+├── components.json
+├── index.html
+├── package-lock.json
 ├── package.json # dependencies, node project metadata, scripts
 ├── tsconfig.app.json # ts config for frontend code in ui
 ├── tsconfig.json  # mostly for IDE
@@ -97,10 +97,13 @@ tree -L 2 --dirsfirst src/electron
 
 src/electron
 ├── etl # ts scripts to etl data into sqlite db
+│   ├── chatGptMessages.ts
 │   └── screentime.ts
-├── electron-db.ts 
+├── electron-db.ts
 ├── main.ts # main process
 ├── preload.cts # pre load script
+├── services.ts 
+├── sharedTypes.ts
 ├── tsconfig.json # ts config for project
 └── util.ts
 ```
@@ -118,7 +121,10 @@ src/ui
 │   └── dark-mode-toggle.tsx
 ├── lib # common utils
 │   └── utils.ts
-├── App.tsx 
+├── pages
+│   ├── chatgpt-message-dashboard.tsx
+│   └── screentime-dashboard.tsx
+├── App.tsx
 ├── index.css # tailwind stuff in here
 └── main.tsx # tsx entrypoint
 ```

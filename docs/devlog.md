@@ -167,3 +167,27 @@ Links:
 * Links:
     * https://stackoverflow.com/questions/70552056/window-alert-for-electron-on-main-js
     * https://www.electronjs.org/fiddle
+
+
+## 2025-01-10
+* git: 5c4a61b133d113ffc1bc01a1f03f43ab8f026862
+* Start: 14:46
+* End: 18:39
+* What I want to do:
+    * Finish off etl script for chatgpt messages, add visuals to dashboard.
+* What I did:
+    * Finshed etl script for chatgpt messages
+    * Realised the heatmap visual is not generic, it was tightly coupled to the screen time so this needs updating
+    * had lunch (steak)
+    * overthink architecture 
+* What broke:
+    * kept running into this error in frontend chatgpt-message-dashboard:
+    ```
+    Error invoking remote method 'runEtl': Error: An object could not be cloned.
+    ```
+    I don't know how to resolve this
+* What next:
+    * Refactor visuals to be more generic. make them accept data only in certain formats.
+    * reduce complexity
+    * Make unit tests for etl functions.
+* Links:

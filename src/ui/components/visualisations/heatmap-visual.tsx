@@ -222,9 +222,13 @@ function DayCircleMatrix(
 export function HeatmapVisual(
   {
     data,
+    datetimeCol = "datetime",
+    valueCol = "value",
     heatmapSettings = DEFAULT_HEATMAP_SETTINGS,
   }: {
     data: Record<string, string | number>[],
+    datetimeCol?: string,
+    valueCol?: string,
     heatmapSettings?: HeatmapSettings,
   }
 ) {
@@ -232,8 +236,8 @@ export function HeatmapVisual(
   useEffect(() => {
     const dateValueDict: unknown= _(data)
       .map((row: Record<string, string | number>) => ({
-        date: getUTCDateOnly(row.start_time as string).toDateString(), // "YYYY-MM-DD"
-        value: row.usage,
+        date: getUTCDateOnly(row[datetimeCol] as string).toDateString(), // "YYYY-MM-DD"
+        value: row[valueCol],
       }))
       .groupBy("date")
       .mapValues((rows: Record<string, string | number>[]) => _.sumBy(rows, "value"))

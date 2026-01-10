@@ -15,19 +15,19 @@ export default function ScreenTimeDashboard() {
   async function fetchScreenTimeByYear(year: number) {
     const records = await window.electronAPI.getDataByYear(table_name, year, "start_time")
     // console.log(`Screen time for ${year}:`, records);
-    return records;
+    setData(records)
   }
 
   async function extractScreenTime() {
-    const response = await window.electronAPI.runEtl(table_name)
-    if (response.success) {
+    const response = await window.electronAPI.runEtl(table_name, {})
+    if (!response.success) {
       console.log(`Failed to run etl for ${table_name}`)
     }
-    fetchScreenTimeByYear(2025).then(newData => setData(newData))
+    fetchScreenTimeByYear(2025)
   }
 
   useEffect(() => {
-    fetchScreenTimeByYear(2025).then(newData => setData(newData))
+    fetchScreenTimeByYear(2025)
   }, [])
 
 
@@ -91,7 +91,7 @@ export default function ScreenTimeDashboard() {
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll h-50'>
-        <HeatmapVisual data={data} />
+        <HeatmapVisual data={data} datetimeCol="start_time" valueCol="usage"/>
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll flex justify-center h-80'>

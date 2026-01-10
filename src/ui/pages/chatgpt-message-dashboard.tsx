@@ -1,10 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useState } from "react";
+import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
+import { reduce } from "lodash";
+import { useEffect, useState } from "react";
 
 
 export default function ChatGptMessageDashboard() {
+  const table_name = "chat_gpt_messages"
   const [filePath, setFilePath] = useState<string | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [data, setData] = useState<any[]>([])
+
+  useEffect(() => {
+    fetchData(2025)
+  }, [])
+
 
   function clearSelectedFilePath() {
     setFilePath(null)
@@ -14,6 +24,26 @@ export default function ChatGptMessageDashboard() {
     const path = await window.electronAPI.selectFile()
     if (!path) return
     setFilePath(path)
+  }
+
+  async function fetchData(year: number) {
+    const records = await window.electronAPI.getDataByYear(table_name, year, "datetime")
+    setData(records)
+    console.log(`rows for ${table_name} ${year}:`, records.length);
+    return records;
+  }
+
+  async function runEtl() {
+    if (!filePath) {
+      console.log("Failed to run chatgpt pipeline")
+      return
+    } // create method in electron api to dialog this
+    const response = await window.electronAPI.runEtl(table_name, { zipPath: filePath, targetDir: "./data/chatgpt" })
+    if (!response.success) {
+      console.log(`Failed to run etl for ${table_name}`)
+    }
+    await fetchData(2025)
+    setDialogOpen(false)
   }
 
 
@@ -26,7 +56,7 @@ export default function ChatGptMessageDashboard() {
         </div>
 
         <div className='flex'>
-          <Dialog>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button variant={"outline"} onClick={clearSelectedFilePath}>
                 Extract chatgpt data
@@ -50,11 +80,10 @@ export default function ChatGptMessageDashboard() {
                   </div>
                 }
               </div>
-              {filePath && 
-  
-              <Button className="w-fit">
-                Extract chatgpt message data
-              </Button>
+              {filePath &&
+                <Button className="w-fit" onClick={runEtl}>
+                  Extract chatgpt message data
+                </Button>
               }
 
 
@@ -62,7 +91,17 @@ export default function ChatGptMessageDashboard() {
           </Dialog>
 
         </div>
+      </div>
 
+      <div className='p-2 outline rounded-xl overflow-scroll h-50'>
+        <HeatmapVisual data={data.map((row) => {
+          return {...row, value: 1}
+        })} />
+      </div>
+
+                  <div className="font-light font-mono text-sm flex-1 wrap-break-word w-full bg-accent p-2 rounded-md">
+
+        {JSON.stringify(data.slice(0, 10))}
       </div>
     </div>
   )

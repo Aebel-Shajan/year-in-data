@@ -28,6 +28,12 @@ export interface ScreenTimeRecord {
   end_time: string;
 }
 
+export function etlScreentime(db: Database) {
+  const rows = extractScreenTime();
+  const records = transformScreenTime(rows);
+  loadScreenTimeToSqlite(db, records)
+}
+
 interface ScreenTimeRaw {
   app: string;
   usage: number;
@@ -119,11 +125,5 @@ function loadScreenTimeToSqlite(db: Database, records: ScreenTimeRecord[]) {
 
   insertMany(records);
   console.log(`Inserted ${records.length} screen time records.`);
-}
-
-export function etlScreentime(db: Database) {
-  const rows = extractScreenTime();
-  const records = transformScreenTime(rows);
-  loadScreenTimeToSqlite(db, records)
 }
 

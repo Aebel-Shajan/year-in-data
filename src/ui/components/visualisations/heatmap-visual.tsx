@@ -1,5 +1,7 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEventHandler } from "react";
+import { useTooltip, useTooltipInPortal, TooltipWithBounds } from '@visx/tooltip';
+import { localPoint } from '@visx/event';
 
 // Types
 const DEFAULT_HEATMAP_SETTINGS: HeatmapSettings = {
@@ -111,12 +113,14 @@ function DayCircleCell(
   {
     date,
     value,
+    handleMouseOver,
     label,
     range,
     heatmapSettings = DEFAULT_HEATMAP_SETTINGS,
   }: {
     date: Date,
     value: number,
+    handleMouseOver: CallableFunction
     label: string,
     range: [number, number],
     heatmapSettings?: HeatmapSettings,
@@ -148,34 +152,11 @@ function DayCircleCell(
         cx={heatmapPos.xPos}
         cy={heatmapPos.yPos}
         r={heatmapSettings.radius}
+        onMouseOver={(event) => handleMouseOver(event, value) as MouseEventHandler}
+        // onMouseOut={hideTooltip}
       />
 
-      {/* Tooltip group */}
-      {value > 0 &&
-        <g
-          className="
-      opacity-0 group-hover:opacity-100 
-      transition-opacity duration-150 
-      pointer-events-none
-    "
-        >
-          {/* Tooltip background */}
-          <text
-            x={heatmapPos.xPos - 2 * heatmapSettings.radius} // horizontally centered inside rect
-            y={heatmapPos.yPos + heatmapSettings.radius} // vertically centered (adjust as needed)
-            className="fill-white  select-none"
-            fontSize={4 * heatmapSettings.radius}
-            textAnchor="end"
-            stroke='black'
-            fill='white'
-            strokeWidth={1}
-            fontWeight={1000}
-          >
-            {label}
-          </text>
 
-        </g>
-      }
     </g>
 
 
@@ -210,11 +191,13 @@ function DayCircleMatrix(
   {
     heatmapData,
     heatmapSettings,
-    range
+    range,
+    handleMouseOver,
   }: {
     heatmapData: HeatmapDataType,
     heatmapSettings: HeatmapSettings,
-    range: [number, number]
+    range: [number, number],
+    handleMouseOver: CallableFunction
   }
 ) {
 
@@ -229,6 +212,7 @@ function DayCircleMatrix(
         label={heatmapData[date.toDateString()].label}
         heatmapSettings={heatmapSettings}
         range={range}
+        handleMouseOver={handleMouseOver}
       />
     )
   })
@@ -274,10 +258,54 @@ export function HeatmapVisual(
     setHeatmapData(dateValueDict as HeatmapDataType)
   }, [data])
 
+
+  const {
+    tooltipData,
+    tooltipLeft,
+    tooltipTop,
+    tooltipOpen,
+    showTooltip,
+    hideTooltip,
+  } = useTooltip();
+
+
+  // `Tooltip` or `TooltipWithBounds` and remove `containerRef`
+  const { containerRef, TooltipInPortal } = useTooltipInPortal({
+    // use TooltipWithBounds
+    detectBounds: true,
+    // when tooltip containers are scrolled, this will correctly update the Tooltip position
+    scroll: true,
+  })
+
+  const handleMouseOver = (event, datum) => {
+    const coords = localPoint(event.target.ownerSVGElement, event);
+    if (coords) {
+      showTooltip({
+        tooltipLeft: coords.x,
+        tooltipTop: coords.y,
+        tooltipData: datum
+      });
+    }
+
+  };
+
+
   return (
-    <svg width={1127} height="100%">
-      <DayCircleMatrix heatmapData={heatmapData} heatmapSettings={heatmapSettings} range={range} />
-      <HeatmapMonthLabels heatmapSettings={heatmapSettings} />
-    </svg>
+    <>
+      <svg ref={containerRef} width={1127} height="100%">
+        <DayCircleMatrix heatmapData={heatmapData} heatmapSettings={heatmapSettings} range={range} handleMouseOver={handleMouseOver}/>
+        <HeatmapMonthLabels heatmapSettings={heatmapSettings} />
+      </svg>
+      {tooltipOpen && (
+        <TooltipInPortal
+          // set this to random so it correctly updates with parent bounds
+          key={Math.random()}
+          top={tooltipTop}
+          left={tooltipLeft}
+        >
+          Data value <strong>{tooltipData ? String(tooltipData) : "No data"}</strong>
+        </TooltipInPortal>
+      )}
+    </>
   )
 }

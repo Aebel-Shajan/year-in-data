@@ -67,7 +67,7 @@ export function prepareTreeMapData(
   valueCol: string,
 ) {
   // const groupedData = Object.groupBy only in es2024 rip
-   const groupedDataMap = fullData.reduce((dataMap: {[category: string]: number}, row) => {
+   const groupedDataMap = fullData.reduce((dataMap:DateMapDataType, row) => {
       const category = row[categoryCol]
       const value = row[valueCol] as number
       if (!category || !value) return dataMap
@@ -76,7 +76,7 @@ export function prepareTreeMapData(
       }
       dataMap[category] += value
       return dataMap
-    }, {} as {[category: string]: number})
+    }, {} as DateMapDataType)
 
     const flattenedGroupedData = Object.entries(groupedDataMap).map(([role, value])=> {
       return {
@@ -92,4 +92,49 @@ export function prepareTreeMapData(
       children: flattenedGroupedData.sort((a, b) => b.value - a.value) as Tree[]
     }
     return treeData
+}
+
+
+/**
+ * SELECT 
+ * TO_CHAR(TO_DATE(EXTRACT(MONTH FROM dateTimeCol)::TEXT, 'MM'), 'Mon') AS month,
+ * SUM(valueCol) AS value
+ * FROM my_table
+ * WHERE dateTimeCol IS NOT NULL
+ * GROUP BY EXTRACT(MONTH FROM dateTimeCol)
+ * ORDER BY EXTRACT(MONTH FROM dateTimeCol);
+ */
+
+export function prepareMonthlyGroupedData(
+  fullData: Record<string, string|number>[],
+  dateTimeCol: string,
+  valueCol: string
+) {
+
+    const shortMonthNames = [
+      "Jan", "Feb", "Mar", "Apr",
+      "May", "Jun", "Jul", "Aug",
+      "Sep", "Oct", "Nov", "Dec"
+    ];
+    const initialMonthNameMap = Object.fromEntries(shortMonthNames.map(month => [month, 0]))
+    const groupedDataMap = fullData.reduce((dataMap: DateMapDataType, row) => {
+      const dateTime = row[dateTimeCol]
+      const value = row[valueCol] as number
+      if (!dateTime || !value) return dataMap
+      const month = new Date(dateTime).toLocaleString("en-US", { month: "short" })
+      if (!dataMap[month]) {
+        dataMap[month] = 0 as number
+      }
+      dataMap[month] += value
+      return dataMap
+    }, initialMonthNameMap as DateMapDataType)
+
+
+    const flattenedGroupedData = Object.entries(groupedDataMap).map(([month, value])=> {
+      return {
+        month: month,
+        value: value as number
+      }
+    })
+    return flattenedGroupedData
 }

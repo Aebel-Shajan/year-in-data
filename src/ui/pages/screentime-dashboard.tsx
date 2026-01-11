@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
 import MonthlyBarChart from "@/components/visualisations/montthly-barchart";
 import { Treemap, type Tree } from "@/components/visualisations/treemap";
-import { constructDurationString, prepareHeatmapData, prepareTreeMapData } from "@/utils";
+import { constructDurationString, prepareHeatmapData, prepareMonthlyGroupedData, prepareTreeMapData } from "@/utils";
 import * as d3 from "d3";
 import { useEffect, useState } from "react";
 
@@ -37,31 +37,7 @@ export default function ScreenTimeDashboard() {
     "app",
     "usage"
   )
-
-
-  const groupedByMonthMap = d3.rollup(
-    data,
-    v => d3.sum(v, d => d["usage"]),
-    d => {
-      return (new Date(d["start_time"])).toLocaleString("en-US", { month: "short" })
-    }
-  )
-  const shortMonthNames = [
-    "Jan", "Feb", "Mar", "Apr",
-    "May", "Jun", "Jul", "Aug",
-    "Sep", "Oct", "Nov", "Dec"
-  ];
-  const flattenedMonthList = shortMonthNames.map((month) => {
-    let value = groupedByMonthMap.get(month)
-    if (value == undefined) {
-      value = 0
-    }
-    return {
-      month,
-      value
-    }
-  })
-
+  
   let heatmapData = prepareHeatmapData(
     data,
     "start_time",
@@ -71,6 +47,12 @@ export default function ScreenTimeDashboard() {
     row.label = constructDurationString(row.value)
     return row
   })
+
+  const dataGroupedByMonth = prepareMonthlyGroupedData(
+    data,
+    "start_time",
+    "usage"
+  )
 
   return (
     <div className=' w-full h-fit p-3 flex flex-col gap-3'>
@@ -88,15 +70,15 @@ export default function ScreenTimeDashboard() {
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll h-50'>
-        <HeatmapVisual data={heatmapData} range={[0, 10 * 3600]}/>
+        <HeatmapVisual data={heatmapData} range={[0, 10 * 3600]} />
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll flex justify-center h-80'>
-        <Treemap data={treemapData}  />
+        <Treemap data={treemapData} />
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll flex justify-center'>
-        <MonthlyBarChart data={flattenedMonthList} />
+        <MonthlyBarChart data={dataGroupedByMonth} />
       </div>
     </div>
   )

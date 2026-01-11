@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
-import { Treemap} from "@/components/visualisations/treemap";
-import { prepareHeatmapData, prepareTreeMapData } from "@/utils";
+import MonthlyBarChart from "@/components/visualisations/montthly-barchart";
+import { Treemap } from "@/components/visualisations/treemap";
+import { prepareHeatmapData, prepareMonthlyGroupedData, prepareTreeMapData } from "@/utils";
 import { useEffect, useState } from "react";
 
 
@@ -64,6 +65,11 @@ export default function ChatGptMessageDashboard() {
     "value"
   )
 
+  const dataGroupedByMonth = prepareMonthlyGroupedData(
+    dataWithValueCount,
+    "datetime",
+    "value"
+  )
 
   return (
     <div className=' w-full h-fit p-3 flex flex-col gap-3'>
@@ -114,6 +120,11 @@ export default function ChatGptMessageDashboard() {
       <div className='p-2 outline rounded-xl overflow-scroll h-50'>
         <Treemap data={treemapData} />
       </div>
+
+      <div className='p-2 outline rounded-xl overflow-scroll flex justify-center'>
+        <MonthlyBarChart data={dataGroupedByMonth} />
+      </div>
+
 
       <div className="font-light font-mono text-sm flex-1 wrap-break-word w-full bg-accent p-2 rounded-md">
         {JSON.stringify(data.slice(0, 10))}

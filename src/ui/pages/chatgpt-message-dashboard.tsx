@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
+import { Treemap, type Tree } from "@/components/visualisations/treemap";
 import { prepareHeatmapData } from "@/utils";
 import { useEffect, useState } from "react";
 
@@ -56,6 +57,28 @@ export default function ChatGptMessageDashboard() {
     "messages"
   )
 
+  const groupedDataMap = data.reduce((dataMap, row) => {
+    const role = row["role"]
+    if (!role) return dataMap
+    if (!dataMap[role]) {
+      dataMap[role] = 0
+    }
+    dataMap[role] += 1
+    return dataMap
+  }, {})
+  const flattenedGroupedData = Object.entries(groupedDataMap).map(([role, value])=> {
+    return {
+      type: "leaf",
+      name: role,
+      value: value as number
+    }
+  })
+  const treeData: Tree = {
+    type: "node",
+    name: "boss",
+    value: 0,
+    children: flattenedGroupedData.sort((a, b) => b.value - a.value) as Tree[]
+  }
 
   return (
     <div className=' w-full h-fit p-3 flex flex-col gap-3'>
@@ -106,6 +129,10 @@ export default function ChatGptMessageDashboard() {
       <div className='p-2 outline rounded-xl overflow-scroll h-50'>
         <HeatmapVisual data={heatmapData} range={[0, 100]}/>
       </div>
+      <div className='p-2 outline rounded-xl overflow-scroll h-50'>
+        <Treemap data={treeData} />
+      </div>
+
 
       <div className="font-light font-mono text-sm flex-1 wrap-break-word w-full bg-accent p-2 rounded-md">
 

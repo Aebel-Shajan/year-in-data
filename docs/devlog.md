@@ -191,3 +191,26 @@ Links:
     * reduce complexity
     * Make unit tests for etl functions.
 * Links:
+
+## 2025-01-11
+* git: 8c4c4edb0f8828a3de57902fccf4d6bc6441cfb6
+* Start: 12:21
+* End: 14:15
+* What I want to do:
+    * make heatmap generic. 
+    * add tooltip to heatmap.
+    * create functions to transform data from original format to format required by visuals.
+    * save the logs from etl runs into a file/db.
+    * render logs in real time to ui when run is initiated.
+    * add filters
+    * add a page to frontend to go through previous etl runs
+    * decide if error log is worth it
+* What I did:
+    * make heatmap less generic
+    * installed visx for heatmap. (yay another dependency!)
+* What broke:
+    * react dependency issue when installing visx
+* What next:
+    * add context to heatmap to get rid of prop drilling.
+* Links:
+    * https://visx.airbnb.tech/docs/tooltip

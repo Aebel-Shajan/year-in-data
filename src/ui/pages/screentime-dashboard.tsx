@@ -107,7 +107,7 @@ export default function ScreenTimeDashboard() {
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll flex justify-center h-80'>
-        <Treemap data={treeData} width={600} height={300} />
+        <Treemap data={treeData}  />
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll flex justify-center'>

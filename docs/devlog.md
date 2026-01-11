@@ -214,3 +214,26 @@ Links:
     * add context to heatmap to get rid of prop drilling.
 * Links:
     * https://visx.airbnb.tech/docs/tooltip
+
+
+* git: 3732a99222da9de5620e8760fe094a4d90c7ed47
+* Start: 17:36
+* End: 20:17
+* What I want to do:
+    * add context to heatmap
+* What I did:
+    * Simplified nesting in heatmap-visual. using react context is overkill.
+    * added tooltip to heatmap using visx
+    * tried using recharts for treemap, but i couldn't get it to look colourful. It looked bland af. also the recharts tooltip kinda sucks.
+    * was able to replicate the auto sizing i wanted from recharts treemap with `@visx/responsive`. visx > recharts
+    * add a tooltip which follows the mouse.
+    * watched a tonne of ig reels
+* What broke:  
+    * my attention span
+* What next:
+    * make heatmap responsive too
+    * add zsh history etl
+    * add etl logs (this can wait cus its boring)
+* Links:
+    * https://react.dev/learn/passing-data-deeply-with-context
+    * https://visx.airbnb.tech/docs/responsive

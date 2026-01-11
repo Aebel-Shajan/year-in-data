@@ -1,4 +1,4 @@
-import _ from "lodash";
+
 import { useEffect, useState } from "react";
 
 // Types
@@ -10,7 +10,17 @@ const DEFAULT_HEATMAP_SETTINGS: HeatmapSettings = {
   yOffset: 0,
 }
 
-export type HeatmapDataType = { [x: string]: number; }
+export interface InputHeatmapData {
+  date: string,
+  value: number,
+  label?: string
+}
+export type HeatmapDataType = {
+  [date: string]: {
+    value: number,
+    label: string
+  }
+}
 
 export interface HeatmapSettings {
   radius: number,
@@ -25,11 +35,7 @@ function getCSSVariable(name: string): string {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
-function constructDurationString(timeInSeconds: number): string {
-  const hours = Math.floor(timeInSeconds / 3600)
-  const minutes = Math.floor((timeInSeconds % 3600) / 60)
-  return `${hours}h ${minutes}m`
-}
+
 
 function getAllUTCdatesInYear(year: number): Date[] {
   const dates: Date[] = [];
@@ -105,11 +111,15 @@ function DayCircleCell(
   {
     date,
     value,
-    heatmapSettings = DEFAULT_HEATMAP_SETTINGS
+    label,
+    range,
+    heatmapSettings = DEFAULT_HEATMAP_SETTINGS,
   }: {
     date: Date,
     value: number,
-    heatmapSettings?: HeatmapSettings
+    label: string,
+    range: [number, number],
+    heatmapSettings?: HeatmapSettings,
   }
 ) {
   const heatmapPos = getHeatmapPosition(
@@ -132,7 +142,7 @@ function DayCircleCell(
     "
         fill={
           value > 0
-            ? getColorFromValue(value, 0, 10 * 3600)
+            ? getColorFromValue(value, range[0], range[1])
             : getCSSVariable("--accent")
         }
         cx={heatmapPos.xPos}
@@ -161,7 +171,7 @@ function DayCircleCell(
             strokeWidth={1}
             fontWeight={1000}
           >
-            {constructDurationString(value)}
+            {label}
           </text>
 
         </g>
@@ -200,54 +210,73 @@ function DayCircleMatrix(
   {
     heatmapData,
     heatmapSettings,
+    range
   }: {
     heatmapData: HeatmapDataType,
     heatmapSettings: HeatmapSettings,
+    range: [number, number]
   }
 ) {
 
+
+
   const circleSvgMatrix = getAllUTCdatesInYear(2025).map(date => {
+    const row = heatmapData[date.toDateString()]
     return (
       <DayCircleCell
         date={date}
-        value={heatmapData[date.toDateString()]}
+        value={heatmapData[date.toDateString()].value}
+        label={heatmapData[date.toDateString()].label}
         heatmapSettings={heatmapSettings}
+        range={range}
       />
     )
   })
   return circleSvgMatrix
 }
 
+// beware of this
+
+
 
 export function HeatmapVisual(
   {
     data,
-    datetimeCol = "datetime",
-    valueCol = "value",
+    range,
     heatmapSettings = DEFAULT_HEATMAP_SETTINGS,
   }: {
-    data: Record<string, string | number>[],
-    datetimeCol?: string,
-    valueCol?: string,
+    data: InputHeatmapData[], // always take data in as llist of rows, no maps here
     heatmapSettings?: HeatmapSettings,
+    range: [number, number]
   }
 ) {
-  const [heatmapData, setHeatmapData] = useState<HeatmapDataType>({})
+
+  const initialHeatmapData = getAllUTCdatesInYear(2025).reduce((dateMap: HeatmapDataType, date: Date) => {
+    dateMap[date.toDateString()] = {
+      value: 0,
+      label: ""
+    }
+    return dateMap
+  }, {} as HeatmapDataType)
+
+
+  const [heatmapData, setHeatmapData] = useState<HeatmapDataType>(initialHeatmapData)
   useEffect(() => {
-    const dateValueDict: unknown= _(data)
-      .map((row: Record<string, string | number>) => ({
-        date: getUTCDateOnly(row[datetimeCol] as string).toDateString(), // "YYYY-MM-DD"
-        value: row[valueCol],
-      }))
-      .groupBy("date")
-      .mapValues((rows: Record<string, string | number>[]) => _.sumBy(rows, "value"))
-      .value();
+    // convert to map for easier use
+    const dateValueDict: HeatmapDataType = data.reduce((heatmapData: HeatmapDataType, row: InputHeatmapData) => {
+      const date = (new Date(row.date)).toDateString()
+      heatmapData[date] = {
+        value: row.value,
+        label: row.label ?? ""
+      }
+      return heatmapData
+    }, initialHeatmapData)
     setHeatmapData(dateValueDict as HeatmapDataType)
   }, [data])
 
   return (
     <svg width={1127} height="100%">
-      <DayCircleMatrix heatmapData={heatmapData} heatmapSettings={heatmapSettings} />
+      <DayCircleMatrix heatmapData={heatmapData} heatmapSettings={heatmapSettings} range={range} />
       <HeatmapMonthLabels heatmapSettings={heatmapSettings} />
     </svg>
   )

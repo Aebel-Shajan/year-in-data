@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
-import { reduce } from "lodash";
+import { prepareHeatmapData } from "@/utils";
 import { useEffect, useState } from "react";
 
 
@@ -45,6 +45,16 @@ export default function ChatGptMessageDashboard() {
     await fetchData(2025)
     setDialogOpen(false)
   }
+
+  const heatmapData = prepareHeatmapData(
+    data.map(row => {
+      row.value = 1
+      return row
+    }),
+    "datetime",
+    "value",
+    "messages"
+  )
 
 
   return (
@@ -94,12 +104,10 @@ export default function ChatGptMessageDashboard() {
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll h-50'>
-        <HeatmapVisual data={data.map((row) => {
-          return {...row, value: 1}
-        })} />
+        <HeatmapVisual data={heatmapData} range={[0, 100]}/>
       </div>
 
-                  <div className="font-light font-mono text-sm flex-1 wrap-break-word w-full bg-accent p-2 rounded-md">
+      <div className="font-light font-mono text-sm flex-1 wrap-break-word w-full bg-accent p-2 rounded-md">
 
         {JSON.stringify(data.slice(0, 10))}
       </div>

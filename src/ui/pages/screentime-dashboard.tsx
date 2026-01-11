@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
 import MonthlyBarChart from "@/components/visualisations/montthly-barchart";
 import { Treemap, type Tree } from "@/components/visualisations/treemap";
+import { constructDurationString, prepareHeatmapData } from "@/utils";
 import * as d3 from "d3";
 import { useEffect, useState } from "react";
 
@@ -75,6 +76,17 @@ export default function ScreenTimeDashboard() {
     }
   })
 
+  let heatmapData = prepareHeatmapData(
+    data,
+    "start_time",
+    "usage",
+    ""
+  ).map(row => {
+    row.label = constructDurationString(row.value)
+    return row
+  })
+  console.log(heatmapData)
+
   return (
     <div className=' w-full h-fit p-3 flex flex-col gap-3'>
 
@@ -91,7 +103,7 @@ export default function ScreenTimeDashboard() {
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll h-50'>
-        <HeatmapVisual data={data} datetimeCol="start_time" valueCol="usage"/>
+        <HeatmapVisual data={heatmapData} range={[0, 10 * 3600]}/>
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll flex justify-center h-80'>

@@ -21,6 +21,7 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@tailwindcss/vite": "^4.1.18",
     "@visx/event": "^3.12.0",
+    "@visx/responsive": "^3.12.0",
     "@visx/tooltip": "^3.12.0",
     "better-sqlite3": "^12.5.0",
     "class-variance-authority": "^0.7.1",

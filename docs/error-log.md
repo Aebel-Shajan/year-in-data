@@ -31,3 +31,30 @@ Turns out the `content_parts` column was not a list of strings as expected. Its 
 tree structure which can contain strings or objects based on `content_type`. 
 
 I decided on process only `content_parts` which had `content_type="text"`.
+
+## 2026-01-11 React visx dependency error.
+
+Error:
+```
+npm error code ERESOLVE
+npm error ERESOLVE unable to resolve dependency tree
+npm error
+npm error While resolving: year-in-data@4.0.0
+npm error Found: react@19.2.3
+npm error node_modules/react
+npm error   react@"^19.2.0" from the root project
+npm error
+npm error Could not resolve dependency:
+npm error peer react@"^16.8.0-0 || ^17.0.0-0 || ^18.0.0-0" from @visx/tooltip@3.12.0
+npm error node_modules/@visx/tooltip
+npm error   @visx/tooltip@"*" from the root project
+npm error
+npm error Fix the upstream dependency conflict, or retry
+npm error this command with --force or --legacy-peer-deps
+npm error to accept an incorrect (and potentially broken) dependency resolution.
+npm error
+npm error
+```
+
+Fix:
+* Downgraded to react 18.

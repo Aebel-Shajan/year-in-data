@@ -1,6 +1,6 @@
 
 import { useEffect, useState, type MouseEventHandler } from "react";
-import { useTooltip, useTooltipInPortal, TooltipWithBounds } from '@visx/tooltip';
+import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
 
 // Types
@@ -96,10 +96,10 @@ function getColorFromValue(
   // palette: string[]
 ): string {
   const palette = [
-    "#357A4F", // forest/muted green (low intensity)
+    "#D2F3D4",  // soft pale mint highlight
     "#53A36D", // mid pastel green
     "#7FD699", // bright mint green
-    "#D2F3D4"  // soft pale mint highlight
+    "#357A4F", // forest/muted green (low intensity)
   ];
   const clamped = Math.min(Math.max(value, min), max);
   const ratio = (clamped - min) / (max - min);
@@ -113,14 +113,16 @@ function DayCircleCell(
   {
     date,
     value,
-    handleMouseOver,
     label,
+    handleMouseOver,
+    hideTooltip,
     range,
     heatmapSettings = DEFAULT_HEATMAP_SETTINGS,
   }: {
     date: Date,
     value: number,
-    handleMouseOver: CallableFunction
+    handleMouseOver: CallableFunction,
+    hideTooltip: () => void,
     label: string,
     range: [number, number],
     heatmapSettings?: HeatmapSettings,
@@ -152,14 +154,10 @@ function DayCircleCell(
         cx={heatmapPos.xPos}
         cy={heatmapPos.yPos}
         r={heatmapSettings.radius}
-        onMouseOver={(event) => handleMouseOver(event, value) as MouseEventHandler}
-        // onMouseOut={hideTooltip}
+        onMouseOver={(event) => handleMouseOver(event, {date: date.toDateString(), value, label}) as MouseEventHandler}
+        onMouseOut={() => hideTooltip()}
       />
-
-
     </g>
-
-
   )
 }
 
@@ -178,45 +176,13 @@ function HeatmapMonthLabels(
         key={"label " + monthName}
         x={heatmapPos.xPos - heatmapSettings.radius}
         y={heatmapPos.yPos + 0.5 * heatmapSettings.radius}
-        fill='white'
+        fill={getCSSVariable("--foreground")}
       >
         {monthName.slice(0, 3)}
       </text>
     )
   })
   return monthLabels
-}
-
-function DayCircleMatrix(
-  {
-    heatmapData,
-    heatmapSettings,
-    range,
-    handleMouseOver,
-  }: {
-    heatmapData: HeatmapDataType,
-    heatmapSettings: HeatmapSettings,
-    range: [number, number],
-    handleMouseOver: CallableFunction
-  }
-) {
-
-
-
-  const circleSvgMatrix = getAllUTCdatesInYear(2025).map(date => {
-    const row = heatmapData[date.toDateString()]
-    return (
-      <DayCircleCell
-        date={date}
-        value={heatmapData[date.toDateString()].value}
-        label={heatmapData[date.toDateString()].label}
-        heatmapSettings={heatmapSettings}
-        range={range}
-        handleMouseOver={handleMouseOver}
-      />
-    )
-  })
-  return circleSvgMatrix
 }
 
 // beware of this
@@ -277,35 +243,61 @@ export function HeatmapVisual(
     scroll: true,
   })
 
-  const handleMouseOver = (event, datum) => {
-    const coords = localPoint(event.target.ownerSVGElement, event);
-    if (coords) {
-      showTooltip({
-        tooltipLeft: coords.x,
-        tooltipTop: coords.y,
-        tooltipData: datum
-      });
+  const handleMouseOver = (event: MouseEvent, datum: any) => {
+    const ownerSVGElement = (event.target as SVGElement).ownerSVGElement;
+    if (ownerSVGElement) {
+      const coords = localPoint(ownerSVGElement, event);
+      if (coords) {
+        showTooltip({
+          tooltipLeft: coords.x,
+          tooltipTop: coords.y,
+          tooltipData: datum 
+        });
+      }
     }
-
   };
 
-
+  const tooltipDataTyped = tooltipData as {date: string, value: number, label: string}
   return (
     <>
       <svg ref={containerRef} width={1127} height="100%">
-        <DayCircleMatrix heatmapData={heatmapData} heatmapSettings={heatmapSettings} range={range} handleMouseOver={handleMouseOver}/>
+        {
+          // render circles for each daty
+          getAllUTCdatesInYear(2025).map(date => {
+            const row = heatmapData[date.toDateString()]
+            return (
+              <DayCircleCell
+                date={date}
+                value={row.value}
+                label={row.label}
+                heatmapSettings={heatmapSettings}
+                range={range}
+                handleMouseOver={handleMouseOver}
+                hideTooltip={hideTooltip}
+              />
+            )
+          })
+        }
         <HeatmapMonthLabels heatmapSettings={heatmapSettings} />
       </svg>
-      {tooltipOpen && (
-        <TooltipInPortal
-          // set this to random so it correctly updates with parent bounds
-          key={Math.random()}
-          top={tooltipTop}
-          left={tooltipLeft}
-        >
-          Data value <strong>{tooltipData ? String(tooltipData) : "No data"}</strong>
-        </TooltipInPortal>
-      )}
+      {
+        // tooltip for circles
+        tooltipOpen  && (
+          <TooltipInPortal
+            // set this to random so it correctly updates with parent bounds
+            key={Math.random()}
+            top={tooltipTop}
+            left={tooltipLeft}
+          >
+            {tooltipDataTyped && 
+            <>
+            <h1>{String(tooltipDataTyped["date"])}</h1>
+            <strong>{tooltipData ? String(tooltipDataTyped["label"]) : "No data"}</strong>
+            </>
+            }
+          </TooltipInPortal>
+        )
+      }
     </>
   )
 }

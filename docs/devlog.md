@@ -237,3 +237,20 @@ Links:
 * Links:
     * https://react.dev/learn/passing-data-deeply-with-context
     * https://visx.airbnb.tech/docs/responsive
+
+
+## 2025-01-13
+* git: 60f85885b78ae06643d90d7a47c7423585f42490
+* Start: 21:06
+* End: 22:56
+* What I want to do:
+    * create etl script to extract zsh history
+* What I did:
+    * made ts notebook to investigate zsh history data
+* What broke:
+    * coulnd't get plots to display
+* What next:
+    * try and get plots in ts notebook.
+* Links:
+    * https://deno.com/blog/exploring-art-with-typescript-and-jupyter
+    * https://jsr.io/@manzt/jupyter-helper

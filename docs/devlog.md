@@ -254,3 +254,22 @@ Links:
 * Links:
     * https://deno.com/blog/exploring-art-with-typescript-and-jupyter
     * https://jsr.io/@manzt/jupyter-helper
+
+
+## 2025-01-14
+* git: 9aba048099d997210b27b615cd416a5b5fd95c81
+* Start: 21:03
+* End: 22:01
+* What I want to do:
+    * get plots in notebook
+* What I did:
+    * setup deno environment just for notebooks, no more polluting my project dependencies.
+    * Doing this also fixed lack of intellisense in the notebooks. vscode detected deno.json wooo.
+* What broke:
+    * I couldn't figure out plotly so just asked claude instead
+    * found out that on `Tuesday, 18 November 2025 19:26:08` I ran like 1000 commands at once. either that or an update mustve messed with my `.zsh_history` 😡
+    * messed around with a bunch of plots
+* What next:
+    * move zsh history into own etl script
+* Links:
+    * https://docs.deno.com/runtime/getting_started/first_project/

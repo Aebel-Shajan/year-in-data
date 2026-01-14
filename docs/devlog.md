@@ -271,5 +271,7 @@ Links:
     * messed around with a bunch of plots
 * What next:
     * move zsh history into own etl script
+    * investigate if you can etl gym group api
 * Links:
     * https://docs.deno.com/runtime/getting_started/first_project/
+    * https://github.com/luke0x90/thegymgroup-api

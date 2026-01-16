@@ -11,10 +11,16 @@ const db = new Database(dbPath);
 
 const tables = [
   screenTimeSql,
-  chatGptMessagesSql
+  chatGptMessagesSql,
+  zshHistoryCommandsSql
 ]
 tables.forEach(tableSql => {
-  db.prepare(tableSql).run()
+  try {
+    db.prepare(tableSql).run()
+  } catch(e) {
+    console.error("Failed to build sqlite table: ", tableSql)
+    throw e
+  }
 })
 
 export { db };

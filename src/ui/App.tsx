@@ -2,6 +2,7 @@ import { useState } from 'react'
 import DarkModeToggle from './components/dark-mode-toggle'
 import ScreenTimeDashboard from './pages/screentime-dashboard'
 import ChatGptMessageDashboard from './pages/chatgpt-message-dashboard';
+import ZshHistoryCommandsDashboard from './pages/zsh-history-commands-dashboard';
 import { Button } from './components/ui/button';
 import type { IpcAPI } from 'src/electron/sharedTypes';
 declare global {
@@ -17,7 +18,8 @@ function App() {
   // i cba implementing hash router 
   const pageMapping: { [key: string]: React.ReactNode } = {
     "screenTime": <ScreenTimeDashboard />,
-    "chatgptMessages": <ChatGptMessageDashboard />
+    "chatgptMessages": <ChatGptMessageDashboard />,
+    "zshHistoryCommands": <ZshHistoryCommandsDashboard />
   }
 
 

@@ -5,6 +5,7 @@ import Database from "better-sqlite3";
 import { screenTimeSql } from "./etl/screentime.js";
 import { isDev } from "./util.js";
 import { chatGptMessagesSql } from "./etl/chatGptMessages.js";
+import { zshHistoryCommandsSql } from "./etl/zshHistoryCommands.js";
 
 const dbPath = isDev()  ? "./year-in-data.db" : path.join(app.getPath("userData"), "year-in-data.db");
 const db = new Database(dbPath);

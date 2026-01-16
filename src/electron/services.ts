@@ -17,7 +17,8 @@ export function registerIpcHandlers(mainWindow: BrowserWindow, db: DatabaseType)
   const serviceFunctionMapping: IpcAPI = {
     "selectFile": () => selectFile(mainWindow),
     "runEtl": (tableName: string, config: ConfigType) => runEtl(db, tableName, config),
-    "getDataByYear": (tableName: string, year: number, dateColumn: string) => getDataByYear(db, tableName, year, dateColumn)
+    "getDataByYear": (tableName: string, year: number, dateColumn: string) => getDataByYear(db, tableName, year, dateColumn),
+    "showDialogError": (message: string) => dialog.showErrorBox("Error", message)
   }
   Object.entries(serviceFunctionMapping).forEach(([channel, listener]) => {
     ipcMain.handle(channel, (_e, ...args) => listener(...args))
@@ -60,8 +61,8 @@ async function runEtl(
       success: true,
       runMetadata: metadata ?? {}
     }
-  } catch {
-    const message = "error running etl"
+  } catch (e) {
+    const message = `error running etl: ${e}`
     console.log(message)
     dialog.showErrorBox("Error", message)
 

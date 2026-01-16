@@ -30,3 +30,4 @@ notebooks/data/*
 !notebooks/data/.gitkeep
 year-in-data.db
 data
+.env

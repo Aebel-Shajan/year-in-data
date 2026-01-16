@@ -3,8 +3,13 @@
     "@manzt/jupyter-helper": "jsr:@manzt/jupyter-helper@^0.0.4",
     "@observablehq/plot": "npm:@observablehq/plot@^0.6.17",
     "@std/assert": "jsr:@std/assert@1",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
+    "axios": "npm:axios@^1.13.2",
     "decompress": "npm:decompress@^4.2.1",
-    "nodejs-polars": "npm:nodejs-polars@^0.23.5"
-  }
+    "node-fetch": "npm:node-fetch@^3.3.2",
+    "nodejs-polars": "npm:nodejs-polars@^0.23.5",
+    "querystring": "npm:querystring@^0.2.1"
+  },
+   "nodeModulesDir": "manual"
 
 }

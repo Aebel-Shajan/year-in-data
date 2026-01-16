@@ -275,3 +275,24 @@ Links:
 * Links:
     * https://docs.deno.com/runtime/getting_started/first_project/
     * https://github.com/luke0x90/thegymgroup-api
+
+
+## 2025-01-16
+* git: 
+* Start: 17:12
+* End: 18:07
+* What I want to do:
+    * move zsh history into own etl script
+    * investigate if you can etl gym group api
+* What I did:
+    * Created dashboard page for zsh history
+    * Found a way to use gym groups api from github 🤭. probably won't include this tho 
+* What broke:
+    * deno was installing packages into parent node module folder. Had to turn on `"nodeModulesDir": "manual"` to fix this
+* What next:
+    * macos battery?
+    * resize heatmap
+* Links:
+    * https://github.com/luke0x90/thegymgroup-api/blob/main/example.py
+
+

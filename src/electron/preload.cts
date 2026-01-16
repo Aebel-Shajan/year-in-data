@@ -5,7 +5,8 @@ import { IpcAPI } from "./sharedTypes";
 const api: IpcAPI = {
   runEtl: (...args) => ipcRenderer.invoke("runEtl", ...args),
   getDataByYear: (...args)  => ipcRenderer.invoke("getDataByYear", ...args),
-  selectFile: (...args) => ipcRenderer.invoke("selectFile", ...args)
+  selectFile: (...args) => ipcRenderer.invoke("selectFile", ...args),
+  showDialogError: (...args) => ipcRenderer.invoke("showDialogError", ...args)
 }
 
 contextBridge.exposeInMainWorld('electronAPI', api)

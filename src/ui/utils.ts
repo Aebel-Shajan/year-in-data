@@ -138,3 +138,34 @@ export function prepareMonthlyGroupedData(
     })
     return flattenedGroupedData
 }
+
+
+export function prepareHourlyGroupedData(
+  fullData: Record<string, string|number>[],
+  dateTimeCol: string,
+  valueCol: string
+) {
+
+    const categories = [...Array(24)].map((_, index) => index)
+    const initialCategoryMap = Object.fromEntries(categories.map(category => [category, 0]))
+    const groupedDataMap = fullData.reduce((dataMap: DateMapDataType, row) => {
+      const dateTime = row[dateTimeCol]
+      const value = row[valueCol] as number
+      if (!dateTime || !value) return dataMap
+      const hour = new Date(dateTime).getUTCHours()
+      if (!dataMap[hour]) {
+        dataMap[hour] = 0 as number
+      }
+      dataMap[hour] += value
+      return dataMap
+    }, initialCategoryMap as DateMapDataType)
+
+
+    const flattenedGroupedData = Object.entries(groupedDataMap).map(([hour, value])=> {
+      return {
+        hour: hour,
+        value: value as number
+      }
+    })
+    return flattenedGroupedData
+}

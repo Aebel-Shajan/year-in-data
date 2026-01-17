@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
-import MonthlyBarChart from "@/components/visualisations/montthly-barchart";
+import BarChartVisual from "../components/visualisations/barchart-visual.tsx";
 import { Treemap, type Tree } from "@/components/visualisations/treemap";
-import { constructDurationString, prepareHeatmapData, prepareMonthlyGroupedData, prepareTreeMapData } from "@/utils";
+import { constructDurationString, prepareHeatmapData, prepareHourlyGroupedData, prepareMonthlyGroupedData, prepareTreeMapData } from "@/utils";
 import * as d3 from "d3";
 import { useEffect, useState } from "react";
 
@@ -54,6 +54,13 @@ export default function ScreenTimeDashboard() {
     "usage"
   )
 
+  const dataGroupedByHour = prepareHourlyGroupedData(
+    data,
+    "start_time",
+    "usage"
+  )
+
+
   return (
     <div className=' w-full h-fit p-3 flex flex-col gap-3'>
 
@@ -77,9 +84,16 @@ export default function ScreenTimeDashboard() {
         <Treemap data={treemapData} />
       </div>
 
-      <div className='p-2 outline rounded-xl overflow-scroll flex justify-center'>
-        <MonthlyBarChart data={dataGroupedByMonth} />
-      </div>
+      <div className="w-full flex flex-wrap gap-3">
+ 
+       <div className='p-2 outline rounded-xl overflow-scroll flex justify-center  grow'>
+         <BarChartVisual data={dataGroupedByMonth} xCol="month" yCol="value" />
+       </div>
+ 
+       <div className='p-2 outline rounded-xl overflow-scroll flex justify-center grow'>
+         <BarChartVisual data={dataGroupedByHour} xCol="hour" yCol="value" />
+       </div>
+       </div>
     </div>
   )
 }

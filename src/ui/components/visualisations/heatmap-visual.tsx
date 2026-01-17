@@ -2,12 +2,13 @@
 import { useEffect, useState, type MouseEventHandler } from "react";
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
+import { useParentSize } from "@visx/responsive";
 
 // Types
 const DEFAULT_HEATMAP_SETTINGS: HeatmapSettings = {
   radius: 7,
   daySpacing: 2,
-  monthSpacing: 20,
+  monthSpacing: 40,
   xOffset: 0,
   yOffset: 0,
 }
@@ -89,6 +90,8 @@ function getHeatmapPosition(
 
 
 
+
+
 function getColorFromValue(
   value: number,
   min: number,
@@ -154,7 +157,7 @@ function DayCircleCell(
         cx={heatmapPos.xPos}
         cy={heatmapPos.yPos}
         r={heatmapSettings.radius}
-        onMouseOver={(event) => handleMouseOver(event, {date: date.toDateString(), value, label}) as MouseEventHandler}
+        onMouseOver={(event) => handleMouseOver(event, { date: date.toDateString(), value, label }) as MouseEventHandler}
         onMouseOut={() => hideTooltip()}
       />
     </g>
@@ -173,6 +176,7 @@ function HeatmapMonthLabels(
     const heatmapPos = getHeatmapPosition(8, monthIndex, getWeekNumber(firstDay) + 1.5, heatmapSettings)
     return (
       <text
+        fontSize={heatmapSettings.radius * 2}
         key={"label " + monthName}
         x={heatmapPos.xPos - heatmapSettings.radius}
         y={heatmapPos.yPos + 0.5 * heatmapSettings.radius}
@@ -193,10 +197,8 @@ export function HeatmapVisual(
   {
     data,
     range,
-    heatmapSettings = DEFAULT_HEATMAP_SETTINGS,
   }: {
     data: InputHeatmapData[], // always take data in as llist of rows, no maps here
-    heatmapSettings?: HeatmapSettings,
     range: [number, number]
   }
 ) {
@@ -211,6 +213,25 @@ export function HeatmapVisual(
 
 
   const [heatmapData, setHeatmapData] = useState<HeatmapDataType>(initialHeatmapData)
+  const [settings, setSettings] = useState(DEFAULT_HEATMAP_SETTINGS)
+  const { parentRef, width } = useParentSize({ debounceTime: 150 });
+  const adjustedWidth = Math.max(width, 700)
+
+  useEffect(() => {
+    setSettings((old) => {
+      const {xOffset, daySpacing} = old
+      const newMonthSpacing = (adjustedWidth/12) * 0.3
+      const offset = (52 * daySpacing) + (newMonthSpacing*11.5) + xOffset
+      const newRadius = (adjustedWidth - offset)/105
+      return {
+        ...old,
+        radius:  newRadius,
+        monthSpacing: newMonthSpacing
+      }
+    })
+
+  }, [adjustedWidth])
+
   useEffect(() => {
     // convert to map for easier use
     const dateValueDict: HeatmapDataType = data.reduce((heatmapData: HeatmapDataType, row: InputHeatmapData) => {
@@ -251,16 +272,18 @@ export function HeatmapVisual(
         showTooltip({
           tooltipLeft: coords.x,
           tooltipTop: coords.y,
-          tooltipData: datum 
+          tooltipData: datum
         });
       }
     }
   };
 
-  const tooltipDataTyped = tooltipData as {date: string, value: number, label: string}
+  const fullHeight = getHeatmapPosition(9, 0, 0, settings).yPos
+
+  const tooltipDataTyped = tooltipData as { date: string, value: number, label: string }
   return (
-    <>
-      <svg ref={containerRef} width={1127} height="100%">
+    <div className="w-full h-fit overflow-scroll" ref={parentRef}>
+      <svg ref={containerRef} width={adjustedWidth} height={fullHeight} >
         {
           // render circles for each daty
           getAllUTCdatesInYear(2025).map(date => {
@@ -270,7 +293,7 @@ export function HeatmapVisual(
                 date={date}
                 value={row.value}
                 label={row.label}
-                heatmapSettings={heatmapSettings}
+                heatmapSettings={settings}
                 range={range}
                 handleMouseOver={handleMouseOver}
                 hideTooltip={hideTooltip}
@@ -278,26 +301,26 @@ export function HeatmapVisual(
             )
           })
         }
-        <HeatmapMonthLabels heatmapSettings={heatmapSettings} />
+        <HeatmapMonthLabels heatmapSettings={settings} />
       </svg>
       {
         // tooltip for circles
-        tooltipOpen  && (
+        tooltipOpen && (
           <TooltipInPortal
             // set this to random so it correctly updates with parent bounds
             key={Math.random()}
             top={tooltipTop}
             left={tooltipLeft}
           >
-            {tooltipDataTyped && 
-            <>
-            <h1>{String(tooltipDataTyped["date"])}</h1>
-            <strong>{tooltipData ? String(tooltipDataTyped["label"]) : "No data"}</strong>
-            </>
+            {tooltipDataTyped &&
+              <>
+                <h1>{String(tooltipDataTyped["date"])}</h1>
+                <strong>{tooltipData ? String(tooltipDataTyped["label"]) : "No data"}</strong>
+              </>
             }
           </TooltipInPortal>
         )
       }
-    </>
+    </div>
   )
 }

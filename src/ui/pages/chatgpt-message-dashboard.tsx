@@ -113,7 +113,7 @@ export default function ChatGptMessageDashboard() {
         </div>
       </div>
 
-      <div className='p-2 outline rounded-xl overflow-scroll h-50'>
+     <div className='p-4 outline rounded-xl overflow-scroll h-fit'>
         <HeatmapVisual data={heatmapData} range={[0, 100]} />
       </div>
 

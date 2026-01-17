@@ -69,7 +69,7 @@ export default function ScreenTimeDashboard() {
         </div>
       </div>
 
-      <div className='p-2 outline rounded-xl overflow-scroll h-50'>
+      <div className='p-2 outline rounded-xl overflow-scroll h-fit'>
         <HeatmapVisual data={heatmapData} range={[0, 10 * 3600]} />
       </div>
 

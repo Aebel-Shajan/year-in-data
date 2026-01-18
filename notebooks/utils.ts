@@ -1,5 +1,6 @@
 import { dirname } from "node:path";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import pl from "nodejs-polars"
 
 export async function readJson<T>(
   filePath: string
@@ -57,3 +58,12 @@ export function toTsInterface(
 
 
 
+export function displayTable(df: pl.DataFrame, limit:number = 10) {
+  console.log(df.shape)
+  console.table(df.head(limit).toRecords());
+}
+
+
+export function maskColumn(df: pl.DataFrame, column: string) {
+ return df.withColumn(pl.col(column).str.slice(0, 3).str.padEnd(6, "*"))
+}

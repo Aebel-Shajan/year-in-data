@@ -8,6 +8,8 @@
     "decompress": "npm:decompress@^4.2.1",
     "node-fetch": "npm:node-fetch@^3.3.2",
     "nodejs-polars": "npm:nodejs-polars@^0.23.5",
+    "pdf-parse": "npm:pdf-parse@^2.4.5",
+    "pdfjs-dist": "npm:pdfjs-dist@^5.4.530",
     "querystring": "npm:querystring@^0.2.1"
   },
    "nodeModulesDir": "manual"

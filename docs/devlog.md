@@ -278,7 +278,7 @@ Links:
 
 
 ## 2025-01-16
-* git: 
+* git: 27f96059152bf9e95d167001d6b19aad2f918049
 * Start: 17:12
 * End: 18:07
 * What I want to do:
@@ -295,4 +295,21 @@ Links:
 * Links:
     * https://github.com/luke0x90/thegymgroup-api/blob/main/example.py
 
+
+## 2025-01-17
+* git: aba6ee095931c2af940c5d61587669677f1ce31d
+* Start: 19:45
+* End: 22:03
+* What I want to do:
+    * make heatmap resizable using visx
+* What I did:
+    * made heatmap responsive, made it have a minimum width above which it resizes
+    * made the barchart component abstract
+    * added barcharts for hourly view
+* What broke:
+    * nothing 
+* What next:
+    * claude, gemini data?
+    * fix dark mode 
+* Links:
 

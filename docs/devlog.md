@@ -334,7 +334,7 @@ Links:
     * https://github.com/adrienjoly/HsbcStatementParser
 
 
-* git: 
+* git: 9602dbf6b4d123a9cc9ef8adcff827486963e19e
 * Start:17:00
 * End: 21:37 
 * What I want to do:

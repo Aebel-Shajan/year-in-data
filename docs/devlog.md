@@ -313,3 +313,42 @@ Links:
     * fix dark mode 
 * Links:
 
+
+## 2025-01-18
+* git: 1eb5d4431d3c5a043408fbea98391d9a890fcb6a
+* Start:12:19
+* End: 15:10
+* What I want to do:
+    * Etl hsbc bank statements
+* What I did:
+    * Shell out £180 😭 for personal Claude subscription and add `Claude.md`. 
+    * Tried using pdf-parse
+    * 
+* What broke:
+    * My bank account
+    * `pdf-parse` extracted text but not in a structured way.
+* What next:
+    * Find an alternative to `pdf-parse`. maybe `pdf-dist` legacy
+* Links:
+    * https://dev.to/drsimplegraffiti/extract-texts-from-pdfs-383g
+    * https://github.com/adrienjoly/HsbcStatementParser
+
+
+* git: 
+* Start:17:00
+* End: 21:37 
+* What I want to do:
+    * Try parsing hsbc statements.
+    * Try using `pdf-dist` or `pdf2json`
+* What I did:
+    * pdf parsing is harder than i thought it would be. I was able to get text content out along with their x and y positions on the page. the statements came as tables, so i was able to leverage the column positions to get transaction date, type, detail and amount.
+* What broke:
+    * my bank account x2 (found out i have no money there). Could be because statement start in the middle of the month?? (why hsbc???)
+    * I tried using `pdf2json` but the output was in a weird format.
+    * `pdf-dist` is built for the browser, disabling workers meant i could get around and run on node. but i still get warnings which is pretty annoying.
+* What next:
+    * convert notebook to etl script
+* Links:
+    * https://www.npmjs.com/package/pdf2json
+    * https://community.palantir.com/t/parsing-pdf-blob-with-pdfjs-dist/1195
+    * https://github.com/mozilla/pdfjs-dist

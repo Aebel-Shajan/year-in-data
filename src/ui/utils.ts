@@ -44,7 +44,7 @@ export function prepareHeatmapData(
     return {
       date,
       value,
-      label: `${value} ${units}`
+      label: `${value.toFixed(2)} ${units}`
     }
   })
   return listOfRows
@@ -62,37 +62,38 @@ export function constructDurationString(timeInSeconds: number): string {
  * GROUP BY categoryCol
  */
 export function prepareTreeMapData(
-  fullData: Record<string, string|number>[],
+  fullData: Record<string, string | number>[],
   categoryCol: string,
   valueCol: string,
 ) {
   // const groupedData = Object.groupBy only in es2024 rip
-   const groupedDataMap = fullData.reduce((dataMap:DateMapDataType, row) => {
-      const category = row[categoryCol]
-      const value = row[valueCol] as number
-      if (!category || !value) return dataMap
-      if (!dataMap[category]) {
-        dataMap[category] = 0 as number
-      }
-      dataMap[category] += value
-      return dataMap
-    }, {} as DateMapDataType)
-
-    const flattenedGroupedData = Object.entries(groupedDataMap).map(([role, value])=> {
-      return {
-        type: "leaf",
-        name: role,
-        value: value as number
-      }
-    })
-    const treeData: Tree = {
-      type: "node",
-      name: "no data to display!",
-      value: 0,
-      children: flattenedGroupedData.sort((a, b) => b.value - a.value) as Tree[]
+  const groupedDataMap = fullData.reduce((dataMap: DateMapDataType, row) => {
+    const category = row[categoryCol]
+    const value = row[valueCol] as number
+    if (!category || !value) return dataMap
+    if (!dataMap[category]) {
+      dataMap[category] = 0 as number
     }
-    return treeData
+    dataMap[category] += value
+    return dataMap
+  }, {} as DateMapDataType)
+
+  const flattenedGroupedData = Object.entries(groupedDataMap).map(([role, value]) => {
+    return {
+      type: "leaf",
+      name: role,
+      value: value as number
+    }
+  })
+  const treeData: Tree = {
+    type: "node",
+    name: "no data to display!",
+    value: 0,
+    children: flattenedGroupedData.sort((a, b) => b.value - a.value) as Tree[]
+  }
+  return treeData
 }
+
 
 
 /**
@@ -106,66 +107,93 @@ export function prepareTreeMapData(
  */
 
 export function prepareMonthlyGroupedData(
-  fullData: Record<string, string|number>[],
+  fullData: Record<string, string | number>[],
   dateTimeCol: string,
   valueCol: string
 ) {
 
-    const shortMonthNames = [
-      "Jan", "Feb", "Mar", "Apr",
-      "May", "Jun", "Jul", "Aug",
-      "Sep", "Oct", "Nov", "Dec"
-    ];
-    const initialMonthNameMap = Object.fromEntries(shortMonthNames.map(month => [month, 0]))
-    const groupedDataMap = fullData.reduce((dataMap: DateMapDataType, row) => {
-      const dateTime = row[dateTimeCol]
-      const value = row[valueCol] as number
-      if (!dateTime || !value) return dataMap
-      const month = new Date(dateTime).toLocaleString("en-US", { month: "short" })
-      if (!dataMap[month]) {
-        dataMap[month] = 0 as number
-      }
-      dataMap[month] += value
-      return dataMap
-    }, initialMonthNameMap as DateMapDataType)
+  const shortMonthNames = [
+    "Jan", "Feb", "Mar", "Apr",
+    "May", "Jun", "Jul", "Aug",
+    "Sep", "Oct", "Nov", "Dec"
+  ];
+  const initialMonthNameMap = Object.fromEntries(shortMonthNames.map(month => [month, 0]))
+  const groupedDataMap = fullData.reduce((dataMap: DateMapDataType, row) => {
+    const dateTime = row[dateTimeCol]
+    const value = row[valueCol] as number
+    if (!dateTime || !value) return dataMap
+    const month = new Date(dateTime).toLocaleString("en-US", { month: "short" })
+    if (!dataMap[month]) {
+      dataMap[month] = 0 as number
+    }
+    dataMap[month] += value
+    return dataMap
+  }, initialMonthNameMap as DateMapDataType)
 
 
-    const flattenedGroupedData = Object.entries(groupedDataMap).map(([month, value])=> {
-      return {
-        month: month,
-        value: value as number
-      }
-    })
-    return flattenedGroupedData
+  const flattenedGroupedData = Object.entries(groupedDataMap).map(([month, value]) => {
+    return {
+      month: month,
+      value: value as number
+    }
+  })
+  return flattenedGroupedData
 }
 
 
 export function prepareHourlyGroupedData(
-  fullData: Record<string, string|number>[],
+  fullData: Record<string, string | number>[],
   dateTimeCol: string,
   valueCol: string
 ) {
 
-    const categories = [...Array(24)].map((_, index) => index)
-    const initialCategoryMap = Object.fromEntries(categories.map(category => [category, 0]))
-    const groupedDataMap = fullData.reduce((dataMap: DateMapDataType, row) => {
-      const dateTime = row[dateTimeCol]
-      const value = row[valueCol] as number
-      if (!dateTime || !value) return dataMap
-      const hour = new Date(dateTime).getUTCHours()
-      if (!dataMap[hour]) {
-        dataMap[hour] = 0 as number
-      }
-      dataMap[hour] += value
-      return dataMap
-    }, initialCategoryMap as DateMapDataType)
+  const categories = [...Array(24)].map((_, index) => index)
+  const initialCategoryMap = Object.fromEntries(categories.map(category => [category, 0]))
+  const groupedDataMap = fullData.reduce((dataMap: DateMapDataType, row) => {
+    const dateTime = row[dateTimeCol]
+    const value = row[valueCol] as number
+    if (!dateTime || !value) return dataMap
+    const hour = new Date(dateTime).getUTCHours()
+    if (!dataMap[hour]) {
+      dataMap[hour] = 0 as number
+    }
+    dataMap[hour] += value
+    return dataMap
+  }, initialCategoryMap as DateMapDataType)
 
 
-    const flattenedGroupedData = Object.entries(groupedDataMap).map(([hour, value])=> {
-      return {
-        hour: hour,
-        value: value as number
-      }
-    })
-    return flattenedGroupedData
+  const flattenedGroupedData = Object.entries(groupedDataMap).map(([hour, value]) => {
+    return {
+      hour: hour,
+      value: value as number
+    }
+  })
+  return flattenedGroupedData
+}
+
+
+/**
+ * SELECT category_col, SUM(value_col) FROM my_table
+ * GROUP BY category_col
+ */
+export function prepareCategoryGroupedData(
+  fullData: Record<string, string | number>[],
+  categoryCol: string,
+  valueCol: string
+) {
+  const groupedDataMap: Record<string, number> = fullData.reduce((dataMap: Record<string, number>, row) => {
+    const category = row[categoryCol] as string
+    const value = row[valueCol] as number
+    if (!category || !value) return dataMap
+    if (!dataMap[category]) {
+      dataMap[category] = 0
+    }
+    dataMap[category] += value
+    return dataMap
+  }, {} as Record<string, number>)
+
+  return Object.entries(groupedDataMap).map(([category, value]) => ({
+    category,
+    value
+  }))
 }

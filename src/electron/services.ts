@@ -4,13 +4,15 @@ import { etlChatGptMessages } from "./etl/chatGptMessages.js";
 import { type Database as DatabaseType } from "better-sqlite3";
 import { ConfigType, EtlResult, IpcAPI } from "./sharedTypes.js";
 import { etlZshHistoryCommands } from "./etl/zshHistoryCommands.js";
+import { etlHsbcStatements } from "./etl/hsbcStatements.js";
 
 
 
 const TABLE_ETL_MAP: Record<string, (db: DatabaseType, config: ConfigType) => void> = {
   "screen_time": etlScreentime,
   "chat_gpt_messages": etlChatGptMessages,
-  "zsh_history_commands": etlZshHistoryCommands
+  "zsh_history_commands": etlZshHistoryCommands,
+  "hsbc_transactions": etlHsbcStatements
 }
 // open to opinions on this, should i simplify this? get rid of registry pattern?
 export function registerIpcHandlers(mainWindow: BrowserWindow, db: DatabaseType) {

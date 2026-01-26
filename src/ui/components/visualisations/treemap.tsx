@@ -53,6 +53,10 @@ function TreeNodeElement(
   const textWidth = leaf.data.name.length * 12 * 0.55
   const showText = rectWidth > textWidth && rectHeight > 12 * 0.55
   const id = `leaf-${Math.random().toString(36).substr(2, 9)}`;
+  const centeredPos = {
+    x: leaf.x0 + rectWidth/2,
+    y: leaf.y0 + rectHeight/2
+  }
   return (
     <>
       <g>
@@ -79,27 +83,27 @@ function TreeNodeElement(
         {showText &&
           <>
             <text
-              x={leaf.x0 + 3}
-              y={leaf.y0 + 3}
+              x={centeredPos.x}
+              y={centeredPos.y -7}
               fontSize={12}
-              textAnchor="start"
+              textAnchor="middle"
               alignmentBaseline="hanging"
               fill="white"
               className="font-bold"
             >
               {leaf.data.name}
             </text>
-            <text
-              x={leaf.x0 + 3}
-              y={leaf.y0 + 18}
+            {/* <text
+              x={centeredPos.x + 0}
+              y={centeredPos.y + 7}
               fontSize={12}
-              textAnchor="start"
+              textAnchor="middle"
               alignmentBaseline="hanging"
               fill="white"
               className="font-light"
             >
-              {leaf.data.value}
-            </text>
+              {leaf.data.value.toFixed(2)}
+            </text> */}
           </>
         }
       </g>
@@ -191,7 +195,7 @@ export const Treemap = ({ data }: TreemapProps) => {
             {tooltipData &&
               <>
                 <h1>{String(tooltipData["name"])}</h1>
-                <strong>{tooltipData ? String(tooltipData["value"]) : "No data"}</strong>
+                <strong>{tooltipData ? String(tooltipData["value"].toFixed(2)) : "No data"}</strong>
               </>
             }
           </TooltipInPortal>

@@ -5,6 +5,7 @@ import ChatGptMessageDashboard from './pages/chatgpt-message-dashboard';
 import ZshHistoryCommandsDashboard from './pages/zsh-history-commands-dashboard';
 import { Button } from './components/ui/button';
 import type { IpcAPI } from 'src/electron/sharedTypes';
+import HsbcTransactionsDashboard from './pages/hsbc-transactions-dashboard';
 declare global {
   interface Window {
     electronAPI: IpcAPI
@@ -19,7 +20,8 @@ function App() {
   const pageMapping: { [key: string]: React.ReactNode } = {
     "screenTime": <ScreenTimeDashboard />,
     "chatgptMessages": <ChatGptMessageDashboard />,
-    "zshHistoryCommands": <ZshHistoryCommandsDashboard />
+    "zshHistoryCommands": <ZshHistoryCommandsDashboard />,
+    "hsbcTransactions": <HsbcTransactionsDashboard />
   }
 
 

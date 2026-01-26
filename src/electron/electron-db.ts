@@ -6,6 +6,7 @@ import { screenTimeSql } from "./etl/screentime.js";
 import { isDev } from "./util.js";
 import { chatGptMessagesSql } from "./etl/chatGptMessages.js";
 import { zshHistoryCommandsSql } from "./etl/zshHistoryCommands.js";
+import { hsbcStatementsSql } from "./etl/hsbcStatements.js";
 
 const dbPath = isDev()  ? "./year-in-data.db" : path.join(app.getPath("userData"), "year-in-data.db");
 const db = new Database(dbPath);
@@ -13,7 +14,8 @@ const db = new Database(dbPath);
 const tables = [
   screenTimeSql,
   chatGptMessagesSql,
-  zshHistoryCommandsSql
+  zshHistoryCommandsSql,
+  hsbcStatementsSql
 ]
 tables.forEach(tableSql => {
   try {

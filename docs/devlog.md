@@ -36,7 +36,7 @@ Links:
     * Understand how the renderer interacts with electron main process
     * Refactor tooltips in `heatmap-visual.tsx`
 
-## 2025-01-03
+## 2026-01-03
 * git: af09265c7fa9cebd0f712ebb3725187d20d779b1
 * Start: 13:53
 * End: 15:45
@@ -78,7 +78,7 @@ Links:
     * for clipping stuff contained in svg: https://gsap.com/community/forums/topic/16517-how-to-give-svg-element-overflow-hidden/
     * recharts: https://recharts.github.io/en-US/
 
-## 2025-01-06
+## 2026-01-06
 * git:caae669fe96e928d9316b447579f74d31e36f10f
 * Start: 18:57
 * End: 21:00
@@ -98,7 +98,7 @@ Links:
 * Links:
 
 
-## 2025-01-07
+## 2026-01-07
 * git: 829830892968b15f0f70eac0c7a66925f3cf7b68
 * Start: 18:15
 * End: 21:19
@@ -123,7 +123,7 @@ Links:
     * https://pola-rs.github.io/nodejs-polars/interfaces/pl.DataFrame.html
 
 
-## 2025-01-08
+## 2026-01-08
 * git: 5b873aa797e3e7a55ad33462275c6fb2f9d74a0d
 * Start: 20:22
 * End: 23:35
@@ -146,7 +146,7 @@ Links:
     * https://ui.shadcn.com/docs/components/dialog
     
 
-## 2025-01-09
+## 2026-01-09
 * git: e7698603b31e9344d2895911d388131b6c127202
 * Start: 19:12
 * End: 22:20
@@ -169,7 +169,7 @@ Links:
     * https://www.electronjs.org/fiddle
 
 
-## 2025-01-10
+## 2026-01-10
 * git: 5c4a61b133d113ffc1bc01a1f03f43ab8f026862
 * Start: 14:46
 * End: 18:39
@@ -192,7 +192,7 @@ Links:
     * Make unit tests for etl functions.
 * Links:
 
-## 2025-01-11
+## 2026-01-11
 * git: 8c4c4edb0f8828a3de57902fccf4d6bc6441cfb6
 * Start: 12:21
 * End: 14:15
@@ -239,7 +239,7 @@ Links:
     * https://visx.airbnb.tech/docs/responsive
 
 
-## 2025-01-13
+## 2026-01-13
 * git: 60f85885b78ae06643d90d7a47c7423585f42490
 * Start: 21:06
 * End: 22:56
@@ -256,7 +256,7 @@ Links:
     * https://jsr.io/@manzt/jupyter-helper
 
 
-## 2025-01-14
+## 2026-01-14
 * git: 9aba048099d997210b27b615cd416a5b5fd95c81
 * Start: 21:03
 * End: 22:01
@@ -277,7 +277,7 @@ Links:
     * https://github.com/luke0x90/thegymgroup-api
 
 
-## 2025-01-16
+## 2026-01-16
 * git: 27f96059152bf9e95d167001d6b19aad2f918049
 * Start: 17:12
 * End: 18:07
@@ -296,7 +296,7 @@ Links:
     * https://github.com/luke0x90/thegymgroup-api/blob/main/example.py
 
 
-## 2025-01-17
+## 2026-01-17
 * git: aba6ee095931c2af940c5d61587669677f1ce31d
 * Start: 19:45
 * End: 22:03
@@ -314,7 +314,7 @@ Links:
 * Links:
 
 
-## 2025-01-18
+## 2026-01-18
 * git: 1eb5d4431d3c5a043408fbea98391d9a890fcb6a
 * Start:12:19
 * End: 15:10
@@ -352,3 +352,21 @@ Links:
     * https://www.npmjs.com/package/pdf2json
     * https://community.palantir.com/t/parsing-pdf-blob-with-pdfjs-dist/1195
     * https://github.com/mozilla/pdfjs-dist
+
+
+## 2026-01-23
+* git:?
+* Start: 21:20
+* End: ?
+* What I want to do:
+    * Try getting some good visuals for hsbc transactions
+    * Make an abstract function for grouping by categories
+* What I did:
+    * did some transformations on frontend to map transactions into certain categories
+    * converted to notebook into etl script
+    * Cloned other dashboard to show hsbc transactions
+* What broke:
+* What next:
+* Links:
+
+

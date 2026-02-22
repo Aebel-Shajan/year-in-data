@@ -132,7 +132,6 @@ function transformBooksCompleted(csvContent: string): KindleBooksCompletedRecord
       row[col.trim()] = (values[idx] ?? '').trim()
     })
 
-    // asin_date_and_content_type is like "B002RI9KAE_2025-04-23_AUTOMATIC"
     const asinDateField = row['asin_date_and_content_type'] ?? ''
     const parts = asinDateField.split('_')
     const asin = parts[0] ?? ''

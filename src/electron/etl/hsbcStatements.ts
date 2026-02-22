@@ -43,7 +43,7 @@ interface PdfTextRecord {
 }
 
 interface HsbcStatementsConfig extends ConfigType {
-  statementsDir: string;
+  zipPath: string;
 }
 
 export async function etlHsbcStatements(
@@ -52,16 +52,16 @@ export async function etlHsbcStatements(
 ) {
   const config = conf as HsbcStatementsConfig;
 
-  const files = fs.readdirSync(config.statementsDir)
+  const files = fs.readdirSync(config.zipPath)
     .filter(f => f.endsWith(".pdf"))
     .sort();
 
-  console.log(`Found ${files.length} PDF statements in ${config.statementsDir}`);
+  console.log(`Found ${files.length} PDF statements in ${config.zipPath}`);
 
   const allRecords: HsbcTransactionRecord[] = [];
 
   for (const pdfFile of files) {
-    const filePath = path.join(config.statementsDir, pdfFile);
+    const filePath = path.join(config.zipPath, pdfFile);
     const statementDate = pdfFile.replace("_Statement.pdf", "").replace(".pdf", "");
 
     const rawRecords = await extract(filePath);
@@ -86,7 +86,6 @@ export async function etlHsbcStatements(
 }
 
 function convertToDatetime(date: string, statementDate: string): string {
-  // date format: "18 Dec 24", statementDate: "2025-01-16"
   const monthMap: Record<string, string> = {
     "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04",
     "May": "05", "Jun": "06", "Jul": "07", "Aug": "08",

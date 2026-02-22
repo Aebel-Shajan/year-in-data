@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { EtlRunModal } from "@/components/etl/EtlRunModal";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
 import BarChartVisual from "../components/visualisations/barchart-visual.tsx";
 import { Treemap } from "@/components/visualisations/treemap";
@@ -6,13 +7,13 @@ import { prepareHeatmapData, prepareHourlyGroupedData, prepareMonthlyGroupedData
 import { useEffect, useState } from "react";
 
 
-export default function ZshHistoryCommandsDashboard() {
+export default function ZshHistoryCommandsDashboard({selectedYear}: {selectedYear: number}) {
   const table_name = "zsh_history_commands"
   const [data, setData] = useState<any[]>([])
 
   useEffect(() => {
-    fetchData(2025)
-  }, [])
+    fetchData(selectedYear)
+  }, [selectedYear])
 
 
   async function fetchData(year: number) {
@@ -21,16 +22,6 @@ export default function ZshHistoryCommandsDashboard() {
     console.log(`rows for ${table_name} ${year}:`, records.length);
     return records;
   }
-
-  async function runEtl() {
-    const response = await window.electronAPI.runEtl(table_name, {})
-    if (!response.success) {
-      console.log(`Failed to run etl for ${table_name}`)
-    }
-
-    await fetchData(2025)
-  }
-
 
   const heatmapData = prepareHeatmapData(
     data,
@@ -66,16 +57,18 @@ export default function ZshHistoryCommandsDashboard() {
         </div>
 
         <div className='flex'>
-
-          <Button variant={"outline"} onClick={runEtl}>
-            Extract zsh history data
-          </Button>
-
+          <EtlRunModal
+            tableName="zsh_history_commands"
+            label="Zsh History"
+            requiresFile={false}
+            onComplete={() => fetchData(selectedYear)}
+            trigger={<Button variant="outline">Extract zsh history data</Button>}
+          />
         </div>
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll h-fit'>
-        <HeatmapVisual data={heatmapData} range={[0, 100]} />
+        <HeatmapVisual data={heatmapData} range={[0, 100]} year={selectedYear} />
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll h-50'>

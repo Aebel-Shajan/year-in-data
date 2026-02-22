@@ -1,5 +1,5 @@
 
-import { useEffect, useState, type MouseEventHandler } from "react";
+import { useEffect, useMemo, useState, type MouseEventHandler } from "react";
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
 import { useParentSize } from "@visx/responsive";
@@ -166,13 +166,15 @@ function DayCircleCell(
 
 function HeatmapMonthLabels(
   {
+    year,
     heatmapSettings
   }: {
+    year: number,
     heatmapSettings: HeatmapSettings
   }
 ) {
   const monthLabels = getMonthNames().map((monthName, monthIndex) => {
-    const firstDay = new Date(Date.UTC(2025, monthIndex, 1)) // utc cus otherwise it defaults to local
+    const firstDay = new Date(Date.UTC(year, monthIndex, 1)) // utc cus otherwise it defaults to local
     const heatmapPos = getHeatmapPosition(8, monthIndex, getWeekNumber(firstDay) + 1.5, heatmapSettings)
     return (
       <text
@@ -195,24 +197,37 @@ function HeatmapMonthLabels(
 
 export function HeatmapVisual(
   {
+    year,
     data,
     range,
   }: {
+    year: number,
     data: InputHeatmapData[], // always take data in as llist of rows, no maps here
     range: [number, number]
   }
 ) {
 
-  const initialHeatmapData = getAllUTCdatesInYear(2025).reduce((dateMap: HeatmapDataType, date: Date) => {
-    dateMap[date.toDateString()] = {
-      value: 0,
-      label: ""
+
+
+const heatmapData = useMemo(() => {
+  const base = getAllUTCdatesInYear(year).reduce(
+    (map: HeatmapDataType, date) => {
+      map[date.toDateString()] = { value: 0, label: "" }
+      return map
+    },
+    {} as HeatmapDataType
+  )
+
+  return data.reduce((map, row) => {
+    const date = new Date(row.date).toDateString()
+    map[date] = {
+      value: row.value,
+      label: row.label ?? "",
     }
-    return dateMap
-  }, {} as HeatmapDataType)
+    return map
+  }, base)
+}, [year, data])
 
-
-  const [heatmapData, setHeatmapData] = useState<HeatmapDataType>(initialHeatmapData)
   const [settings, setSettings] = useState(DEFAULT_HEATMAP_SETTINGS)
   const { parentRef, width } = useParentSize({ debounceTime: 150 });
   const adjustedWidth = Math.max(width, 700)
@@ -232,18 +247,7 @@ export function HeatmapVisual(
 
   }, [adjustedWidth])
 
-  useEffect(() => {
-    // convert to map for easier use
-    const dateValueDict: HeatmapDataType = data.reduce((heatmapData: HeatmapDataType, row: InputHeatmapData) => {
-      const date = (new Date(row.date)).toDateString()
-      heatmapData[date] = {
-        value: row.value,
-        label: row.label ?? ""
-      }
-      return heatmapData
-    }, initialHeatmapData)
-    setHeatmapData(dateValueDict as HeatmapDataType)
-  }, [data])
+
 
 
   const {
@@ -286,7 +290,7 @@ export function HeatmapVisual(
       <svg ref={containerRef} width={adjustedWidth} height={fullHeight} >
         {
           // render circles for each daty
-          getAllUTCdatesInYear(2025).map(date => {
+          getAllUTCdatesInYear(year).map(date => {
             const row = heatmapData[date.toDateString()]
             return (
               <DayCircleCell
@@ -301,7 +305,7 @@ export function HeatmapVisual(
             )
           })
         }
-        <HeatmapMonthLabels heatmapSettings={settings} />
+        <HeatmapMonthLabels heatmapSettings={settings} year={year} />
       </svg>
       {
         // tooltip for circles

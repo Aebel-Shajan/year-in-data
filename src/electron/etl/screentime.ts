@@ -53,17 +53,15 @@ const knowledgeDb = path.join(
 
 function extractScreenTime(): ScreenTimeRaw[] {
   if (!fs.existsSync(knowledgeDb)) {
-    console.error(`Could not find knowledgeC.db at ${knowledgeDb}.`);
-    process.exit(1);
+    throw new Error(`Could not find knowledgeC.db at ${knowledgeDb}.`);
   }
 
   try {
     fs.accessSync(knowledgeDb, fs.constants.R_OK);
   } catch (err) {
-    console.error(
-      `The knowledgeC.db at ${knowledgeDb} is not readable.\nPlease grant full disk access to the application running the script (Terminal, iTerm, VSCode, etc.).`
+    throw new Error(
+      `The knowledgeC.db at ${knowledgeDb} is not readable. Please grant full disk access to the application running the script (Terminal, iTerm, VSCode, etc.).`
     );
-    process.exit(1);
   }
 
   const db = sqlite3(knowledgeDb, { readonly: true });

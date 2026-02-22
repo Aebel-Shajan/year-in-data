@@ -9,6 +9,18 @@ import { zshHistoryCommandsSql } from "./etl/zshHistoryCommands.js";
 import { hsbcStatementsSql } from "./etl/hsbcStatements.js";
 import { kindleReadingSessionsSql, kindleBooksCompletedSql } from "./etl/kindleReadingSessions.js";
 
+export const etlRunsSql = `CREATE TABLE IF NOT EXISTS etl_runs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  table_name TEXT NOT NULL,
+  status TEXT NOT NULL,
+  started_at TEXT NOT NULL,
+  finished_at TEXT,
+  record_count INTEGER,
+  error_message TEXT,
+  config TEXT,
+  logs TEXT
+)`;
+
 const dbPath = isDev()  ? "./year-in-data.db" : path.join(app.getPath("userData"), "year-in-data.db");
 const db = new Database(dbPath);
 
@@ -18,7 +30,8 @@ const tables = [
   zshHistoryCommandsSql,
   hsbcStatementsSql,
   kindleReadingSessionsSql,
-  kindleBooksCompletedSql
+  kindleBooksCompletedSql,
+  etlRunsSql
 ]
 tables.forEach(tableSql => {
   try {
@@ -28,5 +41,12 @@ tables.forEach(tableSql => {
     throw e
   }
 })
+
+// Migration: add logs column to existing etl_runs tables
+try {
+  db.prepare(`ALTER TABLE etl_runs ADD COLUMN logs TEXT`).run();
+} catch {
+  // Column already exists
+}
 
 export { db };

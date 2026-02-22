@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { EtlRunModal } from "@/components/etl/EtlRunModal";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
 import BarChartVisual from "@/components/visualisations/barchart-visual";
 import { Treemap } from "@/components/visualisations/treemap";
@@ -7,45 +7,19 @@ import { prepareHeatmapData, prepareHourlyGroupedData, prepareMonthlyGroupedData
 import { useEffect, useState } from "react";
 
 
-export default function ChatGptMessageDashboard() {
+export default function ChatGptMessageDashboard({selectedYear}: {selectedYear: number}) {
   const table_name = "chat_gpt_messages"
-  const [filePath, setFilePath] = useState<string | null>(null)
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [data, setData] = useState<any[]>([])
 
   useEffect(() => {
-    fetchData(2025)
-  }, [])
-
-
-  function clearSelectedFilePath() {
-    setFilePath(null)
-  }
-
-  async function selectZipFile() {
-    const path = await window.electronAPI.selectFile()
-    if (!path) return
-    setFilePath(path)
-  }
+    fetchData(selectedYear)
+  }, [selectedYear])
 
   async function fetchData(year: number) {
     const records = await window.electronAPI.getDataByYear(table_name, year, "datetime")
     setData(records)
     console.log(`rows for ${table_name} ${year}:`, records.length);
     return records;
-  }
-
-  async function runEtl() {
-    if (!filePath) {
-      console.log("Failed to run chatgpt pipeline")
-      return
-    } // create method in electron api to dialog this
-    const response = await window.electronAPI.runEtl(table_name, { zipPath: filePath, targetDir: "./data/chatgpt" })
-    if (!response.success) {
-      console.log(`Failed to run etl for ${table_name}`)
-    }
-    await fetchData(2025)
-    setDialogOpen(false)
   }
 
   const dataWithValueCount = data.map(row => {
@@ -86,41 +60,19 @@ export default function ChatGptMessageDashboard() {
         </div>
 
         <div className='flex'>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant={"outline"} onClick={clearSelectedFilePath}>
-                Extract chatgpt data
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Extract chatgpt data</DialogTitle>
-                <DialogDescription>
-                  Select the chatgpt zip file you would like to process.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex w-full gap-1">
-                <Button variant="outline" onClick={selectZipFile}>
-                  Select file
-                </Button>
-                {filePath &&
-                  <div className="font-light font-mono text-sm flex-1 wrap-break-word w-64 bg-accent p-2 rounded-md">
-                    {filePath}
-                  </div>
-                }
-              </div>
-              {filePath &&
-                <Button className="w-fit" onClick={runEtl}>
-                  Extract chatgpt message data
-                </Button>
-              }
-            </DialogContent>
-          </Dialog>
+          <EtlRunModal
+            tableName="chat_gpt_messages"
+            label="ChatGPT Messages"
+            requiresFile={true}
+            targetDir="./data/chatgpt"
+            onComplete={() => fetchData(selectedYear)}
+            trigger={<Button variant="outline">Extract chatgpt data</Button>}
+          />
         </div>
       </div>
 
       <div className='p-4 outline rounded-xl overflow-scroll h-fit'>
-        <HeatmapVisual data={heatmapData} range={[0, 100]} />
+        <HeatmapVisual data={heatmapData} range={[0, 100]} year={selectedYear}/>
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll h-50'>

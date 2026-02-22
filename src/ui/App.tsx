@@ -6,6 +6,7 @@ import ZshHistoryCommandsDashboard from './pages/zsh-history-commands-dashboard'
 import { Button } from './components/ui/button';
 import type { IpcAPI } from 'src/electron/sharedTypes';
 import HsbcTransactionsDashboard from './pages/hsbc-transactions-dashboard';
+import KindleReadingDashboard from './pages/kindle-reading-dashboard';
 declare global {
   interface Window {
     electronAPI: IpcAPI
@@ -21,7 +22,8 @@ function App() {
     "screenTime": <ScreenTimeDashboard />,
     "chatgptMessages": <ChatGptMessageDashboard />,
     "zshHistoryCommands": <ZshHistoryCommandsDashboard />,
-    "hsbcTransactions": <HsbcTransactionsDashboard />
+    "hsbcTransactions": <HsbcTransactionsDashboard />,
+    "kindleReading": <KindleReadingDashboard />
   }
 
 

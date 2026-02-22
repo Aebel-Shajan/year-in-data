@@ -1,32 +1,21 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
 import BarChartVisual from "@/components/visualisations/barchart-visual";
 import { Treemap } from "@/components/visualisations/treemap";
-import { prepareCategoryGroupedData, prepareHeatmapData, prepareHourlyGroupedData, prepareMonthlyGroupedData, prepareTreeMapData } from "@/utils";
+import { prepareCategoryGroupedData, prepareHeatmapData, prepareMonthlyGroupedData, prepareTreeMapData } from "@/utils";
 import { useEffect, useState } from "react";
+import { EtlRunModal } from "@/components/etl/EtlRunModal";
 
 
-export default function HsbcTransactionsDashboard() {
+export default function HsbcTransactionsDashboard({selectedYear}: {selectedYear: number}) {
   const table_name = "hsbc_transactions"
-  const [filePath, setFilePath] = useState<string | null>(null)
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [data, setData] = useState<any[]>([])
 
   useEffect(() => {
-    fetchData(2025)
-  }, [])
+    fetchData(selectedYear)
+  }, [selectedYear])
 
 
-  function clearSelectedFilePath() {
-    setFilePath(null)
-  }
-
-  async function selectZipFile() {
-    const path = await window.electronAPI.selectFile()
-    if (!path) return
-    setFilePath(path)
-  }
 
   async function fetchData(year: number) {
     const records = await window.electronAPI.getDataByYear(table_name, year, "datetime")
@@ -35,18 +24,6 @@ export default function HsbcTransactionsDashboard() {
     return records;
   }
 
-  async function runEtl() {
-    if (!filePath) {
-      console.log("Failed to run pipeline")
-      return
-    } // create method in electron api to dialog this
-    const response = await window.electronAPI.runEtl(table_name, { zipPath: filePath, targetDir: "./data/hsbc" })
-    if (!response.success) {
-      console.log(`Failed to run etl for ${table_name}`)
-    }
-    await fetchData(2025)
-    setDialogOpen(false)
-  }
 
   function mapDetail(detailString: string | undefined) {
     if (detailString === undefined) {
@@ -171,41 +148,21 @@ export default function HsbcTransactionsDashboard() {
         </div>
 
         <div className='flex'>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant={"outline"} onClick={clearSelectedFilePath}>
-                Extract hsbc transactions
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Extract hsbc data</DialogTitle>
-                <DialogDescription>
-                  Select a statement to process
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex w-full gap-1">
-                <Button variant="outline" onClick={selectZipFile}>
-                  Select file
-                </Button>
-                {filePath &&
-                  <div className="font-light font-mono text-sm flex-1 wrap-break-word w-64 bg-accent p-2 rounded-md">
-                    {filePath}
-                  </div>
-                }
-              </div>
-              {filePath &&
-                <Button className="w-fit" onClick={runEtl}>
-                  Extract transactions from statement
-                </Button>
-              }
-            </DialogContent>
-          </Dialog>
+        <div className='flex'>
+          <EtlRunModal
+            tableName={table_name}
+            label="hsbc statements"
+            requiresFile={true}
+            targetDir="./data/hsbc"
+            onComplete={() => fetchData(selectedYear)}
+            trigger={<Button variant="outline">Extract hsbc statements</Button>}
+          />
+        </div>
         </div>
       </div>
 
       <div className='p-4 outline rounded-xl overflow-scroll h-fit'>
-        <HeatmapVisual data={heatmapData} range={[0, 500]} />
+        <HeatmapVisual data={heatmapData} range={[0, 500]}  year={selectedYear} />
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll h-fit'>

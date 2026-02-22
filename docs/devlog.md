@@ -357,7 +357,7 @@ Links:
 ## 2026-01-23
 * git:?
 * Start: 21:20
-* End: ?
+* End: 22:00
 * What I want to do:
     * Try getting some good visuals for hsbc transactions
     * Make an abstract function for grouping by categories
@@ -368,5 +368,17 @@ Links:
 * What broke:
 * What next:
 * Links:
+
+## 2026-02-22 
+* git: ba55d136f4ac9a695500d5f910186fcd2e7d8429
+* Start: 11:00
+* End:
+* What I want to do:
+    * Use claude code to wrap this project up 😔
+    * Read kindle data
+    * Claude data?
+    * Record etl logs
+* What I did:
+    * Claude code
 
 

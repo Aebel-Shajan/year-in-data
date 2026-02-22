@@ -1,33 +1,21 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HeatmapVisual } from "@/components/visualisations/heatmap-visual";
 import BarChartVisual from "@/components/visualisations/barchart-visual";
 import { Treemap } from "@/components/visualisations/treemap";
 import { prepareHeatmapData, prepareHourlyGroupedData, prepareMonthlyGroupedData, prepareTreeMapData } from "@/utils";
 import { useEffect, useState } from "react";
+import { EtlRunModal } from "@/components/etl/EtlRunModal";
 
 
-export default function KindleReadingDashboard() {
+export default function KindleReadingDashboard({selectedYear}: {selectedYear: number}) {
   const table_name = "kindle_reading_sessions"
-  const [filePath, setFilePath] = useState<string | null>(null)
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [data, setData] = useState<any[]>([])
   const [booksCompleted, setBooksCompleted] = useState<any[]>([])
 
   useEffect(() => {
-    fetchData(2025)
-    fetchBooksCompleted(2025)
-  }, [])
-
-  function clearSelectedFilePath() {
-    setFilePath(null)
-  }
-
-  async function selectZipFile() {
-    const path = await window.electronAPI.selectFile()
-    if (!path) return
-    setFilePath(path)
-  }
+    fetchData(selectedYear)
+    fetchBooksCompleted(selectedYear)
+  }, [selectedYear])
 
   async function fetchData(year: number) {
     const records = await window.electronAPI.getDataByYear(table_name, year, "datetime")
@@ -41,20 +29,6 @@ export default function KindleReadingDashboard() {
     setBooksCompleted(records)
     console.log(`rows for kindle_books_completed ${year}:`, records.length);
     return records;
-  }
-
-  async function runEtl() {
-    if (!filePath) {
-      console.log("Failed to run kindle pipeline")
-      return
-    }
-    const response = await window.electronAPI.runEtl(table_name, { zipPath: filePath, targetDir: "./data/kindle" })
-    if (!response.success) {
-      console.log(`Failed to run etl for ${table_name}`)
-    }
-    await fetchData(2025)
-    await fetchBooksCompleted(2025)
-    setDialogOpen(false)
   }
 
   // convert ms to minutes for display
@@ -102,41 +76,21 @@ export default function KindleReadingDashboard() {
           <div className="text-sm font-mono text-muted-foreground">
             {totalHours.toFixed(1)}h total | {booksCompleted.length} books completed
           </div>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant={"outline"} onClick={clearSelectedFilePath}>
-                Extract kindle data
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Extract kindle data</DialogTitle>
-                <DialogDescription>
-                  Select the Kindle data export zip file you would like to process.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex w-full gap-1">
-                <Button variant="outline" onClick={selectZipFile}>
-                  Select file
-                </Button>
-                {filePath &&
-                  <div className="font-light font-mono text-sm flex-1 wrap-break-word w-64 bg-accent p-2 rounded-md">
-                    {filePath}
-                  </div>
-                }
-              </div>
-              {filePath &&
-                <Button className="w-fit" onClick={runEtl}>
-                  Extract kindle reading data
-                </Button>
-              }
-            </DialogContent>
-          </Dialog>
+          <div className='flex'>
+            <EtlRunModal
+              tableName={table_name}
+              label="Kindle Reading"
+              requiresFile={true}
+              targetDir="./data/kindle"
+              onComplete={() => fetchData(selectedYear)}
+              trigger={<Button variant="outline">Extract Kindle data</Button>}
+            />
+          </div>
         </div>
       </div>
 
       <div className='p-4 outline rounded-xl overflow-scroll h-fit'>
-        <HeatmapVisual data={heatmapData} range={[0, 120]} />
+        <HeatmapVisual data={heatmapData} range={[0, 120]} year={selectedYear} />
       </div>
 
       <div className='p-2 outline rounded-xl overflow-scroll h-50'>

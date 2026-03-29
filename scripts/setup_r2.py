@@ -1,12 +1,11 @@
 """
 One-time setup for the production Cloudflare R2 bucket.
 
-  - Creates the bucket if it doesn't exist
-  - Applies a public-read policy on web/* (serves JSON to the website)
   - Applies CORS rules from config/cors.json
 
   uv run python scripts/setup_r2.py
 
+The bucket must already exist (create it in the Cloudflare dashboard).
 Run once when setting up a new environment, and again whenever cors.json changes.
 """
 
@@ -42,27 +41,17 @@ client = boto3.client(
 )
 
 
-def ensure_bucket() -> None:
+def check_bucket() -> None:
     try:
         client.head_bucket(Bucket=bucket)
-        print(f"· Bucket '{bucket}' already exists")
-    except ClientError:
-        client.create_bucket(Bucket=bucket)
-        print(f"✓ Created bucket '{bucket}'")
-
-
-def apply_policy() -> None:
-    policy = json.dumps({
-        "Version": "2012-10-17",
-        "Statement": [{
-            "Effect": "Allow",
-            "Principal": {"AWS": "*"},
-            "Action": ["s3:GetObject"],
-            "Resource": [f"arn:aws:s3:::{bucket}/web/*"],
-        }],
-    })
-    client.put_bucket_policy(Bucket=bucket, Policy=policy)
-    print(f"✓ Public-read policy applied to '{bucket}/web/*'")
+        print(f"· Bucket '{bucket}' found")
+    except ClientError as e:
+        code = e.response["Error"]["Code"]
+        if code in ("404", "NoSuchBucket"):
+            print(f"✗ Bucket '{bucket}' not found — create it in the Cloudflare dashboard first")
+        else:
+            print(f"✗ Could not access bucket '{bucket}': {e}")
+        raise SystemExit(1)
 
 
 def apply_cors() -> None:
@@ -75,7 +64,7 @@ def apply_cors() -> None:
 
 
 if __name__ == "__main__":
-    ensure_bucket()
-    apply_policy()
+    check_bucket()
     apply_cors()
-    print(f"\nBucket '{bucket}' is ready.")
+    print(f"\n✓ Bucket '{bucket}' is ready.")
+    print("  To enable public access: Cloudflare dashboard → R2 → your bucket → Settings → Public access")

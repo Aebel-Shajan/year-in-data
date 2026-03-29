@@ -6,29 +6,32 @@ The pipeline runs weekly via GitHub Actions, reads raw exports from Cloudflare R
 
 ## Data sources
 
-| Source | How to get the data | Frequency |
+| Source | How to get the data | Format |
 |---|---|---|
 | **GitHub** | Fetched automatically via GraphQL API | Automated |
-| **Fitbit** | [Google Takeout](https://takeout.google.com) → select Fitbit → download zip | Manual |
-| **Kindle** | [Amazon data request](https://www.amazon.com/hz/privacy-central/data-requests/preview.html) → Reading Insights CSV (takes 1–2 days) | Manual |
-| **Strong** | Strong app → Settings → Export Data → CSV | Manual |
+| **Fitbit** | [Google Takeout](https://takeout.google.com) → select Fitbit → download zip | `.zip` |
+| **Kindle** | Amazon data request → Reading Insights → download zip | `.zip` |
+| **Strong** | Strong app → Settings → Export Data → CSV | `.csv` |
+
+Raw exports are either uploaded manually to `raw/{source}/inbox/` in R2, or synced automatically from a public Google Drive folder via `scripts/sync_drive.py`.
 
 ## R2 bucket layout
 
 ```
-raw/{source}/inbox/                       ← drop new files here
-raw/{source}/{YYYY-WXX}/                  ← archived after processing
+raw/{source}/inbox/                             ← drop new files here
+raw/{source}/{YYYY-WXX}/                        ← archived after processing
 processed/{source}/{metric}/{YYYY-WXX}.parquet  ← weekly Polars partitions
-web/{source}/{metric}.json                ← public JSON consumed by the website
+web/{source}/{metric}.json                      ← public JSON consumed by the website
 ```
 
 ## Setup
 
 ### 1. Cloudflare R2
 
-1. In the Cloudflare dashboard, create a bucket (e.g. `year-in-data`)
+1. Create a bucket (e.g. `year-in-data`) in the Cloudflare dashboard
 2. Under **Settings → Public access**, enable the public R2.dev subdomain
-3. Under **Manage R2 API tokens**, create an API token with *Object Read & Write* on your bucket — note the **Account ID**, **Access Key ID**, and **Secret Access Key**
+3. Under **Manage R2 API tokens**, create a token with *Object Read & Write* — note the **Account ID**, **Access Key ID**, and **Secret Access Key**
+4. Run `make setup-r2` to apply the public-read bucket policy and CORS config
 
 ### 2. Environment variables
 
@@ -47,6 +50,9 @@ R2_PUBLIC_URL=https://pub-xxxx.r2.dev
 
 GITHUB_TOKEN=ghp_xxxx
 GITHUB_USERNAME=your_github_username
+
+# Optional: public Google Drive folder share link for auto-sync
+DRIVE_SHARE_URL=https://drive.google.com/drive/folders/xxxx
 ```
 
 For the website, copy `website/.env.example` to `website/.env`:
@@ -61,7 +67,7 @@ VITE_R2_PUBLIC_URL=https://pub-xxxx.r2.dev
 
 ### 3. GitHub repository secrets
 
-Add these secrets under *Settings → Secrets and variables → Actions*:
+Add these under *Settings → Secrets and variables → Actions*:
 
 | Secret | Value |
 |---|---|
@@ -72,59 +78,52 @@ Add these secrets under *Settings → Secrets and variables → Actions*:
 | `R2_PUBLIC_URL` | Public R2 subdomain URL |
 | `PIPELINE_GITHUB_TOKEN` | Personal access token (read:user scope) |
 | `GITHUB_USERNAME` | Your GitHub username |
+| `DRIVE_SHARE_URL` | Public Google Drive folder share link |
 
 ### 4. Enable GitHub Pages
 
 In *Settings → Pages*, set the source to the `gh-pages` branch.
 
-## Local development (without real R2)
+## Local development
 
-The pipeline can run against a local [MinIO](https://min.io) instance, which is S3-compatible and behaves identically to R2.
-
-```sh
-# Start MinIO
-docker compose up -d
-
-# Use the local env (minioadmin / minioadmin)
-cp .env.local.example .env
-```
-
-Open http://localhost:9001 to access the MinIO web console. Create a bucket named `year-in-data` there (or via the AWS CLI: `aws s3 mb s3://year-in-data --endpoint-url http://localhost:9000`), then upload raw files into `raw/{source}/inbox/` as you normally would.
-
-## Running locally
-
-Install Python dependencies:
+The pipeline can run against a local [MinIO](https://min.io) instance (S3-compatible, behaves identically to R2).
 
 ```sh
+# Install dependencies
 uv sync
+cd website && npm install
+
+# Start MinIO and create the local bucket
+make up
+
+# Run the end-to-end test with fake data
+make test
+
+# Or sync real data from Drive and run the pipeline
+make pipeline
 ```
 
-Upload raw exports to `raw/{source}/inbox/` in your R2 bucket, then run:
+Open http://localhost:9001 for the MinIO web console (credentials: `minioadmin` / `minioadmin`).
 
-```sh
-uv run python -m pipeline.main
-```
+## Makefile targets
 
-To skip a source:
-
-```sh
-RUN_FITBIT=false uv run python -m pipeline.main
-```
-
-Run the website locally:
-
-```sh
-cd website
-npm install
-npm run dev
-```
+| Target | Description |
+|---|---|
+| `make up` | Start MinIO and create the local bucket |
+| `make down` | Stop MinIO and remove data |
+| `make pipeline` | Sync Drive → run pipeline (production) |
+| `make test` | Sync Drive + run e2e test with fake data (local) |
+| `make setup-r2` | Apply bucket policy and CORS to production R2 |
+| `make notebook` | Open Jupyter in the `notebooks/` folder |
+| `make dev` | Start the Vite dev server |
+| `make build` | Build the website for production |
 
 ## How it works
 
 ```
-                     Manual uploads
+                     Manual uploads / Drive sync
 Fitbit zip ──────┐
-Kindle CSV ──────┼──→  raw/{source}/inbox/  (R2)
+Kindle zip ──────┼──→  raw/{source}/inbox/  (R2)
 Strong CSV ──────┘              │
                                 │  weekly GitHub Actions
 GitHub API ─────────────────────┤
@@ -142,32 +141,42 @@ GitHub API ─────────────────────┤
 ```
 
 Each weekly run:
-1. **GitHub** — fetches the last 52 weeks of contributions from the API
+1. **GitHub** — fetches the last 52 weeks of contributions from the GraphQL API
 2. **Fitbit / Kindle / Strong** — checks `inbox/` for new files, processes them, archives to a dated folder
 3. For each metric, new data is merged into weekly Parquet partitions and the public web JSON is regenerated
+4. Extractor failures are isolated — one source failing does not abort the rest
 
 ## Project structure
 
 ```
 ├── pipeline/
-│   ├── config.py            # Pydantic settings
-│   ├── r2.py                # R2 client and storage operations
-│   ├── main.py              # Entry point
+│   ├── config.py            # Settings (loaded from .env + config/*.toml)
+│   ├── r2.py                # R2 client and all storage operations
+│   ├── main.py              # Entry point with per-extractor error isolation
 │   └── extractors/
-│       ├── fitbit.py
-│       ├── kindle.py
-│       ├── github.py
-│       └── strong.py
+│       ├── fitbit.py        # Parses Google Takeout zips (multi-day intraday files)
+│       ├── kindle.py        # Parses Kindle Reading Insights zip
+│       ├── strong.py        # Parses Strong CSV export
+│       └── github.py        # Fetches GitHub contributions via GraphQL
+├── scripts/
+│   ├── sync_drive.py        # Download exports from public Google Drive → R2 inbox
+│   ├── setup_r2.py          # One-time production R2 bucket/policy/CORS setup
+│   ├── setup_local.py       # MinIO startup and bucket creation for local dev
+│   └── test_e2e.py          # End-to-end test with fake data against local MinIO
+├── notebooks/               # Jupyter notebooks for data exploration
 ├── website/
 │   └── src/
-│       ├── App.tsx
+│       ├── App.tsx          # Sticky navbar with global year selector
 │       ├── components/
-│       │   ├── Heatmap.tsx  # SVG heatmap (React + d3-scale)
+│       │   ├── Heatmap.tsx  # SVG heatmap (React + d3-scale, DST-safe)
 │       │   └── DataSection.tsx
 │       └── hooks/
 │           └── useMetricData.ts
-├── .github/workflows/
-│   ├── pipeline.yml         # Weekly pipeline (every Monday 02:00 UTC)
-│   └── deploy.yml           # Deploy website on push to main
-└── pyproject.toml
+├── config/
+│   ├── config.toml          # Production config
+│   ├── test.toml            # Local/test config
+│   └── cors.json            # R2 CORS rules
+└── .github/workflows/
+    ├── pipeline.yml         # Weekly pipeline (every Monday 02:00 UTC)
+    └── deploy.yml           # Deploy website on push to main
 ```

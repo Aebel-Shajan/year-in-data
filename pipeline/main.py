@@ -1,169 +1,62 @@
-import logging
+"""
+Entry point for the weekly pipeline.
+
+  uv run python -m pipeline.main
+  uv run python -m pipeline.main --config config/config.toml
+"""
+
+import argparse
 import os
+import sys
+import traceback
 from pathlib import Path
 
-
-import yd_extractor.fitbit as fitbit_extractor
-import yd_extractor.github as github_extractor
-import yd_extractor.kindle as kindle_extractor
-import yd_extractor.strong as strong_extractor
-from yd_extractor.app_usage.screen_time import process_screen_time
-from config import config_loader
-from yd_extractor.utils.logger import (
-    setup_aebels_logger,
-)
-from yd_extractor.utils.io import download_files_from_drive, get_latest_file, create_load_function
-
-from yd_extractor.utils.io import get_latest_valid_zip
-
-# Create a logger
-logger = logging.getLogger()
-logging.basicConfig(level=logging.INFO)
-setup_aebels_logger(
-    logger=logger,
-    # resource_monitoring_interval=1.1,
-    show_context=False,
-)
+from pipeline.config import Config, Secrets
+from pipeline.extractors import fitbit, github, kindle, strong
+from pipeline.extractors.github import _DEFAULT_API_URL
+from pipeline.r2 import make_client
 
 
-def run_pipeline(
-    config: config_loader.PipelineConfig,
-    env_vars: config_loader.EnvVars,
-):
-    # Unpack config
-    fitbit_config = config.fitbit_config
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Run the yearly data pipeline.")
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=None,
+        metavar="PATH",
+        help="Path to config.toml (default: config/config.toml)",
+    )
+    args = parser.parse_args()
 
-    # Setup folder structure
-    root_dir = Path(__file__).resolve().parent
-    input_data_folder = root_dir / "data" / "input"
-    output_data_folder = root_dir / "data" / "output"
-    load_function = create_load_function(output_data_folder)
+    secrets = Secrets()  # type: ignore[call-arg]
+    config = Config.load(args.config) if args.config else Config.load()
+    r2 = make_client(secrets, config)
 
-    os.makedirs(input_data_folder, exist_ok=True)
-    os.makedirs(root_dir / "data" / "output", exist_ok=True)
-    os.makedirs(root_dir / "data" / "output" / "metadata", exist_ok=True)
-    logger.info(f"Inputs and output data will be stored here: {root_dir / 'data'}")
+    extractors = []
+    if config.run_github:
+        extractors.append(("github", lambda: github.run(r2, secrets, config, api_url=os.getenv("GITHUB_API_URL", _DEFAULT_API_URL))))
+    if config.run_fitbit:
+        extractors.append(("fitbit", lambda: fitbit.run(r2)))
+    if config.run_kindle:
+        extractors.append(("kindle", lambda: kindle.run(r2)))
+    if config.run_strong:
+        extractors.append(("strong", lambda: strong.run(r2)))
 
-    if config.download_from_drive:
+    failures = []
+    for name, fn in extractors:
+        print(f"── {name} ──────────────────────")
         try:
-            download_files_from_drive(input_data_folder, env_vars)
-        except Exception as e:
-            logger.exception(f"Error while downloading files from Google Drive")
+            fn()
+        except Exception:
+            traceback.print_exc()
+            failures.append(name)
 
-    # Fitbit
-    if fitbit_config.process_fitbit:
-        latest_google_zip = get_latest_valid_zip(
-            folder_path=input_data_folder,
-            file_name_glob="google/takeout*.zip",
-            expected_file_path="Takeout/Fitbit/Global Export Data",
-        )
-        if latest_google_zip:
-            # Calories
-            if fitbit_config.process_calories:
-                fitbit_extractor.process_calories(
-                    inputs_folder=input_data_folder,
-                    zip_path=latest_google_zip,
-                    cleanup=config.cleanup_unziped_files,
-                    load_function=load_function,
-                )
-
-            # Sleep
-            if fitbit_config.process_sleep:
-                fitbit_extractor.process_sleep(
-                    inputs_folder=input_data_folder,
-                    zip_path=latest_google_zip,
-                    cleanup=config.cleanup_unziped_files,
-                    load_function=load_function,
-                )
-
-            # Steps
-            if fitbit_config.process_steps:
-                fitbit_extractor.process_steps(
-                    inputs_folder=input_data_folder,
-                    zip_path=latest_google_zip,
-                    cleanup=config.cleanup_unziped_files,
-                    load_function=load_function,
-                )
-
-            # Exercise
-            if fitbit_config.process_exercise:
-                fitbit_extractor.process_exercise(
-                    inputs_folder=input_data_folder,
-                    zip_path=latest_google_zip,
-                    cleanup=config.cleanup_unziped_files,
-                    load_function=load_function,
-                )
-        else:
-            logger.warning("Couldn't find zip for google fitbit data.")
-
-    # Github
-    if config.process_github:
-        github_extractor.process_repo_contributions(
-            github_token=env_vars["GITHUB_TOKEN"],
-            load_function=load_function,
-        )
-
-    # Kindle
-    if config.process_kindle:
-        latest_zip = get_latest_valid_zip(
-            folder_path=input_data_folder,
-            file_name_glob="amazon/Kindle*.zip",
-            expected_file_path="Kindle.Devices.ReadingSession" "/Kindle.Devices.ReadingSession.csv",
-        )
-        if latest_zip:
-            kindle_extractor.process_reading(
-                inputs_folder=input_data_folder,
-                zip_path=latest_zip,
-                cleanup=config.cleanup_unziped_files,
-                load_function=load_function,
-            )
-        else:
-            logger.warning("Couldn't find zip for kindle data.")
-
-    # Strong
-    if config.process_strong:
-        try:
-            latest_csv = get_latest_file(
-                folder_path=input_data_folder,
-                file_name_glob="strong/strong*.csv",
-            )
-            strong_extractor.process_workouts(
-                latest_csv,
-                load_function,
-            )
-        except:
-            logger.warning("Couldn't process strong data")
-
-    
-    # App Usage
-    if config.process_app_usage:
-        screen_time_csv = get_latest_file(
-            folder_path=input_data_folder,
-            file_name_glob="app_usage/AUM_V4_Activity*.csv"
-        )
-        app_info_csv = None
-        try:
-            app_info_csv = get_latest_file(
-                folder_path=input_data_folder,
-                file_name_glob="app_usage/AUM_V4_App*.csv"
-            )
-        except:
-            logger.warning("Couldn't find app info file.")
-        
-        process_screen_time(
-            screen_time_csv,
-            app_info_csv,
-            load_function=load_function
-        )
-        
-
-    if config.cleanup_ziped_files:
-        for zip_file in input_data_folder.glob("*.zip"):
-            zip_file.unlink()
-    logger.info("Finished extracting data.")
+    if failures:
+        print(f"\n✗ Failed: {', '.join(failures)}")
+        sys.exit(1)
+    else:
+        print("\nPipeline complete.")
 
 
 if __name__ == "__main__":
-    config = config_loader.load_config("config/config.toml")
-    env_vars = config_loader.load_env_vars()
-    run_pipeline(config, env_vars)
+    main()

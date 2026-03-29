@@ -1,0 +1,51 @@
+name: Weekly data pipeline
+
+on:
+  schedule:
+    - cron: "0 2 * * 1"  # Every Monday at 02:00 UTC
+  workflow_dispatch:      # Allow manual runs from the Actions tab
+    inputs:
+      run_fitbit:
+        description: Process Fitbit data
+        type: boolean
+        default: true
+      run_kindle:
+        description: Process Kindle data
+        type: boolean
+        default: true
+      run_github:
+        description: Fetch GitHub contributions
+        type: boolean
+        default: true
+      run_strong:
+        description: Process Strong data
+        type: boolean
+        default: true
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: make install-python
+
+      - name: Set up R2 bucket
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: make setup-r2
+
+      - name: Run pipeline
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          GITHUB_TOKEN: ${{ secrets.PIPELINE_GITHUB_TOKEN }}
+        run: make pipeline

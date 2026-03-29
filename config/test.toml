@@ -6,7 +6,8 @@ public_url  = "http://localhost:9000/year-in-data"
 username = "test-user"
 
 [sources]
-fitbit  = true
-kindle  = true
-github  = true
-strong  = true
+fitbit    = true
+kindle    = true
+github    = true
+strong    = true
+gymgroup  = false

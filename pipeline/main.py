@@ -12,7 +12,7 @@ import traceback
 from pathlib import Path
 
 from pipeline.config import Config, Secrets
-from pipeline.extractors import fitbit, github, kindle, strong
+from pipeline.extractors import fitbit, github, gymgroup, kindle, strong
 from pipeline.extractors.github import _DEFAULT_API_URL
 from pipeline.r2 import make_client
 
@@ -41,6 +41,8 @@ def main() -> None:
         extractors.append(("kindle", lambda: kindle.run(r2)))
     if config.run_strong:
         extractors.append(("strong", lambda: strong.run(r2)))
+    if config.run_gymgroup:
+        extractors.append(("gymgroup", lambda: gymgroup.run(r2, secrets.gym_group_username, secrets.gym_group_password)))
 
     failures = []
     for name, fn in extractors:

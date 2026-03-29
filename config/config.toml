@@ -6,7 +6,8 @@ public_url  = "https://pub-xxxx.r2.dev"
 username = "your-github-username"
 
 [sources]
-fitbit  = true
-kindle  = true
-github  = true
-strong  = true
+fitbit    = true
+kindle    = true
+github    = true
+strong    = true
+gymgroup  = true

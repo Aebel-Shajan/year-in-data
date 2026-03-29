@@ -18,6 +18,8 @@ class Secrets(BaseSettings):
     r2_access_key_id: str
     r2_secret_access_key: str
     github_token: str
+    gym_group_username: str = ""
+    gym_group_password: str = ""
     # Optional: overrides the R2 endpoint (used for local MinIO)
     r2_endpoint_url: str = ""
 
@@ -33,6 +35,7 @@ class Config:
     run_kindle: bool
     run_github: bool
     run_strong: bool
+    run_gymgroup: bool
 
     @staticmethod
     def load(path: Path = _ROOT / "config" / "config.toml") -> "Config":
@@ -46,4 +49,5 @@ class Config:
             run_kindle=data["sources"]["kindle"],
             run_github=data["sources"]["github"],
             run_strong=data["sources"]["strong"],
+            run_gymgroup=data["sources"]["gymgroup"],
         )

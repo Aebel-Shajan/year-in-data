@@ -10,6 +10,7 @@ const METRICS: MetricConfig[] = [
   { source: "fitbit",  metric: "exercise",      label: "Active minutes",       colorScheme: "reds"    },
   { source: "kindle",  metric: "reading",       label: "Reading (minutes)",    colorScheme: "warm"    },
   { source: "strong",  metric: "workouts",      label: "Workout duration",     colorScheme: "oranges" },
+  { source: "gymgroup", metric: "visits",       label: "Gym visits",           colorScheme: "greens"  },
 ];
 
 export default function App() {

@@ -1,0 +1,12 @@
+[r2]
+bucket_name = "year-in-data"
+public_url  = "https://pub-xxxx.r2.dev"
+
+[github]
+username = "your-github-username"
+
+[sources]
+fitbit  = true
+kindle  = true
+github  = true
+strong  = true

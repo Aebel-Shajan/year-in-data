@@ -38,10 +38,10 @@ pipeline: ## Sync from Drive and run the data pipeline
 	uv run python scripts/sync_drive.py
 	uv run python -m pipeline.main
 
-sync-screentime: ## Sync screen time to R2 (run manually or via launchd)
-	uv run python scripts/sync_screentime.py
+sync-macos: ## Sync screen time to R2 (run manually or via launchd)
+	uv run python scripts/sync_macos.py
 
-install-screentime: ## Install launchd job to sync screen time daily at 9 AM
+install-macos-cron: ## Install launchd job to sync screen time daily at 9 AM
 	mkdir -p $(PROJECT_DIR)/logs
 	sed -e "s|__UV__|$$(which uv)|g" \
 	    -e "s|__PROJECT_DIR__|$(PROJECT_DIR)|g" \
@@ -49,7 +49,7 @@ install-screentime: ## Install launchd job to sync screen time daily at 9 AM
 	launchctl load $(PLIST_PATH)
 	@echo "Installed: $(PLIST_LABEL)"
 
-uninstall-screentime: ## Remove launchd job
+uninstall-macos-cron: ## Remove launchd job
 	launchctl unload $(PLIST_PATH)
 	rm -f $(PLIST_PATH)
 	@echo "Removed: $(PLIST_LABEL)"

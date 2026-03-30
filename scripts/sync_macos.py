@@ -21,7 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from pipeline.config import Config, Secrets
-from pipeline.extractors import screentime
+from pipeline.extractors import screentime, zsh_history
 from pipeline.r2 import make_client
 
 
@@ -30,6 +30,7 @@ def main() -> None:
     config = Config.load()
     r2 = make_client(secrets, config)
     screentime.run(r2)
+    zsh_history.run(r2)
 
 
 if __name__ == "__main__":

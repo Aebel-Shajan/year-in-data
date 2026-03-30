@@ -4,7 +4,7 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.yearindata.screentime</string>
+  <string>com.yearindata.macos</string>
 
   <key>ProgramArguments</key>
   <array>
@@ -13,7 +13,7 @@
     <string>__PROJECT_DIR__</string>
     <string>run</string>
     <string>python</string>
-    <string>scripts/sync_screentime.py</string>
+    <string>scripts/sync_macos.py</string>
   </array>
 
   <key>StartCalendarInterval</key>
@@ -25,9 +25,9 @@
   </dict>
 
   <key>StandardOutPath</key>
-  <string>__PROJECT_DIR__/logs/screentime.log</string>
+  <string>__PROJECT_DIR__/logs/macos-data.log</string>
 
   <key>StandardErrorPath</key>
-  <string>__PROJECT_DIR__/logs/screentime.err</string>
+  <string>__PROJECT_DIR__/logs/macos-data.err</string>
 </dict>
 </plist>

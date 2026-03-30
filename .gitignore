@@ -19,3 +19,5 @@ website/dist/
 
 # Notebooks
 notebooks/.ipynb_checkpoints/
+
+logs

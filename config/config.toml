@@ -12,3 +12,4 @@ github    = false
 strong    = false
 gymgroup    = true
 screentime  = true
+zsh_history = true

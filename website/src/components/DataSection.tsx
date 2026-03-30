@@ -52,6 +52,7 @@ export function DataSection({ config, year, onYearsLoaded }: Props) {
             data={data?.data ?? []}
             year={year}
             colorScheme={colorScheme}
+            unit={data?.unit}
           />
         </>
       )}
@@ -60,8 +61,12 @@ export function DataSection({ config, year, onYearsLoaded }: Props) {
 }
 
 function formatValue(v: number, unit: string): string {
-  const rounded = Math.round(v).toLocaleString();
-  return `${rounded} ${unit}`;
+  if (unit === "minutes" && v >= 60) {
+    const h = Math.floor(v / 60);
+    const m = Math.round(v % 60);
+    return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  }
+  return `${Math.round(v).toLocaleString()} ${unit}`;
 }
 
 function SkeletonHeatmap() {

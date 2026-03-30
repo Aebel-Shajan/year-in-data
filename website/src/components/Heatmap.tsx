@@ -32,6 +32,7 @@ interface Props {
   data: DataPoint[];
   year: number;
   colorScheme?: ColorScheme;
+  unit?: string;
   cellSize?: number;
   gap?: number;
 }
@@ -60,7 +61,16 @@ function weekIndex(d: Date, yearStart: Date): number {
 const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const DAY_LABELS = ["Mon", "", "Wed", "", "Fri", "", "Sun"];
 
-export function Heatmap({ data, year, colorScheme = "greens", cellSize = 13, gap = 2 }: Props) {
+function formatMinutes(v: number): string {
+  if (v >= 60) {
+    const h = Math.floor(v / 60);
+    const m = Math.round(v % 60);
+    return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  }
+  return `${Math.round(v)}m`;
+}
+
+export function Heatmap({ data, year, colorScheme = "greens", unit, cellSize = 13, gap = 2 }: Props) {
   const step = cellSize + gap;
 
   const [tooltip, setTooltip] = useState<TooltipState>({ visible: false, x: 0, y: 0, date: "", value: 0 });
@@ -183,7 +193,9 @@ export function Heatmap({ data, year, colorScheme = "greens", cellSize = 13, gap
           style={{ left: tooltip.x + 12, top: tooltip.y - 32 }}
         >
           <span className="text-gray-400">{tooltip.date}</span>
-          <span className="ml-2 font-semibold">{tooltip.value.toLocaleString()}</span>
+          <span className="ml-2 font-semibold">
+            {unit === "minutes" ? formatMinutes(tooltip.value) : tooltip.value.toLocaleString()}
+          </span>
         </div>
       )}
     </div>

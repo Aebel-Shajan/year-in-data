@@ -45,13 +45,15 @@ export function DataSection({ config, year, onYearsLoaded }: Props) {
       </div>
 
       {loading && <SkeletonHeatmap />}
-      {error && <p className="text-sm text-red-400">Failed to load: {error}</p>}
-      {data && !loading && (
-        <Heatmap
-          data={data.data}
-          year={year}
-          colorScheme={colorScheme}
-        />
+      {!loading && (
+        <>
+          {error && <p className="text-sm text-red-400 mb-2">Failed to load: {error}</p>}
+          <Heatmap
+            data={data?.data ?? []}
+            year={year}
+            colorScheme={colorScheme}
+          />
+        </>
       )}
     </section>
   );

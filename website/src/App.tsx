@@ -7,8 +7,6 @@ const GROUPS: { label: string; metrics: MetricConfig[] }[] = [
     label: "Physical",
     metrics: [
       { source: "fitbit",   metric: "steps",    label: "Steps",            colorScheme: "blues"   },
-      { source: "fitbit",   metric: "calories", label: "Calories burned",  colorScheme: "oranges" },
-      { source: "fitbit",   metric: "sleep",    label: "Sleep (hours)",    colorScheme: "purples" },
       { source: "fitbit",   metric: "exercise", label: "Active minutes",   colorScheme: "reds"    },
       { source: "strong",   metric: "workouts", label: "Workout duration", colorScheme: "oranges" },
       { source: "gymgroup", metric: "visits",   label: "Gym visits",       colorScheme: "greens"  },
@@ -17,15 +15,17 @@ const GROUPS: { label: string; metrics: MetricConfig[] }[] = [
   {
     label: "Productivity",
     metrics: [
-      { source: "github", metric: "contributions", label: "GitHub contributions", colorScheme: "greens" },
-      { source: "kindle", metric: "reading",        label: "Reading (minutes)",    colorScheme: "warm"   },
+      { source: "github",      metric: "contributions", label: "GitHub contributions", colorScheme: "greens" },
+      { source: "kindle",      metric: "reading",       label: "Reading (minutes)",    colorScheme: "warm"   },
+      { source: "screentime",  metric: "app_usage",     label: "Screen time",          colorScheme: "reds"   },
+      { source: "zsh_history", metric: "commands",      label: "Shell commands",       colorScheme: "greens" },
     ],
   },
   {
-    label: "Digital",
+    label: "Metrics",
     metrics: [
-      { source: "screentime",  metric: "app_usage", label: "Screen time",    colorScheme: "reds"   },
-      { source: "zsh_history", metric: "commands",  label: "Shell commands", colorScheme: "greens" },
+      { source: "fitbit", metric: "calories", label: "Calories burned", colorScheme: "oranges" },
+      { source: "fitbit", metric: "sleep",    label: "Sleep (hours)",   colorScheme: "purples" },
     ],
   },
 ];

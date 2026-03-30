@@ -36,6 +36,7 @@ class Config:
     run_github: bool
     run_strong: bool
     run_gymgroup: bool
+    run_screentime: bool
 
     @staticmethod
     def load(path: Path = _ROOT / "config" / "config.toml") -> "Config":
@@ -50,4 +51,5 @@ class Config:
             run_github=data["sources"]["github"],
             run_strong=data["sources"]["strong"],
             run_gymgroup=data["sources"]["gymgroup"],
+            run_screentime=data["sources"]["screentime"],
         )

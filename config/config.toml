@@ -10,4 +10,5 @@ fitbit    = false
 kindle    = false
 github    = false
 strong    = false
-gymgroup  = true
+gymgroup    = true
+screentime  = true

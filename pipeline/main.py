@@ -12,7 +12,7 @@ import traceback
 from pathlib import Path
 
 from pipeline.config import Config, Secrets
-from pipeline.extractors import fitbit, github, gymgroup, kindle, screentime, strong
+from pipeline.extractors import fitbit, github, gymgroup, kindle, screentime, strong, zsh_history
 from pipeline.extractors.github import _DEFAULT_API_URL
 from pipeline.r2 import make_client
 
@@ -45,6 +45,8 @@ def main() -> None:
         extractors.append(("gymgroup", lambda: gymgroup.run(r2, secrets.gym_group_username, secrets.gym_group_password)))
     if config.run_screentime:
         extractors.append(("screentime", lambda: screentime.run(r2)))
+    if config.run_zsh_history:
+        extractors.append(("zsh_history", lambda: zsh_history.run(r2)))
 
     failures = []
     for name, fn in extractors:

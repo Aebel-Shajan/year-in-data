@@ -12,6 +12,7 @@ const METRICS: MetricConfig[] = [
   { source: "strong",  metric: "workouts",      label: "Workout duration",     colorScheme: "oranges" },
   { source: "gymgroup",    metric: "visits",     label: "Gym visits",           colorScheme: "greens"  },
   { source: "screentime",  metric: "app_usage", label: "Screen time",          colorScheme: "reds"    },
+  { source: "zsh_history", metric: "commands",  label: "Shell commands",       colorScheme: "greens"  },
 ];
 
 export default function App() {

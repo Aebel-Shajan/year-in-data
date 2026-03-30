@@ -1,6 +1,6 @@
-.PHONY: help install install-python install-node up down console setup-r2 pipeline sync-screentime install-screentime uninstall-screentime test dev build lint format clean
+.PHONY: help install install-python install-node up down console setup-r2 pipeline sync-macos install-macos-cron uninstall-macos-cron test dev build lint format clean
 
-PLIST_LABEL = com.yearindata.screentime
+PLIST_LABEL = com.yearindata.macos
 PLIST_PATH  = ~/Library/LaunchAgents/$(PLIST_LABEL).plist
 PROJECT_DIR = $(shell pwd)
 

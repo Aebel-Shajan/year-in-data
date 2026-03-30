@@ -34,7 +34,12 @@ def run(r2: R2Client) -> None:
         print("[strong] inbox is empty, skipping")
         return
 
-    df = pl.concat([_read_csv(R2.download_bytes(r2, k)) for k in csv_keys])
+    df = (
+        pl.concat([_read_csv(R2.download_bytes(r2, k)) for k in csv_keys])
+        .group_by(["date", "category"])
+        .agg(pl.col("value").max())
+        .sort("date")
+    )
 
     print(f"[strong/{METRIC}] {len(df)} rows")
     R2.store_partitions(r2, "strong", METRIC, df)

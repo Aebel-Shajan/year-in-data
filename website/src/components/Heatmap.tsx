@@ -14,7 +14,7 @@ import {
   interpolateReds,
   interpolateWarm,
 } from "d3-scale-chromatic";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import type { DataPoint } from "../types";
 
 const INTERPOLATORS = {
@@ -36,6 +36,14 @@ interface Props {
   gap?: number;
 }
 
+interface TooltipState {
+  visible: boolean;
+  x: number;
+  y: number;
+  date: string;
+  value: number;
+}
+
 // Day index: Monday = 0 … Sunday = 6  (ISO weekday - 1)
 function isoWeekday(d: Date): number {
   return (d.getDay() + 6) % 7;
@@ -54,6 +62,8 @@ const DAY_LABELS = ["Mon", "", "Wed", "", "Fri", "", "Sun"];
 
 export function Heatmap({ data, year, colorScheme = "greens", cellSize = 13, gap = 2 }: Props) {
   const step = cellSize + gap;
+
+  const [tooltip, setTooltip] = useState<TooltipState>({ visible: false, x: 0, y: 0, date: "", value: 0 });
 
   const byDate = useMemo(() => {
     const map = new Map<string, number>();
@@ -102,7 +112,6 @@ export function Heatmap({ data, year, colorScheme = "greens", cellSize = 13, gap
     const value = byDate.get(iso) ?? 0;
     const col = weekIndex(cursor, yearStart);
     const row = isoWeekday(cursor);
-    const fill = value > 0 ? colorScale(value) : "#ebedf0";
 
     cells.push(
       <rect
@@ -112,56 +121,71 @@ export function Heatmap({ data, year, colorScheme = "greens", cellSize = 13, gap
         width={cellSize}
         height={cellSize}
         rx={2}
-        fill={fill}
-        data-date={iso}
-        data-value={value}
-      >
-        <title>{`${iso}: ${value.toLocaleString()}`}</title>
-      </rect>
+        // Use inline style for colored cells so it beats CSS specificity;
+        // leave style unset for empty cells so Tailwind dark: classes apply.
+        style={value > 0 ? { fill: colorScale(value) } : undefined}
+        className={value === 0 ? "fill-gray-200 dark:fill-gray-700" : undefined}
+        onMouseEnter={(e) => setTooltip({ visible: true, x: e.clientX, y: e.clientY, date: iso, value })}
+        onMouseMove={(e) => setTooltip((t) => ({ ...t, x: e.clientX, y: e.clientY }))}
+        onMouseLeave={() => setTooltip((t) => ({ ...t, visible: false }))}
+      />
     );
 
     cursor.setDate(cursor.getDate() + 1);
   }
 
   return (
-    <svg
-      viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-      className="w-full max-w-4xl"
-      aria-label={`${year} activity heatmap`}
-    >
-      {/* Month labels */}
-      {monthPositions.map(({ label, col }) => (
-        <text
-          key={label}
-          x={paddingLeft + col * step}
-          y={paddingTop - 4}
-          fontSize={10}
-          fill="currentColor"
-          className="fill-gray-500"
-        >
-          {label}
-        </text>
-      ))}
-
-      {/* Day-of-week labels */}
-      {DAY_LABELS.map((label, i) =>
-        label ? (
+    <div className="relative">
+      <svg
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        className="w-full max-w-3xl"
+        aria-label={`${year} activity heatmap`}
+      >
+        {/* Month labels */}
+        {monthPositions.map(({ label, col }) => (
           <text
-            key={i}
-            x={paddingLeft - 4}
-            y={paddingTop + i * step + cellSize - 2}
-            fontSize={9}
-            textAnchor="end"
+            key={label}
+            x={paddingLeft + col * step}
+            y={paddingTop - 4}
+            fontSize={10}
             fill="currentColor"
-            className="fill-gray-400"
+            className="fill-gray-500"
           >
             {label}
           </text>
-        ) : null
-      )}
+        ))}
 
-      {/* Cells */}
-      {cells}
-    </svg>
+        {/* Day-of-week labels */}
+        {DAY_LABELS.map((label, i) =>
+          label ? (
+            <text
+              key={i}
+              x={paddingLeft - 4}
+              y={paddingTop + i * step + cellSize - 2}
+              fontSize={9}
+              textAnchor="end"
+              fill="currentColor"
+              className="fill-gray-400"
+            >
+              {label}
+            </text>
+          ) : null
+        )}
+
+        {/* Cells */}
+        {cells}
+      </svg>
+
+      {tooltip.visible && (
+        <div
+          className="fixed z-50 pointer-events-none px-2 py-1 rounded shadow text-xs
+                     bg-gray-900 text-white dark:bg-gray-700"
+          style={{ left: tooltip.x + 12, top: tooltip.y - 32 }}
+        >
+          <span className="text-gray-400">{tooltip.date}</span>
+          <span className="ml-2 font-semibold">{tooltip.value.toLocaleString()}</span>
+        </div>
+      )}
+    </div>
   );
 }

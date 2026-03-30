@@ -2,17 +2,32 @@ import { useCallback, useState } from "react";
 import type { MetricConfig } from "./types";
 import { DataSection } from "./components/DataSection";
 
-const METRICS: MetricConfig[] = [
-  { source: "github",  metric: "contributions", label: "GitHub contributions", colorScheme: "greens"  },
-  { source: "fitbit",  metric: "steps",         label: "Steps",                colorScheme: "blues"   },
-  { source: "fitbit",  metric: "calories",      label: "Calories burned",      colorScheme: "oranges" },
-  { source: "fitbit",  metric: "sleep",         label: "Sleep (hours)",        colorScheme: "purples" },
-  { source: "fitbit",  metric: "exercise",      label: "Active minutes",       colorScheme: "reds"    },
-  { source: "kindle",  metric: "reading",       label: "Reading (minutes)",    colorScheme: "warm"    },
-  { source: "strong",  metric: "workouts",      label: "Workout duration",     colorScheme: "oranges" },
-  { source: "gymgroup",    metric: "visits",     label: "Gym visits",           colorScheme: "greens"  },
-  { source: "screentime",  metric: "app_usage", label: "Screen time",          colorScheme: "reds"    },
-  { source: "zsh_history", metric: "commands",  label: "Shell commands",       colorScheme: "greens"  },
+const GROUPS: { label: string; metrics: MetricConfig[] }[] = [
+  {
+    label: "Physical",
+    metrics: [
+      { source: "fitbit",   metric: "steps",    label: "Steps",            colorScheme: "blues"   },
+      { source: "fitbit",   metric: "calories", label: "Calories burned",  colorScheme: "oranges" },
+      { source: "fitbit",   metric: "sleep",    label: "Sleep (hours)",    colorScheme: "purples" },
+      { source: "fitbit",   metric: "exercise", label: "Active minutes",   colorScheme: "reds"    },
+      { source: "strong",   metric: "workouts", label: "Workout duration", colorScheme: "oranges" },
+      { source: "gymgroup", metric: "visits",   label: "Gym visits",       colorScheme: "greens"  },
+    ],
+  },
+  {
+    label: "Productivity",
+    metrics: [
+      { source: "github", metric: "contributions", label: "GitHub contributions", colorScheme: "greens" },
+      { source: "kindle", metric: "reading",        label: "Reading (minutes)",    colorScheme: "warm"   },
+    ],
+  },
+  {
+    label: "Digital",
+    metrics: [
+      { source: "screentime",  metric: "app_usage", label: "Screen time",    colorScheme: "reds"   },
+      { source: "zsh_history", metric: "commands",  label: "Shell commands", colorScheme: "greens" },
+    ],
+  },
 ];
 
 export default function App() {
@@ -56,13 +71,20 @@ export default function App() {
       </header>
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-6 py-10">
-        {METRICS.map((cfg) => (
-          <DataSection
-            key={`${cfg.source}/${cfg.metric}`}
-            config={cfg}
-            year={year}
-            onYearsLoaded={handleYearsLoaded}
-          />
+        {GROUPS.map((group) => (
+          <section key={group.label} className="mb-12">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-6">
+              {group.label}
+            </h2>
+            {group.metrics.map((cfg) => (
+              <DataSection
+                key={`${cfg.source}/${cfg.metric}`}
+                config={cfg}
+                year={year}
+                onYearsLoaded={handleYearsLoaded}
+              />
+            ))}
+          </section>
         ))}
       </main>
 

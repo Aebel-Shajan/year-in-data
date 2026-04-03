@@ -1,11 +1,15 @@
 """
 Cloudflare R2 client and all storage operations for the pipeline.
 
-R2 key conventions:
-  raw/{source}/inbox/{filename}          ← user uploads here
-  raw/{source}/{YYYY-WXX}/{filename}     ← archived after processing
-  processed/{source}/{metric}/{YYYY-WXX}.parquet  ← weekly Polars partitions
-  web/{source}/{metric}.json             ← public JSON consumed by the website
+Medallion architecture:
+  bronze/{source}/{metric}.parquet    ← raw source records, source schema
+  silver/{source}/{metric}.parquet    ← normalized (date, category?, value in source units)
+  gold/{source}/{metric}.parquet      ← daily aggregated totals, display units
+  web/{source}/{metric}.json          ← public JSON consumed by the website
+
+Raw file storage:
+  raw/{source}/inbox/{filename}       ← user uploads here
+  raw/{source}/{YYYY-WXX}/{filename}  ← archived after processing
 """
 
 from __future__ import annotations
@@ -14,6 +18,7 @@ import io
 import json
 from dataclasses import dataclass
 from datetime import date
+from typing import Literal
 
 import boto3
 import polars as pl
@@ -91,25 +96,25 @@ def move(r2: R2Client, src: str, dst: str) -> None:
 # ── Key-path helpers ──────────────────────────────────────────────────────────
 
 def year_week(d: date | None = None) -> str:
-    """ISO year-week string, e.g. '2025-W12'."""
+    """ISO year-week string, e.g. '2025-W12'. Used for raw archive keys."""
     iso = (d or date.today()).isocalendar()
     return f"{iso.year}-W{iso.week:02d}"
 
 
 def inbox_prefix(source: str) -> str:
-    return f"raw/{source}/inbox/"
+    return f"bronze/inbox/{source}"
 
 
-def archive_key(source: str, yw: str, filename: str) -> str:
-    return f"raw/{source}/{yw}/{filename}"
+def archive_key(source: str, iso_date: str, filename: str) -> str:
+    return f"bronze/{source}/{iso_date}/{filename}"
 
 
-def processed_key(source: str, metric: str, yw: str) -> str:
-    return f"processed/{source}/{metric}/{yw}.parquet"
+def silver_key(source: str, metric: str) -> str:
+    return f"silver/{source}/{metric}.parquet"
 
 
-def processed_prefix(source: str, metric: str) -> str:
-    return f"processed/{source}/{metric}/"
+def gold_key(source: str, metric: str) -> str:
+    return f"gold/{source}/{metric}.parquet"
 
 
 def web_key(source: str, metric: str) -> str:
@@ -120,59 +125,39 @@ def web_public_url(r2: R2Client, source: str, metric: str) -> str:
     return f"{r2.public_url}/{web_key(source, metric)}"
 
 
-# ── Data-lake write ───────────────────────────────────────────────────────────
+# ── Medallion storage ─────────────────────────────────────────────────────────
 
-def store_partitions(r2: R2Client, source: str, metric: str, df: pl.DataFrame) -> None:
-    """
-    Merge df into weekly Parquet partitions on R2.
-
-    df must have columns: date (pl.Date), value (pl.Float64), and optionally
-    category (pl.Utf8) and image_url (pl.Utf8).
-    """
-    if df.is_empty():
-        return
-
-    augmented = df.with_columns(
-        pl.col("date")
-        .map_elements(
-            lambda d: f"{d.isocalendar()[0]}-W{d.isocalendar()[1]:02d}",
-            return_dtype=pl.Utf8,
-        )
-        .alias("_yw")
-    )
-
-    dedup_cols = ["date"] + (["category"] if "category" in df.columns else [])
-
-    for (yw,), week_df in augmented.group_by("_yw"):
-        week_df = week_df.drop("_yw")
-        key = processed_key(source, metric, yw)
-
-        if exists(r2, key):
-            existing = pl.read_parquet(io.BytesIO(download_bytes(r2, key)))
-            week_df = (
-                pl.concat([existing, week_df])
-                .unique(subset=dedup_cols, keep="last")
+def store_parquet(
+        r2: R2Client, 
+        key: str, 
+        df: pl.DataFrame,
+        sort_col: str,
+        dedup_cols: list[str] | None = None,
+        keep: Literal["last", "any", "none", "first"] = "last",
+) -> None:
+    """Merge df into an existing Parquet file, deduplicating and preserving existing rows."""
+    if exists(r2, key):
+        existing = pl.read_parquet(io.BytesIO(download_bytes(r2, key)))
+        if dedup_cols:
+            df = (
+                pl.concat([df, existing])
+                .unique(subset=dedup_cols, keep=keep)
                 .sort("date")
             )
         else:
-            week_df = week_df.sort("date")
+            df = pl.concat([df, existing]).unique(keep=keep).sort(sort_col)
+    else:
+        df = df.sort(sort_col)
 
-        buf = io.BytesIO()
-        week_df.write_parquet(buf)
-        upload_bytes(r2, key, buf.getvalue())
-
+    buf = io.BytesIO()
+    df.write_parquet(buf)
+    upload_bytes(r2, key, buf.getvalue())
 
 # ── Web JSON write ────────────────────────────────────────────────────────────
 
-def write_web_json(
-    r2: R2Client,
-    source: str,
-    metric: str,
-    unit: str,
-    label: str,
-) -> None:
+def export_daily_aggregated_json(r2: R2Client, source: str, metric: str, unit: str, label: str) -> None:
     """
-    Concatenate all weekly partitions and write aggregated JSON to web/.
+    Read the gold Parquet file and write aggregated JSON to web/.
 
     Output format:
     {
@@ -181,12 +166,11 @@ def write_web_json(
       "data": [{"date": "2025-01-01", "value": 2100.0}, ...]
     }
     """
-    keys = sorted(list_keys(r2, processed_prefix(source, metric)))
-    if not keys:
+    key = gold_key(source, metric)
+    if not exists(r2, key):
         return
 
-    frames = [pl.read_parquet(io.BytesIO(download_bytes(r2, k))) for k in keys]
-    full = pl.concat(frames).sort("date")
+    full = pl.read_parquet(io.BytesIO(download_bytes(r2, key))).sort("date")
 
     records: list[dict] = []
     for row in full.iter_rows(named=True):
@@ -211,9 +195,9 @@ def write_web_json(
 # ── Raw inbox archival ────────────────────────────────────────────────────────
 
 def archive_inbox(r2: R2Client, source: str) -> None:
-    yw = year_week()
+    iso_date = date.today().isoformat()
     for key in list_keys(r2, inbox_prefix(source)):
         filename = key.rsplit("/", 1)[-1]
-        dst = archive_key(source, yw, filename)
+        dst = archive_key(source, iso_date, filename)
         move(r2, key, dst)
         print(f"  archived {filename} → {dst}")

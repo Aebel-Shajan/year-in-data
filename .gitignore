@@ -21,3 +21,4 @@ website/dist/
 notebooks/.ipynb_checkpoints/
 
 logs
+temp

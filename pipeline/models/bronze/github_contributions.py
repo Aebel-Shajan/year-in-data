@@ -1,25 +1,27 @@
 """
-GitHub contributions extractor.
+Bronze asset: github/contributions
 
-Fetches the last 52 weeks of contribution data via the GitHub GraphQL API.
-No manual upload needed — runs automatically.
+Fetches the last 52 weeks of contribution data via the GitHub GraphQL API,
+saves the raw response to the inbox, then archives it to the bronze store.
+
+Bronze JSON format: [{date, contributionCount}, ...]
 """
 
 from __future__ import annotations
 
+import json
+import os
 from datetime import date, timedelta, timezone
 from datetime import datetime as dt
 
 import httpx
-import polars as pl
 
 from pipeline import r2 as R2
 from pipeline.config import Config, Secrets
 from pipeline.r2 import R2Client
 
-METRIC = "contributions"
-UNIT = "commits"
-LABEL = "GitHub contributions"
+SOURCE = "github"
+
 _DEFAULT_API_URL = "https://api.github.com/graphql"
 
 _GQL = """
@@ -40,15 +42,21 @@ query($login: String!, $from: DateTime!, $to: DateTime!) {
 """
 
 
-def run(r2: R2Client, secrets: Secrets, config: Config, api_url: str = _DEFAULT_API_URL) -> None:
-    df = _fetch(secrets, config, api_url)
-    print(f"[github/{METRIC}] {len(df)} rows")
-    R2.store_partitions(r2, "github", METRIC, df)
-    R2.write_web_json(r2, "github", METRIC, UNIT, LABEL)
-    # No inbox to archive for GitHub
+def materialize(r2: R2Client, secrets: Secrets | None = None, config: Config | None = None) -> None:
+    assert secrets and config, "github bronze requires secrets and config"
+    days = _fetch(secrets, config)
+    if not days:
+        print(f"[bronze/{SOURCE}] no contributions returned, skipping")
+        return
+
+    filename = f"contributions_{date.today().isoformat()}.json"
+    R2.upload_bytes(r2, R2.inbox_prefix(SOURCE) + filename, json.dumps(days).encode(), "application/json")
+    R2.archive_inbox(r2, SOURCE)
+    print(f"[bronze/{SOURCE}] {len(days)} days → archived")
 
 
-def _fetch(secrets: Secrets, config: Config, api_url: str = _DEFAULT_API_URL) -> pl.DataFrame:
+def _fetch(secrets: Secrets, config: Config) -> list[dict]:
+    api_url = os.getenv("GITHUB_API_URL", _DEFAULT_API_URL)
     end = dt.now(tz=timezone.utc)
     start = end - timedelta(weeks=52)
 
@@ -74,18 +82,9 @@ def _fetch(secrets: Secrets, config: Config, api_url: str = _DEFAULT_API_URL) ->
         resp.json()["data"]["user"]["contributionsCollection"]
         ["contributionCalendar"]["weeks"]
     )
-
-    rows = [
-        {
-            "date": date.fromisoformat(day["date"]),
-            "value": float(day["contributionCount"]),
-        }
+    return [
+        {"date": day["date"], "contributionCount": day["contributionCount"]}
         for week in weeks
         for day in week["contributionDays"]
         if day["contributionCount"] > 0
     ]
-
-    return pl.DataFrame(
-        {"date": [r["date"] for r in rows], "value": [r["value"] for r in rows]},
-        schema={"date": pl.Date, "value": pl.Float64},
-    ).sort("date")

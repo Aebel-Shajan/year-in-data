@@ -2,14 +2,14 @@
 Cloudflare R2 client and all storage operations for the pipeline.
 
 Medallion architecture:
-  bronze/{source}/{metric}.parquet    ← raw source records, source schema
-  silver/{source}/{metric}.parquet    ← normalized (date, category?, value in source units)
+  bronze/inbox/{source}/              ← all raw files land here
+    - file-based sources: user uploads ZIP/CSV
+    - API sources:   ingest() saves raw JSON response
+    - local sources: ingest() dumps query results as JSON
+  bronze/{source}/{YYYY-MM-DD}/       ← archived after bronze_to_silver runs
+  silver/{source}/{metric}.parquet    ← cleaned, normalized, source units, row-level
   gold/{source}/{metric}.parquet      ← daily aggregated totals, display units
   web/{source}/{metric}.json          ← public JSON consumed by the website
-
-Raw file storage:
-  raw/{source}/inbox/{filename}       ← user uploads here
-  raw/{source}/{YYYY-WXX}/{filename}  ← archived after processing
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from __future__ import annotations
 import io
 import json
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime, timezone
 from typing import Literal
 
 import boto3
@@ -95,14 +95,8 @@ def move(r2: R2Client, src: str, dst: str) -> None:
 
 # ── Key-path helpers ──────────────────────────────────────────────────────────
 
-def year_week(d: date | None = None) -> str:
-    """ISO year-week string, e.g. '2025-W12'. Used for raw archive keys."""
-    iso = (d or date.today()).isocalendar()
-    return f"{iso.year}-W{iso.week:02d}"
-
-
 def inbox_prefix(source: str) -> str:
-    return f"bronze/inbox/{source}"
+    return f"bronze/inbox/{source}/"
 
 
 def archive_key(source: str, iso_date: str, filename: str) -> str:
@@ -125,24 +119,50 @@ def web_public_url(r2: R2Client, source: str, metric: str) -> str:
     return f"{r2.public_url}/{web_key(source, metric)}"
 
 
-# ── Medallion storage ─────────────────────────────────────────────────────────
+# ── Parquet helpers ───────────────────────────────────────────────────────────
+
+def load_parquet(
+    r2: R2Client,
+    key: str,
+    start: date | None = None,
+    end: date | None = None,
+) -> pl.DataFrame | None:
+    """Download a Parquet file and return it, or None if it doesn't exist.
+
+    Optionally filters rows by the 'date' column (inclusive on both ends).
+    """
+    if not exists(r2, key):
+        return None
+    df = pl.read_parquet(io.BytesIO(download_bytes(r2, key)))
+    if start:
+        df = df.filter(pl.col("date") >= start)
+    if end:
+        df = df.filter(pl.col("date") <= end)
+    return df
+
 
 def store_parquet(
-        r2: R2Client, 
-        key: str, 
-        df: pl.DataFrame,
-        sort_col: str,
-        dedup_cols: list[str] | None = None,
-        keep: Literal["last", "any", "none", "first"] = "last",
+    r2: R2Client,
+    key: str,
+    df: pl.DataFrame,
+    sort_col: str,
+    dedup_cols: list[str] | None = None,
+    keep: Literal["last", "first", "any", "none"] = "last",
+    overwrite: bool = False,
 ) -> None:
-    """Merge df into an existing Parquet file, deduplicating and preserving existing rows."""
-    if exists(r2, key):
+    """Write df to a Parquet file on R2.
+
+    By default merges with any existing file, deduplicating to preserve history.
+    Pass overwrite=True to replace entirely — used for silver and gold layers
+    which are always fully recomputed from the previous layer.
+    """
+    if not overwrite and exists(r2, key):
         existing = pl.read_parquet(io.BytesIO(download_bytes(r2, key)))
         if dedup_cols:
             df = (
                 pl.concat([df, existing])
                 .unique(subset=dedup_cols, keep=keep)
-                .sort("date")
+                .sort(sort_col)
             )
         else:
             df = pl.concat([df, existing]).unique(keep=keep).sort(sort_col)
@@ -153,11 +173,17 @@ def store_parquet(
     df.write_parquet(buf)
     upload_bytes(r2, key, buf.getvalue())
 
-# ── Web JSON write ────────────────────────────────────────────────────────────
 
-def export_daily_aggregated_json(r2: R2Client, source: str, metric: str, unit: str, label: str) -> None:
-    """
-    Read the gold Parquet file and write aggregated JSON to web/.
+# ── Web JSON export ───────────────────────────────────────────────────────────
+
+def export_daily_aggregated_json(
+    r2: R2Client,
+    source: str,
+    metric: str,
+    unit: str,
+    label: str,
+) -> None:
+    """Read the gold Parquet file and write aggregated JSON to web/.
 
     Output format:
     {
@@ -192,12 +218,48 @@ def export_daily_aggregated_json(r2: R2Client, source: str, metric: str, unit: s
     upload_bytes(r2, web_key(source, metric), json.dumps(payload).encode(), "application/json")
 
 
-# ── Raw inbox archival ────────────────────────────────────────────────────────
+# ── Bronze inbox archival ─────────────────────────────────────────────────────
 
 def archive_inbox(r2: R2Client, source: str) -> None:
-    iso_date = date.today().isoformat()
+    now = datetime.now(tz=timezone.utc)
+    iso_date = now.date().isoformat()
+    timestamp = now.strftime("%Y-%m-%d_%H%M%S")
     for key in list_keys(r2, inbox_prefix(source)):
-        filename = key.rsplit("/", 1)[-1]
+        ext = key.rsplit(".", 1)[-1] if "." in key else ""
+        filename = f"{source}_{timestamp}.{ext}"
         dst = archive_key(source, iso_date, filename)
         move(r2, key, dst)
-        print(f"  archived {filename} → {dst}")
+        print(f"  archived → {dst}")
+
+
+def list_archived_keys(
+    r2: R2Client,
+    source: str,
+    start: date | None = None,
+    end: date | None = None,
+) -> list[str]:
+    """List archived bronze files for a source.
+
+    Keys follow the pattern: bronze/{source}/{YYYY-MM-DD}/{filename}
+    start/end filter on the archive folder date (when the file was archived).
+    """
+    all_keys = list_keys(r2, f"bronze/{source}/")
+    if not start and not end:
+        return all_keys
+
+    filtered = []
+    for key in all_keys:
+        # bronze/{source}/{YYYY-MM-DD}/{filename}
+        parts = key.split("/")
+        if len(parts) < 4:
+            continue
+        try:
+            folder_date = date.fromisoformat(parts[2])
+        except ValueError:
+            continue
+        if start and folder_date < start:
+            continue
+        if end and folder_date > end:
+            continue
+        filtered.append(key)
+    return filtered

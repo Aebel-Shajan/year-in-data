@@ -19,6 +19,7 @@ class Secrets(BaseSettings):
     r2_account_id: str
     r2_access_key_id: str
     r2_secret_access_key: str
+    cloudflare_api_token: str
     github_token: str
     gym_group_username: str = ""
     gym_group_password: str = ""

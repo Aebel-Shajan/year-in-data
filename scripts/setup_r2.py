@@ -52,9 +52,9 @@ def check_bucket(r2, bucket: str) -> None:
             raise
 
 
-def apply_cors(client, bucket: str, cors_rules: dict) -> None:
+def apply_cors(client, bucket: str, cors_rules: list) -> None:
     try:
-        client.put_bucket_cors(Bucket=bucket, CORSConfiguration=cors_rules)
+        client.put_bucket_cors(Bucket=bucket, CORSConfiguration={"CORSRules": cors_rules})
         print(f"✓ CORS rules applied to '{bucket}'")
     except Exception as e:
         print(f"✗ Failed to apply CORS rules: {e}")

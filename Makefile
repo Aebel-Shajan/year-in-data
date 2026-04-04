@@ -35,6 +35,9 @@ console: ## Open MinIO web console in browser (user: minioadmin / pass: minioadm
 setup-r2: ## Create R2 bucket, apply public-read policy and CORS (run once)
 	uv run python scripts/setup_r2.py
 
+delete-bucket: ## Empty and delete the R2 bucket (irreversible)
+	uv run python scripts/delete_bucket.py
+
 pipeline: ## Sync from Drive and run the data pipeline
 	uv run python scripts/sync_drive.py
 	uv run python -m pipeline.main

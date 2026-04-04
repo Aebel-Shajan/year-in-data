@@ -1,0 +1,58 @@
+name: Setup Cloudflare R2 bucket
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: make install-python
+
+      - name: Print setup instructions
+        run: |
+          echo "════════════════════════════════════════════════════════"
+          echo "  Cloudflare R2 — one-time bucket setup"
+          echo "════════════════════════════════════════════════════════"
+          echo ""
+          echo "Before running this workflow, make sure you have:"
+          echo ""
+          echo "  1. Created the R2 bucket in the Cloudflare dashboard"
+          echo "       dash.cloudflare.com → R2 Object Storage → Create bucket"
+          echo "       Name must match r2.bucket_name in config/config.toml"
+          echo ""
+          echo "  2. Created an R2 API token in the Cloudflare dashboard"
+          echo "       dash.cloudflare.com → R2 → Manage R2 API Tokens"
+          echo "       Permissions: Object Read & Write"
+          echo ""
+          echo "  3. Added the following secrets to this GitHub repo"
+          echo "       Settings → Secrets → Actions → New repository secret"
+          echo ""
+          echo "       R2_ACCOUNT_ID         your Cloudflare account ID"
+          echo "       R2_ACCESS_KEY_ID      from the API token created above"
+          echo "       R2_SECRET_ACCESS_KEY  from the API token created above"
+          echo ""
+          echo "  4. Updated config/config.toml with:"
+          echo "       r2.bucket_name  — the bucket name you created"
+          echo "       r2.public_url   — the public URL (if using R2 public access)"
+          echo "       github.username — your GitHub username"
+          echo ""
+          echo "  This step applies CORS rules from config/cors.json."
+          echo "  Re-run this workflow any time cors.json changes."
+          echo ""
+          echo "════════════════════════════════════════════════════════"
+
+      - name: Apply CORS rules to R2 bucket
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          GITHUB_TOKEN: ${{ secrets.PIPELINE_GITHUB_TOKEN }}
+        run: make setup-r2

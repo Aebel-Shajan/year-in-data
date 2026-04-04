@@ -39,7 +39,6 @@ delete-bucket: ## Empty and delete the R2 bucket (irreversible)
 	uv run python scripts/delete_bucket.py
 
 pipeline: ## Sync from Drive and run the data pipeline
-	uv run python scripts/sync_drive.py
 	uv run python -m pipeline.main
 
 sync-macos: ## Sync screen time to R2 (run manually or via launchd)
@@ -47,6 +46,9 @@ sync-macos: ## Sync screen time to R2 (run manually or via launchd)
 
 export-json: ## Export gold tables
 	uv run python scripts/export_json.py
+
+get-web-url: ## Print the public URL of the web R2 bucket
+	uv run python scripts/get_web_url.py
 
 install-macos-cron: ## Install launchd job to sync screen time daily at 9 AM
 	mkdir -p $(PROJECT_DIR)/logs

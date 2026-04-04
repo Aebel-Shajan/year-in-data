@@ -7,7 +7,6 @@ Run this once after `make up` before using `make pipeline` or `make dev` locally
 
 from __future__ import annotations
 
-import json
 import subprocess
 import sys
 import time
@@ -46,17 +45,6 @@ def ensure_bucket(r2, bucket: str) -> None:
     except ClientError:
         r2.client.create_bucket(Bucket=bucket)
         print(f"✓ Created bucket '{bucket}'")
-
-    policy = json.dumps({
-        "Version": "2012-10-17",
-        "Statement": [{
-            "Effect": "Allow",
-            "Principal": {"AWS": "*"},
-            "Action": ["s3:GetObject"],
-            "Resource": [f"arn:aws:s3:::{bucket}/web/*"],
-        }],
-    })
-    r2.client.put_bucket_policy(Bucket=bucket, Policy=policy)
     print(f"✓ Bucket '{bucket}' ready")
 
 

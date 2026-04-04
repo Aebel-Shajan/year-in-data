@@ -17,14 +17,12 @@ import polars as pl
 from pipeline import r2 as R2
 from pipeline.r2 import R2Client
 
-SOURCE = "github"
-METRIC = "contributions"
 
-
-def materialize(r2: R2Client, start: date | None = None, end: date | None = None) -> None:
-    keys = sorted(k for k in R2.list_archived_keys(r2, SOURCE, start=start, end=end) if k.endswith(".json"))
+def github_contributions(r2: R2Client, input_key: str, output_key: str, start: date | None = None, end: date | None = None) -> None:
+    start = start or R2.latest_date(r2, output_key)
+    keys = sorted(k for k in R2.list_bronze_keys(r2, input_key, start=start, end=end) if k.endswith(".json"))
     if not keys:
-        print(f"[silver/{SOURCE}/{METRIC}] no archived files found, skipping")
+        print(f"[{output_key.removesuffix('.parquet')}] no archived files found, skipping")
         return
 
     all_days: list[dict] = []
@@ -44,5 +42,5 @@ def materialize(r2: R2Client, start: date | None = None, end: date | None = None
         .sort("date")
     )
 
-    R2.store_parquet(r2, R2.silver_key(SOURCE, METRIC), df, sort_col="date", overwrite=True)
-    print(f"[silver/{SOURCE}/{METRIC}] {len(df)} rows")
+    R2.store_parquet(r2, output_key, df, sort_col="date", overwrite=True)
+    print(f"[{output_key.removesuffix('.parquet')}] {len(df)} rows")

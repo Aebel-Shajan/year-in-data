@@ -1,7 +1,7 @@
 """
 Silver table: zsh_history/commands
 
-Reads raw command JSON from the bronze inbox and produces a silver table
+Reads raw command JSON from the bronze store and produces a silver table
 with daily counts per command stem.
 
 Silver schema: (date, category, count)
@@ -17,14 +17,12 @@ import polars as pl
 from pipeline import r2 as R2
 from pipeline.r2 import R2Client
 
-SOURCE = "zsh_history"
-METRIC = "commands"
 
-
-def materialize(r2: R2Client, start: date | None = None, end: date | None = None) -> None:
-    keys = [k for k in R2.list_archived_keys(r2, SOURCE, start=start, end=end) if k.endswith(".json")]
+def macos_commands(r2: R2Client, input_key: str, output_key: str, start: date | None = None, end: date | None = None) -> None:
+    start = start or R2.latest_date(r2, output_key)
+    keys = [k for k in R2.list_bronze_keys(r2, input_key, start=start, end=end) if k.endswith(".json")]
     if not keys:
-        print(f"[silver/{SOURCE}/{METRIC}] no archived files found, skipping")
+        print(f"[{output_key.removesuffix('.parquet')}] no archived files found, skipping")
         return
 
     all_records: list[dict] = []
@@ -45,5 +43,5 @@ def materialize(r2: R2Client, start: date | None = None, end: date | None = None
         .sort("date")
     )
 
-    R2.store_parquet(r2, R2.silver_key(SOURCE, METRIC), df, sort_col="date", overwrite=True)
-    print(f"[silver/{SOURCE}/{METRIC}] {len(df)} rows")
+    R2.store_parquet(r2, output_key, df, sort_col="date", overwrite=True)
+    print(f"[{output_key.removesuffix('.parquet')}] {len(df)} rows")

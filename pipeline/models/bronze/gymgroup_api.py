@@ -1,8 +1,11 @@
 """
 Bronze asset: gymgroup/checkins
 
-Fetches full check-in history from The Gym Group API, saves the raw
-response to the inbox, then archives it to the bronze store.
+When runtime_env is "local", fetches full check-in history from The Gym Group
+API and saves it to the inbox. Otherwise expects the inbox to be pre-populated
+by a separate workflow.
+
+Then archives any inbox files to the bronze store.
 
 Bronze JSON format: [{checkInDate, gymLocationName, duration, ...}, ...]
 """
@@ -18,8 +21,6 @@ from pipeline import r2 as R2
 from pipeline.config import Config, Secrets
 from pipeline.r2 import R2Client
 
-SOURCE = "gymgroup"
-
 _BASE = "https://thegymgroup.netpulse.com/np"
 _HEADERS = {
     "accept": "application/json",
@@ -33,17 +34,20 @@ _HEADERS = {
 }
 
 
-def materialize(r2: R2Client, secrets: Secrets | None = None, config: Config | None = None) -> None:  # noqa: ARG001
-    assert secrets, "gymgroup bronze requires secrets"
-    check_ins = _fetch(secrets.gym_group_username, secrets.gym_group_password)
-    if not check_ins:
-        print(f"[bronze/{SOURCE}] no check-ins returned, skipping")
-        return
+def gymgroup_api(r2: R2Client, input_key: str, output_key: str, secrets: Secrets | None = None, config: Config | None = None) -> None:
+    assert secrets and config, "gymgroup bronze requires secrets and config"
+    if config.runtime_env == "local":
+        check_ins = _fetch(secrets.gym_group_username, secrets.gym_group_password)
+        if check_ins:
+            filename = f"checkins_{date.today().isoformat()}.json"
+            R2.upload_bytes(r2, input_key + "/" + filename, json.dumps(check_ins).encode(), "application/json")
 
-    filename = f"checkins_{date.today().isoformat()}.json"
-    R2.upload_bytes(r2, R2.inbox_prefix(SOURCE) + filename, json.dumps(check_ins).encode(), "application/json")
-    R2.archive_inbox(r2, SOURCE)
-    print(f"[bronze/{SOURCE}] {len(check_ins)} check-ins → archived")
+    keys = R2.list_keys(r2, input_key + "/")
+    if not keys:
+        print(f"[{output_key}] inbox empty, skipping")
+        return
+    R2.archive_inbox(r2, input_key, output_key)
+    print(f"[{output_key}] archived {len(keys)} file(s)")
 
 
 def _fetch(username: str, password: str) -> list[dict]:

@@ -15,6 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -22,9 +26,16 @@ jobs:
           cache-dependency-path: website/package-lock.json
 
       - name: Install dependencies
-        run: make install-node
+        run: make install
 
-      - name: Build
+      - name: Export JSON from gold layer
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: uv run python scripts/export_json.py
+
+      - name: Build website
         run: make build
 
       - name: Deploy to gh-pages

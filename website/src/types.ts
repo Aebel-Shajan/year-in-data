@@ -6,7 +6,7 @@ export interface DataPoint {
 }
 
 export interface MetricData {
-  source: string;
+  asset_name: string;
   metric: string;
   unit: string;
   label: string;

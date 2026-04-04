@@ -19,5 +19,4 @@ def daily_sleep(r2: R2Client, input_key: str, output_key: str, unit: str, label:
         return
 
     R2.store_parquet(r2, output_key, gold, sort_col="date", overwrite=True)
-    R2.export_daily_aggregated_json(r2, output_key, unit, label)
     print(f"[{output_key.removesuffix('.parquet')}] {len(gold)} rows")

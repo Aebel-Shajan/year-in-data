@@ -1,5 +1,5 @@
 """
-Silver table: zsh_history/commands
+Silver table: macos_commands/commands
 
 Reads raw command JSON from the bronze store and produces a silver table
 with daily counts per command stem.

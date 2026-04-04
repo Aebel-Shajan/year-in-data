@@ -1,5 +1,5 @@
 """
-Bronze asset: zsh_history/commands
+Bronze asset: macos_commands
 
 Parses ~/.zsh_history, saves raw (date, command_stem) pairs to the inbox,
 then archives them to the bronze store. Only the first word of each command

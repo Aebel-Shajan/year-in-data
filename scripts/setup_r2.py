@@ -1,11 +1,11 @@
 """
-One-time setup for the production Cloudflare R2 bucket.
+One-time setup for the production Cloudflare R2 buckets.
 
-  - Applies CORS rules from config/cors.json
+  - Creates pipeline bucket (private) and web bucket (public) if they don't exist
+  - Applies CORS rules from config/cors.json to the web bucket
 
   uv run python scripts/setup_r2.py
 
-The bucket must already exist (create it in the Cloudflare dashboard).
 Run once when setting up a new environment, and again whenever cors.json changes.
 """
 
@@ -19,25 +19,25 @@ ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
 from pipeline.config import PipelineConfig
-from pipeline.r2 import make_client
+from pipeline.r2 import make_client, make_web_client
+
 
 def main() -> None:
     config = PipelineConfig.load()
     r2 = make_client(config)
-    
+    web_r2 = make_web_client(config)
+
     with open(ROOT / "config" / "cors.json") as f:
         cors_rules = json.load(f)
 
-    # Check bucket exists
-    check_bucket(r2, config.r2_bucket_name)
-    
-    # Apply CORS rules
-    apply_cors(r2.client, config.r2_bucket_name, cors_rules)
-    
-    print("✓ R2 bucket setup complete")
+    ensure_bucket(r2, config.r2_bucket_name)
+    ensure_bucket(web_r2, config.web_bucket_name)
+    apply_cors(web_r2.client, config.web_bucket_name, cors_rules)
+
+    print("✓ R2 setup complete")
 
 
-def check_bucket(r2, bucket: str) -> None:
+def ensure_bucket(r2, bucket: str) -> None:
     from botocore.exceptions import ClientError
 
     try:

@@ -22,7 +22,7 @@ ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
 from pipeline.config import PipelineConfig
-from pipeline.r2 import make_client, upload_bytes, exists, export_daily_aggregated_json
+from pipeline.r2 import make_client, make_web_client, upload_bytes, exists, export_daily_aggregated_json
 from pipeline import stages
 from pipeline.stages import GOLD_MODELS
 
@@ -158,9 +158,11 @@ def main() -> None:
     print("── Starting MinIO ──────────────────────────────────────────────")
 
     r2 = make_client(config)
+    web_r2 = make_web_client(config)
     print(config.endpoint_url)
     ensure_minio_running(config.endpoint_url)
     ensure_bucket(r2, config.r2_bucket_name)
+    ensure_bucket(web_r2, config.web_bucket_name)
 
     print("\n── Uploading test data to inbox ────────────────────────────────")
     upload_test_data(r2)
@@ -186,16 +188,16 @@ def main() -> None:
     print("\n── Exporting web JSON ──────────────────────────────────────────")
     gold_models = stages._filter(GOLD_MODELS, config)
     for model in gold_models:
-        export_daily_aggregated_json(r2, model.output_key, model.unit, model.label)
+        export_daily_aggregated_json(r2, web_r2, model.output_key, model.unit, model.label)
         _, layer, filename = model.output_key.split("/")
-        print(f"  exported web/{layer}/{filename.removesuffix('.parquet')}.json")
+        print(f"  exported {layer}/{filename.removesuffix('.parquet')}.json → {config.web_bucket_name}")
 
     print("\n── Verifying outputs ───────────────────────────────────────────")
     missing = []
     for model in gold_models:
         _, layer, filename = model.output_key.split("/")
-        web_key = f"web/{layer}/{filename.removesuffix('.parquet')}.json"
-        if not exists(r2, web_key):
+        web_key = f"{layer}/{filename.removesuffix('.parquet')}.json"
+        if not exists(web_r2, web_key):
             missing.append(web_key)
 
     print()

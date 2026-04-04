@@ -33,7 +33,8 @@ class PipelineConfig:
 
     runtime_env: Literal["local", "github_actions"]
     r2_bucket_name: str
-    r2_public_url: str
+    web_bucket_name: str
+    web_public_url: str
     github_username: str
     secrets: Secrets
     endpoint_url: str
@@ -57,7 +58,8 @@ class PipelineConfig:
         return PipelineConfig(
             runtime_env=data["general"]["runtime_env"],
             r2_bucket_name=data["r2"]["bucket_name"],
-            r2_public_url=data["r2"]["public_url"],
+            web_bucket_name=data["r2"]["web_bucket_name"],
+            web_public_url=data["r2"]["web_public_url"],
             github_username=data["github"]["username"],
             secrets=secrets,
             endpoint_url=endpoint_url,

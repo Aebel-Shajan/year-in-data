@@ -35,8 +35,8 @@ class R2Client:
     public_url: str
 
 
-def make_client(config: PipelineConfig) -> R2Client:
-    client = boto3.client(
+def _boto_client(config: PipelineConfig):
+    return boto3.client(
         "s3",
         endpoint_url=config.endpoint_url,
         aws_access_key_id=config.secrets.r2_access_key_id,
@@ -44,11 +44,14 @@ def make_client(config: PipelineConfig) -> R2Client:
         config=BotocoreConfig(signature_version="s3v4"),
         region_name="auto",
     )
-    return R2Client(
-        client=client,
-        bucket=config.r2_bucket_name,
-        public_url=config.r2_public_url.rstrip("/"),
-    )
+
+
+def make_client(config: PipelineConfig) -> R2Client:
+    return R2Client(client=_boto_client(config), bucket=config.r2_bucket_name, public_url="")
+
+
+def make_web_client(config: PipelineConfig) -> R2Client:
+    return R2Client(client=_boto_client(config), bucket=config.web_bucket_name, public_url=config.web_public_url.rstrip("/"))
 
 
 # ── Low-level helpers ─────────────────────────────────────────────────────────
@@ -178,13 +181,16 @@ def store_parquet(
 
 def export_daily_aggregated_json(
     r2: R2Client,
+    web_r2: R2Client,
     output_key: str,
     unit: str,
     label: str,
 ) -> None:
-    """Read the gold Parquet file and write aggregated JSON to web/.
+    """Read a gold Parquet from r2 and write aggregated JSON to web_r2.
 
     output_key is the full gold key, e.g. "gold/fitbit/daily_calories.parquet".
+    JSON is written to web_r2 as "{layer}/{metric}.json",
+    e.g. "fitbit/daily_calories.json".
 
     Output format:
     {
@@ -198,7 +204,7 @@ def export_daily_aggregated_json(
 
     _, layer, filename = output_key.split("/")
     metric = filename.removesuffix(".parquet")
-    web_key_path = f"web/{layer}/{metric}.json"
+    web_key_path = f"{layer}/{metric}.json"
 
     full = pl.read_parquet(io.BytesIO(download_bytes(r2, output_key))).sort("date")
 
@@ -219,7 +225,7 @@ def export_daily_aggregated_json(
         "updated_at": str(date.today()),
         "data": records,
     }
-    upload_bytes(r2, web_key_path, json.dumps(payload).encode(), "application/json")
+    upload_bytes(web_r2, web_key_path, json.dumps(payload).encode(), "application/json")
 
 
 # ── Bronze inbox archival ─────────────────────────────────────────────────────

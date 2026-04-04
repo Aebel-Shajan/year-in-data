@@ -40,7 +40,7 @@ def main() -> None:
     ensure_bucket(r2, config.r2_bucket_name)
     ensure_bucket(web_r2, config.web_bucket_name)
     if config.runtime_env != "local":
-        enable_public_access(config.endpoint_url, config.web_bucket_name, config.secrets.cloudflare_api_token)
+        enable_r2_dev_public(config.endpoint_url, config.web_bucket_name, config.secrets.cloudflare_api_token)
     apply_cors(web_r2.client, config.web_bucket_name, cors_rules)
 
     print("✓ R2 setup complete")
@@ -61,24 +61,35 @@ def ensure_bucket(r2, bucket: str) -> None:
             raise
 
 
-def enable_public_access(endpoint_url: str, bucket: str, api_token: str) -> None:
-    """Enable the pub-*.r2.dev development URL on a bucket via the Cloudflare REST API."""
-    account_id = endpoint_url.removeprefix("https://").split(".")[0]
-    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/r2/buckets/{bucket}/policy"
+import httpx
+from urllib.parse import urlparse
+
+def enable_r2_dev_public(endpoint_url: str, bucket: str, api_token: str) -> None:
+    # extract account ID from the endpoint hostname
+    host = urlparse(endpoint_url).hostname or ""
+    account_id = host.split(".")[0]
+
+    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/r2/buckets/{bucket}/domains/managed"
+
     resp = httpx.put(
         url,
-        headers={"Authorization": f"Bearer {api_token}"},
-        json={"access": "public"},
+        headers={
+            "Authorization": f"Bearer {api_token}",
+            "Content-Type": "application/json",
+        },
+        json={"enabled": True},
+        timeout=30.0,
     )
-    if resp.status_code == 200:
-        dev_url = resp.json().get("result", {}).get("development_url", "")
-        print(f"✓ Public access enabled on '{bucket}'")
-        if dev_url:
-            print(f"  URL: {dev_url}")
-            print(f"  Update web_public_url in config/config.toml if needed")
+    data = resp.json()
+    if resp.status_code == 200 and data.get("success"):
+        enabled = data["result"]["enabled"]
+        domain = data["result"]["domain"]
+        if enabled:
+            print(f"✓ Public r2.dev enabled: https://{domain}")
+        else:
+            print(f"⚠️ Public access wasn’t enabled for some reason")
     else:
-        print(f"✗ Failed to enable public access: {resp.status_code} {resp.text}")
-
+        print(f"✗ Failed to enable public access: {resp.status_code} {data}")
 
 def apply_cors(client, bucket: str, cors_rules: list) -> None:
     try:

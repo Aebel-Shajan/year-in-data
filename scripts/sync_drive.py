@@ -20,74 +20,64 @@ Setup:
 
 from __future__ import annotations
 
+import sys
 import tempfile
-import tomllib
 from pathlib import Path
 
-import boto3
 import gdown
-from botocore.config import Config as BotocoreConfig
-from botocore.exceptions import ClientError
 from dotenv import dotenv_values
 
 ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(ROOT))
 
-env = dotenv_values(ROOT / ".env")
-with open(ROOT / "config" / "config.toml", "rb") as f:
-    _toml = tomllib.load(f)
-
-ASSET_NAMES = ["fitbit", "kindle", "strong"]
-BUCKET: str = _toml["r2"]["bucket_name"]
-
-ENDPOINT = env.get("R2_ENDPOINT_URL") or f"https://{env['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com"
-r2 = boto3.client(
-    "s3",
-    endpoint_url=ENDPOINT,
-    aws_access_key_id=env["R2_ACCESS_KEY_ID"],
-    aws_secret_access_key=env["R2_SECRET_ACCESS_KEY"],
-    config=BotocoreConfig(signature_version="s3v4"),
-    region_name="us-east-1",
-)
-
-
-def _r2_exists(key: str) -> bool:
-    try:
-        r2.head_object(Bucket=BUCKET, Key=key)
-        return True
-    except ClientError:
-        return False
-
+from pipeline.config import PipelineConfig
+from pipeline.r2 import make_client, upload_bytes, exists
 
 def main() -> None:
-    share_url = env.get("DRIVE_SHARE_URL")
-    if not share_url:
-        raise SystemExit("Add DRIVE_SHARE_URL to .env (the public share link for your Drive folder)")
+    config = PipelineConfig.load()
+    r2 = make_client(config)
 
-    print("── Syncing from Google Drive ────────────────────────────────────")
-
+    ASSET_NAMES = ["fitbit", "kindle", "strong"]
+    
+    # Get drive URL from environment
+    env = dotenv_values(ROOT / ".env")
+    drive_url = env.get("DRIVE_SHARE_URL")
+    if not drive_url:
+        print("✗ DRIVE_SHARE_URL not set in .env")
+        sys.exit(1)
+    
+    print(f"Syncing from {drive_url}")
+    
     with tempfile.TemporaryDirectory() as tmp:
-        print("· Downloading from Drive...")
-        gdown.download_folder(url=share_url, output=tmp, use_cookies=False, quiet=True)
-
-        total = 0
-        for source in ASSET_NAMES:
-            source_dir = Path(tmp) / source
-            if not source_dir.exists():
-                print(f"  [{source}] no subfolder found, skipping")
+        tmp_path = Path(tmp)
+        
+        for asset in ASSET_NAMES:
+            asset_dir = tmp_path / asset
+            asset_dir.mkdir()
+            
+            # Download all files from this asset's Drive folder
+            folder_url = f"{drive_url}/{asset}"
+            try:
+                gdown.download_folder(folder_url, output=str(asset_dir), quiet=True)
+            except Exception as e:
+                print(f"  skipping {asset}: {e}")
                 continue
-            for file in sorted(source_dir.iterdir()):
-                if not file.is_file():
-                    continue
-                key = f"raw/{source}/inbox/{file.name}"
-                if _r2_exists(key):
-                    print(f"  [{source}] already in R2: {file.name}")
-                    continue
-                with open(file, "rb") as f:
-                    r2.put_object(Bucket=BUCKET, Key=key, Body=f)
-                print(f"  [{source}] → {key}")
-                total += 1
-
-    print(f"✓ {total} new file(s) synced\n")
+            
+            # Upload new files to R2 inbox
+            for file_path in asset_dir.rglob("*"):
+                if file_path.is_file():
+                    relative_path = file_path.relative_to(asset_dir)
+                    r2_key = f"bronze/inbox/{asset}/{relative_path}"
+                    
+                    if exists(r2, r2_key):
+                        print(f"  skipping {r2_key} (already exists)")
+                        continue
+                    
+                    with open(file_path, "rb") as f:
+                        data = f.read()
+                    
+                    upload_bytes(r2, r2_key, data)
+                    print(f"  uploaded {r2_key}")
 
 
 if __name__ == "__main__":

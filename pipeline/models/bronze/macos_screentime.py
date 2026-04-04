@@ -19,7 +19,7 @@ from datetime import date
 from pathlib import Path
 
 from pipeline import r2 as R2
-from pipeline.config import Config, Secrets
+from pipeline.config import PipelineConfig
 from pipeline.r2 import R2Client
 
 _DB = Path.home() / "Library/Application Support/Knowledge/knowledgeC.db"
@@ -42,7 +42,7 @@ ORDER BY
 """
 
 
-def macos_screentime(r2: R2Client, input_key: str, output_key: str, secrets: Secrets | None = None, config: Config | None = None) -> None:  # noqa: ARG001
+def macos_screentime(r2: R2Client, input_key: str, output_key: str, config: PipelineConfig | None = None) -> None:  # noqa: ARG001
     if config and config.runtime_env == "local":
         records = _query_db()
         filename = f"screentime_{date.today().isoformat()}.json"

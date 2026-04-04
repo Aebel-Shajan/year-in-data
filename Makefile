@@ -1,4 +1,4 @@
-.PHONY: help install install-python install-node up down console setup-r2 pipeline sync-macos install-macos-cron uninstall-macos-cron test dev build lint format clean
+.PHONY: help install install-python install-node up down console setup-r2 pipeline export-json sync-macos install-macos-cron uninstall-macos-cron test dev build lint format clean
 
 PLIST_LABEL = com.yearindata.macos
 PLIST_PATH  = ~/Library/LaunchAgents/$(PLIST_LABEL).plist
@@ -41,6 +41,9 @@ pipeline: ## Sync from Drive and run the data pipeline
 
 sync-macos: ## Sync screen time to R2 (run manually or via launchd)
 	uv run python scripts/sync_macos.py
+
+export-json: ## Export gold tables
+	uv run python scripts/export_json.py
 
 install-macos-cron: ## Install launchd job to sync screen time daily at 9 AM
 	mkdir -p $(PROJECT_DIR)/logs

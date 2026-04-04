@@ -25,7 +25,7 @@ import polars as pl
 from botocore.config import Config as BotocoreConfig
 from botocore.exceptions import ClientError
 
-from pipeline.config import Config, Secrets
+from pipeline.config import PipelineConfig
 
 
 @dataclass
@@ -35,16 +35,12 @@ class R2Client:
     public_url: str
 
 
-def make_client(secrets: Secrets, config: Config) -> R2Client:
-    endpoint = (
-        secrets.r2_endpoint_url
-        or f"https://{secrets.r2_account_id}.r2.cloudflarestorage.com"
-    )
+def make_client(config: PipelineConfig) -> R2Client:
     client = boto3.client(
         "s3",
-        endpoint_url=endpoint,
-        aws_access_key_id=secrets.r2_access_key_id,
-        aws_secret_access_key=secrets.r2_secret_access_key,
+        endpoint_url=config.endpoint_url,
+        aws_access_key_id=config.secrets.r2_access_key_id,
+        aws_secret_access_key=config.secrets.r2_secret_access_key,
         config=BotocoreConfig(signature_version="s3v4"),
         region_name="auto",
     )

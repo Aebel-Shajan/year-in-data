@@ -8,43 +8,19 @@ Run this once after `make up` before using `make pipeline` or `make dev` locally
 from __future__ import annotations
 
 import json
-import shutil
 import subprocess
 import sys
 import time
-import tomllib
 import urllib.request
 from pathlib import Path
 
-import boto3
-from botocore.config import Config
 from botocore.exceptions import ClientError
-from dotenv import dotenv_values
 
 ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(ROOT))
 
-
-def _load_config() -> tuple[str, str, object]:
-    env_file = ROOT / ".env"
-    if not env_file.exists():
-        shutil.copy(ROOT / ".env.local.example", env_file)
-        print("✓ Created .env from .env.local.example")
-
-    env = dotenv_values(env_file)
-    with open(ROOT / "config" / "test.toml", "rb") as f:
-        toml = tomllib.load(f)
-
-    endpoint = env.get("R2_ENDPOINT_URL") or "http://localhost:9000"
-    bucket = toml["r2"]["bucket_name"]
-    r2 = boto3.client(
-        "s3",
-        endpoint_url=endpoint,
-        aws_access_key_id=env["R2_ACCESS_KEY_ID"],
-        aws_secret_access_key=env["R2_SECRET_ACCESS_KEY"],
-        config=Config(signature_version="s3v4"),
-        region_name="us-east-1",
-    )
-    return endpoint, bucket, r2
+from pipeline.config import PipelineConfig
+import pipeline.r2 as R2
 
 
 def ensure_minio(endpoint: str) -> None:
@@ -66,9 +42,9 @@ def ensure_minio(endpoint: str) -> None:
 
 def ensure_bucket(r2, bucket: str) -> None:
     try:
-        r2.head_bucket(Bucket=bucket)
+        r2.client.head_bucket(Bucket=bucket)
     except ClientError:
-        r2.create_bucket(Bucket=bucket)
+        r2.client.create_bucket(Bucket=bucket)
         print(f"✓ Created bucket '{bucket}'")
 
     policy = json.dumps({
@@ -80,14 +56,16 @@ def ensure_bucket(r2, bucket: str) -> None:
             "Resource": [f"arn:aws:s3:::{bucket}/web/*"],
         }],
     })
-    r2.put_bucket_policy(Bucket=bucket, Policy=policy)
+    r2.client.put_bucket_policy(Bucket=bucket, Policy=policy)
     print(f"✓ Bucket '{bucket}' ready")
 
 
 def main() -> None:
-    endpoint, bucket, r2 = _load_config()
-    ensure_minio(endpoint)
-    ensure_bucket(r2, bucket)
+    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
+
+    r2 = R2.make_client(config)
+    ensure_minio(config.endpoint_url)
+    ensure_bucket(r2, config.r2_bucket_name)
 
 
 if __name__ == "__main__":

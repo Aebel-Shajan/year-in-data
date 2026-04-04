@@ -29,9 +29,10 @@ def main() -> None:
     resp.raise_for_status()
 
     result = resp.json().get("result", {})
-    url = result.get("development_url")
+    url = result.get("development_url") or result.get("public_bucket_url")
     if not url:
-        print("✗ development_url not found in response. Enable public access first: make setup-r2", file=sys.stderr)
+        print(f"✗ Could not find public URL in response: {result}", file=sys.stderr)
+        print("  Run 'make setup-r2' first to enable public access.", file=sys.stderr)
         sys.exit(1)
 
     print(url)

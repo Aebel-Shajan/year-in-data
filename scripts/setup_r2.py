@@ -68,7 +68,7 @@ def enable_public_access(endpoint_url: str, bucket: str, api_token: str) -> None
     resp = httpx.put(
         url,
         headers={"Authorization": f"Bearer {api_token}"},
-        json={"allowed_public_access": True},
+        json={"access": "public"},
     )
     if resp.status_code == 200:
         dev_url = resp.json().get("result", {}).get("development_url", "")

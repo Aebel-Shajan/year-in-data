@@ -51,7 +51,7 @@ def make_client(config: PipelineConfig) -> R2Client:
 
 
 def make_web_client(config: PipelineConfig) -> R2Client:
-    return R2Client(client=_boto_client(config), bucket=config.web_bucket_name, public_url=config.web_public_url.rstrip("/"))
+    return R2Client(client=_boto_client(config), bucket=config.web_bucket_name, public_url="")
 
 
 # ── Low-level helpers ─────────────────────────────────────────────────────────

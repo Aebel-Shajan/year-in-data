@@ -2,11 +2,16 @@
 One-time setup for the production Cloudflare R2 buckets.
 
   - Creates pipeline bucket (private) and web bucket (public) if they don't exist
+  - Enables public development URL (pub-*.r2.dev) on the web bucket
   - Applies CORS rules from config/cors.json to the web bucket
 
   uv run python scripts/setup_r2.py
 
 Run once when setting up a new environment, and again whenever cors.json changes.
+
+Requires a Cloudflare API token with R2 edit permission:
+  dash.cloudflare.com → My Profile → API Tokens → Create Token → R2:Edit
+  Add it to .env as CLOUDFLARE_API_TOKEN
 """
 
 from __future__ import annotations
@@ -17,6 +22,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
+
+import httpx
 
 from pipeline.config import PipelineConfig
 from pipeline.r2 import make_client, make_web_client
@@ -32,6 +39,7 @@ def main() -> None:
 
     ensure_bucket(r2, config.r2_bucket_name)
     ensure_bucket(web_r2, config.web_bucket_name)
+    enable_public_access(config.secrets.r2_account_id, config.web_bucket_name, config.secrets.cloudflare_api_token)
     apply_cors(web_r2.client, config.web_bucket_name, cors_rules)
 
     print("✓ R2 setup complete")
@@ -50,6 +58,24 @@ def ensure_bucket(r2, bucket: str) -> None:
             print(f"✓ Bucket '{bucket}' created")
         else:
             raise
+
+
+def enable_public_access(account_id: str, bucket: str, api_token: str) -> None:
+    """Enable the pub-*.r2.dev development URL on a bucket via the Cloudflare REST API."""
+    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/r2/buckets/{bucket}/policy"
+    resp = httpx.put(
+        url,
+        headers={"Authorization": f"Bearer {api_token}"},
+        json={"allowed_public_access": True},
+    )
+    if resp.status_code == 200:
+        dev_url = resp.json().get("result", {}).get("development_url", "")
+        print(f"✓ Public access enabled on '{bucket}'")
+        if dev_url:
+            print(f"  URL: {dev_url}")
+            print(f"  Update web_public_url in config/config.toml if needed")
+    else:
+        print(f"✗ Failed to enable public access: {resp.status_code} {resp.text}")
 
 
 def apply_cors(client, bucket: str, cors_rules: list) -> None:

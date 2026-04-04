@@ -24,32 +24,40 @@ jobs:
           echo ""
           echo "Before running this workflow, make sure you have:"
           echo ""
-          echo "  1. Created an R2 API token in the Cloudflare dashboard"
+          echo "  1. Created an R2 API token (for S3-compatible access)"
           echo "       dash.cloudflare.com → R2 → Manage R2 API Tokens"
           echo "       Permissions: Object Read & Write"
           echo ""
-          echo "  2. Added the following secrets to this GitHub repo"
+          echo "  2. Created a Cloudflare API token (to enable public access)"
+          echo "       dash.cloudflare.com → My Profile → API Tokens → Create Token"
+          echo "       Use template: Edit Cloudflare Workers, or custom with R2:Edit"
+          echo ""
+          echo "  3. Added the following secrets to this GitHub repo"
           echo "       Settings → Secrets → Actions → New repository secret"
-          echo "       (The bucket will be created automatically if it doesn't exist)"
+          echo "       (Buckets are created automatically if they don't exist)"
           echo ""
-          echo "       R2_ACCOUNT_ID         your Cloudflare account ID"
-          echo "       R2_ACCESS_KEY_ID      from the API token created above"
-          echo "       R2_SECRET_ACCESS_KEY  from the API token created above"
+          echo "       R2_ACCOUNT_ID           your Cloudflare account ID"
+          echo "       R2_ACCESS_KEY_ID        from the R2 API token (step 1)"
+          echo "       R2_SECRET_ACCESS_KEY    from the R2 API token (step 1)"
+          echo "       CLOUDFLARE_API_TOKEN    from the API token (step 2)"
           echo ""
-          echo "  3. Updated config/config.toml with:"
-          echo "       r2.bucket_name  — the bucket name to create or connect to"
-          echo "       r2.public_url   — the public URL (if using R2 public access)"
-          echo "       github.username — your GitHub username"
+          echo "  4. Updated config/config.toml with:"
+          echo "       r2.bucket_name      — private pipeline bucket"
+          echo "       r2.web_bucket_name  — public web bucket"
+          echo "       github.username     — your GitHub username"
           echo ""
-          echo "  This step applies CORS rules from config/cors.json."
-          echo "  Re-run this workflow any time cors.json changes."
+          echo "  After this runs, copy the printed pub-*.r2.dev URL into"
+          echo "  r2.web_public_url in config/config.toml."
+          echo ""
+          echo "  Re-run any time cors.json changes."
           echo ""
           echo "════════════════════════════════════════════════════════"
 
-      - name: Apply CORS rules to R2 bucket
+      - name: Create buckets, enable public access, apply CORS
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PIPELINE_GITHUB_TOKEN }}
         run: make setup-r2

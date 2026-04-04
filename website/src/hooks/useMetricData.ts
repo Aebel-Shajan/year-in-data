@@ -9,7 +9,7 @@ export function useMetricData(source: string, metric: string) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const url = `${__R2_PUBLIC_URL__}/web/${source}/${metric}.json`;
+    const url = `${__R2_PUBLIC_URL__}/${source}/${metric}.json`;
     fetch(url)
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} fetching ${url}`);

@@ -4,7 +4,6 @@ runtime_env="local"
 [r2]
 bucket_name     = "year-in-data"
 web_bucket_name = "year-in-data-web"
-web_public_url  = "http://localhost:9000/year-in-data-web"
 
 [github]
 username = "test-user"

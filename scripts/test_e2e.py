@@ -10,7 +10,6 @@ from __future__ import annotations
 import io
 import json
 import os
-import shutil
 import subprocess
 import sys
 import threading
@@ -36,13 +35,8 @@ seed(42)
 
 # ── Load config ───────────────────────────────────────────────────────────────
 
-env_file = ROOT / ".env"
-if not env_file.exists():
-    shutil.copy(ROOT / ".env.local.example", env_file)
-    print("✓ Created .env from .env.local.example")
-
 TEST_CONFIG = ROOT / "config" / "test.toml"
-env = dotenv_values(env_file)
+env = dotenv_values(ROOT / ".env.local.example")
 
 with open(TEST_CONFIG, "rb") as f:
     toml = tomllib.load(f)
@@ -65,14 +59,6 @@ r2 = boto3.client(
 def upload(key: str, data: bytes) -> None:
     r2.put_object(Bucket=BUCKET, Key=key, Body=data)
     print(f"  uploaded {key}")
-
-
-def clear_inbox(source: str) -> None:
-    prefix = f"raw/{source}/inbox/"
-    resp = r2.list_objects_v2(Bucket=BUCKET, Prefix=prefix)
-    for obj in resp.get("Contents", []):
-        if not obj["Key"].endswith(".keep"):
-            r2.delete_object(Bucket=BUCKET, Key=obj["Key"])
 
 
 def days_back(n: int) -> list[date]:
@@ -163,12 +149,10 @@ def main() -> None:
     ensure_minio(ENDPOINT)
     ensure_bucket(r2, BUCKET)
 
-    print("\n── Uploading test data ─────────────────────────────────────────")
-    # for source in ["fitbit", "kindle", "strong"]:
-    #     clear_inbox(source)
-    upload("raw/fitbit/inbox/test_export.zip", make_fitbit_zip())
-    upload("raw/kindle/inbox/test_reading.zip", make_kindle_zip())
-    upload("raw/strong/inbox/test_workouts.csv", make_strong_csv())
+    print("\n── Uploading test data to inbox ────────────────────────────────")
+    upload(f"bronze/inbox/fitbit/test_export.zip", make_fitbit_zip())
+    upload(f"bronze/inbox/kindle/test_reading.zip", make_kindle_zip())
+    upload(f"bronze/inbox/strong/test_workouts.csv", make_strong_csv())
 
     print("\n── Starting mock GitHub API ────────────────────────────────────")
     server, port = start_mock_server()
@@ -178,7 +162,15 @@ def main() -> None:
     result = subprocess.run(
         [sys.executable, "-m", "pipeline.main", "--config", str(TEST_CONFIG)],
         cwd=ROOT,
-        env={**os.environ, "GITHUB_API_URL": f"http://127.0.0.1:{port}"},
+        env={
+            **os.environ,
+            "R2_ACCESS_KEY_ID": env["R2_ACCESS_KEY_ID"] or "",
+            "R2_SECRET_ACCESS_KEY": env["R2_SECRET_ACCESS_KEY"] or "",
+            "R2_ACCOUNT_ID": env.get("R2_ACCOUNT_ID") or "local",
+            "R2_ENDPOINT_URL": env.get("R2_ENDPOINT_URL") or "http://localhost:9000",
+            "GITHUB_TOKEN": env.get("GITHUB_TOKEN") or "test",
+            "GITHUB_API_URL": f"http://127.0.0.1:{port}",
+        },
     )
     server.shutdown()
 

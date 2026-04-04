@@ -3,6 +3,7 @@ from __future__ import annotations
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -28,6 +29,7 @@ class Secrets(BaseSettings):
 class Config:
     """Project-level settings — loaded from config.toml."""
 
+    runtime_env: Literal["local", "github_actions"]
     r2_bucket_name: str
     r2_public_url: str
     github_username: str
@@ -44,6 +46,7 @@ class Config:
         with open(path, "rb") as f:
             data = tomllib.load(f)
         return Config(
+            runtime_env=data["general"]["runtime_env"],
             r2_bucket_name=data["r2"]["bucket_name"],
             r2_public_url=data["r2"]["public_url"],
             github_username=data["github"]["username"],

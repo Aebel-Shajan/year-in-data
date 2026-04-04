@@ -26,7 +26,8 @@ down: ## Stop MinIO and remove data
 	docker compose down
 	rm -rf .minio-data
 
-console: ## Open MinIO web console in browser
+console: ## Open MinIO web console in browser (user: minioadmin / pass: minioadmin)
+	@echo "User: minioadmin  Password: minioadmin"
 	open http://localhost:9001
 
 # ── Pipeline ──────────────────────────────────────────────────────────────────
@@ -55,7 +56,7 @@ uninstall-macos-cron: ## Remove launchd job
 	@echo "Removed: $(PLIST_LABEL)"
 
 test: ## Run end-to-end test with fake data
-	uv run python scripts/sync_drive.py
+# 	uv run python scripts/sync_drive.py
 	uv run python scripts/test_e2e.py
 
 # ── Website ───────────────────────────────────────────────────────────────────

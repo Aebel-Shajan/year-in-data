@@ -36,7 +36,7 @@ env = dotenv_values(ROOT / ".env")
 with open(ROOT / "config" / "config.toml", "rb") as f:
     _toml = tomllib.load(f)
 
-SOURCES = ["fitbit", "kindle", "strong"]
+ASSET_NAMES = ["fitbit", "kindle", "strong"]
 BUCKET: str = _toml["r2"]["bucket_name"]
 
 ENDPOINT = env.get("R2_ENDPOINT_URL") or f"https://{env['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com"
@@ -70,7 +70,7 @@ def main() -> None:
         gdown.download_folder(url=share_url, output=tmp, use_cookies=False, quiet=True)
 
         total = 0
-        for source in SOURCES:
+        for source in ASSET_NAMES:
             source_dir = Path(tmp) / source
             if not source_dir.exists():
                 print(f"  [{source}] no subfolder found, skipping")

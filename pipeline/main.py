@@ -66,7 +66,7 @@ def main() -> None:
     if args.stage in ("bronze", "all"):
         failures += stages.run_bronze(r2, secrets, config)
     if args.stage in ("silver", "all"):
-        failures += stages.run_silver(r2, config)
+        failures += stages.run_silver(r2)
     if args.stage in ("gold", "all"):
         failures += stages.run_gold(r2, start=args.start, end=args.end, dry_run=args.dry_run)
 

@@ -1,8 +1,8 @@
 """
-Bronze asset: github/contributions
+Job: github
 
-Fetches the last 52 weeks of contribution data via the GitHub GraphQL API,
-saves the raw response to the inbox, then archives it to the bronze store.
+Fetches the last 52 weeks of contribution data via the GitHub GraphQL API
+and saves the raw response as JSON to the bronze inbox.
 
 Bronze JSON format: [{date, contributionCount}, ...]
 """
@@ -20,7 +20,7 @@ from pipeline import r2 as R2
 from pipeline.config import Config, Secrets
 from pipeline.r2 import R2Client
 
-SOURCE = "github"
+ASSET_NAME = "github"
 
 _DEFAULT_API_URL = "https://api.github.com/graphql"
 
@@ -42,17 +42,15 @@ query($login: String!, $from: DateTime!, $to: DateTime!) {
 """
 
 
-def materialize(r2: R2Client, secrets: Secrets | None = None, config: Config | None = None) -> None:
-    assert secrets and config, "github bronze requires secrets and config"
+def run(r2: R2Client, secrets: Secrets, config: Config) -> None:
     days = _fetch(secrets, config)
     if not days:
-        print(f"[bronze/{SOURCE}] no contributions returned, skipping")
+        print(f"[jobs/{ASSET_NAME}] no contributions returned, skipping")
         return
 
     filename = f"contributions_{date.today().isoformat()}.json"
-    R2.upload_bytes(r2, R2.inbox_prefix(SOURCE) + filename, json.dumps(days).encode(), "application/json")
-    R2.archive_inbox(r2, SOURCE)
-    print(f"[bronze/{SOURCE}] {len(days)} days → archived")
+    R2.upload_bytes(r2, f"bronze/inbox/{ASSET_NAME}/{filename}", json.dumps(days).encode(), "application/json")
+    print(f"[jobs/{ASSET_NAME}] {len(days)} days → inbox")
 
 
 def _fetch(secrets: Secrets, config: Config) -> list[dict]:

@@ -2,14 +2,14 @@
 Cloudflare R2 client and all storage operations for the pipeline.
 
 Medallion architecture:
-  bronze/inbox/{source}/              ← all raw files land here
-    - file-based sources: user uploads ZIP/CSV
-    - API sources:   ingest() saves raw JSON response
-    - local sources: ingest() dumps query results as JSON
-  bronze/{source}/{YYYY-MM-DD}/       ← archived after bronze_to_silver runs
-  silver/{source}/{metric}.parquet    ← cleaned, normalized, source units, row-level
-  gold/{source}/{metric}.parquet      ← daily aggregated totals, display units
-  web/{source}/{metric}.json          ← public JSON consumed by the website
+  bronze/inbox/{asset_name}/              ← all raw files land here
+    - file-based asset_names: user uploads ZIP/CSV
+    - API asset_names:   ingest() saves raw JSON response
+    - local asset_names: ingest() dumps query results as JSON
+  bronze/{asset_name}/{YYYY-MM-DD}/       ← archived after bronze_to_silver runs
+  silver/{asset_name}/{metric}.parquet    ← cleaned, normalized, asset_name units, row-level
+  gold/{asset_name}/{metric}.parquet      ← daily aggregated totals, display units
+  web/{asset_name}/{metric}.json          ← public JSON consumed by the website
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from __future__ import annotations
 import io
 import json
 from dataclasses import dataclass
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from typing import Literal
 
 import boto3
@@ -95,31 +95,35 @@ def move(r2: R2Client, src: str, dst: str) -> None:
 
 # ── Key-path helpers ──────────────────────────────────────────────────────────
 
-def inbox_prefix(source: str) -> str:
-    return f"bronze/inbox/{source}/"
+def silver_key(location: str) -> str:
+    return f"silver/{location}.parquet"
 
 
-def archive_key(source: str, iso_date: str, filename: str) -> str:
-    return f"bronze/{source}/{iso_date}/{filename}"
+def gold_key(location: str) -> str:
+    return f"gold/{location}.parquet"
 
 
-def silver_key(source: str, metric: str) -> str:
-    return f"silver/{source}/{metric}.parquet"
+def web_key(location: str) -> str:
+    return f"web/{location}.json"
 
 
-def gold_key(source: str, metric: str) -> str:
-    return f"gold/{source}/{metric}.parquet"
-
-
-def web_key(source: str, metric: str) -> str:
-    return f"web/{source}/{metric}.json"
-
-
-def web_public_url(r2: R2Client, source: str, metric: str) -> str:
-    return f"{r2.public_url}/{web_key(source, metric)}"
+def web_public_url(r2: R2Client, location: str) -> str:
+    return f"{r2.public_url}/{web_key(location)}"
 
 
 # ── Parquet helpers ───────────────────────────────────────────────────────────
+
+def latest_date(r2: R2Client, key: str) -> date | None:
+    """Return max(date) - 1 day from a Parquet file, or None if it doesn't exist."""
+    if not exists(r2, key):
+        return None
+    df = pl.read_parquet(io.BytesIO(download_bytes(r2, key)))
+    if df.is_empty() or "date" not in df.columns:
+        return None
+    max_val = df["date"].max()
+    if max_val is None:
+        return None
+    return date.fromisoformat(str(max_val)) - timedelta(days=1)
 
 def load_parquet(
     r2: R2Client,
@@ -178,25 +182,29 @@ def store_parquet(
 
 def export_daily_aggregated_json(
     r2: R2Client,
-    source: str,
-    metric: str,
+    output_key: str,
     unit: str,
     label: str,
 ) -> None:
     """Read the gold Parquet file and write aggregated JSON to web/.
 
+    output_key is the full gold key, e.g. "gold/fitbit/daily_calories.parquet".
+
     Output format:
     {
-      "source": "fitbit", "metric": "calories", "unit": "kcal",
+      "asset_name": "fitbit", "metric": "daily_calories", "unit": "kcal",
       "label": "Calories burned", "updated_at": "2025-01-20",
       "data": [{"date": "2025-01-01", "value": 2100.0}, ...]
     }
     """
-    key = gold_key(source, metric)
-    if not exists(r2, key):
+    if not exists(r2, output_key):
         return
 
-    full = pl.read_parquet(io.BytesIO(download_bytes(r2, key))).sort("date")
+    _, layer, filename = output_key.split("/")
+    metric = filename.removesuffix(".parquet")
+    web_key_path = f"web/{layer}/{metric}.json"
+
+    full = pl.read_parquet(io.BytesIO(download_bytes(r2, output_key))).sort("date")
 
     records: list[dict] = []
     for row in full.iter_rows(named=True):
@@ -208,48 +216,53 @@ def export_daily_aggregated_json(
         records.append(entry)
 
     payload = {
-        "source": source,
+        "asset_name": layer,
         "metric": metric,
         "unit": unit,
         "label": label,
         "updated_at": str(date.today()),
         "data": records,
     }
-    upload_bytes(r2, web_key(source, metric), json.dumps(payload).encode(), "application/json")
+    upload_bytes(r2, web_key_path, json.dumps(payload).encode(), "application/json")
 
 
 # ── Bronze inbox archival ─────────────────────────────────────────────────────
 
-def archive_inbox(r2: R2Client, source: str) -> None:
+def archive_inbox(r2: R2Client, inbox_key: str, archive_prefix: str) -> None:
+    """Move all files from inbox_key/ to archive_prefix/{date}/{filename}.
+
+    inbox_key: e.g. "bronze/inbox/fitbit"
+    archive_prefix: e.g. "bronze/fitbit"
+    """
     now = datetime.now(tz=timezone.utc)
     iso_date = now.date().isoformat()
     timestamp = now.strftime("%Y-%m-%d_%H%M%S")
-    for key in list_keys(r2, inbox_prefix(source)):
+    for key in list_keys(r2, inbox_key + "/"):
         ext = key.rsplit(".", 1)[-1] if "." in key else ""
-        filename = f"{source}_{timestamp}.{ext}"
-        dst = archive_key(source, iso_date, filename)
+        filename = f"{archive_prefix.split('/')[-1]}_{timestamp}.{ext}"
+        dst = f"{archive_prefix}/{iso_date}/{filename}"
         move(r2, key, dst)
         print(f"  archived → {dst}")
 
 
-def list_archived_keys(
+def list_bronze_keys(
     r2: R2Client,
-    source: str,
+    bronze_prefix: str,
     start: date | None = None,
     end: date | None = None,
 ) -> list[str]:
-    """List archived bronze files for a source.
+    """List archived bronze files under bronze_prefix.
 
-    Keys follow the pattern: bronze/{source}/{YYYY-MM-DD}/{filename}
+    bronze_prefix: e.g. "bronze/fitbit" (no trailing slash)
+    Keys follow the pattern: {bronze_prefix}/{YYYY-MM-DD}/{filename}
     start/end filter on the archive folder date (when the file was archived).
     """
-    all_keys = list_keys(r2, f"bronze/{source}/")
+    all_keys = list_keys(r2, bronze_prefix + "/")
     if not start and not end:
         return all_keys
 
     filtered = []
     for key in all_keys:
-        # bronze/{source}/{YYYY-MM-DD}/{filename}
         parts = key.split("/")
         if len(parts) < 4:
             continue

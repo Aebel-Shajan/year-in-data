@@ -16,7 +16,7 @@ class Secrets(BaseSettings):
 
     model_config = SettingsConfigDict(env_file_encoding="utf-8", extra="ignore")
 
-    r2_account_id: str
+    r2_endpoint_url: str
     r2_access_key_id: str
     r2_secret_access_key: str
     cloudflare_api_token: str
@@ -51,10 +51,6 @@ class PipelineConfig:
             data = tomllib.load(f)
         secrets = Secrets(env_file=env_path)
         sources = data.get("sources", {})
-        runtime_env = data["general"]["runtime_env"]
-        endpoint_url = f"https://{secrets.r2_account_id}.r2.cloudflarestorage.com"
-        if runtime_env == "local":
-            endpoint_url = "http://localhost:9000"
 
         return PipelineConfig(
             runtime_env=data["general"]["runtime_env"],
@@ -63,7 +59,7 @@ class PipelineConfig:
             web_public_url=data["r2"]["web_public_url"],
             github_username=data["github"]["username"],
             secrets=secrets,
-            endpoint_url=endpoint_url,
+            endpoint_url=secrets.r2_endpoint_url,
             tags_to_run=_parse_tags("PIPELINE_TAGS_TO_RUN") or sources.get("tags_to_run", []),
             tags_to_ignore=_parse_tags("PIPELINE_TAGS_TO_IGNORE") or sources.get("tags_to_ignore", [])
         )

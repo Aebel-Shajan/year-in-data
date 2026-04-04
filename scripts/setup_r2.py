@@ -39,7 +39,8 @@ def main() -> None:
 
     ensure_bucket(r2, config.r2_bucket_name)
     ensure_bucket(web_r2, config.web_bucket_name)
-    enable_public_access(config.secrets.r2_account_id, config.web_bucket_name, config.secrets.cloudflare_api_token)
+    if config.runtime_env != "local":
+        enable_public_access(config.endpoint_url, config.web_bucket_name, config.secrets.cloudflare_api_token)
     apply_cors(web_r2.client, config.web_bucket_name, cors_rules)
 
     print("✓ R2 setup complete")
@@ -60,8 +61,9 @@ def ensure_bucket(r2, bucket: str) -> None:
             raise
 
 
-def enable_public_access(account_id: str, bucket: str, api_token: str) -> None:
+def enable_public_access(endpoint_url: str, bucket: str, api_token: str) -> None:
     """Enable the pub-*.r2.dev development URL on a bucket via the Cloudflare REST API."""
+    account_id = endpoint_url.removeprefix("https://").split(".")[0]
     url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/r2/buckets/{bucket}/policy"
     resp = httpx.put(
         url,

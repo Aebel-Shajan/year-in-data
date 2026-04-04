@@ -2,11 +2,12 @@
 runtime_env="github_actions"
 
 [r2]
-bucket_name = "year-in-data"
-public_url  = "https://pub-4c3162b076d04dfc90201a5002cb0c74.r2.dev"
+bucket_name     = "year-in-data"
+web_bucket_name = "year-in-data-web"
+web_public_url  = "https://pub-<web-bucket-id>.r2.dev"
 
 [github]
-username = "your-github-username"
+username = "aebel-shajan"
 
 [sources]
 # Run only these pipelines (empty = run all)

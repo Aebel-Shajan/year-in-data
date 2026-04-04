@@ -1,5 +1,5 @@
 """
-Export gold-layer Parquet files to web-facing JSON in R2.
+Export gold-layer Parquet files to the public web bucket as JSON.
 
 Run as part of the website deploy process to publish the latest gold data
 before the site is built.
@@ -21,12 +21,13 @@ from pipeline.stages import GOLD_MODELS
 
 def main() -> None:
     ROOT = Path(__file__).parent.parent
-    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
-    r2= R2.make_client(config)
+    config = PipelineConfig.load(ROOT / "config" / "config.toml", ".env")
+    r2 = R2.make_client(config)
+    web_r2 = R2.make_web_client(config)
     for model in GOLD_MODELS:
-        R2.export_daily_aggregated_json(r2, model.output_key, model.unit, model.label)
+        R2.export_daily_aggregated_json(r2, web_r2, model.output_key, model.unit, model.label)
         _, layer, filename = model.output_key.split("/")
-        print(f"  exported web/{layer}/{filename.removesuffix('.parquet')}.json")
+        print(f"  exported {layer}/{filename.removesuffix('.parquet')}.json → {config.web_bucket_name}")
 
 
 if __name__ == "__main__":

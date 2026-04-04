@@ -8,11 +8,11 @@ Users upload Kindle Google Takeout ZIPs manually to the inbox.
 from __future__ import annotations
 
 from pipeline import r2 as R2
-from pipeline.config import Config, Secrets
+from pipeline.config import PipelineConfig
 from pipeline.r2 import R2Client
 
 
-def kindle_zip(r2: R2Client, input_key: str, output_key: str, secrets: Secrets | None = None, config: Config | None = None) -> None:  # noqa: ARG001
+def kindle_zip(r2: R2Client, input_key: str, output_key: str, config: PipelineConfig | None = None) -> None:  # noqa: ARG001
     keys = R2.list_keys(r2, input_key + "/")
     if not keys:
         print(f"[{output_key}] inbox empty, skipping")

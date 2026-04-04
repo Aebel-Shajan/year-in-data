@@ -12,59 +12,51 @@ Run once when setting up a new environment, and again whenever cors.json changes
 from __future__ import annotations
 
 import json
-import tomllib
+import sys
 from pathlib import Path
 
-import boto3
-from botocore.config import Config
-from botocore.exceptions import ClientError
-from dotenv import dotenv_values
-
 ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(ROOT))
 
-env = dotenv_values(ROOT / ".env")
-with open(ROOT / "config" / "config.toml", "rb") as f:
-    toml = tomllib.load(f)
-with open(ROOT / "config" / "cors.json") as f:
-    cors_rules = json.load(f)
+from pipeline.config import PipelineConfig
+from pipeline.r2 import make_client
 
-endpoint = env.get("R2_ENDPOINT_URL") or f"https://{env['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com"
-bucket = toml["r2"]["bucket_name"]
+def main() -> None:
+    config = PipelineConfig.load()
+    r2 = make_client(config)
+    
+    with open(ROOT / "config" / "cors.json") as f:
+        cors_rules = json.load(f)
 
-client = boto3.client(
-    "s3",
-    endpoint_url=endpoint,
-    aws_access_key_id=env["R2_ACCESS_KEY_ID"],
-    aws_secret_access_key=env["R2_SECRET_ACCESS_KEY"],
-    config=Config(signature_version="s3v4"),
-    region_name="auto",
-)
+    # Check bucket exists
+    check_bucket(r2, config.r2_bucket_name)
+    
+    # Apply CORS rules
+    apply_cors(r2.client, config.r2_bucket_name, cors_rules)
+    
+    print("✓ R2 bucket setup complete")
 
 
-def check_bucket() -> None:
+def check_bucket(r2, bucket: str) -> None:
+    from botocore.exceptions import ClientError
+    
     try:
-        client.head_bucket(Bucket=bucket)
+        r2.client.head_bucket(Bucket=bucket)
         print(f"· Bucket '{bucket}' found")
     except ClientError as e:
         code = e.response["Error"]["Code"]
         if code in ("404", "NoSuchBucket"):
-            print(f"✗ Bucket '{bucket}' not found — create it in the Cloudflare dashboard first")
-        else:
-            print(f"✗ Could not access bucket '{bucket}': {e}")
-        raise SystemExit(1)
+            raise SystemExit(f"✗ Bucket '{bucket}' does not exist. Create it in Cloudflare dashboard first.")
+        raise
 
 
-def apply_cors() -> None:
-    client.put_bucket_cors(
-        Bucket=bucket,
-        CORSConfiguration={"CORSRules": cors_rules},
-    )
-    origins = [o for rule in cors_rules for o in rule["AllowedOrigins"]]
-    print(f"✓ CORS applied — allowed origins: {origins}")
+def apply_cors(client, bucket: str, cors_rules: dict) -> None:
+    try:
+        client.put_bucket_cors(Bucket=bucket, CORSConfiguration=cors_rules)
+        print(f"✓ CORS rules applied to '{bucket}'")
+    except Exception as e:
+        print(f"✗ Failed to apply CORS rules: {e}")
 
 
 if __name__ == "__main__":
-    check_bucket()
-    apply_cors()
-    print(f"\n✓ Bucket '{bucket}' is ready.")
-    print("  To enable public access: Cloudflare dashboard → R2 → your bucket → Settings → Public access")
+    main()

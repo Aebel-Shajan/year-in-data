@@ -9,56 +9,22 @@ from __future__ import annotations
 
 import io
 import json
-import os
-import subprocess
 import sys
 import threading
-import time
-import tomllib
-import urllib.request
 import zipfile
 from datetime import date, timedelta
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
-from random import randint, seed
-
-import boto3
-from botocore.config import Config
+from random import randint
 from botocore.exceptions import ClientError
-from dotenv import dotenv_values
 
 ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
-from setup_local import ensure_bucket, ensure_minio  # noqa: E402
+sys.path.insert(0, str(ROOT))
 
-seed(42)
-
-# ── Load config ───────────────────────────────────────────────────────────────
-
-TEST_CONFIG = ROOT / "config" / "test.toml"
-env = dotenv_values(ROOT / ".env.local.example")
-
-with open(TEST_CONFIG, "rb") as f:
-    toml = tomllib.load(f)
-
-ENDPOINT = env.get("R2_ENDPOINT_URL") or "http://localhost:9000"
-BUCKET = toml["r2"]["bucket_name"]
-
-r2 = boto3.client(
-    "s3",
-    endpoint_url=ENDPOINT,
-    aws_access_key_id=env["R2_ACCESS_KEY_ID"],
-    aws_secret_access_key=env["R2_SECRET_ACCESS_KEY"],
-    config=Config(signature_version="s3v4"),
-    region_name="us-east-1",
-)
-
-
-# ── Helpers ───────────────────────────────────────────────────────────────────
-
-def upload(key: str, data: bytes) -> None:
-    r2.put_object(Bucket=BUCKET, Key=key, Body=data)
-    print(f"  uploaded {key}")
+from pipeline.config import PipelineConfig
+from pipeline.r2 import make_client, upload_bytes, exists, export_daily_aggregated_json
+from pipeline import stages
+from pipeline.stages import GOLD_MODELS
 
 
 def days_back(n: int) -> list[date]:
@@ -142,66 +108,115 @@ def start_mock_server() -> tuple[HTTPServer, int]:
     return server, port
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+def ensure_minio_running(endpoint: str) -> None:
+    """Ensure MinIO is running and accessible."""
+    import urllib.request
+    import time
+    import subprocess
+    
+    # Start MinIO with docker-compose
+    subprocess.run(["docker", "compose", "up", "-d"], check=True, cwd=ROOT)
+    
+    print("· Waiting for MinIO", end="", flush=True)
+    for _ in range(20):
+        try:
+            urllib.request.urlopen(f"{endpoint}/minio/health/live", timeout=1)
+            print(" ✓")
+            return
+        except Exception:
+            print(".", end="", flush=True)
+            time.sleep(1)
+
+    print("\n✗ MinIO did not start. Run: docker compose logs minio")
+    sys.exit(1)
+
+
+def ensure_bucket(r2, bucket: str) -> None:
+    """Ensure the bucket exists with proper policy."""
+    try:
+        r2.client.head_bucket(Bucket=bucket)
+    except ClientError:
+        r2.client.create_bucket(Bucket=bucket)
+        print(f"✓ Created bucket '{bucket}'")
+
+    # Set public read policy for web files
+    import json
+    policy = json.dumps({
+        "Version": "2012-10-17",
+        "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"AWS": "*"},
+            "Action": ["s3:GetObject"],
+            "Resource": [f"arn:aws:s3:::{bucket}/web/*"],
+        }],
+    })
+    r2.client.put_bucket_policy(Bucket=bucket, Policy=policy)
+    print(f"✓ Bucket '{bucket}' ready")
+
+
+def upload_test_data(r2) -> None:
+    """Upload fake test data to the bronze inbox."""
+    upload_bytes(r2, "bronze/inbox/fitbit/test_export.zip", make_fitbit_zip(), "application/zip")
+    print("  uploaded fitbit test data")
+    
+    upload_bytes(r2, "bronze/inbox/kindle/test_reading.zip", make_kindle_zip(), "application/zip")
+    print("  uploaded kindle test data")
+    
+    upload_bytes(r2, "bronze/inbox/strong/test_workouts.csv", make_strong_csv(), "text/csv")
+    print("  uploaded strong test data")
 
 def main() -> None:
+    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
+
     print("── Starting MinIO ──────────────────────────────────────────────")
-    ensure_minio(ENDPOINT)
-    ensure_bucket(r2, BUCKET)
+
+    r2 = make_client(config)
+    print(config.endpoint_url)
+    ensure_minio_running(config.endpoint_url)
+    ensure_bucket(r2, config.r2_bucket_name)
 
     print("\n── Uploading test data to inbox ────────────────────────────────")
-    upload(f"bronze/inbox/fitbit/test_export.zip", make_fitbit_zip())
-    upload(f"bronze/inbox/kindle/test_reading.zip", make_kindle_zip())
-    upload(f"bronze/inbox/strong/test_workouts.csv", make_strong_csv())
+    upload_test_data(r2)
 
     print("\n── Starting mock GitHub API ────────────────────────────────────")
-    server, port = start_mock_server()
+    _, port = start_mock_server()
     print(f"  listening on http://127.0.0.1:{port}")
 
-    print("\n── Running pipeline ────────────────────────────────────────────")
-    result = subprocess.run(
-        [sys.executable, "-m", "pipeline.main", "--config", str(TEST_CONFIG)],
-        cwd=ROOT,
-        env={
-            **os.environ,
-            "R2_ACCESS_KEY_ID": env["R2_ACCESS_KEY_ID"] or "",
-            "R2_SECRET_ACCESS_KEY": env["R2_SECRET_ACCESS_KEY"] or "",
-            "R2_ACCOUNT_ID": env.get("R2_ACCOUNT_ID") or "local",
-            "R2_ENDPOINT_URL": env.get("R2_ENDPOINT_URL") or "http://localhost:9000",
-            "GITHUB_TOKEN": env.get("GITHUB_TOKEN") or "test",
-            "GITHUB_API_URL": f"http://127.0.0.1:{port}",
-        },
-    )
+    # Set the mock server URL in environment for the pipeline
+    import os
+    os.environ["GITHUB_API_URL"] = f"http://127.0.0.1:{port}"
 
-    if result.returncode != 0:
-        print("\n✗ Pipeline exited with errors")
+    print("\n── Running pipeline ────────────────────────────────────────────")
+    failures = []
+    failures += stages.run_bronze(r2, config)
+    failures += stages.run_silver(r2, config)
+    failures += stages.run_gold(r2, config)
+
+    if failures:
+        print(f"\nE2E test failed ✗: {', '.join(failures)}")
         sys.exit(1)
 
-    print("\n── Checking outputs ────────────────────────────────────────────")
-    expected = [
-        "web/fitbit/daily_calories.json",
-        "web/fitbit/daily_sleep.json",
-        "web/fitbit/daily_steps.json",
-        "web/fitbit/daily_exercise.json",
-        "web/kindle/daily_reading.json",
-        "web/github/daily_contributions.json",
-        "web/strong/daily_workouts.json",
-    ]
-    all_ok = True
-    for key in expected:
-        try:
-            r2.head_object(Bucket=BUCKET, Key=key)
-            print(f"  ✓ {key}")
-        except ClientError:
-            print(f"  ✗ {key}  ← MISSING")
-            all_ok = False
+    print("\n── Exporting web JSON ──────────────────────────────────────────")
+    gold_models = stages._filter(GOLD_MODELS, config)
+    for model in gold_models:
+        export_daily_aggregated_json(r2, model.output_key, model.unit, model.label)
+        _, layer, filename = model.output_key.split("/")
+        print(f"  exported web/{layer}/{filename.removesuffix('.parquet')}.json")
+
+    print("\n── Verifying outputs ───────────────────────────────────────────")
+    missing = []
+    for model in gold_models:
+        _, layer, filename = model.output_key.split("/")
+        web_key = f"web/{layer}/{filename.removesuffix('.parquet')}.json"
+        if not exists(r2, web_key):
+            missing.append(web_key)
 
     print()
-    if all_ok:
-        print("E2E test passed ✓")
-    else:
-        print("E2E test failed ✗")
+    if missing:
+        print(f"E2E test failed ✗: missing web files: {', '.join(missing)}")
         sys.exit(1)
+    else:
+        print("E2E test passed ✓")
 
 
 if __name__ == "__main__":

@@ -18,7 +18,7 @@ from datetime import date
 import httpx
 
 from pipeline import r2 as R2
-from pipeline.config import Config, Secrets
+from pipeline.config import PipelineConfig
 from pipeline.r2 import R2Client
 
 _BASE = "https://thegymgroup.netpulse.com/np"
@@ -34,10 +34,10 @@ _HEADERS = {
 }
 
 
-def gymgroup_api(r2: R2Client, input_key: str, output_key: str, secrets: Secrets | None = None, config: Config | None = None) -> None:
-    assert secrets and config, "gymgroup bronze requires secrets and config"
+def gymgroup_api(r2: R2Client, input_key: str, output_key: str, config: PipelineConfig | None = None) -> None:
+    assert config, "gymgroup bronze requires secrets and config"
     if config.runtime_env == "local":
-        check_ins = _fetch(secrets.gym_group_username, secrets.gym_group_password)
+        check_ins = _fetch(config.secrets.gym_group_username, config.secrets.gym_group_password)
         if check_ins:
             filename = f"checkins_{date.today().isoformat()}.json"
             R2.upload_bytes(r2, input_key + "/" + filename, json.dumps(check_ins).encode(), "application/json")

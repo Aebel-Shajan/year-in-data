@@ -15,16 +15,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from pipeline import r2 as R2
-from pipeline.config import Config, Secrets
-from pipeline.r2 import make_client
+from pipeline.config import PipelineConfig
 from pipeline.stages import GOLD_MODELS
 
 
 def main() -> None:
-    secrets = Secrets()  # type: ignore[call-arg]
-    config = Config.load()
-    r2 = make_client(secrets, config)
-
+    ROOT = Path(__file__).parent.parent
+    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
+    r2= R2.make_client(config)
     for model in GOLD_MODELS:
         R2.export_daily_aggregated_json(r2, model.output_key, model.unit, model.label)
         _, layer, filename = model.output_key.split("/")

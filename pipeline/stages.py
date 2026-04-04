@@ -45,7 +45,7 @@ from pipeline.models.gold.daily_screen_time import daily_screen_time
 from pipeline.models.gold.daily_sleep import daily_sleep
 from pipeline.models.gold.daily_steps import daily_steps
 from pipeline.models.gold.daily_workouts import daily_workouts
-from pipeline.config import Config, Secrets
+from pipeline.config import PipelineConfig
 from pipeline.r2 import R2Client
 
 BRONZE_MODELS = [
@@ -85,13 +85,13 @@ GOLD_MODELS = [
 ]
 
 
-def run_bronze(r2: R2Client, secrets: Secrets, config: Config, tags: Collection[str] | None = None) -> list[str]:
+def run_bronze(r2: R2Client, config: PipelineConfig, tags: Collection[str] | None = None) -> list[str]:
     """Run bronze models, filtered by config tags (or explicit tags override)."""
     failures: list[str] = []
     for model in _filter(BRONZE_MODELS, config, tags):
         print(f"── {model.output_key} ──────────────────────")
         try:
-            model.fn(r2, model.input_key, model.output_key, secrets=secrets, config=config)
+            model.fn(r2, model.input_key, model.output_key, config=config)
         except Exception:
             traceback.print_exc()
             failures.append(model.output_key)
@@ -100,7 +100,7 @@ def run_bronze(r2: R2Client, secrets: Secrets, config: Config, tags: Collection[
 
 def run_silver(
     r2: R2Client,
-    config: Config,
+    config: PipelineConfig,
     start: date | None = None,
     end: date | None = None,
     tags: Collection[str] | None = None,
@@ -120,7 +120,7 @@ def run_silver(
 
 def run_gold(
     r2: R2Client,
-    config: Config,
+    config: PipelineConfig,
     start: date | None = None,
     end: date | None = None,
     dry_run: bool = False,
@@ -141,7 +141,7 @@ def run_gold(
 
 # ── Internal helpers ──────────────────────────────────────────────────────────
 
-def _filter(models: list[Model], config: Config, tags: Collection[str] | None = None) -> list[Model]:
+def _filter(models: list[Model], config: PipelineConfig, tags: Collection[str] | None = None) -> list[Model]:
     """Filter models by tag. Explicit tags override config; config tags_to_run/tags_to_ignore apply otherwise."""
     if tags is not None:
         return [m for m in models if m.tag in tags]

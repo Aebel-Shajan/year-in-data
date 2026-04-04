@@ -16,14 +16,14 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 from pipeline import r2 as R2
-from pipeline.config import Config, Secrets
+from pipeline.config import PipelineConfig
 from pipeline.r2 import R2Client
 
 _HISTORY_FILE = Path.home() / ".zsh_history"
 _LINE_RE = re.compile(r"^: (\d+):\d+;(.+)$")
 
 
-def macos_commands(r2: R2Client, input_key: str, output_key: str, secrets: Secrets | None = None, config: Config | None = None) -> None:  # noqa: ARG001
+def macos_commands(r2: R2Client, input_key: str, output_key: str, config: PipelineConfig | None = None) -> None:  # noqa: ARG001
     records = _parse_history()
     if not records:
         print(f"[{output_key}] no commands found, skipping")

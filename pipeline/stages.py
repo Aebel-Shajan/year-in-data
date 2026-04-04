@@ -8,7 +8,7 @@ Stages run in order: bronze → silver → gold
   gold   — aggregate silver → gold Parquet + web JSON
 
 Each stage function accepts an optional `tags` set to run only assets with matching tags.
-Tags: "physical", "productivity", "digital"
+Tags: "fitbit", "github", "gymgroup", "kindle", "strong", "macos_commands", "macos_screentime"
 """
 
 from __future__ import annotations
@@ -49,48 +49,46 @@ from pipeline.config import Config, Secrets
 from pipeline.r2 import R2Client
 
 BRONZE_MODELS = [
-    Model(fitbit_zip,              "physical",    "bronze/inbox/fitbit",      "bronze/fitbit"),
-    Model(github_api_response,     "productivity", "bronze/inbox/github",     "bronze/github"),
-    Model(gymgroup_api,            "physical",    "bronze/inbox/gymgroup",    "bronze/gymgroup"),
-    Model(kindle_zip,              "productivity", "bronze/inbox/kindle",     "bronze/kindle"),
-    Model(bronze_macos_commands,   "productivity", "bronze/inbox/zsh_history","bronze/zsh_history"),
-    Model(bronze_macos_screentime, "digital",     "bronze/inbox/screentime",  "bronze/screentime"),
-    Model(strong_csv,              "physical",    "bronze/inbox/strong",      "bronze/strong"),
+    Model(fitbit_zip,              "fitbit",          "bronze/inbox/fitbit",           "bronze/fitbit"),
+    Model(github_api_response,     "github",          "bronze/inbox/github",           "bronze/github"),
+    Model(gymgroup_api,            "gymgroup",        "bronze/inbox/gymgroup",         "bronze/gymgroup"),
+    Model(kindle_zip,              "kindle",          "bronze/inbox/kindle",           "bronze/kindle"),
+    Model(bronze_macos_commands,   "macos_commands",  "bronze/inbox/macos_commands",   "bronze/macos_commands"),
+    Model(bronze_macos_screentime, "macos_screentime","bronze/inbox/macos_screentime", "bronze/macos_screentime"),
+    Model(strong_csv,              "strong",          "bronze/inbox/strong",           "bronze/strong"),
 ]
 
 SILVER_MODELS = [
-    Model(fitbit_calories,      "physical",     "bronze/fitbit",       "silver/fitbit/calories.parquet"),
-    Model(fitbit_exercise,      "physical",     "bronze/fitbit",       "silver/fitbit/exercise.parquet"),
-    Model(fitbit_sleep,         "physical",     "bronze/fitbit",       "silver/fitbit/sleep.parquet"),
-    Model(fitbit_steps,         "physical",     "bronze/fitbit",       "silver/fitbit/steps.parquet"),
-    Model(github_contributions, "productivity", "bronze/github",       "silver/github/contributions.parquet"),
-    Model(gymgroup_visits,      "physical",     "bronze/gymgroup",     "silver/gymgroup/visits.parquet"),
-    Model(kindle_reading,       "productivity", "bronze/kindle",       "silver/kindle/reading.parquet"),
-    Model(macos_commands,       "productivity", "bronze/zsh_history",  "silver/zsh_history/commands.parquet"),
-    Model(macos_screentime,     "digital",      "bronze/screentime",   "silver/screentime/app_usage.parquet"),
-    Model(strong_workouts,      "physical",     "bronze/strong",       "silver/strong/workouts.parquet"),
+    Model(fitbit_calories,      "fitbit",          "bronze/fitbit",          "silver/fitbit/calories.parquet"),
+    Model(fitbit_exercise,      "fitbit",          "bronze/fitbit",          "silver/fitbit/exercise.parquet"),
+    Model(fitbit_sleep,         "fitbit",          "bronze/fitbit",          "silver/fitbit/sleep.parquet"),
+    Model(fitbit_steps,         "fitbit",          "bronze/fitbit",          "silver/fitbit/steps.parquet"),
+    Model(github_contributions, "github",          "bronze/github",          "silver/github/contributions.parquet"),
+    Model(gymgroup_visits,      "gymgroup",        "bronze/gymgroup",        "silver/gymgroup/visits.parquet"),
+    Model(kindle_reading,       "kindle",          "bronze/kindle",          "silver/kindle/reading.parquet"),
+    Model(macos_commands,       "macos_commands",  "bronze/macos_commands",  "silver/macos_commands/commands.parquet"),
+    Model(macos_screentime,     "macos_screentime","bronze/macos_screentime","silver/macos_screentime/app_usage.parquet"),
+    Model(strong_workouts,      "strong",          "bronze/strong",          "silver/strong/workouts.parquet"),
 ]
 
 GOLD_MODELS = [
-    Model(daily_calories,     "physical",     "silver/fitbit/calories.parquet",       "gold/fitbit/daily_calories.parquet",           "kcal",    "Calories burned"),
-    Model(daily_exercise,     "physical",     "silver/fitbit/exercise.parquet",        "gold/fitbit/daily_exercise.parquet",           "minutes", "Active minutes"),
-    Model(daily_sleep,        "physical",     "silver/fitbit/sleep.parquet",           "gold/fitbit/daily_sleep.parquet",              "hours",   "Sleep duration"),
-    Model(daily_steps,        "physical",     "silver/fitbit/steps.parquet",           "gold/fitbit/daily_steps.parquet",              "steps",   "Steps"),
-    Model(daily_gym_visits,   "physical",     "silver/gymgroup/visits.parquet",        "gold/gymgroup/daily_gym_visits.parquet",        "minutes", "Gym duration"),
-    Model(daily_workouts,     "physical",     "silver/strong/workouts.parquet",        "gold/strong/daily_workouts.parquet",           "minutes", "Workout duration"),
-    Model(daily_reading,      "productivity", "silver/kindle/reading.parquet",         "gold/kindle/daily_reading.parquet",            "minutes", "Reading time"),
-    Model(daily_commands,     "productivity", "silver/zsh_history/commands.parquet",   "gold/zsh_history/daily_commands.parquet",      "count",   "Shell commands"),
-    Model(daily_contributions,"productivity", "silver/github/contributions.parquet",   "gold/github/daily_contributions.parquet",      "commits", "GitHub contributions"),
-    Model(daily_screen_time,  "digital",      "silver/screentime/app_usage.parquet",   "gold/screentime/daily_screen_time.parquet",    "minutes", "Screen time"),
+    Model(daily_calories,     "fitbit",          "silver/fitbit/calories.parquet",              "gold/fitbit/daily_calories.parquet",                "kcal",    "Calories burned"),
+    Model(daily_exercise,     "fitbit",          "silver/fitbit/exercise.parquet",              "gold/fitbit/daily_exercise.parquet",                "minutes", "Active minutes"),
+    Model(daily_sleep,        "fitbit",          "silver/fitbit/sleep.parquet",                 "gold/fitbit/daily_sleep.parquet",                   "hours",   "Sleep duration"),
+    Model(daily_steps,        "fitbit",          "silver/fitbit/steps.parquet",                 "gold/fitbit/daily_steps.parquet",                   "steps",   "Steps"),
+    Model(daily_gym_visits,   "gymgroup",        "silver/gymgroup/visits.parquet",              "gold/gymgroup/daily_gym_visits.parquet",             "minutes", "Gym duration"),
+    Model(daily_workouts,     "strong",          "silver/strong/workouts.parquet",              "gold/strong/daily_workouts.parquet",                "minutes", "Workout duration"),
+    Model(daily_reading,      "kindle",          "silver/kindle/reading.parquet",               "gold/kindle/daily_reading.parquet",                 "minutes", "Reading time"),
+    Model(daily_commands,     "macos_commands",  "silver/macos_commands/commands.parquet",      "gold/macos_commands/daily_commands.parquet",        "count",   "Shell commands"),
+    Model(daily_contributions,"github",          "silver/github/contributions.parquet",         "gold/github/daily_contributions.parquet",           "commits", "GitHub contributions"),
+    Model(daily_screen_time,  "macos_screentime","silver/macos_screentime/app_usage.parquet",   "gold/macos_screentime/daily_screen_time.parquet",   "minutes", "Screen time"),
 ]
 
 
 def run_bronze(r2: R2Client, secrets: Secrets, config: Config, tags: Collection[str] | None = None) -> list[str]:
-    """Run bronze models, optionally filtered by tag."""
+    """Run bronze models, filtered by config tags (or explicit tags override)."""
     failures: list[str] = []
-    for model in _filter(BRONZE_MODELS, tags):
-        if not getattr(config, f"run_{model.output_key.split('/')[1]}", False):
-            continue
+    for model in _filter(BRONZE_MODELS, config, tags):
         print(f"── {model.output_key} ──────────────────────")
         try:
             model.fn(r2, model.input_key, model.output_key, secrets=secrets, config=config)
@@ -102,13 +100,14 @@ def run_bronze(r2: R2Client, secrets: Secrets, config: Config, tags: Collection[
 
 def run_silver(
     r2: R2Client,
+    config: Config,
     start: date | None = None,
     end: date | None = None,
     tags: Collection[str] | None = None,
 ) -> list[str]:
-    """Run silver models, optionally filtered by tag."""
+    """Run silver models, filtered by config tags (or explicit tags override)."""
     failures: list[str] = []
-    for model in _filter(SILVER_MODELS, tags):
+    for model in _filter(SILVER_MODELS, config, tags):
         name = model.output_key.rsplit("/", 1)[-1].removesuffix(".parquet")
         print(f"── {name} ──────────────────────")
         try:
@@ -121,14 +120,15 @@ def run_silver(
 
 def run_gold(
     r2: R2Client,
+    config: Config,
     start: date | None = None,
     end: date | None = None,
     dry_run: bool = False,
     tags: Collection[str] | None = None,
 ) -> list[str]:
-    """Run gold models, optionally filtered by tag."""
+    """Run gold models, filtered by config tags (or explicit tags override)."""
     failures: list[str] = []
-    for model in _filter(GOLD_MODELS, tags):
+    for model in _filter(GOLD_MODELS, config, tags):
         name = model.output_key.rsplit("/", 1)[-1].removesuffix(".parquet")
         print(f"── {name} ──────────────────────")
         try:
@@ -141,7 +141,12 @@ def run_gold(
 
 # ── Internal helpers ──────────────────────────────────────────────────────────
 
-def _filter(models: list[Model], tags: Collection[str] | None) -> list[Model]:
-    if tags is None:
-        return models
-    return [m for m in models if m.tag in tags]
+def _filter(models: list[Model], config: Config, tags: Collection[str] | None = None) -> list[Model]:
+    """Filter models by tag. Explicit tags override config; config tags_to_run/tags_to_ignore apply otherwise."""
+    if tags is not None:
+        return [m for m in models if m.tag in tags]
+    if config.tags_to_run:
+        models = [m for m in models if m.tag in config.tags_to_run]
+    if config.tags_to_ignore:
+        models = [m for m in models if m.tag not in config.tags_to_ignore]
+    return models

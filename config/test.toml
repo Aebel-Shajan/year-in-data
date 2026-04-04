@@ -9,10 +9,5 @@ public_url  = "http://localhost:9000/year-in-data"
 username = "test-user"
 
 [sources]
-fitbit    = true
-kindle    = true
-github    = true
-strong    = true
-gymgroup    = false
-screentime  = false
-zsh_history = false
+tags_to_run    = ["fitbit", "kindle", "github", "strong"]
+tags_to_ignore = []

@@ -172,7 +172,6 @@ def main() -> None:
             "GITHUB_API_URL": f"http://127.0.0.1:{port}",
         },
     )
-    server.shutdown()
 
     if result.returncode != 0:
         print("\n✗ Pipeline exited with errors")
@@ -180,14 +179,16 @@ def main() -> None:
 
     print("\n── Checking outputs ────────────────────────────────────────────")
     expected = [
-        ("fitbit", "calories"), ("fitbit", "sleep"),
-        ("fitbit", "steps"),    ("fitbit", "exercise"),
-        ("kindle", "reading"),  ("github", "contributions"),
-        ("strong", "workouts"),
+        "web/fitbit/daily_calories.json",
+        "web/fitbit/daily_sleep.json",
+        "web/fitbit/daily_steps.json",
+        "web/fitbit/daily_exercise.json",
+        "web/kindle/daily_reading.json",
+        "web/github/daily_contributions.json",
+        "web/strong/daily_workouts.json",
     ]
     all_ok = True
-    for source, metric in expected:
-        key = f"web/{source}/{metric}.json"
+    for key in expected:
         try:
             r2.head_object(Bucket=BUCKET, Key=key)
             print(f"  ✓ {key}")

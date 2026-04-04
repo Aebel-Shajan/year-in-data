@@ -5,22 +5,14 @@ on:
     - cron: "0 2 * * 1"  # Every Monday at 02:00 UTC
   workflow_dispatch:      # Allow manual runs from the Actions tab
     inputs:
-      run_fitbit:
-        description: Process Fitbit data
-        type: boolean
-        default: true
-      run_kindle:
-        description: Process Kindle data
-        type: boolean
-        default: true
-      run_github:
-        description: Fetch GitHub contributions
-        type: boolean
-        default: true
-      run_strong:
-        description: Process Strong data
-        type: boolean
-        default: true
+      tags_to_run:
+        description: "Pipelines to run, comma-separated (empty = use config.toml)"
+        type: string
+        default: ""
+      tags_to_ignore:
+        description: "Pipelines to skip, comma-separated (empty = use config.toml)"
+        type: string
+        default: ""
 
 jobs:
   pipeline:
@@ -48,4 +40,6 @@ jobs:
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           GITHUB_TOKEN: ${{ secrets.PIPELINE_GITHUB_TOKEN }}
+          PIPELINE_TAGS_TO_RUN: ${{ github.event.inputs.tags_to_run || '' }}
+          PIPELINE_TAGS_TO_IGNORE: ${{ github.event.inputs.tags_to_ignore || '' }}
         run: make pipeline

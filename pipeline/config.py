@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import os
 import tomllib
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
@@ -33,28 +34,25 @@ class Config:
     r2_bucket_name: str
     r2_public_url: str
     github_username: str
-    run_fitbit: bool
-    run_kindle: bool
-    run_github: bool
-    run_strong: bool
-    run_gymgroup: bool
-    run_screentime: bool
-    run_zsh_history: bool
+    tags_to_run: list[str] = field(default_factory=list)    # empty = run all
+    tags_to_ignore: list[str] = field(default_factory=list)
 
     @staticmethod
     def load(path: Path = _ROOT / "config" / "config.toml") -> "Config":
         with open(path, "rb") as f:
             data = tomllib.load(f)
+        sources = data.get("sources", {})
         return Config(
             runtime_env=data["general"]["runtime_env"],
             r2_bucket_name=data["r2"]["bucket_name"],
             r2_public_url=data["r2"]["public_url"],
             github_username=data["github"]["username"],
-            run_fitbit=data["sources"]["fitbit"],
-            run_kindle=data["sources"]["kindle"],
-            run_github=data["sources"]["github"],
-            run_strong=data["sources"]["strong"],
-            run_gymgroup=data["sources"]["gymgroup"],
-            run_screentime=data["sources"]["screentime"],
-            run_zsh_history=data["sources"]["zsh_history"],
+            tags_to_run=_parse_tags("PIPELINE_TAGS_TO_RUN") or sources.get("tags_to_run", []),
+            tags_to_ignore=_parse_tags("PIPELINE_TAGS_TO_IGNORE") or sources.get("tags_to_ignore", []),
         )
+
+
+def _parse_tags(env_var: str) -> list[str]:
+    """Parse a comma-separated env var into a list of tags, returning [] if unset or empty."""
+    raw = os.getenv(env_var, "").strip()
+    return [t.strip() for t in raw.split(",") if t.strip()]

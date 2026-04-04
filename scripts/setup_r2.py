@@ -39,15 +39,17 @@ def main() -> None:
 
 def check_bucket(r2, bucket: str) -> None:
     from botocore.exceptions import ClientError
-    
+
     try:
         r2.client.head_bucket(Bucket=bucket)
         print(f"· Bucket '{bucket}' found")
     except ClientError as e:
         code = e.response["Error"]["Code"]
         if code in ("404", "NoSuchBucket"):
-            raise SystemExit(f"✗ Bucket '{bucket}' does not exist. Create it in Cloudflare dashboard first.")
-        raise
+            r2.client.create_bucket(Bucket=bucket)
+            print(f"✓ Bucket '{bucket}' created")
+        else:
+            raise
 
 
 def apply_cors(client, bucket: str, cors_rules: dict) -> None:

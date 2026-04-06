@@ -1,5 +1,6 @@
 [general]
 runtime_env="github_actions"
+start=""
 
 [r2]
 bucket_name     = "year-in-data"
@@ -10,6 +11,13 @@ username = "aebel-shajan"
 
 [sources]
 # Run only these pipelines (empty = run all)
-tags_to_run    = ["strong", "gymgroup", "macos_commands", "macos_screentime"]
+tags_to_run    = [
+    # "strong", 
+    "gymgroup", 
+    # "macos_commands",
+    # "macos_screentime",
+    # "fitbit", 
+    # "kindle",
+]
 # Always skip these pipelines
 tags_to_ignore = []

@@ -41,7 +41,10 @@ delete-bucket: ## Empty and delete the R2 bucket (irreversible)
 pipeline: ## Sync from Drive and run the data pipeline
 	uv run python -m pipeline.main
 
-sync-macos: ## Sync screen time to R2 (run manually or via launchd)
+sync-api: ## Fetch GitHub and Gym Group data into the R2 inbox
+	uv run python scripts/sync_api.py
+
+sync-macos: ## Sync screen time and shell history into the R2 inbox (run manually or via launchd)
 	uv run python scripts/sync_macos.py
 
 export-json: ## Export gold tables

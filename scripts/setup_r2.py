@@ -43,7 +43,7 @@ def main() -> None:
     if config.runtime_env != "local":
         enable_r2_dev_public(config.endpoint_url, config.web_bucket_name, config.secrets.cloudflare_api_token)
     apply_cors(web_r2.client, config.web_bucket_name, cors_rules)
-    create_inboxes(r2, config)
+    create_inboxes(r2)
 
     print("✓ R2 setup complete")
 
@@ -93,7 +93,7 @@ def enable_r2_dev_public(endpoint_url: str, bucket: str, api_token: str) -> None
     else:
         print(f"✗ Failed to enable public access: {resp.status_code} {data}")
 
-def create_inboxes(r2, config) -> None:
+def create_inboxes(r2) -> None:
     """Create placeholder objects for each bronze inbox folder."""
     from pipeline.r2 import exists
     for model in BRONZE_MODELS:

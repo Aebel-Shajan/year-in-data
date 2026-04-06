@@ -1,7 +1,7 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-const DEV_WEB_URL = "http://localhost:9000/year-in-data-web";
+const DEV_WEB_URL = "https://pub-e4601d315b694fc3998db0702f6fabaf.r2.dev";
 
 export default defineConfig(({ mode }) => {
   const isDev = mode === "development";

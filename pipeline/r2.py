@@ -240,6 +240,8 @@ def archive_inbox(r2: R2Client, inbox_key: str, archive_prefix: str) -> None:
     iso_date = now.date().isoformat()
     timestamp = now.strftime("%Y-%m-%d_%H%M%S")
     for key in list_keys(r2, inbox_key + "/"):
+        if key.endswith("/.keep"):
+            continue
         ext = key.rsplit(".", 1)[-1] if "." in key else ""
         filename = f"{archive_prefix.split('/')[-1]}_{timestamp}.{ext}"
         dst = f"{archive_prefix}/{iso_date}/{filename}"

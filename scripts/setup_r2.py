@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
@@ -26,8 +27,8 @@ sys.path.insert(0, str(ROOT))
 import httpx
 
 from pipeline.config import PipelineConfig
-from pipeline.r2 import make_client, make_web_client, upload_bytes
-from pipeline.stages import BRONZE_MODELS
+from pipeline.r2 import make_client, make_web_client, upload_bytes, exists
+from pipeline.main import ALL_JOBS
 
 
 def main() -> None:
@@ -63,11 +64,7 @@ def ensure_bucket(r2, bucket: str) -> None:
             raise
 
 
-import httpx
-from urllib.parse import urlparse
-
 def enable_r2_dev_public(endpoint_url: str, bucket: str, api_token: str) -> None:
-    # extract account ID from the endpoint hostname
     host = urlparse(endpoint_url).hostname or ""
     account_id = host.split(".")[0]
 
@@ -89,18 +86,27 @@ def enable_r2_dev_public(endpoint_url: str, bucket: str, api_token: str) -> None
         if enabled:
             print(f"✓ Public r2.dev enabled: https://{domain}")
         else:
-            print(f"⚠️ Public access wasn’t enabled for some reason")
+            print("⚠️ Public access wasn't enabled for some reason")
     else:
         print(f"✗ Failed to enable public access: {resp.status_code} {data}")
 
+
 def create_inboxes(r2) -> None:
-    """Create placeholder objects for each bronze inbox folder."""
-    from pipeline.r2 import exists
-    for model in BRONZE_MODELS:
-        placeholder = model.input_key + "/.keep"
+    """Create placeholder objects for each source inbox folder."""
+    sources = [
+        "fitbit",
+        "github",
+        "gymgroup",
+        "kindle",
+        "macos_commands",
+        "macos_screentime",
+        "strong"
+    ]
+    for src in sources:
+        placeholder = src + "/.keep"
         if not exists(r2, placeholder):
             upload_bytes(r2, placeholder, b"", "application/octet-stream")
-            print(f"  created {model.input_key}/")
+            print(f"  created {src}/")
 
 
 def apply_cors(client, bucket: str, cors_rules: list) -> None:

@@ -22,9 +22,10 @@ ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
 from pipeline.config import PipelineConfig
-from pipeline.r2 import make_client, make_web_client, upload_bytes, exists, export_daily_aggregated_json
-from pipeline import stages
-from pipeline.stages import GOLD_MODELS
+from pipeline.r2 import make_client, make_web_client, upload_bytes, exists
+from pipeline.jobs import fitbit, github, kindle, strong, aggregate
+from pipeline.main import run_pipeline
+from pipeline import paths
 
 
 def days_back(n: int) -> list[date]:
@@ -109,14 +110,12 @@ def start_mock_server() -> tuple[HTTPServer, int]:
 
 
 def ensure_minio_running(endpoint: str) -> None:
-    """Ensure MinIO is running and accessible."""
     import urllib.request
     import time
     import subprocess
-    
-    # Start MinIO with docker-compose
+
     subprocess.run(["docker", "compose", "up", "-d"], check=True, cwd=ROOT)
-    
+
     print("· Waiting for MinIO", end="", flush=True)
     for _ in range(20):
         try:
@@ -132,7 +131,6 @@ def ensure_minio_running(endpoint: str) -> None:
 
 
 def ensure_bucket(r2, bucket: str) -> None:
-    """Ensure the bucket exists."""
     try:
         r2.client.head_bucket(Bucket=bucket)
     except ClientError:
@@ -142,70 +140,41 @@ def ensure_bucket(r2, bucket: str) -> None:
 
 
 def upload_test_data(r2) -> None:
-    """Upload fake test data to the bronze inbox."""
-    upload_bytes(r2, "bronze/inbox/fitbit/test_export.zip", make_fitbit_zip(), "application/zip")
+    upload_bytes(r2, f"{paths.inbox(paths.Source.FITBIT)}/test_export.zip", make_fitbit_zip(), "application/zip")
     print("  uploaded fitbit test data")
-    
-    upload_bytes(r2, "bronze/inbox/kindle/test_reading.zip", make_kindle_zip(), "application/zip")
+
+    upload_bytes(r2, f"{paths.inbox(paths.Source.KINDLE)}/test_reading.zip", make_kindle_zip(), "application/zip")
     print("  uploaded kindle test data")
-    
-    upload_bytes(r2, "bronze/inbox/strong/test_workouts.csv", make_strong_csv(), "text/csv")
+
+    upload_bytes(r2, f"{paths.inbox(paths.Source.STRONG)}/test_workouts.csv", make_strong_csv(), "text/csv")
     print("  uploaded strong test data")
 
-def main() -> None:
-    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
 
-    print("── Starting MinIO ──────────────────────────────────────────────")
-
+def create_test_bucket(config):
     r2 = make_client(config)
     web_r2 = make_web_client(config)
     print(config.endpoint_url)
     ensure_minio_running(config.endpoint_url)
     ensure_bucket(r2, config.r2_bucket_name)
     ensure_bucket(web_r2, config.web_bucket_name)
-
-    print("\n── Uploading test data to inbox ────────────────────────────────")
     upload_test_data(r2)
+
+def main() -> None:
+    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
+
+    print("── Starting MinIO ──────────────────────────────────────────────")
+    create_test_bucket(config)
 
     print("\n── Starting mock GitHub API ────────────────────────────────────")
     _, port = start_mock_server()
     print(f"  listening on http://127.0.0.1:{port}")
 
-    # Set the mock server URL in environment for the pipeline
     import os
     os.environ["GITHUB_API_URL"] = f"http://127.0.0.1:{port}"
 
     print("\n── Running pipeline ────────────────────────────────────────────")
-    failures = []
-    failures += stages.run_bronze(r2, config)
-    failures += stages.run_silver(r2, config)
-    failures += stages.run_gold(r2, config)
+    run_pipeline(config)
 
-    if failures:
-        print(f"\nE2E test failed ✗: {', '.join(failures)}")
-        sys.exit(1)
-
-    print("\n── Exporting web JSON ──────────────────────────────────────────")
-    gold_models = stages._filter(GOLD_MODELS, config)
-    for model in gold_models:
-        export_daily_aggregated_json(r2, web_r2, model.output_key, model.unit, model.label)
-        _, layer, filename = model.output_key.split("/")
-        print(f"  exported {layer}/{filename.removesuffix('.parquet')}.json → {config.web_bucket_name}")
-
-    print("\n── Verifying outputs ───────────────────────────────────────────")
-    missing = []
-    for model in gold_models:
-        _, layer, filename = model.output_key.split("/")
-        web_key = f"{layer}/{filename.removesuffix('.parquet')}.json"
-        if not exists(web_r2, web_key):
-            missing.append(web_key)
-
-    print()
-    if missing:
-        print(f"E2E test failed ✗: missing web files: {', '.join(missing)}")
-        sys.exit(1)
-    else:
-        print("E2E test passed ✓")
 
 
 if __name__ == "__main__":

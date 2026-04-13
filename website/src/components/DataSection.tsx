@@ -15,8 +15,8 @@ interface Props {
 }
 
 export function DataSection({ config, year, onYearsLoaded }: Props) {
-  const { source, metric, label, colorScheme } = config;
-  const { data, loading, error } = useMetricData(source, metric);
+  const {  metric, label, colorScheme } = config;
+  const { data, loading, error } = useMetricData(metric);
 
   useEffect(() => {
     if (!data) return;

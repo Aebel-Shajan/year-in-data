@@ -1,44 +1,74 @@
 """
 Entry point for the yearly data pipeline.
 
-  uv run python -m pipeline.main                          # run all stages
-  uv run python -m pipeline.main --stage ingest           # fetch raw data only
-  uv run python -m pipeline.main --stage silver           # build silver tables
-  uv run python -m pipeline.main --stage gold             # build gold tables
-  uv run python -m pipeline.main --stage gold --dry-run   # preview without writing
-  uv run python -m pipeline.main --stage gold --start 2025-01-01 --end 2025-03-31
+  uv run python -m pipeline.main
 """
 
 from __future__ import annotations
 
 import sys
+import traceback
 from pathlib import Path
+from types import ModuleType
 
-from pipeline import stages  # type: ignore[attr-defined]
 from pipeline.config import PipelineConfig
+from pipeline.jobs import (
+    aggregate,
+    export,
+    fitbit,
+    github,
+    gymgroup,
+    kindle,
+    macos_commands,
+    macos_screentime
+)
 from pipeline.r2 import make_client
 
 
-def run_pipeline(
-        config_path: Path | None = None,
-        env_path: str | None = None
-):
-    config = PipelineConfig.load()
-    if config_path and env_path:
-        config = PipelineConfig.load(config_path, env_path)
+# list order determines order to run job 
+ALL_JOBS = [
+    fitbit,
+    github,
+    gymgroup,
+    kindle,
+    macos_commands,
+    macos_screentime, 
+    aggregate,
+    export,
+]
 
+
+def run_pipeline(config: PipelineConfig) -> None:
     r2 = make_client(config)
+    jobs_to_run = []
+    for job in ALL_JOBS:
+        job_name = get_module_name(job)
+        run_job = not config.jobs_to_run or job_name in config.jobs_to_run
+        if run_job:
+            jobs_to_run.append(job)
+
 
     failures: list[str] = []
-    failures += stages.run_bronze(r2, config)
-    failures += stages.run_silver(r2, config)
-    failures += stages.run_gold(r2, config)
+
+    for index, job in enumerate(jobs_to_run):
+        try:
+            job_name = get_module_name(job)
+            print(f"{index}. running {job_name}...")
+            job.run_job(r2, config)
+        except Exception:
+            traceback.print_exc()
+            failures.append(job_name)
 
     if failures:
         print(f"\n✗ Failed: {', '.join(failures)}")
         sys.exit(1)
-    else:
-        print("\nDone.")
+    print("\nDone.")
+
+
+def get_module_name(module: ModuleType) -> str:
+    return module.__name__.split('.')[-1]
+
 
 if __name__ == "__main__":
-    run_pipeline()
+    config = PipelineConfig.load()
+    run_pipeline(config)

@@ -1,10 +1,7 @@
 """
-Silver table: kindle/reading
+Source: kindle
 
-Reads archived Kindle ZIP files and produces a silver table with daily
-reading time per book in source units (milliseconds).
-
-Silver schema: (date, category, reading_ms)
+Processes Kindle Google Takeout ZIPs uploaded manually to the inbox.
 """
 
 from __future__ import annotations
@@ -15,20 +12,24 @@ from datetime import date
 
 import polars as pl
 
-from pipeline import r2 as R2
+from pipeline import paths, r2 as R2
+from pipeline.config import PipelineConfig
+from pipeline.paths import Source, Table
 from pipeline.r2 import R2Client
+
+TAG = Source.KINDLE
 
 _CSV_NAME = "Kindle.reading-insights-sessions_with_adjustments.csv"
 
+def run_job(r2: R2Client, config: PipelineConfig) -> None:
+    R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
 
-def kindle_reading(r2: R2Client, input_key: str, output_key: str, start: date | None = None, end: date | None = None) -> None:
-    start = start or R2.latest_date(r2, output_key)
-    keys = [k for k in R2.list_bronze_keys(r2, input_key, start=start, end=end) if k.lower().endswith(".zip")]
-    if not keys:
-        print(f"[{output_key.removesuffix('.parquet')}] no archived files found, skipping")
+    archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.KINDLE_READING), ".zip")
+    if not archive_keys:
+        print(f"[{TAG}] no new files, skipping")
         return
 
-    frames = [_parse_zip(R2.download_bytes(r2, k)) for k in keys]
+    frames = [_parse_zip(R2.download_bytes(r2, k)) for k in archive_keys]
     df = (
         pl.concat(frames)
         .group_by(["date", "category"])
@@ -36,9 +37,11 @@ def kindle_reading(r2: R2Client, input_key: str, output_key: str, start: date | 
         .sort("date")
     )
 
-    R2.store_parquet(r2, output_key, df, sort_col="date", overwrite=True)
-    print(f"[{output_key.removesuffix('.parquet')}] {len(df)} rows")
+    R2.store_parquet(r2, paths.table(Table.KINDLE_READING), df, sort_col="date", overwrite=True)
+    print(f"[{TAG}] {len(df)} rows")
 
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _parse_zip(data: bytes) -> pl.DataFrame:
     with zipfile.ZipFile(io.BytesIO(data)) as zf:

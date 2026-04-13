@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from pipeline.config import PipelineConfig
 from pipeline.r2 import make_client, make_web_client, list_keys
+ROOT = Path(__file__).parent.parent
 
 
 def delete_bucket(r2, bucket: str) -> None:
@@ -33,7 +34,7 @@ def delete_bucket(r2, bucket: str) -> None:
 
 
 def main() -> None:
-    config = PipelineConfig.load()
+    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
     buckets = f"'{config.r2_bucket_name}' and '{config.web_bucket_name}'"
 
     print(f"This will permanently delete all objects and buckets: {buckets}.")

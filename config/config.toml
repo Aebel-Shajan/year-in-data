@@ -1,6 +1,5 @@
 [general]
 runtime_env="github_actions"
-start=""
 
 [r2]
 bucket_name     = "year-in-data"
@@ -9,15 +8,18 @@ web_bucket_name = "year-in-data-web"
 [github]
 username = "aebel-shajan"
 
-[sources]
-# Run only these pipelines (empty = run all)
-tags_to_run    = [
-    # "strong", 
-    "gymgroup", 
+[pipeline]
+# Run only these jobs (empty = run all)
+jobs_to_run = [
+    # "strong",
+    "gymgroup",
     # "macos_commands",
     # "macos_screentime",
-    # "fitbit", 
+    # "fitbit",
     # "kindle",
 ]
-# Always skip these pipelines
-tags_to_ignore = []
+
+# Per-job date ranges (optional — omit to use latest processed date)
+# [pipeline.fitbit]
+start = "2023-01-01"
+# end   = "2024-12-31"

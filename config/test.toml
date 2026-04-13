@@ -8,6 +8,20 @@ web_bucket_name = "year-in-data-web"
 [github]
 username = "test-user"
 
-[sources]
-tags_to_run    = ["fitbit", "kindle", "github", "strong"]
-tags_to_ignore = []
+[pipeline]
+# Run only these jobs (empty = run all)
+jobs_to_run = [
+    # "strong",
+    "gymgroup",
+    "aggregate",
+    "export"
+    # "macos_commands",
+    # "macos_screentime",
+    # "fitbit",
+    # "kindle",
+]
+
+# Per-job date ranges (optional — omit to use latest processed date)
+# [pipeline.fitbit]
+# start = "2024-01-01"
+# end   = "2024-12-31"

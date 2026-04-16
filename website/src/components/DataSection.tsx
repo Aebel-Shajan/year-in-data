@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function DataSection({ config, year, onYearsLoaded }: Props) {
-  const {  metric, label, colorScheme } = config;
+  const { metric, colorScheme } = config;
   const { data, loading, error } = useMetricData(metric);
 
   useEffect(() => {
@@ -35,8 +35,10 @@ export function DataSection({ config, year, onYearsLoaded }: Props) {
   return (
     <section className="mb-12">
       <div className="flex items-baseline gap-4 mb-3">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{label}</h2>
-
+        {data
+          ? <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{data.label}</h2>
+          : <div className="h-6 w-36 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
+        }
         {data && (
           <span className="ml-auto text-sm text-gray-400">
             {activeDays} active days · {formatValue(total, data.unit)} total

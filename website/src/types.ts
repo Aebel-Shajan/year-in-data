@@ -16,8 +16,6 @@ export interface MetricData {
 
 // A metric descriptor used to configure the data sections on the page
 export interface MetricConfig {
-  // source: string;
   metric: string;
-  label: string;
   colorScheme: "greens" | "blues" | "oranges" | "purples" | "reds" | "warm";
 }

@@ -22,7 +22,7 @@ ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
 from pipeline.config import PipelineConfig
-from pipeline.r2 import make_client, make_web_client, upload_bytes, exists
+from pipeline.r2 import ensure_bucket, make_client, make_web_client, upload_bytes, exists
 from pipeline.jobs import fitbit, github, kindle, strong, aggregate
 from pipeline.main import run_pipeline
 from pipeline import paths
@@ -109,36 +109,6 @@ def start_mock_server() -> tuple[HTTPServer, int]:
     return server, port
 
 
-def ensure_minio_running(endpoint: str) -> None:
-    import urllib.request
-    import time
-    import subprocess
-
-    subprocess.run(["docker", "compose", "up", "-d"], check=True, cwd=ROOT)
-
-    print("· Waiting for MinIO", end="", flush=True)
-    for _ in range(20):
-        try:
-            urllib.request.urlopen(f"{endpoint}/minio/health/live", timeout=1)
-            print(" ✓")
-            return
-        except Exception:
-            print(".", end="", flush=True)
-            time.sleep(1)
-
-    print("\n✗ MinIO did not start. Run: docker compose logs minio")
-    sys.exit(1)
-
-
-def ensure_bucket(r2, bucket: str) -> None:
-    try:
-        r2.client.head_bucket(Bucket=bucket)
-    except ClientError:
-        r2.client.create_bucket(Bucket=bucket)
-        print(f"✓ Created bucket '{bucket}'")
-    print(f"✓ Bucket '{bucket}' ready")
-
-
 def upload_test_data(r2) -> None:
     upload_bytes(r2, f"{paths.inbox(paths.Source.FITBIT)}/test_export.zip", make_fitbit_zip(), "application/zip")
     print("  uploaded fitbit test data")
@@ -153,8 +123,6 @@ def upload_test_data(r2) -> None:
 def create_test_bucket(config):
     r2 = make_client(config)
     web_r2 = make_web_client(config)
-    print(config.endpoint_url)
-    ensure_minio_running(config.endpoint_url)
     ensure_bucket(r2, config.r2_bucket_name)
     ensure_bucket(web_r2, config.web_bucket_name)
     upload_test_data(r2)

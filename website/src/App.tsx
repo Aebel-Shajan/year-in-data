@@ -6,26 +6,26 @@ const GROUPS: { label: string; metrics: MetricConfig[] }[] = [
   {
     label: "Physical",
     metrics: [
-      {    metric: "daily_steps",     label: "Steps",            colorScheme: "blues"   },
-      {    metric: "daily_exercise",   label: "Active minutes",   colorScheme: "reds"    },
-      {    metric: "daily_workouts",   label: "Workout duration", colorScheme: "oranges" },
-      {  metric: "daily_gymgroup_visits", label: "Gym visits",       colorScheme: "greens"  },
+      { metric: "daily_fitbit_steps",    label: "Steps",            colorScheme: "blues"   },
+      { metric: "daily_fitbit_exercise", label: "Active minutes",   colorScheme: "reds"    },
+      { metric: "daily_strong_workouts", label: "Workout duration", colorScheme: "oranges" },
+      { metric: "daily_gymgroup_visits", label: "Gym visits",       colorScheme: "greens"  },
     ],
   },
   {
     label: "Productivity",
     metrics: [
-      {           metric: "daily_contributions", label: "GitHub contributions", colorScheme: "greens" },
-      {           metric: "daily_reading",        label: "Reading time",         colorScheme: "warm"   },
-      { metric: "daily_screen_time",    label: "Screen time",          colorScheme: "reds"   },
-      {   metric: "daily_commands",       label: "Shell commands",       colorScheme: "greens" },
+      { metric: "daily_github_contributions", label: "GitHub contributions", colorScheme: "greens" },
+      { metric: "daily_kindle_reading",        label: "Reading time",         colorScheme: "warm"   },
+      { metric: "daily_macos_screentime",      label: "Screen time",          colorScheme: "reds"   },
+      { metric: "daily_macos_commands",        label: "Shell commands",       colorScheme: "greens" },
     ],
   },
   {
     label: "Metrics",
     metrics: [
-      {  metric: "daily_calories", label: "Calories burned", colorScheme: "oranges" },
-      {  metric: "daily_sleep",    label: "Sleep",           colorScheme: "purples" },
+      { metric: "daily_fitbit_calories", label: "Calories burned", colorScheme: "oranges" },
+      { metric: "daily_fitbit_sleep",    label: "Sleep",           colorScheme: "purples" },
     ],
   },
 ];

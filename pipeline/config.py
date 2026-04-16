@@ -4,7 +4,6 @@ import os
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -32,7 +31,6 @@ class Secrets(BaseSettings):
 class PipelineConfig:
     """Project-level settings — loaded from config.toml and env file."""
 
-    runtime_env: Literal["local", "github_actions"]
     r2_bucket_name: str
     web_bucket_name: str
     github_username: str
@@ -51,7 +49,6 @@ class PipelineConfig:
         pipeline = data.get("pipeline", {})
 
         return PipelineConfig(
-            runtime_env=data["general"]["runtime_env"],
             r2_bucket_name=data["r2"]["bucket_name"],
             web_bucket_name=data["r2"]["web_bucket_name"],
             github_username=data["github"]["username"],

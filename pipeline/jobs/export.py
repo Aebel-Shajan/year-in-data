@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import io
 import json
+from dataclasses import dataclass
 from datetime import date
 
 import polars as pl
@@ -15,27 +16,33 @@ from pipeline.config import PipelineConfig
 from pipeline.paths import Table
 from pipeline.r2 import R2Client, upload_bytes
 
-# (table, web_path, unit, label)
-# web_path becomes "{web_path}.json" in the web bucket
-_EXPORTS: list[tuple[Table, str, str]] = [
-    (Table.FITBIT_CALORIES,                 "kcal",    "Calories burned"),
-    (Table.FITBIT_EXERCISE,                 "minutes", "Active minutes"),
-    (Table.FITBIT_SLEEP,                       "hours",   "Sleep duration"),
-    (Table.FITBIT_STEPS,                       "steps",   "Steps"),
-    (Table.GITHUB_CONTRIBUTIONS,       "commits", "GitHub contributions"),
-    (Table.GYMGROUP_VISITS,                 "minutes", "Gym duration"),
-    (Table.KINDLE_READING,                   "minutes", "Reading time"),
-    (Table.MACOS_COMMANDS,          "count",   "Shell commands"),
-    (Table.MACOS_SCREENTIME,     "minutes", "Screen time"),
-    (Table.STRONG_WORKOUTS,                 "minutes", "Workout duration"),
+
+@dataclass(frozen=True)
+class ExportSpec:
+    table: Table
+    unit: str
+    label: str
+
+
+_EXPORTS: list[ExportSpec] = [
+    ExportSpec(Table.FITBIT_CALORIES,      "kcal",    "Calories burned"),
+    ExportSpec(Table.FITBIT_EXERCISE,      "minutes", "Active minutes"),
+    ExportSpec(Table.FITBIT_SLEEP,         "hours",   "Sleep duration"),
+    ExportSpec(Table.FITBIT_STEPS,         "steps",   "Steps"),
+    ExportSpec(Table.GITHUB_CONTRIBUTIONS, "commits", "GitHub contributions"),
+    ExportSpec(Table.GYMGROUP_VISITS,      "minutes", "Gym duration"),
+    ExportSpec(Table.KINDLE_READING,       "minutes", "Reading time"),
+    ExportSpec(Table.MACOS_COMMANDS,       "count",   "Shell commands"),
+    ExportSpec(Table.MACOS_SCREENTIME,     "minutes", "Screen time"),
+    ExportSpec(Table.STRONG_WORKOUTS,      "minutes", "Workout duration"),
 ]
 
 
 def export_to_web(r2: R2Client, config: PipelineConfig) -> None:
     web_r2 = R2.make_web_client(config)
-    for table_name, unit, label in _EXPORTS:
-        daily_key = paths.table(f"daily_{table_name}")
-        _export_json(r2, web_r2, daily_key, f"daily_{table_name}.json", unit, label)
+    for spec in _EXPORTS:
+        daily_key = paths.table(f"daily_{spec.table}")
+        _export_json(r2, web_r2, daily_key, f"daily_{spec.table}.json", spec.unit, spec.label)
 
 
 

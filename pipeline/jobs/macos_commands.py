@@ -34,7 +34,7 @@ def fetch(r2: R2Client, config: PipelineConfig) -> None:
     print(f"[{TAG}] {len(records)} commands → inbox")
 
 
-def run_job(r2: R2Client, config: PipelineConfig) -> None:
+def process_macos_commands(r2: R2Client, config: PipelineConfig) -> None:
     fetch(r2, config)
 
     R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))

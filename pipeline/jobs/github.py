@@ -52,7 +52,7 @@ def fetch(r2: R2Client, config: PipelineConfig) -> None:
         print(f"[{TAG}] no contributions found")
 
 
-def run_job(r2: R2Client, config: PipelineConfig) -> None:
+def process_github(r2: R2Client, config: PipelineConfig) -> None:
     R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
 
     archive_keys = sorted(R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.GITHUB_CONTRIBUTIONS), ".json"))

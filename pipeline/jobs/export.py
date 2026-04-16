@@ -31,7 +31,7 @@ _EXPORTS: list[tuple[Table, str, str]] = [
 ]
 
 
-def run_job(r2: R2Client, config: PipelineConfig) -> None:
+def export_to_web(r2: R2Client, config: PipelineConfig) -> None:
     web_r2 = R2.make_web_client(config)
     for table_name, unit, label in _EXPORTS:
         daily_key = paths.table(f"daily_{table_name}")

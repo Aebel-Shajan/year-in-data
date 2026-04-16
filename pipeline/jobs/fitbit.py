@@ -28,7 +28,7 @@ _SLEEP_RE    = re.compile(r"Fitbit/Global Export Data/sleep-\d{4}-\d{2}-\d{2}\.j
 _STEPS_RE    = re.compile(r"Fitbit/Global Export Data/steps-\d{4}-\d{2}-\d{2}\.json$",    re.IGNORECASE)
 
 
-def run_job(r2: R2Client, config: PipelineConfig) -> None:
+def process_fitbit(r2: R2Client, config: PipelineConfig) -> None:
     R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
 
     _parse_metric(r2, paths.table(Table.FITBIT_CALORIES), _CALORIES_RE, "dateTime",    "value")

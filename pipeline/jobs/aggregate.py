@@ -24,12 +24,12 @@ _AGGREGATIONS = [
 ]
 
 
-def run_job(r2: R2Client, config: PipelineConfig, dry_run: bool = False) -> None:
+def aggregate_daily(r2: R2Client, config: PipelineConfig) -> None:
     for table_name, transform in _AGGREGATIONS:
-        _agg(r2, table_name, transform, dry_run)
+        _agg(r2, table_name, transform)
 
 
-def _agg(r2: R2Client, name: str, transform, dry_run: bool) -> None:
+def _agg(r2: R2Client, name: str, transform) -> None:
     input_key = table(name)
     output_key = table("daily_" + name)
     df = R2.load_parquet(r2, input_key)
@@ -37,8 +37,5 @@ def _agg(r2: R2Client, name: str, transform, dry_run: bool) -> None:
         print(f"[{input_key}] no data, skipping")
         return
     result = transform(df)
-    if dry_run:
-        print(result)
-        return
     R2.store_parquet(r2, output_key, result, sort_col="date", overwrite=True)
     print(f"[{output_key}] {len(result)} rows")

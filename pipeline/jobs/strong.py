@@ -18,7 +18,7 @@ from pipeline.r2 import R2Client
 TAG = Source.STRONG
 
 
-def run_job(r2: R2Client, config: PipelineConfig) -> None:
+def process_strong(r2: R2Client, config: PipelineConfig) -> None:
     R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
 
     archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.STRONG_WORKOUTS), ".csv")

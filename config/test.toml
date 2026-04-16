@@ -11,14 +11,14 @@ username = "test-user"
 [pipeline]
 # Run only these jobs (empty = run all)
 jobs_to_run = [
-    # "strong",
+    "strong",
     "gymgroup",
     "aggregate",
-    "export"
-    # "macos_commands",
-    # "macos_screentime",
-    # "fitbit",
-    # "kindle",
+    "export",
+    "macos_commands",
+    "macos_screentime",
+    "fitbit",
+    "kindle",
 ]
 
 # Per-job date ranges (optional — omit to use latest processed date)

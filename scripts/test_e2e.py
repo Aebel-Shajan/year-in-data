@@ -21,8 +21,9 @@ from botocore.exceptions import ClientError
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
+from pipeline.bucket_setup import ensure_bucket
 from pipeline.config import PipelineConfig
-from pipeline.r2 import ensure_bucket, make_client, make_web_client, upload_bytes, exists
+from pipeline.r2 import make_client, make_web_client, upload_bytes, exists
 from pipeline.jobs import fitbit, github, kindle, strong, aggregate
 from pipeline.main import run_pipeline
 from pipeline import paths

@@ -1,6 +1,3 @@
-[general]
-runtime_env="github_actions"
-
 [r2]
 bucket_name     = "year-in-data"
 web_bucket_name = "year-in-data-web"

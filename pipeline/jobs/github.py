@@ -1,8 +1,8 @@
 """
 Source: github
 
-Fetches GitHub contribution data via GraphQL API (when local) or processes
-inbox files uploaded by a separate workflow (in CI).
+Processes inbox files containing GitHub contribution data.
+Fetch data first with: uv run python scripts/sync_api.py
 """
 
 from __future__ import annotations
@@ -53,9 +53,6 @@ def fetch(r2: R2Client, config: PipelineConfig) -> None:
 
 
 def run_job(r2: R2Client, config: PipelineConfig) -> None:
-    if config.runtime_env == "local":
-        fetch(r2, config)
-
     R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
 
     archive_keys = sorted(R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.GITHUB_CONTRIBUTIONS), ".json"))

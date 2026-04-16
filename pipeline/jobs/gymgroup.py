@@ -1,8 +1,8 @@
 """
 Source: gymgroup
 
-Fetches gym check-in history from The Gym Group API (when local) or processes
-inbox files uploaded by a separate workflow (in CI).
+Processes inbox files containing Gym Group check-in history.
+Fetch data first with: uv run python scripts/sync_api.py
 """
 
 from __future__ import annotations
@@ -44,9 +44,6 @@ def fetch(r2: R2Client, config: PipelineConfig) -> None:
 
 
 def run_job(r2: R2Client, config: PipelineConfig) -> None:
-    if config.runtime_env == "local":
-        fetch(r2, config)
-
     R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
 
     archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.GYMGROUP_VISITS), ".json")

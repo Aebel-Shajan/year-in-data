@@ -85,6 +85,16 @@ def run_job(r2: R2Client, config: PipelineConfig) -> None:
     print(f"[{TAG}] {len(df)} rows")
 
 
+# ── Aggregation ───────────────────────────────────────────────────────────────
+
+def aggregate(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df.group_by(["date", "category"])
+        .agg((pl.col("usage_secs").sum() / 60).round(1).alias("value"))
+        .sort("date")
+    )
+
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _query_db(db_path: Path = _DB) -> list[dict]:

@@ -66,6 +66,12 @@ def run_job(r2: R2Client, config: PipelineConfig) -> None:
     print(f"[{TAG}] {len(df)} rows")
 
 
+# ── Aggregation ───────────────────────────────────────────────────────────────
+
+def aggregate(df: pl.DataFrame) -> pl.DataFrame:
+    return df.with_columns(pl.col("count").cast(pl.Float64).alias("value")).select(["date", "category", "value"])
+
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _parse_history(path: Path = _HISTORY_FILE) -> list[dict]:

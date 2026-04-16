@@ -81,6 +81,12 @@ def run_job(r2: R2Client, config: PipelineConfig) -> None:
     print(f"[{TAG}] {len(df)} rows")
 
 
+# ── Aggregation ───────────────────────────────────────────────────────────────
+
+def aggregate(df: pl.DataFrame) -> pl.DataFrame:
+    return df  # already one row per date
+
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _fetch_api(config: PipelineConfig) -> list[dict]:

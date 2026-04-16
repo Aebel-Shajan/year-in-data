@@ -74,6 +74,15 @@ def run_job(r2: R2Client, config: PipelineConfig) -> None:
     print(f"[{TAG}] {len(df)} rows")
 
 
+# ── Aggregation ───────────────────────────────────────────────────────────────
+
+def aggregate(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df.with_columns((pl.col("duration_ms") / 60_000).round(1).alias("value"))
+        .select(["date", "category", "value"])
+    )
+
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _fetch_api(username: str, password: str) -> list[dict]:

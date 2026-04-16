@@ -78,6 +78,31 @@ def _parse_metric(
     print(f"[{TAG}/{label}] {len(df)} rows")
 
 
+# ── Aggregations ──────────────────────────────────────────────────────────────
+
+def aggregate_calories(df: pl.DataFrame) -> pl.DataFrame:
+    return df.group_by("date").agg(pl.col("value").sum()).sort("date")
+
+def aggregate_steps(df: pl.DataFrame) -> pl.DataFrame:
+    return df.group_by("date").agg(pl.col("value").sum()).sort("date")
+
+def aggregate_exercise(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df.group_by("date").agg(pl.col("value").sum())
+        .with_columns((pl.col("value") / 60_000).round(1).alias("value"))
+        .sort("date")
+    )
+
+def aggregate_sleep(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df.group_by("date").agg(pl.col("value").sum())
+        .with_columns((pl.col("value") / 60).round(2).alias("value"))
+        .sort("date")
+    )
+
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
 def _parse_datetime(s: str) -> datetime | None:
     s = s.strip()
     for fmt, length in [("%Y-%m-%dT%H:%M:%S", 19), ("%Y-%m-%d %H:%M:%S", 19), ("%m/%d/%y", 8)]:

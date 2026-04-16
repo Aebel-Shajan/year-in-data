@@ -23,16 +23,9 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
+from pipeline.bucket_setup import apply_cors, create_inboxes, enable_r2_dev_public, ensure_bucket
 from pipeline.config import PipelineConfig
-from pipeline.r2 import (
-    apply_cors,
-    enable_r2_dev_public,
-    make_client,
-    make_web_client,
-    set_public_policy,
-    create_inboxes,
-    ensure_bucket,
-)
+from pipeline.r2 import make_client, make_web_client
 
 
 def main() -> None:
@@ -46,7 +39,7 @@ def main() -> None:
     ensure_bucket(r2, config.r2_bucket_name)
     ensure_bucket(web_r2, config.web_bucket_name)
     enable_r2_dev_public(config.endpoint_url, config.web_bucket_name, config.secrets.cloudflare_api_token)
-    apply_cors(web_r2.client, config.web_bucket_name, cors_rules)
+    apply_cors(web_r2, cors_rules)
     create_inboxes(r2)
     print("✓ R2 setup complete")
 

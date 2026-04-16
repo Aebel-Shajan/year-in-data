@@ -18,14 +18,9 @@ from botocore.exceptions import ClientError
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
+from pipeline.bucket_setup import create_inboxes, ensure_bucket, set_public_policy
 from pipeline.config import PipelineConfig
-from pipeline.r2 import (
-    create_inboxes,
-    make_client,
-    ensure_bucket,
-    make_web_client,
-    set_public_policy
-)
+from pipeline.r2 import make_client, make_web_client
 
 
 def ensure_minio(endpoint: str) -> None:

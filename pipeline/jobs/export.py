@@ -26,23 +26,23 @@ class ExportSpec:
 
 
 _EXPORTS: list[ExportSpec] = [
-    ExportSpec(Table.FITBIT_CALORIES,      "kcal",    "Calories burned"),
-    ExportSpec(Table.FITBIT_EXERCISE,      "minutes", "Active minutes"),
-    ExportSpec(Table.FITBIT_SLEEP,         "hours",   "Sleep duration"),
-    ExportSpec(Table.FITBIT_STEPS,         "steps",   "Steps"),
-    ExportSpec(Table.GITHUB_CONTRIBUTIONS, "commits", "GitHub contributions"),
-    ExportSpec(Table.GYMGROUP_VISITS,      "minutes", "Gym duration"),
-    ExportSpec(Table.KINDLE_READING,       "minutes", "Reading time"),
-    ExportSpec(Table.MACOS_COMMANDS,       "count",   "Shell commands"),
-    ExportSpec(Table.MACOS_SCREENTIME,     "minutes", "Screen time"),
-    ExportSpec(Table.STRONG_WORKOUTS,      "minutes", "Workout duration"),
+    ExportSpec(Table.DAILY_FITBIT_CALORIES,      "kcal",    "Calories burned"),
+    ExportSpec(Table.DAILY_FITBIT_EXERCISE,      "minutes", "Active minutes"),
+    ExportSpec(Table.DAILY_FITBIT_SLEEP,         "hours",   "Sleep duration"),
+    ExportSpec(Table.DAILY_FITBIT_STEPS,         "steps",   "Steps"),
+    ExportSpec(Table.DAILY_GITHUB_CONTRIBUTIONS, "commits", "GitHub contributions"),
+    ExportSpec(Table.DAILY_GYMGROUP_VISITS,      "minutes", "Gym duration"),
+    ExportSpec(Table.DAILY_KINDLE_READING,       "minutes", "Reading time"),
+    ExportSpec(Table.DAILY_MACOS_COMMANDS,       "count",   "Shell commands"),
+    ExportSpec(Table.DAILY_MACOS_SCREENTIME,     "minutes", "Screen time"),
+    ExportSpec(Table.DAILY_STRONG_WORKOUTS,      "minutes", "Workout duration"),
 ]
 
 
 def export_to_web(r2: R2Client, config: PipelineConfig) -> None:
     web_r2 = R2.make_web_client(config)
     for spec in _EXPORTS:
-        daily_key = paths.table(f"daily_{spec.table}")
+        daily_key = paths.construct_table_path(spec.table)
         _export_json(r2, web_r2, daily_key, f"daily_{spec.table}.json", spec.unit, spec.label)
 
 

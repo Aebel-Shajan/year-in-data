@@ -23,9 +23,9 @@ TAG = Source.KINDLE
 _CSV_NAME = "Kindle.reading-insights-sessions_with_adjustments.csv"
 
 def extract_kindle(r2: R2Client, config: PipelineConfig) -> None:
-    R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
+    R2.flush_inbox(r2, TAG, paths.construct_inbox_path(TAG), paths.construct_archive_path(TAG))
 
-    archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.KINDLE_READING), ".zip")
+    archive_keys = R2.get_archive_keys(r2, paths.construct_archive_path(TAG), paths.construct_table_path(Table.KINDLE_READING), ".zip")
     if not archive_keys:
         print(f"[{TAG}] no new files, skipping")
         return
@@ -38,7 +38,7 @@ def extract_kindle(r2: R2Client, config: PipelineConfig) -> None:
         .sort("date")
     )
 
-    R2.store_parquet(r2, paths.table(Table.KINDLE_READING), df, sort_col="date", overwrite=True)
+    R2.store_parquet(r2, paths.construct_table_path(Table.KINDLE_READING), df, sort_col="date", overwrite=True)
     print(f"[{TAG}] {len(df)} rows")
 
 

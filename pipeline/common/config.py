@@ -36,7 +36,12 @@ class PipelineConfig:
     github_username: str
     secrets: Secrets
     endpoint_url: str
-    jobs_to_run: list[str] = field(default_factory=list)   # empty = run all
+    extract_from: str | None
+    extract_to: str | None
+    jobs_to_run: list[str] = field(default_factory=list) 
+    sources_to_extract: list[str] = field(default_factory=list)   # empty = run all
+
+
 
     @staticmethod
     def load(
@@ -46,7 +51,7 @@ class PipelineConfig:
         with open(config_path, "rb") as f:
             data = tomllib.load(f)
         secrets = Secrets(env_file=env_path)
-        pipeline = data.get("pipeline", {})
+        extract: dict = data.get("pipeline.extract", {})
 
         return PipelineConfig(
             r2_bucket_name=data["r2"]["bucket_name"],
@@ -54,7 +59,10 @@ class PipelineConfig:
             github_username=data["github"]["username"],
             secrets=secrets,
             endpoint_url=secrets.r2_endpoint_url,
-            jobs_to_run=_parse_list("PIPELINE_JOBS_TO_RUN") or pipeline.get("jobs_to_run", []),
+            sources_to_extract=_parse_list("SOURCES_TO_EXTRACT") or extract.get("sources_to_extract", []),
+            jobs_to_run=_parse_list("JOBS_TO_RUN") or extract.get("jobs_to_run", []),
+            extract_from=extract.get("extract_from"),
+            extract_to=extract.get("extract_to")
         )
 
 

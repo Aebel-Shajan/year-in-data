@@ -38,16 +38,16 @@ def fetch(r2: R2Client, config: PipelineConfig) -> None:
     check_ins = _fetch_api(config.secrets.gym_group_username, config.secrets.gym_group_password)
     if check_ins:
         filename = f"checkins_{date.today().isoformat()}.json"
-        R2.upload_bytes(r2, paths.inbox(TAG) + "/" + filename, json.dumps(check_ins).encode(), "application/json")
+        R2.upload_bytes(r2, paths.construct_inbox_path(TAG) + "/" + filename, json.dumps(check_ins).encode(), "application/json")
         print(f"[{TAG}] {len(check_ins)} check-ins → inbox")
     else:
         print(f"[{TAG}] no check-ins found")
 
 
 def extract_gymgroup(r2: R2Client, config: PipelineConfig) -> None:
-    R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
+    R2.flush_inbox(r2, TAG, paths.construct_inbox_path(TAG), paths.construct_archive_path(TAG))
 
-    archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.GYMGROUP_VISITS), ".json")
+    archive_keys = R2.get_archive_keys(r2, paths.construct_archive_path(TAG), paths.construct_table_path(Table.GYMGROUP_VISITS), ".json")
     if not archive_keys:
         print(f"[{TAG}] no new files, skipping")
         return
@@ -71,7 +71,7 @@ def extract_gymgroup(r2: R2Client, config: PipelineConfig) -> None:
         .sort("date")
     )
 
-    R2.store_parquet(r2, paths.table(Table.GYMGROUP_VISITS), df, sort_col="date", overwrite=True)
+    R2.store_parquet(r2, paths.construct_table_path(Table.GYMGROUP_VISITS), df, sort_col="date", overwrite=True)
     print(f"[{TAG}] {len(df)} rows")
 
 

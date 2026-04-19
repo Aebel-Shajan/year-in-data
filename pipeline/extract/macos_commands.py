@@ -31,13 +31,13 @@ def fetch(r2: R2Client, config: PipelineConfig) -> None:
         print(f"[{TAG}] no commands found, skipping")
         return
     filename = f"commands_{date.today().isoformat()}.json"
-    R2.upload_bytes(r2, paths.inbox(TAG) + "/" + filename, json.dumps(records).encode(), "application/json")
+    R2.upload_bytes(r2, paths.construct_inbox_path(TAG) + "/" + filename, json.dumps(records).encode(), "application/json")
     print(f"[{TAG}] {len(records)} commands → inbox")
 
 
 def extract_macos_commands(r2: R2Client, config: PipelineConfig) -> None:
-    R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
-    archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.MACOS_COMMANDS), ".json")
+    R2.flush_inbox(r2, TAG, paths.construct_inbox_path(TAG), paths.construct_archive_path(TAG))
+    archive_keys = R2.get_archive_keys(r2, paths.construct_archive_path(TAG), paths.construct_table_path(Table.MACOS_COMMANDS), ".json")
     if not archive_keys:
         print(f"[{TAG}] no new files, skipping")
         return
@@ -60,7 +60,7 @@ def extract_macos_commands(r2: R2Client, config: PipelineConfig) -> None:
         .sort("date")
     )
 
-    R2.store_parquet(r2, paths.table(Table.MACOS_COMMANDS), df, sort_col="date", overwrite=True)
+    R2.store_parquet(r2, paths.construct_table_path(Table.MACOS_COMMANDS), df, sort_col="date", overwrite=True)
     print(f"[{TAG}] {len(df)} rows")
 
 

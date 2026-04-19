@@ -36,7 +36,7 @@ def create_inboxes(r2: R2Client) -> None:
         "macos_commands", "macos_screentime", "strong",
     ]
     for src in sources:
-        placeholder = paths.inbox(src + "/.keep")
+        placeholder = paths.construct_inbox_path(src + "/.keep")
         if not exists(r2, placeholder):
             upload_bytes(r2, placeholder, b"", "application/octet-stream")
             print(f"  created {src}/")

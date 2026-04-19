@@ -4,23 +4,71 @@ Aggregates job parquets into daily summary tables.
 
 from __future__ import annotations
 
-from pipeline import r2 as R2
-from pipeline.config import PipelineConfig
-from pipeline.jobs import fitbit, github, gymgroup, kindle, macos_commands, macos_screentime, strong
-from pipeline.paths import Table, table
-from pipeline.r2 import R2Client
+import polars as pl
+
+from pipeline.common import r2 as R2
+from pipeline.common.config import PipelineConfig
+from pipeline.common.paths import Table, table
+from pipeline.common.r2 import R2Client
+
+
+def aggregate_sleep(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df.group_by("date").agg(pl.col("value").sum())
+        .with_columns((pl.col("value") / 60).round(2).alias("value"))
+        .sort("date")
+    )
+
+def aggregate_exercise(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df.group_by("date").agg(pl.col("value").sum())
+        .with_columns((pl.col("value") / 60_000).round(1).alias("value"))
+        .sort("date")
+    )
+
+def aggregate_steps(df: pl.DataFrame) -> pl.DataFrame:
+    return df.group_by("date").agg(pl.col("value").sum()).sort("date")
+
+
+def aggregate_calories(df: pl.DataFrame) -> pl.DataFrame:
+    return df.group_by("date").agg(pl.col("value").sum()).sort("date")
+
+
+def aggregate_gym_group(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df.with_columns((pl.col("duration_ms") / 60_000).round(1).alias("value"))
+        .select(["date", "category", "value"])
+    )
+
+def aggregate_kindle(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df.group_by(["date", "category"])
+        .agg((pl.col("reading_ms").sum() / 60_000).round(1).alias("value"))
+        .sort("date")
+    )
+
+def aggregate_macos_commands(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df
+        .with_columns(pl.col("count")
+        .cast(pl.Float64)
+        .alias("value"))
+        .select(["date", "category", "value"])
+    )
+
+
+
 
 _AGGREGATIONS = [
-    (Table.FITBIT_CALORIES,      fitbit.aggregate_calories),
-    (Table.FITBIT_STEPS,         fitbit.aggregate_steps),
-    (Table.FITBIT_EXERCISE,      fitbit.aggregate_exercise),
-    (Table.FITBIT_SLEEP,         fitbit.aggregate_sleep),
-    (Table.GITHUB_CONTRIBUTIONS, github.aggregate),
-    (Table.GYMGROUP_VISITS,      gymgroup.aggregate),
-    (Table.KINDLE_READING,       kindle.aggregate),
-    (Table.MACOS_COMMANDS,       macos_commands.aggregate),
-    (Table.MACOS_SCREENTIME,     macos_screentime.aggregate),
-    (Table.STRONG_WORKOUTS,      strong.aggregate),
+    ("fitbit_calories",      aggregate_calories),
+    ("fitbit_steps",         aggregate_steps),
+    ("fitbit_steps",      aggregate_exercise),
+    ("fitbit_sleep",         aggregate_sleep),
+    ("gym_group_workouts",      aggregate_gym_group),
+    ("kindle_reading",       aggregate_kindle),
+    ("macos_commands",       aggregate_macos_commands),
+    ("macos_screentime",     aggregate_macos_scre),
+    ("",      aggregate_strong_workouts),
 ]
 
 

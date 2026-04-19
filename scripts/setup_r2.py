@@ -23,9 +23,9 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
-from pipeline.bucket_setup import apply_cors, create_inboxes, enable_r2_dev_public, ensure_bucket
-from pipeline.config import PipelineConfig
-from pipeline.r2 import make_client, make_web_client
+from pipeline.common.bucket_setup import apply_cors, create_inboxes, enable_r2_dev_public, ensure_bucket
+from pipeline.common.config import PipelineConfig
+from pipeline.common.r2 import make_client, make_web_client
 
 
 def main() -> None:

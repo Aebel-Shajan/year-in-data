@@ -13,8 +13,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from pipeline.config import PipelineConfig
-from pipeline.r2 import make_client, make_web_client, list_keys
+from pipeline.common.config import PipelineConfig
+from pipeline.common.r2 import make_client, make_web_client, list_keys
 ROOT = Path(__file__).parent.parent
 
 

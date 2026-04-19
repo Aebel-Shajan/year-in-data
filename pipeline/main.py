@@ -9,26 +9,26 @@ from __future__ import annotations
 import sys
 import traceback
 
-from pipeline.config import PipelineConfig
+from pipeline.common.config import PipelineConfig
 from pipeline.jobs import JobFn
 from pipeline.jobs.aggregate import aggregate_daily
 from pipeline.jobs.export import export_to_web
-from pipeline.jobs.fitbit import process_fitbit
-from pipeline.jobs.github import process_github
-from pipeline.jobs.gymgroup import process_gymgroup
-from pipeline.jobs.kindle import process_kindle
-from pipeline.jobs.macos_commands import process_macos_commands
-from pipeline.jobs.macos_screentime import process_macos_screentime
-from pipeline.r2 import make_client
+from pipeline.jobs.fitbit import extract_fitbit
+from pipeline.jobs.github import extract_github
+from pipeline.jobs.gymgroup import extract_gymgroup
+from pipeline.jobs.kindle import extract_kindle
+from pipeline.jobs.macos_commands import extract_macos_commands
+from pipeline.jobs.macos_screentime import extract_macos_screentime
+from pipeline.common.r2 import make_client
 
 # Order determines execution sequence
 ALL_JOBS: list[JobFn] = [
-    process_fitbit,
-    process_github,
-    process_gymgroup,
-    process_kindle,
-    process_macos_commands,
-    process_macos_screentime,
+    extract_fitbit,
+    extract_github,
+    extract_gymgroup,
+    extract_kindle,
+    extract_macos_commands,
+    extract_macos_screentime,
     aggregate_daily,
     export_to_web,
 ]

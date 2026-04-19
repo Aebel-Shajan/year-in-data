@@ -15,10 +15,11 @@ from datetime import datetime
 
 import polars as pl
 
-from pipeline import paths, r2 as R2
-from pipeline.config import PipelineConfig
-from pipeline.paths import Source, Table
-from pipeline.r2 import R2Client
+from pipeline.common import r2 as R2
+from pipeline.common.config import PipelineConfig
+from pipeline.common import paths
+from pipeline.common.paths import Source, Table
+from pipeline.common.r2 import R2Client
 
 TAG = Source.FITBIT
 
@@ -77,31 +78,6 @@ def _parse_metric(
     R2.store_parquet(r2, output_key, df, sort_col="datetime", overwrite=True)
     print(f"[{TAG}/{label}] {len(df)} rows")
 
-
-# ── Aggregations ──────────────────────────────────────────────────────────────
-
-def aggregate_calories(df: pl.DataFrame) -> pl.DataFrame:
-    return df.group_by("date").agg(pl.col("value").sum()).sort("date")
-
-def aggregate_steps(df: pl.DataFrame) -> pl.DataFrame:
-    return df.group_by("date").agg(pl.col("value").sum()).sort("date")
-
-def aggregate_exercise(df: pl.DataFrame) -> pl.DataFrame:
-    return (
-        df.group_by("date").agg(pl.col("value").sum())
-        .with_columns((pl.col("value") / 60_000).round(1).alias("value"))
-        .sort("date")
-    )
-
-def aggregate_sleep(df: pl.DataFrame) -> pl.DataFrame:
-    return (
-        df.group_by("date").agg(pl.col("value").sum())
-        .with_columns((pl.col("value") / 60).round(2).alias("value"))
-        .sort("date")
-    )
-
-
-# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _parse_datetime(s: str) -> datetime | None:
     s = s.strip()

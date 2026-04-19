@@ -13,10 +13,11 @@ from pathlib import Path
 
 import polars as pl
 
-from pipeline import paths, r2 as R2
-from pipeline.config import PipelineConfig
-from pipeline.paths import Source, Table
-from pipeline.r2 import R2Client
+from pipeline.common import r2 as R2
+from pipeline.common.config import PipelineConfig
+from pipeline.common import paths
+from pipeline.common.paths import Source, Table
+from pipeline.common.r2 import R2Client
 
 TAG = Source.MACOS_COMMANDS
 
@@ -34,11 +35,8 @@ def fetch(r2: R2Client, config: PipelineConfig) -> None:
     print(f"[{TAG}] {len(records)} commands → inbox")
 
 
-def process_macos_commands(r2: R2Client, config: PipelineConfig) -> None:
-    fetch(r2, config)
-
+def extract_macos_commands(r2: R2Client, config: PipelineConfig) -> None:
     R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
-
     archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.MACOS_COMMANDS), ".json")
     if not archive_keys:
         print(f"[{TAG}] no new files, skipping")
@@ -65,14 +63,6 @@ def process_macos_commands(r2: R2Client, config: PipelineConfig) -> None:
     R2.store_parquet(r2, paths.table(Table.MACOS_COMMANDS), df, sort_col="date", overwrite=True)
     print(f"[{TAG}] {len(df)} rows")
 
-
-# ── Aggregation ───────────────────────────────────────────────────────────────
-
-def aggregate(df: pl.DataFrame) -> pl.DataFrame:
-    return df.with_columns(pl.col("count").cast(pl.Float64).alias("value")).select(["date", "category", "value"])
-
-
-# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _parse_history(path: Path = _HISTORY_FILE) -> list[dict]:
     if not path.exists():

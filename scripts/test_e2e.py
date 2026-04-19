@@ -23,8 +23,7 @@ sys.path.insert(0, str(ROOT))
 
 from pipeline.common.bucket_setup import ensure_bucket
 from pipeline.common.config import PipelineConfig
-from pipeline.common.r2 import make_client, make_web_client, upload_bytes, exists
-from pipeline.jobs import fitbit, github, kindle, strong, aggregate
+from pipeline.common.r2 import make_client, make_web_client, upload_bytes
 from pipeline.main import run_pipeline
 from pipeline.common import paths
 
@@ -111,13 +110,13 @@ def start_mock_server() -> tuple[HTTPServer, int]:
 
 
 def upload_test_data(r2) -> None:
-    upload_bytes(r2, f"{paths.inbox(paths.Source.FITBIT)}/test_export.zip", make_fitbit_zip(), "application/zip")
+    upload_bytes(r2, f"{paths.construct_inbox_path(paths.Source.FITBIT)}/test_export.zip", make_fitbit_zip(), "application/zip")
     print("  uploaded fitbit test data")
 
-    upload_bytes(r2, f"{paths.inbox(paths.Source.KINDLE)}/test_reading.zip", make_kindle_zip(), "application/zip")
+    upload_bytes(r2, f"{paths.construct_inbox_path(paths.Source.KINDLE)}/test_reading.zip", make_kindle_zip(), "application/zip")
     print("  uploaded kindle test data")
 
-    upload_bytes(r2, f"{paths.inbox(paths.Source.STRONG)}/test_workouts.csv", make_strong_csv(), "text/csv")
+    upload_bytes(r2, f"{paths.construct_inbox_path(paths.Source.STRONG)}/test_workouts.csv", make_strong_csv(), "text/csv")
     print("  uploaded strong test data")
 
 

@@ -29,13 +29,13 @@ _SLEEP_RE    = re.compile(r"Fitbit/Global Export Data/sleep-\d{4}-\d{2}-\d{2}\.j
 _STEPS_RE    = re.compile(r"Fitbit/Global Export Data/steps-\d{4}-\d{2}-\d{2}\.json$",    re.IGNORECASE)
 
 
-def process_fitbit(r2: R2Client, config: PipelineConfig) -> None:
-    R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
+def extract_fitbit(r2: R2Client, config: PipelineConfig) -> None:
+    R2.flush_inbox(r2, TAG, paths.construct_inbox_path(TAG), paths.construct_archive_path(TAG))
 
-    _parse_metric(r2, paths.table(Table.FITBIT_CALORIES), _CALORIES_RE, "dateTime",    "value")
-    _parse_metric(r2, paths.table(Table.FITBIT_EXERCISE), _EXERCISE_RE, "startTime",   "activeDuration")
-    _parse_metric(r2, paths.table(Table.FITBIT_SLEEP),    _SLEEP_RE,    "dateOfSleep", "minutesAsleep")
-    _parse_metric(r2, paths.table(Table.FITBIT_STEPS),    _STEPS_RE,    "dateTime",    "value")
+    _parse_metric(r2, paths.construct_table_path(Table.FITBIT_CALORIES), _CALORIES_RE, "dateTime",    "value")
+    _parse_metric(r2, paths.construct_table_path(Table.FITBIT_EXERCISE), _EXERCISE_RE, "startTime",   "activeDuration")
+    _parse_metric(r2, paths.construct_table_path(Table.FITBIT_SLEEP),    _SLEEP_RE,    "dateOfSleep", "minutesAsleep")
+    _parse_metric(r2, paths.construct_table_path(Table.FITBIT_STEPS),    _STEPS_RE,    "dateTime",    "value")
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -48,7 +48,7 @@ def _parse_metric(
     value_field: str,
 ) -> None:
     label = output_key.split("/")[-1].removesuffix(".parquet")
-    keys = R2.get_archive_keys(r2, paths.archive(TAG), output_key, ".zip")
+    keys = R2.get_archive_keys(r2, paths.construct_archive_path(TAG), output_key, ".zip")
     if not keys:
         print(f"[{TAG}/{label}] no new files, skipping")
         return

@@ -11,26 +11,16 @@ import traceback
 
 from pipeline.common.config import PipelineConfig
 from pipeline.jobs import JobFn
-from pipeline.jobs.aggregate import aggregate_daily
+from pipeline.jobs.extract import extract_from_sources
+from pipeline.jobs.daily_aggregation import aggregate_into_daily_tables
 from pipeline.jobs.export import export_to_web
-from pipeline.jobs.fitbit import extract_fitbit
-from pipeline.jobs.github import extract_github
-from pipeline.jobs.gymgroup import extract_gymgroup
-from pipeline.jobs.kindle import extract_kindle
-from pipeline.jobs.macos_commands import extract_macos_commands
-from pipeline.jobs.macos_screentime import extract_macos_screentime
 from pipeline.common.r2 import make_client
 
 # Order determines execution sequence
 ALL_JOBS: list[JobFn] = [
-    extract_fitbit,
-    extract_github,
-    extract_gymgroup,
-    extract_kindle,
-    extract_macos_commands,
-    extract_macos_screentime,
-    aggregate_daily,
-    export_to_web,
+    extract_from_sources,
+    aggregate_into_daily_tables,
+    export_to_web
 ]
 
 

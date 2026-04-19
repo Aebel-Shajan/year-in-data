@@ -20,9 +20,9 @@ TAG = Source.STRONG
 
 
 def extract_strong(r2: R2Client, config: PipelineConfig) -> None:
-    R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
+    R2.flush_inbox(r2, TAG, paths.construct_inbox_path(TAG), paths.construct_archive_path(TAG))
 
-    archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.STRONG_WORKOUTS), ".csv")
+    archive_keys = R2.get_archive_keys(r2, paths.construct_archive_path(TAG), paths.construct_table_path(Table.STRONG_WORKOUTS), ".csv")
     if not archive_keys:
         print(f"[{TAG}] no new files, skipping")
         return
@@ -35,20 +35,9 @@ def extract_strong(r2: R2Client, config: PipelineConfig) -> None:
         .sort("date")
     )
 
-    R2.store_parquet(r2, paths.table(Table.STRONG_WORKOUTS), df, sort_col="date", overwrite=True)
+    R2.store_parquet(r2, paths.construct_table_path(Table.STRONG_WORKOUTS), df, sort_col="date", overwrite=True)
     print(f"[{TAG}] {len(df)} rows")
 
-
-# ── Aggregation ───────────────────────────────────────────────────────────────
-
-def aggregate(df: pl.DataFrame) -> pl.DataFrame:
-    return (
-        df.with_columns((pl.col("duration_sec") / 60).round(1).alias("value"))
-        .select(["date", "category", "value"])
-    )
-
-
-# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _parse_csv(data: bytes) -> pl.DataFrame:
     return (

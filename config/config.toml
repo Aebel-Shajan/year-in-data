@@ -5,18 +5,14 @@ web_bucket_name = "year-in-data-web"
 [github]
 username = "aebel-shajan"
 
-[pipeline]
-# Run only these jobs (empty = run all)
-jobs_to_run = [
-    # "strong",
-    "gymgroup",
-    # "macos_commands",
-    # "macos_screentime",
-    # "fitbit",
-    # "kindle",
+[pipeline.extract]
+sources_to_extract = [
+    ''
 ]
+extract_from = "2026"
+extract_to = ""
 
-# Per-job date ranges (optional — omit to use latest processed date)
-# [pipeline.fitbit]
-start = "2023-01-01"
-# end   = "2024-12-31"
+
+[pipeline.aggregate]
+aggregate_from = ""
+aggregate_to = ""

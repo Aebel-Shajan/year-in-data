@@ -14,7 +14,7 @@ import polars as pl
 from botocore.config import Config as BotocoreConfig
 from botocore.exceptions import ClientError
 
-from pipeline.config import PipelineConfig
+from pipeline.common.config import PipelineConfig
 
 
 @dataclass

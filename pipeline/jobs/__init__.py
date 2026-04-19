@@ -1,7 +1,7 @@
 from typing import Protocol
 
-from pipeline.config import PipelineConfig
-from pipeline.r2 import R2Client
+from pipeline.common.config import PipelineConfig
+from pipeline.common.r2 import R2Client
 
 
 class JobFn(Protocol):

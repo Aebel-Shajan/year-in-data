@@ -15,8 +15,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from pipeline import r2 as R2
-from pipeline.config import PipelineConfig
+from pipeline.common import r2 as R2
+from pipeline.common.config import PipelineConfig
 from pipeline.jobs import export
 
 

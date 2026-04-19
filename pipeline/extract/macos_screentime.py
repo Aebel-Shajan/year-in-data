@@ -18,15 +18,14 @@ from pathlib import Path
 
 import polars as pl
 
-from pipeline import paths, r2 as R2
-from pipeline.config import PipelineConfig
-from pipeline.paths import Source, Table
-from pipeline.r2 import R2Client
+from pipeline.common import r2 as R2
+from pipeline.common.config import PipelineConfig
+from pipeline.common import paths
+from pipeline.common.paths import Source, Table
+from pipeline.common.r2 import R2Client
 
 TAG = Source.MACOS_SCREENTIME
-
 _DB = Path.home() / "Library/Application Support/Knowledge/knowledgeC.db"
-
 _QUERY = """
 SELECT
     ZOBJECT.ZVALUESTRING                        AS app,
@@ -51,9 +50,8 @@ def fetch(r2: R2Client, config: PipelineConfig) -> None:
     print(f"[{TAG}] {len(records)} screentime records → inbox")
 
 
-def process_macos_screentime(r2: R2Client, config: PipelineConfig) -> None:
+def extract_macos_screentime(r2: R2Client, config: PipelineConfig) -> None:
     R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
-
     archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.MACOS_SCREENTIME), ".json")
     if not archive_keys:
         print(f"[{TAG}] no new files, skipping")
@@ -83,19 +81,6 @@ def process_macos_screentime(r2: R2Client, config: PipelineConfig) -> None:
 
     R2.store_parquet(r2, paths.table(Table.MACOS_SCREENTIME), df, sort_col="date", overwrite=True)
     print(f"[{TAG}] {len(df)} rows")
-
-
-# ── Aggregation ───────────────────────────────────────────────────────────────
-
-def aggregate(df: pl.DataFrame) -> pl.DataFrame:
-    return (
-        df.group_by(["date", "category"])
-        .agg((pl.col("usage_secs").sum() / 60).round(1).alias("value"))
-        .sort("date")
-    )
-
-
-# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _query_db(db_path: Path = _DB) -> list[dict]:
     if not db_path.exists():

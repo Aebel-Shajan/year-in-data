@@ -12,16 +12,17 @@ from datetime import date
 
 import polars as pl
 
-from pipeline import paths, r2 as R2
-from pipeline.config import PipelineConfig
-from pipeline.paths import Source, Table
-from pipeline.r2 import R2Client
+from pipeline.common import r2 as R2
+from pipeline.common.config import PipelineConfig
+from pipeline.common import paths
+from pipeline.common.paths import Source, Table
+from pipeline.common.r2 import R2Client
 
 TAG = Source.KINDLE
 
 _CSV_NAME = "Kindle.reading-insights-sessions_with_adjustments.csv"
 
-def process_kindle(r2: R2Client, config: PipelineConfig) -> None:
+def extract_kindle(r2: R2Client, config: PipelineConfig) -> None:
     R2.flush_inbox(r2, TAG, paths.inbox(TAG), paths.archive(TAG))
 
     archive_keys = R2.get_archive_keys(r2, paths.archive(TAG), paths.table(Table.KINDLE_READING), ".zip")
@@ -40,18 +41,6 @@ def process_kindle(r2: R2Client, config: PipelineConfig) -> None:
     R2.store_parquet(r2, paths.table(Table.KINDLE_READING), df, sort_col="date", overwrite=True)
     print(f"[{TAG}] {len(df)} rows")
 
-
-# ── Aggregation ───────────────────────────────────────────────────────────────
-
-def aggregate(df: pl.DataFrame) -> pl.DataFrame:
-    return (
-        df.group_by(["date", "category"])
-        .agg((pl.col("reading_ms").sum() / 60_000).round(1).alias("value"))
-        .sort("date")
-    )
-
-
-# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _parse_zip(data: bytes) -> pl.DataFrame:
     with zipfile.ZipFile(io.BytesIO(data)) as zf:

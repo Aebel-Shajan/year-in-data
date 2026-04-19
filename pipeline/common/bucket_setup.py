@@ -12,8 +12,8 @@ from urllib.parse import urlparse
 import httpx
 from botocore.exceptions import ClientError
 
-from pipeline import paths
-from pipeline.r2 import R2Client, exists, upload_bytes
+from pipeline.common import paths
+from pipeline.common.r2 import R2Client, exists, upload_bytes
 
 
 def ensure_bucket(r2: R2Client, bucket: str) -> None:

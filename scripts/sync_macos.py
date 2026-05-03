@@ -25,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from pipeline.common.config import PipelineConfig
 from pipeline.common.r2 import make_client
-from pipeline.jobs import macos_commands, macos_screentime
+from pipeline.extract import macos_commands, macos_screentime
 
 
 def main() -> None:

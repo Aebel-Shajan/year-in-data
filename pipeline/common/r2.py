@@ -204,16 +204,14 @@ def store_parquet(
     """Write df to a Parquet file on R2, merging with any existing data by default."""
     if not overwrite and exists(r2, key):
         existing = pl.read_parquet(io.BytesIO(download_bytes(r2, key)))
-        if dedup_cols:
-            df = (
-                pl.concat([df, existing])
-                .unique(subset=dedup_cols, keep=keep)
-                .sort(sort_col)
-            )
-        else:
-            df = pl.concat([df, existing]).unique(keep=keep).sort(sort_col)
-    else:
-        df = df.sort(sort_col)
+        df = pl.concat([df, existing])
+
+    if dedup_cols:
+        df = df.unique(subset=dedup_cols, keep=keep)
+    elif not overwrite:
+        df = df.unique(keep=keep)
+
+    df = df.sort(sort_col)
 
     buf = io.BytesIO()
     df.write_parquet(buf)

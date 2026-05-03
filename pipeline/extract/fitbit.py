@@ -75,7 +75,7 @@ def _parse_metric(
         .sort("datetime")
     )
 
-    R2.store_parquet(r2, output_key, df, sort_col="datetime", overwrite=True)
+    R2.store_parquet(r2, output_key, df, sort_col="datetime", dedup_cols=["datetime"], overwrite=True)
     print(f"[{TAG}/{label}] {len(df)} rows")
 
 

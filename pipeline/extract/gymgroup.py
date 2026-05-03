@@ -71,7 +71,7 @@ def extract_gymgroup(r2: R2Client, config: PipelineConfig) -> None:
         .sort("date")
     )
 
-    R2.store_parquet(r2, paths.construct_table_path(Table.GYMGROUP_VISITS), df, sort_col="date", overwrite=True)
+    R2.store_parquet(r2, paths.construct_table_path(Table.GYMGROUP_VISITS), df, sort_col="date", dedup_cols=["date", "category"], overwrite=True)
     print(f"[{TAG}] {len(df)} rows")
 
 

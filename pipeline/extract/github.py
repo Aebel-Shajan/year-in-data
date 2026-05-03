@@ -65,20 +65,15 @@ def extract_github(r2: R2Client, config: PipelineConfig) -> None:
     for key in archive_keys:
         all_days.extend(json.loads(R2.download_bytes(r2, key)))
 
-    df = (
-        pl.DataFrame(
-            {
-                "date": [date.fromisoformat(d["date"]) for d in all_days],
-                "value": [float(d["contributionCount"]) for d in all_days],
-            },
-            schema={"date": pl.Date, "value": pl.Float64},
-        )
-        .sort("date")
-        .unique(subset=["date"], keep="last")
-        .sort("date")
+    df = pl.DataFrame(
+        {
+            "date": [date.fromisoformat(d["date"]) for d in all_days],
+            "value": [float(d["contributionCount"]) for d in all_days],
+        },
+        schema={"date": pl.Date, "value": pl.Float64},
     )
 
-    R2.store_parquet(r2, paths.construct_table_path(Table.GITHUB_CONTRIBUTIONS), df, sort_col="date", overwrite=True)
+    R2.store_parquet(r2, paths.construct_table_path(Table.GITHUB_CONTRIBUTIONS), df, sort_col="date", dedup_cols=["date"], overwrite=True)
     print(f"[{TAG}] {len(df)} rows")
 
 

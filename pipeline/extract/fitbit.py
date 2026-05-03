@@ -25,7 +25,7 @@ from pipeline.common.r2 import R2Client
 TAG = Source.FITBIT
 
 _CALORIES_RE = re.compile(r"Fitbit/Global Export Data/calories-\d{4}-\d{2}-\d{2}\.json$", re.IGNORECASE)
-_EXERCISE_RE = re.compile(r"Fitbit/Global Export Data/exercise-\d{4}-\d{2}-\d{2}\.json$", re.IGNORECASE)
+_EXERCISE_RE = re.compile(r"Fitbit/Global Export Data/exercise-\d{4}.json$", re.IGNORECASE)
 _SLEEP_RE    = re.compile(r"Fitbit/Global Export Data/sleep-\d{4}-\d{2}-\d{2}\.json$",    re.IGNORECASE)
 _STEPS_RE    = re.compile(r"Fitbit/Global Export Data/steps-\d{4}-\d{2}-\d{2}\.json$",    re.IGNORECASE)
 

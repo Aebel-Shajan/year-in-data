@@ -41,6 +41,7 @@ jobs:
         run: make setup-r2
 
       - name: Sync API data
+        continue-on-error: true
         run: make sync-api
 
       - name: Run pipeline

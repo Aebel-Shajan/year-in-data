@@ -16,7 +16,7 @@ def extract_from_sources(r2: R2Client, config: PipelineConfig):
     ]
 
     for source, extraction_function in sources:
-        if source in sources_to_extract:
+        if not sources_to_extract or source in sources_to_extract:
             print(f"extracting {source}.. ")
             try:
                 extraction_function(r2, config)

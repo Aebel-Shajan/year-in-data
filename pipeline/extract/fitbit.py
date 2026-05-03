@@ -35,7 +35,7 @@ def extract_fitbit(r2: R2Client, config: PipelineConfig) -> None:
 
     _store_metric(r2, paths.construct_table_path(Table.FITBIT_CALORIES), _CALORIES_RE, "dateTime",    "value")
     _store_metric(r2, paths.construct_table_path(Table.FITBIT_EXERCISE), _EXERCISE_RE, "startTime",   "activeDuration")
-    _store_metric(r2, paths.construct_table_path(Table.FITBIT_SLEEP),    _SLEEP_RE,    "dateOfSleep", "minutesAsleep")
+    _store_metric(r2, paths.construct_table_path(Table.FITBIT_SLEEP),    _SLEEP_RE,    "startTime", "minutesAsleep")
     _store_metric(r2, paths.construct_table_path(Table.FITBIT_STEPS),    _STEPS_RE,    "dateTime",    "value")
 
 

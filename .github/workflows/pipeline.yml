@@ -1,0 +1,45 @@
+name: Weekly data pipeline
+
+on:
+  schedule:
+    - cron: "0 2 * * 1"  # Every Monday at 02:00 UTC
+  workflow_dispatch:      # Allow manual runs from the Actions tab
+    inputs:
+      tags_to_run:
+        description: "Pipelines to run, comma-separated (empty = use config.toml)"
+        type: string
+        default: ""
+      tags_to_ignore:
+        description: "Pipelines to skip, comma-separated (empty = use config.toml)"
+        type: string
+        default: ""
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: make install-python
+
+      - name: Set up R2 bucket
+        env:
+          R2_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: make setup-r2
+
+      - name: Run pipeline
+        env:
+          R2_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          GITHUB_TOKEN: ${{ secrets.PIPELINE_GITHUB_TOKEN }}
+          PIPELINE_TAGS_TO_RUN: ${{ github.event.inputs.tags_to_run || '' }}
+          PIPELINE_TAGS_TO_IGNORE: ${{ github.event.inputs.tags_to_ignore || '' }}
+        run: make pipeline

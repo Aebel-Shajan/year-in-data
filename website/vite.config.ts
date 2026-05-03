@@ -1,8 +1,19 @@
-import { defineConfig } from "vite";
-import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
-export default defineConfig({
-  plugins: [tailwindcss(), react()],
-  base: "/year-in-data/"
+const DEV_WEB_URL =  "http://localhost:9000/year-in-data-web";
+
+export default defineConfig(({ mode }) => {
+  const isDev = mode === "development";
+  const publicUrl = process.env.VITE_R2_PUBLIC_URL ?? (isDev ? DEV_WEB_URL : "");
+
+  if (!publicUrl) throw new Error("VITE_R2_PUBLIC_URL is not set");
+
+  return {
+    plugins: [react()],
+    base: "/year-in-data/",
+    define: {
+      __R2_PUBLIC_URL__: JSON.stringify(publicUrl),
+    },
+  };
 });

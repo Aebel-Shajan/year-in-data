@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=./schema.json
+r2:
+  bucket_name: year-in-data
+  web_bucket_name: year-in-data-web
+
+github:
+  username: aebel-shajan
+
+pipeline:
+  extract:
+    sources_to_extract:
+      - ""
+    extract_from: "2026"
+    extract_to: ""
+  aggregate:
+    aggregate_from: ""
+    aggregate_to: ""

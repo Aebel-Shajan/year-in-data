@@ -8,8 +8,7 @@ github:
 
 pipeline:
   extract:
-    sources_to_extract:
-      - ""
+    sources_to_extract: []
     extract_from: "2026"
     extract_to: ""
   aggregate:

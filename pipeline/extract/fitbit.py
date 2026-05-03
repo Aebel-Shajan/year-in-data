@@ -46,7 +46,7 @@ def _parse_zip(path: Path, file_re: re.Pattern, date_field: str, value_field: st
         for name in zf.namelist():
             if file_re.search(name):
                 for entry in json.loads(zf.read(name)):
-                    dt = _parse_datetime(entry.get(date_field, ""))
+                    dt = entry.get(date_field, "")
                     if dt is not None:
                         datetimes.append(dt)
                         values.append(float(entry.get(value_field, 0)))
@@ -60,17 +60,6 @@ def _parse_zip(path: Path, file_re: re.Pattern, date_field: str, value_field: st
         .select(["datetime", "date", "value"])
         .sort("datetime")
     )
-
-
-def _parse_datetime(s: str) -> datetime | None:
-    try:
-
-        s = s.strip()
-        fmt = "%m/%d/%y %H:%M:%S"
-        return datetime.strptime(s[:19], fmt)
-    except Exception:
-        print("Failed to parse date", s, ", setting as None for now...")
-        return None
 
 
 def _store_metric(

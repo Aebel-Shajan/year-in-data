@@ -7,11 +7,12 @@ Produces four metrics: calories, exercise, sleep, steps.
 
 from __future__ import annotations
 
-import io
 import json
 import re
+import tempfile
 import zipfile
 from datetime import datetime
+from pathlib import Path
 
 import polars as pl
 
@@ -32,15 +33,42 @@ _STEPS_RE    = re.compile(r"Fitbit/Global Export Data/steps-\d{4}-\d{2}-\d{2}\.j
 def extract_fitbit(r2: R2Client, config: PipelineConfig) -> None:
     R2.flush_inbox(r2, TAG, paths.construct_inbox_path(TAG), paths.construct_archive_path(TAG))
 
-    _parse_metric(r2, paths.construct_table_path(Table.FITBIT_CALORIES), _CALORIES_RE, "dateTime",    "value")
-    _parse_metric(r2, paths.construct_table_path(Table.FITBIT_EXERCISE), _EXERCISE_RE, "startTime",   "activeDuration")
-    _parse_metric(r2, paths.construct_table_path(Table.FITBIT_SLEEP),    _SLEEP_RE,    "dateOfSleep", "minutesAsleep")
-    _parse_metric(r2, paths.construct_table_path(Table.FITBIT_STEPS),    _STEPS_RE,    "dateTime",    "value")
+    _store_metric(r2, paths.construct_table_path(Table.FITBIT_CALORIES), _CALORIES_RE, "dateTime",    "value")
+    _store_metric(r2, paths.construct_table_path(Table.FITBIT_EXERCISE), _EXERCISE_RE, "startTime",   "activeDuration")
+    _store_metric(r2, paths.construct_table_path(Table.FITBIT_SLEEP),    _SLEEP_RE,    "dateOfSleep", "minutesAsleep")
+    _store_metric(r2, paths.construct_table_path(Table.FITBIT_STEPS),    _STEPS_RE,    "dateTime",    "value")
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+def _parse_zip(path: Path, file_re: re.Pattern, date_field: str, value_field: str) -> pl.DataFrame:
+    datetimes: list[datetime] = []
+    values: list[float] = []
+    with zipfile.ZipFile(path) as zf:
+        for name in zf.namelist():
+            if file_re.search(name):
+                for entry in json.loads(zf.read(name)):
+                    dt = _parse_datetime(entry.get(date_field, ""))
+                    if dt is not None:
+                        datetimes.append(dt)
+                        values.append(float(entry.get(value_field, 0)))
 
-def _parse_metric(
+    return (
+        pl.DataFrame(
+            {"datetime": datetimes, "value": values},
+            schema={"datetime": pl.Datetime, "value": pl.Float64},
+        )
+        .with_columns(pl.col("datetime").dt.date().alias("date"))
+        .select(["datetime", "date", "value"])
+        .sort("datetime")
+    )
+
+
+def _parse_datetime(s: str) -> datetime | None:
+    s = s.strip()
+    fmt = "%m/%d/%y %H:%M:%S"
+    return datetime.strptime(s[:19], fmt)
+
+
+def _store_metric(
     r2: R2Client,
     output_key: str,
     file_re: re.Pattern,
@@ -53,40 +81,13 @@ def _parse_metric(
         print(f"[{TAG}/{label}] no new files, skipping")
         return
 
-    datetimes: list[datetime] = []
-    values: list[float] = []
-    for key in keys:
-        with zipfile.ZipFile(io.BytesIO(R2.download_bytes(r2, key))) as zf:
-            for name in zf.namelist():
-                if file_re.search(name):
-                    for e in json.loads(zf.read(name)):
-                        dt = _parse_datetime(e.get(date_field, ""))
-                        if dt is not None:
-                            datetimes.append(dt)
-                            values.append(float(e.get(value_field, 0)))
+    frames: list[pl.DataFrame] = []
+    with tempfile.TemporaryDirectory() as tmp:
+        for key in keys:
+            path = Path(tmp) / Path(key).name
+            path.write_bytes(R2.download_bytes(r2, key))
+            frames.append(_parse_zip(path, file_re, date_field, value_field))
 
-    df = (
-        pl.DataFrame(
-            {"datetime": datetimes, "value": values},
-            schema={"datetime": pl.Datetime, "value": pl.Float64},
-        )
-        .with_columns(pl.col("datetime").dt.date().alias("date"))
-        .select(["datetime", "date", "value"])
-        .sort("datetime")
-    )
-
+    df = pl.concat(frames)
     R2.store_parquet(r2, output_key, df, sort_col="datetime", dedup_cols=["datetime"], overwrite=True)
     print(f"[{TAG}/{label}] {len(df)} rows")
-
-
-def _parse_datetime(s: str) -> datetime | None:
-    s = s.strip()
-    for fmt, length in [("%Y-%m-%dT%H:%M:%S", 19), ("%Y-%m-%d %H:%M:%S", 19), ("%m/%d/%y", 8)]:
-        try:
-            return datetime.strptime(s[:length], fmt)
-        except ValueError:
-            pass
-    try:
-        return datetime.strptime(s[:10], "%Y-%m-%d")
-    except ValueError:
-        return None

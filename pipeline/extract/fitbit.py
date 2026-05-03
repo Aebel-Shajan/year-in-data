@@ -38,7 +38,7 @@ def extract_fitbit(r2: R2Client, config: PipelineConfig) -> None:
     _store_metric(r2, paths.construct_table_path(Table.FITBIT_STEPS),    _STEPS_RE,    "dateTime",    "value")
 
 
-_DT_FORMATS = ["%m/%d/%y %H:%M:%S", "%y-%m-%dT%H:%M:00.000"]
+_DT_FORMATS = ["%m/%d/%y %H:%M:%S", "%Y-%m-%dT%H:%M:%S%.3f"]
 
 
 def _parse_zip(path: Path, file_re: re.Pattern, date_field: str, value_field: str) -> pl.DataFrame:

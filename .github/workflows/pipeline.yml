@@ -5,18 +5,28 @@ on:
     - cron: "0 2 * * 1"  # Every Monday at 02:00 UTC
   workflow_dispatch:      # Allow manual runs from the Actions tab
     inputs:
-      tags_to_run:
-        description: "Pipelines to run, comma-separated (empty = use config.toml)"
+      jobs_to_run:
+        description: "Jobs to run, comma-separated (empty = run all)"
         type: string
         default: ""
-      tags_to_ignore:
-        description: "Pipelines to skip, comma-separated (empty = use config.toml)"
+      sources_to_extract:
+        description: "Sources to extract, comma-separated (empty = extract all)"
         type: string
         default: ""
 
 jobs:
   pipeline:
     runs-on: ubuntu-latest
+    env:
+      R2_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.PIPELINE_GITHUB_TOKEN }}
+      GYM_GROUP_USERNAME: ${{ secrets.GYM_GROUP_USERNAME }}
+      GYM_GROUP_PASSWORD: ${{ secrets.GYM_GROUP_PASSWORD }}
+      JOBS_TO_RUN: ${{ github.event.inputs.jobs_to_run || '' }}
+      SOURCES_TO_EXTRACT: ${{ github.event.inputs.sources_to_extract || '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -28,18 +38,10 @@ jobs:
         run: make install-python
 
       - name: Set up R2 bucket
-        env:
-          R2_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: make setup-r2
 
+      - name: Sync API data
+        run: make sync-api
+
       - name: Run pipeline
-        env:
-          R2_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          GITHUB_TOKEN: ${{ secrets.PIPELINE_GITHUB_TOKEN }}
-          PIPELINE_TAGS_TO_RUN: ${{ github.event.inputs.tags_to_run || '' }}
-          PIPELINE_TAGS_TO_IGNORE: ${{ github.event.inputs.tags_to_ignore || '' }}
         run: make pipeline

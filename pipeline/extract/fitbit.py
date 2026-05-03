@@ -63,9 +63,14 @@ def _parse_zip(path: Path, file_re: re.Pattern, date_field: str, value_field: st
 
 
 def _parse_datetime(s: str) -> datetime | None:
-    s = s.strip()
-    fmt = "%m/%d/%y %H:%M:%S"
-    return datetime.strptime(s[:19], fmt)
+    try:
+
+        s = s.strip()
+        fmt = "%m/%d/%y %H:%M:%S"
+        return datetime.strptime(s[:19], fmt)
+    except Exception:
+        print("Failed to parse date", s, ", setting as None for now...")
+        return None
 
 
 def _store_metric(

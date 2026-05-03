@@ -11,7 +11,6 @@ import json
 import re
 import tempfile
 import zipfile
-from datetime import datetime
 from pathlib import Path
 
 import polars as pl
@@ -39,23 +38,28 @@ def extract_fitbit(r2: R2Client, config: PipelineConfig) -> None:
     _store_metric(r2, paths.construct_table_path(Table.FITBIT_STEPS),    _STEPS_RE,    "dateTime",    "value")
 
 
+_DT_FORMATS = ["%m/%d/%y %H:%M:%S", "%y-%m-%dT%H:%M:00.000"]
+
+
 def _parse_zip(path: Path, file_re: re.Pattern, date_field: str, value_field: str) -> pl.DataFrame:
-    datetimes: list[datetime] = []
+    datetimes: list[str] = []
     values: list[float] = []
     with zipfile.ZipFile(path) as zf:
         for name in zf.namelist():
             if file_re.search(name):
                 for entry in json.loads(zf.read(name)):
-                    dt = entry.get(date_field, "")
-                    if dt is not None:
-                        datetimes.append(dt)
-                        values.append(float(entry.get(value_field, 0)))
+                    datetimes.append(entry.get(date_field, ""))
+                    values.append(float(entry.get(value_field, 0)))
 
     return (
-        pl.DataFrame(
-            {"datetime": datetimes, "value": values},
-            schema={"datetime": pl.Datetime, "value": pl.Float64},
+        pl.DataFrame({"datetime": datetimes, "value": values})
+        .with_columns(
+            pl.coalesce([
+                pl.col("datetime").str.to_datetime(fmt, strict=False)
+                for fmt in _DT_FORMATS
+            ]).alias("datetime")
         )
+        .drop_nulls("datetime")
         .with_columns(pl.col("datetime").dt.date().alias("date"))
         .select(["datetime", "date", "value"])
         .sort("datetime")

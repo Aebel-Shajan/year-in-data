@@ -3,7 +3,7 @@ Empty and delete both R2 buckets (pipeline + web). This is irreversible.
 
   uv run python scripts/delete_bucket.py
 
-Credentials and bucket names are read from config/config.toml and .env.
+Credentials and bucket names are read from config/config.yaml and .env.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ def delete_bucket(r2, bucket: str) -> None:
 
 
 def main() -> None:
-    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
+    config = PipelineConfig.load(ROOT / "config" / "test.yaml", ".env.local.example")
     buckets = f"'{config.r2_bucket_name}' and '{config.web_bucket_name}'"
 
     print(f"This will permanently delete all objects and buckets: {buckets}.")

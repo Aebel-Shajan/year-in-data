@@ -42,7 +42,7 @@ def ensure_minio(endpoint: str) -> None:
 
 
 def main() -> None:
-    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
+    config = PipelineConfig.load(ROOT / "config" / "test.yaml", ".env.local.example")
     r2 = make_client(config)
     web_r2 = make_web_client(config)
 

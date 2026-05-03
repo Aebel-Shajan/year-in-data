@@ -8,7 +8,7 @@ import yaml
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-_ROOT = Path(__file__).parent.parent
+_ROOT = Path(__file__).parent.parent.parent
 
 
 # ── YAML schema models ────────────────────────────────────────────────────────

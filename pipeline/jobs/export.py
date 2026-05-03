@@ -43,7 +43,7 @@ def export_to_web(r2: R2Client, config: PipelineConfig) -> None:
     web_r2 = R2.make_web_client(config)
     for spec in _EXPORTS:
         daily_key = paths.construct_table_path(spec.table)
-        _export_json(r2, web_r2, daily_key, f"daily_{spec.table}.json", spec.unit, spec.label)
+        _export_json(r2, web_r2, daily_key, f"{spec.table}.json", spec.unit, spec.label)
 
 
 

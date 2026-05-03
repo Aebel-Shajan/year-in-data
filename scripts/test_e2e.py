@@ -128,7 +128,7 @@ def create_test_bucket(config):
     upload_test_data(r2)
 
 def main() -> None:
-    config = PipelineConfig.load(ROOT / "config" / "test.toml", ".env.local.example")
+    config = PipelineConfig.load(ROOT / "config" / "test.yaml", ".env.local.example")
 
     print("── Starting MinIO ──────────────────────────────────────────────")
     create_test_bucket(config)

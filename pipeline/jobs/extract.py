@@ -6,6 +6,7 @@ from pipeline.extract import fitbit, github, gymgroup, kindle, macos_commands, m
 def extract_from_sources(r2: R2Client, config: PipelineConfig):
     sources_to_extract = config.sources_to_extract
     sources = [
+        (Source.STRONG, strong.extract_strong),
         (Source.FITBIT, fitbit.extract_fitbit),
         (Source.GITHUB, github.extract_github),
         (Source.GYMGROUP, gymgroup.extract_gymgroup),

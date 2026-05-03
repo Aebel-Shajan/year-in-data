@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from pipeline.common.config import PipelineConfig
 from pipeline.common.r2 import make_client
-from pipeline.jobs import github, gymgroup
+from pipeline.extract import github, gymgroup
 
 
 def main() -> None:

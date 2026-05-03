@@ -1,0 +1,134 @@
+{
+  "$defs": {
+    "_AggregateConfig": {
+      "properties": {
+        "aggregate_from": {
+          "default": "",
+          "title": "Aggregate From",
+          "type": "string"
+        },
+        "aggregate_to": {
+          "default": "",
+          "title": "Aggregate To",
+          "type": "string"
+        }
+      },
+      "title": "_AggregateConfig",
+      "type": "object"
+    },
+    "_ExtractConfig": {
+      "properties": {
+        "sources_to_extract": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Sources To Extract",
+          "type": "array"
+        },
+        "extract_from": {
+          "default": "",
+          "title": "Extract From",
+          "type": "string"
+        },
+        "extract_to": {
+          "default": "",
+          "title": "Extract To",
+          "type": "string"
+        }
+      },
+      "title": "_ExtractConfig",
+      "type": "object"
+    },
+    "_GithubConfig": {
+      "properties": {
+        "username": {
+          "title": "Username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "username"
+      ],
+      "title": "_GithubConfig",
+      "type": "object"
+    },
+    "_PipelineSection": {
+      "properties": {
+        "jobs_to_run": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Jobs To Run",
+          "type": "array"
+        },
+        "extract": {
+          "$ref": "#/$defs/_ExtractConfig",
+          "default": {
+            "sources_to_extract": [],
+            "extract_from": "",
+            "extract_to": ""
+          }
+        },
+        "aggregate": {
+          "$ref": "#/$defs/_AggregateConfig",
+          "default": {
+            "aggregate_from": "",
+            "aggregate_to": ""
+          }
+        }
+      },
+      "title": "_PipelineSection",
+      "type": "object"
+    },
+    "_R2Config": {
+      "properties": {
+        "bucket_name": {
+          "title": "Bucket Name",
+          "type": "string"
+        },
+        "web_bucket_name": {
+          "title": "Web Bucket Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "bucket_name",
+        "web_bucket_name"
+      ],
+      "title": "_R2Config",
+      "type": "object"
+    }
+  },
+  "description": "Pydantic model for config.yaml \u2014 use model_json_schema() to regenerate schema.json.",
+  "properties": {
+    "r2": {
+      "$ref": "#/$defs/_R2Config"
+    },
+    "github": {
+      "$ref": "#/$defs/_GithubConfig"
+    },
+    "pipeline": {
+      "$ref": "#/$defs/_PipelineSection",
+      "default": {
+        "jobs_to_run": [],
+        "extract": {
+          "extract_from": "",
+          "extract_to": "",
+          "sources_to_extract": []
+        },
+        "aggregate": {
+          "aggregate_from": "",
+          "aggregate_to": ""
+        }
+      }
+    }
+  },
+  "required": [
+    "r2",
+    "github"
+  ],
+  "title": "ConfigFile",
+  "type": "object"
+}

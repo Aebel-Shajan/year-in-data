@@ -58,6 +58,7 @@ def extract_gymgroup(r2: R2Client, config: PipelineConfig) -> None:
 
     df = (
         pl.DataFrame(all_check_ins)
+        .unique(subset=["checkInDate", "gymLocationName", "duration"])
         .select(["checkInDate", "gymLocationName", "duration"])
         .filter(pl.col("duration") > 0)
         .with_columns(

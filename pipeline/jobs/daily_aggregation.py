@@ -73,15 +73,16 @@ def _aggregate_strong_workouts(df: pl.DataFrame) -> pl.DataFrame:
 
 
 _AGGREGATIONS = [
-    ("fitbit_calories",      _aggregate_calories),
-    ("fitbit_steps",         _aggregate_steps),
-    ("fitbit_exercise",      _aggregate_exercise),
-    ("fitbit_sleep",         _aggregate_sleep),
-    ("gym_group_workouts",   _aggregate_gym_group),
-    ("kindle_reading",       _aggregate_kindle),
-    ("macos_commands",       _aggregate_macos_commands),
-    ("macos_screentime",     _aggregate_macos_screentime),
-    ("strong_workouts",      _aggregate_strong_workouts),
+    ("fitbit_calories",       _aggregate_calories),
+    ("fitbit_steps",          _aggregate_steps),
+    ("fitbit_exercise",       _aggregate_exercise),
+    ("fitbit_sleep",          _aggregate_sleep),
+    ("github_contributions",  lambda df: df),
+    ("gymgroup_visits",       _aggregate_gym_group),
+    ("kindle_reading",        _aggregate_kindle),
+    ("macos_commands",        _aggregate_macos_commands),
+    ("macos_screentime",      _aggregate_macos_screentime),
+    ("strong_workouts",       _aggregate_strong_workouts),
 ]
 
 

@@ -83,7 +83,7 @@ def extract_github(r2: R2Client, config: PipelineConfig) -> None:
 
 
 def _fetch_api(config: PipelineConfig) -> list[dict]:
-    api_url = os.getenv("GITHUB_API_URL", _DEFAULT_API_URL)
+    api_url = _DEFAULT_API_URL
     end = dt.now(tz=timezone.utc)
     start = end - timedelta(weeks=52)
 

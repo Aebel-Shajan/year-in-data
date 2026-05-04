@@ -51,7 +51,7 @@ export default function App() {
           </div>
 
           {availableYears.length > 1 && (
-            <div className="flex gap-1 ml-6">
+            <div className="flex gap-1 ml-6 overflow-x-auto flex-nowrap">
               {availableYears.map((y) => (
                 <button
                   key={y}
@@ -60,7 +60,7 @@ export default function App() {
                     y === year
                       ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
                       : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
-                  }`}
+                  }"}
                 >
                   {y}
                 </button>

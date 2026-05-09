@@ -1,12 +1,14 @@
 """
 Source: garmin
 
-Fetches daily wellness summaries and activities from Garmin Connect.
-Requires GARMIN_USERNAME and GARMIN_PASSWORD in env / .env.
+Processes inbox files containing Garmin Connect data.
+Fetch data first with: uv run python scripts/sync_api.py
 """
 
 from __future__ import annotations
 
+import json
+import re
 from datetime import date, timedelta
 
 import polars as pl
@@ -19,16 +21,34 @@ from pipeline.common.r2 import R2Client
 
 TAG = Source.GARMIN
 
+_WELLNESS_RE   = re.compile(r"wellness-\d{4}-\d{2}-\d{2}\.json$")
+_ACTIVITIES_RE = re.compile(r"activities-\d{4}-\d{2}-\d{2}\.json$")
+
 
 def fetch(r2: R2Client, config: PipelineConfig) -> None:
+    """Fetch from Garmin Connect API and upload to inbox."""
     client = _login(config)
-    _store_wellness(r2, client)
-    _store_activities(r2, client)
+    today = date.today().isoformat()
+
+    wellness = _fetch_wellness(client)
+    R2.upload_bytes(r2, f"{paths.construct_inbox_path(TAG)}/wellness-{today}.json", json.dumps(wellness).encode(), "application/json")
+    print(f"[{TAG}] {len(wellness)} wellness days → inbox")
+
+    activities = _fetch_activities(client)
+    R2.upload_bytes(r2, f"{paths.construct_inbox_path(TAG)}/activities-{today}.json", json.dumps(activities).encode(), "application/json")
+    print(f"[{TAG}] {len(activities)} activities → inbox")
+
+
+def extract_garmin(r2: R2Client, config: PipelineConfig) -> None:
+    R2.flush_inbox(r2, TAG, paths.construct_inbox_path(TAG), paths.construct_archive_path(TAG))
+
+    _extract_table(r2, paths.construct_table_path(Table.GARMIN_WELLNESS),   _WELLNESS_RE,   parse_wellness)
+    _extract_table(r2, paths.construct_table_path(Table.GARMIN_ACTIVITIES), _ACTIVITIES_RE, parse_activities)
 
 
 # ── Pure functions ─────────────────────────────────────────────────────────────
 
-def parse_wellness(stats: list[dict]) -> pl.DataFrame:
+def parse_wellness(records: list[dict]) -> pl.DataFrame:
     rows = [
         {
             "date":            s.get("calendarDate"),
@@ -41,7 +61,7 @@ def parse_wellness(stats: list[dict]) -> pl.DataFrame:
             "sleep_seconds":   s.get("sleepingSeconds"),
             "floors_ascended": s.get("floorsAscended"),
         }
-        for s in stats
+        for s in records
         if s.get("calendarDate")
     ]
     return (
@@ -51,18 +71,18 @@ def parse_wellness(stats: list[dict]) -> pl.DataFrame:
     )
 
 
-def parse_activities(activities: list[dict]) -> pl.DataFrame:
+def parse_activities(records: list[dict]) -> pl.DataFrame:
     rows = [
         {
-            "activity_id":   str(a.get("activityId", "")),
-            "date":          (a.get("startTimeLocal") or "")[:10],
-            "name":          a.get("activityName", ""),
-            "type":          (a.get("activityType") or {}).get("typeKey", ""),
-            "duration_sec":  a.get("duration", 0.0),
-            "distance_m":    a.get("distance", 0.0),
-            "calories":      a.get("calories", 0.0),
+            "activity_id":  str(a.get("activityId", "")),
+            "date":         (a.get("startTimeLocal") or "")[:10],
+            "name":         a.get("activityName", ""),
+            "type":         (a.get("activityType") or {}).get("typeKey", ""),
+            "duration_sec": a.get("duration", 0.0),
+            "distance_m":   a.get("distance", 0.0),
+            "calories":     a.get("calories", 0.0),
         }
-        for a in activities
+        for a in records
         if a.get("activityId")
     ]
     return (
@@ -80,7 +100,7 @@ def _login(config: PipelineConfig) -> Garmin:
     return client
 
 
-def _store_wellness(r2: R2Client, client: Garmin) -> None:
+def _fetch_wellness(client: Garmin) -> list[dict]:
     today = date.today()
     stats = []
     for i in range(365):
@@ -88,14 +108,26 @@ def _store_wellness(r2: R2Client, client: Garmin) -> None:
         s = client.get_stats(d)
         if s:
             stats.append(s)
-
-    df = parse_wellness(stats)
-    R2.store_parquet(r2, paths.construct_table_path(Table.GARMIN_WELLNESS), df, sort_col="date", dedup_cols=["date"], overwrite=True)
-    print(f"[{TAG}/wellness] {len(df)} rows")
+    return stats
 
 
-def _store_activities(r2: R2Client, client: Garmin) -> None:
-    activities = client.get_activities(0, 1000)
-    df = parse_activities(activities)
-    R2.store_parquet(r2, paths.construct_table_path(Table.GARMIN_ACTIVITIES), df, sort_col="date", dedup_cols=["activity_id"], overwrite=True)
-    print(f"[{TAG}/activities] {len(df)} rows")
+def _fetch_activities(client: Garmin) -> list[dict]:
+    return client.get_activities(0, 1000)
+
+
+def _extract_table(r2: R2Client, output_key: str, file_re: re.Pattern, parse_fn) -> None:
+    label = output_key.split("/")[-1].removesuffix(".parquet")
+    keys = R2.get_archive_keys(r2, paths.construct_archive_path(TAG), output_key, ".json")
+    matched = [k for k in keys if file_re.search(k)]
+    if not matched:
+        print(f"[{TAG}/{label}] no new files, skipping")
+        return
+
+    records: list[dict] = []
+    for key in matched:
+        records.extend(json.loads(R2.download_bytes(r2, key)))
+
+    df = parse_fn(records)
+    dedup = ["date"] if "activity_id" not in df.columns else ["activity_id"]
+    R2.store_parquet(r2, output_key, df, sort_col="date", dedup_cols=dedup, overwrite=True)
+    print(f"[{TAG}/{label}] {len(df)} rows")

@@ -8,6 +8,7 @@ class Source(StrEnum):
     KINDLE           = "kindle"
     MACOS_COMMANDS   = "macos_commands"
     MACOS_SCREENTIME = "macos_screentime"
+    GARMIN           = "garmin"
     STRONG           = "strong"
 
 
@@ -16,6 +17,8 @@ class Table(StrEnum):
     FITBIT_EXERCISE      = "fitbit_exercise"
     FITBIT_SLEEP         = "fitbit_sleep"
     FITBIT_STEPS         = "fitbit_steps"
+    GARMIN_ACTIVITIES    = "garmin_activities"
+    GARMIN_WELLNESS      = "garmin_wellness"
     GITHUB_CONTRIBUTIONS = "github_contributions"
     GYMGROUP_VISITS      = "gymgroup_visits"
     KINDLE_READING       = "kindle_reading"

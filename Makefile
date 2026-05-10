@@ -1,4 +1,4 @@
-.PHONY: help install install-python install-node up down console setup-r2 pipeline export-json sync-macos install-macos-cron uninstall-macos-cron test dev build lint format clean
+.PHONY: help install install-python install-node up down console setup-r2 pipeline export-json sync-macos sync-secrets install-macos-cron uninstall-macos-cron test dev build lint format clean
 
 PLIST_LABEL = com.yearindata.macos
 PLIST_PATH  = ~/Library/LaunchAgents/$(PLIST_LABEL).plist
@@ -52,6 +52,9 @@ export-json: ## Export gold tables
 
 get-web-url: ## Print the public URL of the web R2 bucket
 	uv run python scripts/get_web_url.py
+
+sync-secrets: ## Push .env values to GitHub Actions secrets (ONLY=KEY1,KEY2 to filter)
+	bash scripts/sync_secrets.sh $(if $(ONLY),--only $(ONLY),)
 
 install-macos-cron: ## Install launchd job to sync screen time daily at 9 AM
 	mkdir -p $(PROJECT_DIR)/logs

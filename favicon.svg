@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#0f172a"/>
+
+  <!-- 3×3 heatmap grid: 8px cells, 2px gaps, 2px offset -->
+  <!-- warm palette: yellow → orange → red (low → high) -->
+
+  <!-- Row 0 -->
+  <rect x="2"  y="2"  width="8" height="8" rx="1.5" fill="#fef08a"/>
+  <rect x="12" y="2"  width="8" height="8" rx="1.5" fill="#fb923c"/>
+  <rect x="22" y="2"  width="8" height="8" rx="1.5" fill="#ef4444"/>
+
+  <!-- Row 1 -->
+  <rect x="2"  y="12" width="8" height="8" rx="1.5" fill="#fde68a"/>
+  <rect x="12" y="12" width="8" height="8" rx="1.5" fill="#f97316"/>
+  <rect x="22" y="12" width="8" height="8" rx="1.5" fill="#dc2626"/>
+
+  <!-- Row 2 -->
+  <rect x="2"  y="22" width="8" height="8" rx="1.5" fill="#fbbf24"/>
+  <rect x="12" y="22" width="8" height="8" rx="1.5" fill="#ea580c"/>
+  <rect x="22" y="22" width="8" height="8" rx="1.5" fill="#991b1b"/>
+</svg>

@@ -4,6 +4,8 @@ Aggregates job parquets into daily summary tables.
 
 from __future__ import annotations
 
+from typing import Callable
+
 import polars as pl
 
 from pipeline.common import r2 as R2
@@ -12,27 +14,44 @@ from pipeline.common.paths import Table, construct_table_path
 from pipeline.common.r2 import R2Client
 
 
-def _aggregate_sleep(df: pl.DataFrame) -> pl.DataFrame:
-    return (
-        df.group_by("date").agg(pl.col("value").sum())
-        .with_columns((pl.col("value") / 60).round(2).alias("value"))
-        .sort("date")
-    )
+def _aggregate_steps(fitbit_df: pl.DataFrame | None, garmin_df: pl.DataFrame | None) -> pl.DataFrame:
+    parts = []
+    if fitbit_df is not None:
+        parts.append(fitbit_df.group_by("date").agg(pl.col("value").sum()))
+    if garmin_df is not None:
+        parts.append(garmin_df.select(pl.col("date"), pl.col("steps").alias("value")).drop_nulls("value"))
+    return pl.concat(parts).group_by("date").agg(pl.col("value").max()).sort("date")
 
-def _aggregate_exercise(df: pl.DataFrame) -> pl.DataFrame:
+def _aggregate_calories(fitbit_df: pl.DataFrame | None, garmin_df: pl.DataFrame | None) -> pl.DataFrame:
+    parts = []
+    if fitbit_df is not None:
+        parts.append(fitbit_df.group_by("date").agg(pl.col("value").sum()))
+    if garmin_df is not None:
+        parts.append(garmin_df.select(pl.col("date"), pl.col("calories").alias("value")).drop_nulls("value"))
+    return pl.concat(parts).group_by("date").agg(pl.col("value").max()).sort("date")
+
+def _aggregate_sleep(fitbit_df: pl.DataFrame | None, garmin_df: pl.DataFrame | None) -> pl.DataFrame:
+    parts = []
+    if fitbit_df is not None:
+        parts.append(
+            fitbit_df.group_by("date").agg(pl.col("value").sum())
+            .with_columns((pl.col("value") / 60).round(2).alias("value"))
+        )
+    if garmin_df is not None:
+        parts.append(
+            garmin_df.select(pl.col("date"), (pl.col("sleep_seconds") / 3600).round(2).alias("value"))
+            .drop_nulls("value")
+        )
+    return pl.concat(parts).group_by("date").agg(pl.col("value").max()).sort("date")
+
+def _aggregate_exercise(fitbit_df: pl.DataFrame | None, garmin_df: pl.DataFrame | None) -> pl.DataFrame:
+    if fitbit_df is None:
+        return pl.DataFrame({"date": [], "value": []}, schema={"date": pl.Date, "value": pl.Float64})
     return (
-        df.group_by("date").agg(pl.col("value").sum())
+        fitbit_df.group_by("date").agg(pl.col("value").sum())
         .with_columns((pl.col("value") / 60_000).round(1).alias("value"))
         .sort("date")
     )
-
-def _aggregate_steps(df: pl.DataFrame) -> pl.DataFrame:
-    return df.group_by("date").agg(pl.col("value").sum()).sort("date")
-
-
-def _aggregate_calories(df: pl.DataFrame) -> pl.DataFrame:
-    return df.group_by("date").agg(pl.col("value").sum()).sort("date")
-
 
 def _aggregate_gym_group(df: pl.DataFrame) -> pl.DataFrame:
     return (
@@ -49,10 +68,7 @@ def _aggregate_kindle(df: pl.DataFrame) -> pl.DataFrame:
 
 def _aggregate_macos_commands(df: pl.DataFrame) -> pl.DataFrame:
     return (
-        df
-        .with_columns(pl.col("count")
-        .cast(pl.Float64)
-        .alias("value"))
+        df.with_columns(pl.col("count").cast(pl.Float64).alias("value"))
         .select(["date", "category", "value"])
     )
 
@@ -70,34 +86,31 @@ def _aggregate_strong_workouts(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-
-
-_AGGREGATIONS = [
-    ("fitbit_calories",       _aggregate_calories),
-    ("fitbit_steps",          _aggregate_steps),
-    ("fitbit_exercise",       _aggregate_exercise),
-    ("fitbit_sleep",          _aggregate_sleep),
-    ("github_contributions",  lambda df: df),
-    ("gymgroup_visits",       _aggregate_gym_group),
-    ("kindle_reading",        _aggregate_kindle),
-    ("macos_commands",        _aggregate_macos_commands),
-    ("macos_screentime",      _aggregate_macos_screentime),
-    ("strong_workouts",       _aggregate_strong_workouts),
+_AGGREGATIONS: list[tuple[list[Table], Table, Callable]] = [
+    ([Table.FITBIT_CALORIES, Table.GARMIN_WELLNESS],      Table.DAILY_CALORIES,      _aggregate_calories),
+    ([Table.FITBIT_STEPS, Table.GARMIN_WELLNESS],         Table.DAILY_STEPS,          _aggregate_steps),
+    ([Table.FITBIT_EXERCISE, Table.GARMIN_WELLNESS],      Table.DAILY_EXERCISE,       _aggregate_exercise),
+    ([Table.FITBIT_SLEEP, Table.GARMIN_WELLNESS],         Table.DAILY_SLEEP,          _aggregate_sleep),
+    ([Table.GITHUB_CONTRIBUTIONS], Table.DAILY_GITHUB_CONTRIBUTIONS,  lambda df: df),
+    ([Table.GYMGROUP_VISITS],      Table.DAILY_GYMGROUP_VISITS,       _aggregate_gym_group),
+    ([Table.KINDLE_READING],       Table.DAILY_KINDLE_READING,        _aggregate_kindle),
+    ([Table.MACOS_COMMANDS],       Table.DAILY_MACOS_COMMANDS,        _aggregate_macos_commands),
+    ([Table.MACOS_SCREENTIME],     Table.DAILY_MACOS_SCREENTIME,      _aggregate_macos_screentime),
+    ([Table.STRONG_WORKOUTS],      Table.DAILY_STRONG_WORKOUTS,       _aggregate_strong_workouts),
 ]
 
 
 def aggregate_into_daily_tables(r2: R2Client, config: PipelineConfig) -> None:
-    for table_name, transform in _AGGREGATIONS:
-        _agg(r2, table_name, transform)
+    for inputs, output, transform in _AGGREGATIONS:
+        _agg(r2, inputs=inputs, output=output, transform=transform)
 
 
-def _agg(r2: R2Client, name: str, transform) -> None:
-    input_key = construct_table_path(name)
-    output_key = construct_table_path("daily_" + name)
-    df = R2.load_parquet(r2, input_key)
-    if df is None:
-        print(f"[{input_key}] no data, skipping")
+def _agg(r2: R2Client, inputs: list[Table], output: Table, transform: Callable) -> None:
+    frames = [R2.load_parquet(r2, construct_table_path(t)) for t in inputs]
+    if all(df is None for df in frames):
+        print(f"[{output}] no data, skipping")
         return
-    result = transform(df)
-    R2.store_parquet(r2, output_key, result, sort_col="date", overwrite=True)
-    print(f"[{output_key}] {len(result)} rows")
+
+    result = transform(*frames)
+    R2.store_parquet(r2, construct_table_path(output), result, sort_col="date", overwrite=True)
+    print(f"[{output}] {len(result)} rows")

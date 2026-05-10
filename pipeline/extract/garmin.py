@@ -21,8 +21,8 @@ from pipeline.common.r2 import R2Client
 
 TAG = Source.GARMIN
 
-_WELLNESS_RE   = re.compile(r"wellness-\d{4}-\d{2}-\d{2}\.json$")
-_ACTIVITIES_RE = re.compile(r"activities-\d{4}-\d{2}-\d{2}\.json$")
+_WELLNESS_RE   = re.compile(r"/wellness-\d{4}-\d{2}-\d{2}")
+_ACTIVITIES_RE = re.compile(r"/activities-\d{4}-\d{2}-\d{2}")
 
 
 def fetch(r2: R2Client, config: PipelineConfig) -> None:
@@ -41,9 +41,8 @@ def fetch(r2: R2Client, config: PipelineConfig) -> None:
 
 def extract_garmin(r2: R2Client, config: PipelineConfig) -> None:
     R2.flush_inbox(r2, TAG, paths.construct_inbox_path(TAG), paths.construct_archive_path(TAG))
-
-    _extract_table(r2, paths.construct_table_path(Table.GARMIN_WELLNESS),   _WELLNESS_RE,   parse_wellness)
-    _extract_table(r2, paths.construct_table_path(Table.GARMIN_ACTIVITIES), _ACTIVITIES_RE, parse_activities)
+    _extract_wellness(r2)
+    _extract_activities(r2)
 
 
 # ── Pure functions ─────────────────────────────────────────────────────────────
@@ -111,23 +110,33 @@ def _fetch_wellness(client: Garmin) -> list[dict]:
     return stats
 
 
-def _fetch_activities(client: Garmin) -> list[dict]:
+def _fetch_activities(client: Garmin):
     return client.get_activities(0, 1000)
 
 
-def _extract_table(r2: R2Client, output_key: str, file_re: re.Pattern, parse_fn) -> None:
-    label = output_key.split("/")[-1].removesuffix(".parquet")
-    keys = R2.get_archive_keys(r2, paths.construct_archive_path(TAG), output_key, ".json")
-    matched = [k for k in keys if file_re.search(k)]
-    if not matched:
-        print(f"[{TAG}/{label}] no new files, skipping")
+def _extract_wellness(r2: R2Client) -> None:
+    output_key = paths.construct_table_path(Table.GARMIN_WELLNESS)
+    keys = [k for k in R2.get_archive_keys(r2, paths.construct_archive_path(TAG), output_key, ".json") if _WELLNESS_RE.search(k)]
+    if not keys:
+        print(f"[{TAG}/wellness] no new files, skipping")
         return
-
     records: list[dict] = []
-    for key in matched:
+    for key in keys:
         records.extend(json.loads(R2.download_bytes(r2, key)))
+    df = parse_wellness(records)
+    R2.store_parquet(r2, output_key, df, sort_col="date", dedup_cols=["date"], overwrite=True)
+    print(f"[{TAG}/wellness] {len(df)} rows")
 
-    df = parse_fn(records)
-    dedup = ["date"] if "activity_id" not in df.columns else ["activity_id"]
-    R2.store_parquet(r2, output_key, df, sort_col="date", dedup_cols=dedup, overwrite=True)
-    print(f"[{TAG}/{label}] {len(df)} rows")
+
+def _extract_activities(r2: R2Client) -> None:
+    output_key = paths.construct_table_path(Table.GARMIN_ACTIVITIES)
+    keys = [k for k in R2.get_archive_keys(r2, paths.construct_archive_path(TAG), output_key, ".json") if _ACTIVITIES_RE.search(k)]
+    if not keys:
+        print(f"[{TAG}/activities] no new files, skipping")
+        return
+    records: list[dict] = []
+    for key in keys:
+        records.extend(json.loads(R2.download_bytes(r2, key)))
+    df = parse_activities(records)
+    R2.store_parquet(r2, output_key, df, sort_col="date", dedup_cols=["activity_id"], overwrite=True)
+    print(f"[{TAG}/activities] {len(df)} rows")

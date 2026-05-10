@@ -121,8 +121,9 @@ def archive_inbox(r2: R2Client, inbox_key: str, archive_prefix: str) -> None:
     for key in list_keys(r2, inbox_key + "/"):
         if key.endswith("/.keep"):
             continue
-        ext = key.rsplit(".", 1)[-1] if "." in key else ""
-        filename = f"{archive_prefix.split('/')[-1]}_{timestamp}.{ext}"
+        original = key.rsplit("/", 1)[-1].rsplit(".", 1)
+        stem, ext = (original[0], original[1]) if len(original) == 2 else (original[0], "")
+        filename = f"{stem}_{timestamp}.{ext}" if ext else f"{stem}_{timestamp}"
         dst = f"{archive_prefix}/{iso_date}/{filename}"
         move(r2, key, dst)
         print(f"  archived → {dst}")

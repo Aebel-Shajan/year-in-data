@@ -3,16 +3,7 @@ import type { MetricConfig } from "./types";
 import { DataSection } from "./components/DataSection";
 
 const GROUPS: { label: string; metrics: MetricConfig[] }[] = [
-  {
-    label: "Physical",
-    metrics: [
-      { metric: "daily_fitbit_steps",    colorScheme: "blues"   },
-      { metric: "daily_fitbit_exercise", colorScheme: "reds"    },
-      { metric: "daily_strong_workouts", colorScheme: "oranges" },
-      { metric: "daily_gymgroup_visits", colorScheme: "greens"  },
-    ],
-  },
-  {
+    {
     label: "Productivity",
     metrics: [
       { metric: "daily_github_contributions", colorScheme: "greens" },
@@ -22,12 +13,16 @@ const GROUPS: { label: string; metrics: MetricConfig[] }[] = [
     ],
   },
   {
-    label: "Metrics",
+    label: "Health",
     metrics: [
-      { metric: "daily_fitbit_calories", colorScheme: "oranges" },
-      { metric: "daily_fitbit_sleep",    colorScheme: "purples" },
+      { metric: "daily_gymgroup_visits", colorScheme: "greens"  },
+      { metric: "daily_sleep",    colorScheme: "purples" },
+      { metric: "daily_steps",    colorScheme: "blues"   },
+      { metric: "daily_exercise", colorScheme: "reds"    },
+      { metric: "daily_calories", colorScheme: "oranges" },
     ],
   },
+
 ];
 
 export default function App() {
@@ -44,29 +39,30 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col">
       <header className="sticky top-0 z-10 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
-        <div className="max-w-5xl mx-auto flex items-center gap-6">
+        <div className="max-w-5xl mx-auto flex flex-wrap items-center gap-6 justify-between">
           <div>
             <h1 className="text-2xl font-bold leading-none">Year in Data</h1>
             <p className="text-sm text-gray-500 mt-0.5">Personal activity heatmaps</p>
           </div>
-
+          <div className="w-fit overflow-x-scroll">
           {availableYears.length > 1 && (
-            <div className="flex gap-1 ml-6 overflow-x-auto flex-nowrap">
+            <div className="flex gap-1 overflow-x-auto flex-nowrap">
               {availableYears.map((y) => (
                 <button
-                  key={y}
-                  onClick={() => setYear(y)}
-                  className={`px-2 py-0.5 text-sm rounded transition-colors ${
-                    y === year
-                      ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
-                      : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
-                  }"}
+                key={y}
+                onClick={() => setYear(y)}
+                className={`px-2 py-0.5 text-sm rounded transition-colors ${
+                  y === year
+                  ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
+                  : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
+                }`}
                 >
                   {y}
                 </button>
               ))}
             </div>
           )}
+          </div>
         </div>
       </header>
 

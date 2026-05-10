@@ -125,7 +125,7 @@ export function Heatmap({ data, year, colorScheme = "greens", unit, cellSize = 1
 
   const paddingLeft = 28; // space for day labels
   const paddingTop = 20;  // space for month labels
-  const BAR_MAX_H = 20;
+  const BAR_MAX_H = 30;
   const BAR_GAP = 4;
   const gridBottom = paddingTop + 7 * step;
   const svgWidth = paddingLeft + totalWeeks * step + gap;

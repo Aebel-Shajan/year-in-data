@@ -73,9 +73,9 @@ export function DocsPage() {
   const mobileValue = `${selection.kind}:${selection.slug}`;
 
   return (
-    <div className="flex gap-8 max-w-5xl px-6 py-10 w-full">
+    <div className="flex gap-8 max-w-5xl px-6 py-10 w-full flex-wrap">
       {/* desktop sidebar */}
-      <nav className="hidden sm:flex flex-col gap-0.5 w-44 shrink-0 pt-1">
+      <nav className="hidden sm:flex flex-col gap-0.5 w-44 shrink-0 pt-4 sticky top-16 self-start max-h-[calc(100vh-4rem)] overflow-y-auto">
         {DOCS.length > 0 && (
           <>
             <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 px-3 mb-1">Docs</p>

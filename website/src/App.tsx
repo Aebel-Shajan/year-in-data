@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { MetricConfig } from "./types";
 import { DataSection } from "./components/DataSection";
 import { DocsPage } from "./components/DocsPage";
@@ -53,7 +53,9 @@ export default function App() {
                   rel="noopener noreferrer"
                   className="text-base font-bold leading-none hover:underline"
                 >Year in Data</a>
-                <p className="text-xs text-gray-500 mt-0.5">Aebel's activity heatmaps</p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <PipelineStatus />
+                </div>
               </div>
             </div>
             <nav className="flex gap-1 items-center">
@@ -126,7 +128,8 @@ export default function App() {
       )}
 
       <footer className="border-t border-gray-200 dark:border-gray-800 px-6 py-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-end gap-3 text-sm text-gray-400">
+        <div className=" mx-auto flex items-center justify-center gap-10 flex-wrap text-xs text-gray-400">
+          <CopyEmail />
           <a
             href="https://github.com/Aebel-Shajan/year-in-data"
             target="_blank"
@@ -139,6 +142,66 @@ export default function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function CopyEmail() {
+  const [copied, setCopied] = useState(false);
+  const email = "aebel.projects@gmail.com";
+
+  const handleClick = () => {
+    navigator.clipboard.writeText(email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+    >
+      {copied ? "copied! send email, I command you 👽" : email}
+    </button>
+  );
+}
+
+function PipelineStatus() {
+  const [run, setRun] = useState<{ date: string; url: string; conclusion: string } | null>(null);
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/Aebel-Shajan/year-in-data/actions/workflows/pipeline.yml/runs?per_page=1")
+      .then((r) => r.json())
+      .then((data) => {
+        const latest = data.workflow_runs?.[0];
+        if (!latest) return;
+        setRun({
+          date: new Date(latest.updated_at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }),
+          url: latest.html_url,
+          conclusion: latest.conclusion ?? latest.status,
+        });
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!run) return null;
+
+  const dot: Record<string, string> = {
+    success: "bg-green-500",
+    failure: "bg-red-500",
+    cancelled: "bg-yellow-500",
+  };
+
+  return (
+    <a
+      href={run.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-1 text-[10px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+    >
+      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot[run.conclusion] ?? "bg-gray-400"}`} />
+      pipeline last run {run.date}
+    </a>
   );
 }
 

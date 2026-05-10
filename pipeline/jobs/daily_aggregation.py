@@ -19,7 +19,7 @@ def _aggregate_steps(fitbit_df: pl.DataFrame | None, garmin_df: pl.DataFrame | N
     if fitbit_df is not None:
         parts.append(fitbit_df.group_by("date").agg(pl.col("value").sum()))
     if garmin_df is not None:
-        parts.append(garmin_df.select(pl.col("date"), pl.col("steps").alias("value")).drop_nulls("value"))
+        parts.append(garmin_df.select(pl.col("date"), pl.col("steps").cast(pl.Float64).alias("value")).drop_nulls("value"))
     return pl.concat(parts).group_by("date").agg(pl.col("value").max()).sort("date")
 
 def _aggregate_calories(fitbit_df: pl.DataFrame | None, garmin_df: pl.DataFrame | None) -> pl.DataFrame:
@@ -27,7 +27,7 @@ def _aggregate_calories(fitbit_df: pl.DataFrame | None, garmin_df: pl.DataFrame 
     if fitbit_df is not None:
         parts.append(fitbit_df.group_by("date").agg(pl.col("value").sum()))
     if garmin_df is not None:
-        parts.append(garmin_df.select(pl.col("date"), pl.col("calories").alias("value")).drop_nulls("value"))
+        parts.append(garmin_df.select(pl.col("date"), pl.col("calories").cast(pl.Float64).alias("value")).drop_nulls("value"))
     return pl.concat(parts).group_by("date").agg(pl.col("value").max()).sort("date")
 
 def _aggregate_sleep(fitbit_df: pl.DataFrame | None, garmin_df: pl.DataFrame | None) -> pl.DataFrame:
@@ -39,7 +39,7 @@ def _aggregate_sleep(fitbit_df: pl.DataFrame | None, garmin_df: pl.DataFrame | N
         )
     if garmin_df is not None:
         parts.append(
-            garmin_df.select(pl.col("date"), (pl.col("sleep_seconds") / 3600).round(2).alias("value"))
+            garmin_df.select(pl.col("date"), (pl.col("sleep_seconds").cast(pl.Float64) / 3600).round(2).alias("value"))
             .drop_nulls("value")
         )
     return pl.concat(parts).group_by("date").agg(pl.col("value").max()).sort("date")

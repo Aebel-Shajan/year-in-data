@@ -60,6 +60,8 @@ class Secrets(BaseSettings):
     github_token: str
     gym_group_username: str = ""
     gym_group_password: str = ""
+    garmin_username: str = ""
+    garmin_password: str = ""
 
     def __init__(self, env_file: str = ".env", **kwargs):
         super().__init__(_env_file=env_file, **kwargs)

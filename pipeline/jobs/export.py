@@ -26,10 +26,10 @@ class ExportSpec:
 
 
 _EXPORTS: list[ExportSpec] = [
-    ExportSpec(Table.DAILY_FITBIT_CALORIES,      "kcal",    "Calories burned"),
-    ExportSpec(Table.DAILY_FITBIT_EXERCISE,      "minutes", "Active minutes"),
-    ExportSpec(Table.DAILY_FITBIT_SLEEP,         "hours",   "Sleep duration"),
-    ExportSpec(Table.DAILY_FITBIT_STEPS,         "steps",   "Steps"),
+    ExportSpec(Table.DAILY_CALORIES,      "kcal",    "Calories burned"),
+    ExportSpec(Table.DAILY_EXERCISE,      "minutes", "Active minutes"),
+    ExportSpec(Table.DAILY_SLEEP,         "hours",   "Sleep duration"),
+    ExportSpec(Table.DAILY_STEPS,         "steps",   "Steps"),
     ExportSpec(Table.DAILY_GITHUB_CONTRIBUTIONS, "commits", "GitHub contributions"),
     ExportSpec(Table.DAILY_GYMGROUP_VISITS,      "minutes", "Gym duration"),
     ExportSpec(Table.DAILY_KINDLE_READING,       "minutes", "Reading time"),

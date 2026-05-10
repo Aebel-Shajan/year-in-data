@@ -1,11 +1,12 @@
 from pipeline.common.config import PipelineConfig
 from pipeline.common.r2 import R2Client
 from pipeline.common.paths import Source
-from pipeline.extract import fitbit, github, gymgroup, kindle, macos_commands, macos_screentime, strong
+from pipeline.extract import fitbit, garmin, github, gymgroup, kindle, macos_commands, macos_screentime, strong
 
 def extract_from_sources(r2: R2Client, config: PipelineConfig):
     sources_to_extract = config.sources_to_extract
     sources = [
+        (Source.GARMIN, garmin.extract_garmin),
         (Source.STRONG, strong.extract_strong),
         (Source.FITBIT, fitbit.extract_fitbit),
         (Source.GITHUB, github.extract_github),

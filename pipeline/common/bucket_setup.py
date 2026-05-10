@@ -31,10 +31,7 @@ def ensure_bucket(r2: R2Client, bucket: str) -> None:
 
 def create_inboxes(r2: R2Client) -> None:
     """Create placeholder objects for each source inbox folder."""
-    sources = [
-        "fitbit", "github", "gymgroup", "kindle",
-        "macos_commands", "macos_screentime", "strong",
-    ]
+    sources = [s.value for s in paths.Source]
     for src in sources:
         placeholder = paths.construct_inbox_path(src + "/.keep")
         if not exists(r2, placeholder):

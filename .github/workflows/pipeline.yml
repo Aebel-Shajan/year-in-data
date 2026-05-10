@@ -25,6 +25,8 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.PIPELINE_GITHUB_TOKEN }}
       GYM_GROUP_USERNAME: ${{ secrets.GYM_GROUP_USERNAME }}
       GYM_GROUP_PASSWORD: ${{ secrets.GYM_GROUP_PASSWORD }}
+      GARMIN_USERNAME: ${{ secrets.GARMIN_USERNAME }}
+      GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
       JOBS_TO_RUN: ${{ github.event.inputs.jobs_to_run || '' }}
       SOURCES_TO_EXTRACT: ${{ github.event.inputs.sources_to_extract || '' }}
     steps:

@@ -41,28 +41,27 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col">
-      <header className="sticky top-0 z-10 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
-        <div className="max-w-5xl mx-auto flex flex-wrap items-center gap-6 justify-between">
-          <div className="flex flex-wrap gap-5">
-            <div className="flex items-center gap-3">
-              <img src="favicon.svg" alt="" className="w-9 h-9 rounded-md" />
+      <header className="sticky top-0 z-10 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 px-6 py-2">
+        <div className="max-w-5xl mx-auto flex flex-wrap items-center gap-3 justify-between">
+          <div className="flex flex-wrap gap-3 w-full justify-between items-center">
+            <div className="flex items-center gap-2">
+              <img src="favicon.svg" alt="" className="w-7 h-7 rounded-md" />
               <div>
                 <a
                   href="https://github.com/Aebel-Shajan/year-in-data"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-2xl font-bold leading-none hover:underline"
+                  className="text-base font-bold leading-none hover:underline"
                 >Year in Data</a>
-                <p className="text-sm text-gray-500 mt-0.5">Aebel's activity heatmaps</p>
+                <p className="text-xs text-gray-500 mt-0.5">Aebel's activity heatmaps</p>
               </div>
-
             </div>
             <nav className="flex gap-1 items-center">
               {(["data", "docs"] as Tab[]).map((t) => (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
-                  className={`px-5 py-1 h-fit text-sm rounded transition-colors capitalize ${t === tab
+                  className={`px-3 py-0.5 text-xs rounded transition-colors capitalize ${t === tab
                     ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
                     : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
                     }`}
@@ -82,7 +81,7 @@ export default function App() {
                   <button
                     key={y}
                     onClick={() => setYear(y)}
-                    className={`px-2 py-0.5 text-sm rounded transition-colors ${y === year
+                    className={`px-2 py-0.5 text-xs rounded transition-colors ${y === year
                       ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
                       : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
                       }`}
@@ -102,7 +101,7 @@ export default function App() {
             <p>I wanted to track my habits and have it visualised like github's activity heatmap. However, I was too lazy to use habit tracker apps, so I built this instead.</p>
             <p>It's a Polars data pipeline that runs every week on github actions and processes data stored in cloudflare r2. I don't like paying money for things so I'm leeching off github's free compute and cloudflare's free tier.</p>
             <p>Most of the data is automatic, extracted from apis + a cron job on my macbook. However for reading and payments I still have to manually upload files. Amazon doesn't have a kindle api and makes scraping hard. I could use truelayer for bank transactions but it's a pain to set up so I'm sticking with manually uploading statements.</p>
-            <p>It's free and reproducible, feel free to fork it. No guarantees though, I'll probably refactor this because the code is disgusting and I hate it.</p>
+            <p>It's free and reproducible, feel free to fork it. No guarantees though, I'll probably refactor this again for the 10th time because the code is disgusting and I hate it.</p>
           </div>
           {GROUPS.map((group) => (
             <section key={group.label} className="mb-12">

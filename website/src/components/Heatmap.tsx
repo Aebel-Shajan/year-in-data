@@ -43,6 +43,7 @@ interface TooltipState {
   y: number;
   date: string;
   value: number;
+  label?: string;
 }
 
 // Day index: Monday = 0 … Sunday = 6  (ISO weekday - 1)
@@ -110,10 +111,25 @@ export function Heatmap({ data, year, colorScheme = "greens", unit, cellSize = 1
     return positions;
   }, [year, yearStart]);
 
+  const weeklyTotals = useMemo(() => {
+    const totals = new Map<number, number>();
+    const start = new Date(year, 0, 1);
+    for (const [dateStr, value] of byDate) {
+      const col = weekIndex(new Date(dateStr + "T00:00:00"), start);
+      totals.set(col, (totals.get(col) ?? 0) + value);
+    }
+    return totals;
+  }, [byDate, year]);
+
+  const maxWeekly = useMemo(() => Math.max(...weeklyTotals.values(), 1), [weeklyTotals]);
+
   const paddingLeft = 28; // space for day labels
   const paddingTop = 20;  // space for month labels
+  const BAR_MAX_H = 20;
+  const BAR_GAP = 4;
+  const gridBottom = paddingTop + 7 * step;
   const svgWidth = paddingLeft + totalWeeks * step + gap;
-  const svgHeight = paddingTop + 7 * step + gap;
+  const svgHeight = gridBottom + BAR_GAP + BAR_MAX_H + gap;
 
   const cells: React.ReactNode[] = [];
   let cursor = new Date(yearStart);
@@ -184,6 +200,42 @@ export function Heatmap({ data, year, colorScheme = "greens", unit, cellSize = 1
 
         {/* Cells */}
         {cells}
+
+        {/* Weekly total bars */}
+        {Array.from(weeklyTotals.entries()).map(([col, total]) => {
+          const barH = Math.max(1, (total / maxWeekly) * BAR_MAX_H);
+          const weekStart = new Date(yearStart);
+          weekStart.setDate(weekStart.getDate() + col * 7 - isoWeekday(yearStart));
+          if (weekStart < yearStart) weekStart.setTime(yearStart.getTime());
+          const weekLabel = `Week of ${weekStart.toLocaleDateString(undefined, { month: "short", day: "numeric" })}`;
+          const handlers = {
+            onMouseEnter: (e: React.MouseEvent) => setTooltip({ visible: true, x: e.clientX, y: e.clientY, date: weekLabel, value: total, label: "weekly total" }),
+            onMouseMove:  (e: React.MouseEvent) => setTooltip((t) => ({ ...t, x: e.clientX, y: e.clientY })),
+            onMouseLeave: () => setTooltip((t) => ({ ...t, visible: false })),
+          };
+          return (
+            <g key={`bar-${col}`}>
+              <rect
+                x={paddingLeft + col * step}
+                y={gridBottom + BAR_GAP + (BAR_MAX_H - barH)}
+                width={cellSize}
+                height={barH}
+                rx={1}
+                style={{ fill: colorScale(total / 7) }}
+                opacity={0.75}
+              />
+              {/* full-height invisible hit target */}
+              <rect
+                x={paddingLeft + col * step}
+                y={gridBottom + BAR_GAP}
+                width={cellSize}
+                height={BAR_MAX_H}
+                fill="transparent"
+                {...handlers}
+              />
+            </g>
+          );
+        })}
       </svg>
 
       {tooltip.visible && (
@@ -196,6 +248,7 @@ export function Heatmap({ data, year, colorScheme = "greens", unit, cellSize = 1
           <span className="ml-2 font-semibold">
             {unit === "minutes" ? formatMinutes(tooltip.value) : tooltip.value.toLocaleString()}
           </span>
+          {tooltip.label && <span className="ml-1 text-gray-400">({tooltip.label})</span>}
         </div>
       )}
     </div>

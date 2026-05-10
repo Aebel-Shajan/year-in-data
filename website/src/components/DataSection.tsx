@@ -36,11 +36,11 @@ export function DataSection({ config, year, onYearsLoaded }: Props) {
     <section className="mb-12">
       <div className="flex items-baseline gap-4 mb-3">
         {data
-          ? <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{data.label}</h2>
+          ? <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">{data.label}</h2>
           : <div className="h-6 w-36 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
         }
         {data && (
-          <span className="ml-auto text-sm text-gray-400">
+          <span className="ml-auto text-xs md:text-sm text-gray-400 whitespace-nowrap">
             {activeDays} active days · {formatValue(total, data.unit)} total
           </span>
         )}

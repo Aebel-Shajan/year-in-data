@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     base: "/year-in-data/",
+    server: { fs: { allow: [".."] } },
     define: {
       __R2_PUBLIC_URL__: JSON.stringify(publicUrl),
     },
